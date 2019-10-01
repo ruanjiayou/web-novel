@@ -1,0 +1,49 @@
+/* 1.水平垂直居中 */
+.dd-common-centerXY {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 2.两端分散对齐 */
+.dd-common-alignside {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 3.上下高度占满 */
+.full-height {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.full-height-fix {
+  display: flex;
+  flex-direction: column;
+}
+
+.full-height-auto {
+  /* flex-grown flex-shink flex-basis */
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* 4.多栏之固定+自适应 */
+.full-width {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: center;
+}
+
+.full-width-fix {
+  display: flex;
+  flex-direction: row;
+}
+
+.full-width-auto {
+  flex: 1;
+}

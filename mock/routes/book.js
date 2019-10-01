@@ -1,0 +1,50 @@
+const Mock = require('mockjs');
+
+module.exports = {
+  'get /v1/user/book-shelf': async function getMyBooks() {
+    return Mock.mock({
+      code: 0,
+      'data|10': [{
+        'id': '@guid',
+        'uid|+1': '@guid',
+        'uname': '@cname',
+        'avatar': '@url',
+        'title': '@ctitle',
+        'poster': Mock.Random.image('60x80', '##FF6600'),
+        'desc': '@cparagraph',
+        'tags|3-5': [
+          '@cword'
+        ],
+        'words': '@natural(60, 100)',
+        'comments': '@natural(60, 100)',
+        'chapters': '@natural(160, 1100)',
+        'collections': '@natural(60, 100)',
+        'isApproved': true,
+        'status|1': ['loading', 'finished'],
+        'createdAt': '@datetime'
+      }]
+    });
+  },
+  'get /v1/book/info/:id([0-9a-zA-Z]+)': async function getBookInfo() {
+    return Mock.mock({
+      code: 0,
+      data: {
+        id: '@guid',
+        'title': '@ctitle',
+        uid: '@guid',
+        uname: '@cname',
+        avatar: Mock.Random.image('60x80', '##FF6600'),
+        poster: Mock.Random.image('60x80', '##FF6600'),
+        desc: '@cparagraph',
+        'tags|3-5': ['@cword'],
+        words: '@natural(60,100)',
+        'comments': '@natural(60, 100)',
+        'collections': '@natural(60, 100)',
+        'chapters': '@natural(160, 1100)',
+        'isApproved': true,
+        'status|1': ['loading', 'finished'],
+        'createdAt': '@datetime'
+      }
+    });
+  },
+};

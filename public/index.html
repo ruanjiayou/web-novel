@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="demo">
+  <meta name="referrer" content="never">
+  <title>demo</title>
+  <link rel="shortcut icon" href="/favicon.ico">
+  <!-- 兼容iOS: pwa显示桌面图标 -->
+  <link rel="manifest" href="/manifest.json">
+  <link rel="apple-touch-startup-image" href="/logo.jpg" />
+  <link rel="apple-touch-icon" size="180xx180" href="/logo.jpg" />
+  <style>
+    html,
+    body,
+    #root {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overscroll-behavior: none;
+      position: fixed;
+    }
+  </style>
+</head>
+
+<body>
+  <noscript>请允许执行JavaScript</noscript>
+  <div id="start-loading">正在加载资源...</div>
+  <div id="root">
+
+  </div>
+  <script>
+    document.oncontextmenu = function (e) {
+      e.preventDefault();
+    }
+  </script>
+</body>
+
+</html>

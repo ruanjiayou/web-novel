@@ -1,0 +1,43 @@
+.code-list {
+  background-color: #eee;
+  border-left: 5px solid #558ABB;
+  padding-top: 5px;
+  counter-reset: linenumber;
+}
+
+.dd-code-item {
+  line-height: 2.5;
+  border-bottom: 1px solid #ccc;
+}
+
+.dd-code-item span:before {
+  counter-increment: linenumber;
+  display: inline-block;
+  width: 25px;
+  text-align: right;
+  height: 100%;
+  border-right: 1px solid #999;
+  padding-right: 3px;
+  content: " " counter(linenumber) ". ";
+}
+
+.dd-code-item .am-icon {
+  vertical-align: middle;
+  display: inline-block;
+  margin-top: -4px;
+}
+
+.dd-code-item p {
+  line-height: 1.8;
+  margin: 0 35px;
+  word-break: break-all;
+}
+
+/* .dd-code-item>span {
+  display: block;
+  padding: 0 5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-bottom: 1px solid grey;
+} */
