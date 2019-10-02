@@ -11,12 +11,15 @@ const shttp = axios.create({
 
 shttp.interceptors.request.use(
   config => {
+    if (Config.isDebug && Config.console) {
+      console.log(`${config.method} ${config.url}`);
+    }
     config.headers['Authorization'] = globalStore.app.accessToken;
     // config.params = { token: globalStore.app.accessToken }
     return config;
   },
   error => {
-    if (Config.isDebug()) {
+    if (Config.isDebug && Config.console) {
       console.log(error, 'request error');
     }
     return Promise.resolve(error);
@@ -25,6 +28,9 @@ shttp.interceptors.request.use(
 
 shttp.interceptors.response.use(
   response => {
+    if (Config.isDebug && Config.console) {
+      console.log(response.status, response.data);
+    }
     const res = response.data;
     // 干点什么
     res.code = res.ecode;
@@ -60,7 +66,7 @@ shttp.interceptors.response.use(
     return res;
   },
   error => {
-    if (Config.isDebug()) {
+    if (Config.isDebug && Config.console) {
       console.log(error, 'response error');
     }
     return Promise.resolve(error);

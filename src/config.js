@@ -1,7 +1,8 @@
 export default {
-  isDebug() {
+  get isDebug() {
     return process.env.NODE_ENV !== 'production';
   },
+  console: true,
   config: {
     production: {
       host: '/',
@@ -13,7 +14,7 @@ export default {
   menus: [
     {
       name: 'book-shelf',
-      path: '/root/user/book-shelf',
+      path: '/root/user-shelf',
       title: '书架',
       icon: 'FaBook'
     },
@@ -25,7 +26,7 @@ export default {
     },
     {
       name: 'center',
-      path: '/root/user/my',
+      path: '/root/user-center',
       title: '我的',
       icon: 'FaUserAlt'
     },

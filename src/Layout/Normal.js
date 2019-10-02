@@ -1,14 +1,14 @@
 import React, { Fragment } from 'react';
 import { Observer } from 'mobx-react-lite';
 import { TabBar } from 'antd-mobile';
-import { useContext } from 'contexts/routerContext';
-import MIcon from 'components/MIcon';
+import { useRouterContext } from 'contexts/router';
+import MIconView from 'components/MIconView';
 
 import config from 'config';
 import store from 'global-state';
 
 export default function ({ children }) {
-  let router = useContext();
+  let router = useRouterContext();
   return <Observer>
     {() => {
       if (router.hideMenu) {
@@ -27,8 +27,8 @@ export default function ({ children }) {
               return <TabBar.Item
                 title={menu.title}
                 key={menu.name}
-                icon={<MIcon type={menu.icon} />}
-                selectedIcon={<MIcon type={menu.icon} />}
+                icon={<MIconView type={menu.icon} />}
+                selectedIcon={<MIconView type={menu.icon} />}
                 selected={menu.name === store.app.selectedMenu}
                 onPress={() => {
                   store.app.setMenu(menu.name);

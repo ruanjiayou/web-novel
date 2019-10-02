@@ -1,7 +1,7 @@
 const Mock = require('mockjs');
 
 module.exports = {
-  'get /v1/user/book-shelf': async function getMyBooks() {
+  'get /v1/user/my-books': async function getMyBooks() {
     return Mock.mock({
       code: 0,
       'data|10': [{
@@ -25,7 +25,7 @@ module.exports = {
       }]
     });
   },
-  'get /v1/book/info/:id([0-9a-zA-Z]+)': async function getBookInfo() {
+  'get /v1/book/:id([0-9a-zA-Z]+)': async function getBookInfo() {
     return Mock.mock({
       code: 0,
       data: {

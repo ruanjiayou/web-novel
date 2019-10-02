@@ -1,16 +1,16 @@
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import React from 'react';
 import { Observer } from 'mobx-react-lite';
-import { useProvider } from '../contexts/routerContext';
+import { useProvider } from 'contexts/router';
 
-import store from '../global-state';
-import storage from '../utils/storage';
-import Locker from '../components/Locker';
+import store from 'global-state';
+import storage from 'utils/storage';
+import Locker from 'components/LockerView';
 
 import LayoutNormal from 'Layout/Normal';
 
 import pages from 'pages';
-import Login from 'pages/Auth/Login'
+import AuthLoginPage from 'pages/AuthLoginPage'
 
 // 路由=>组件.没登录跳到登录.登录了匹配root.匹配失败就重定向route.
 
@@ -20,7 +20,7 @@ function App(props) {
   return <RouterContext.Provider value={router}>
     <Switch>
       <Route path={'/root/*'} component={AppRoot}></Route>
-      <Route path={'/auth/login'} component={Login}></Route>
+      <Route path={'/auth/login'} component={AuthLoginPage}></Route>
       <Route component={NoMatch}></Route>
     </Switch>
   </RouterContext.Provider>;

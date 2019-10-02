@@ -16,6 +16,13 @@ app.use(function (req, res, next) {
   }
 })
 router(app);
+app.use(function (req, res, next, err) {
+  if (err) {
+    res.json({ code: -1, message: '内部错误!' });
+  } else {
+    next();
+  }
+})
 app.use(function (req, res) {
   // console.log(req.method);
   // console.log(req.originalUrl.length);

@@ -1,6 +1,12 @@
 const Mock = require('mockjs');
 const crypto = require('crypto');
 module.exports = {
+  'post /v1/auth/user/refresh': async function login() {
+    return {
+      code: 0,
+      data: { token: 'test' },
+    };
+  },
   'post /v1/auth/user/sign-in': async function login() {
     const data = req.body;
     const password = crypto.createHash('md5').update('123456').digest('hex').toUpperCase();
@@ -16,15 +22,6 @@ module.exports = {
       };
     }
 
-  },
-  'get /v1/user/articles': async function getArticles() {
-    return Mock.mock({
-      code: 0,
-      'data|10': [{
-        title: '@ctitle',
-        content: '@cparagraph'
-      }]
-    });
   },
   'get /v1/user/info': async function getInfo() {
     return Mock.mock({

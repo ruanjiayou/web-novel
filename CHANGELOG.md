@@ -1,4 +1,5 @@
 # 开发进度
+继承自web-password的进度
 
 ## master 2019-09-30
 - 书架页面与mock
@@ -13,3 +14,17 @@
 - baseURL优化
 - BaseLoader defaultValue问题
 - BaseLoader 排序问题
+
+## master 2019-10-02 03:52
+- 目录页/正文 序号/进度ref
+- Loader和Model都首字母大写
+- component和business里都加View后缀
+- pages里都加Page后缀
+- services里按文件分
+- data-loader改为loader
+- 路由上下文改名为useRouterContext
+- models里都采用APPModel方式命名
+- utils/time number
+- VisuaBoxView/SwitchView/AutoCenterView
+- mock-server添加控制配置
+- isDebug和console配置

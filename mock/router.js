@@ -1,63 +1,10 @@
-const _ = require('lodash'); const fs = require('fs');
+const _ = require('lodash');
 const path = require('path');
-
-/**
- * 遍历文件夹
- * @param {object} opt 参数
- * @param {function} cb 回调函数
- */
-function loader(opt, cb = null) {
-  scanner(opt.dir, cb, opt.filter, opt.recusive);
-}
-
-function scanner(dir, cb, filter, recusive) {
-  fs.readdirSync(dir).forEach(file => {
-    const fullpath = path.join(dir, file);
-    const ext = path.extname(file).toLocaleLowerCase();
-    const filename = file.substr(0, file.length - ext.length);
-    if (recusive === true && fs.existsSync(fullpath) && fs.lstatSync(fullpath).isDirectory()) {
-      scanner(fullpath, cb, filter, recusive);
-    } else if (cb) {
-      // filter处理
-      cb({ fullpath, dir, filename, ext });
-    }
-  });
-}
-
+const sleep = require('./utils/sleep');
+const loader = require('./utils/loader');
+const adjustRoutes = require('./utils/adjustRoutes');
+const config = require('./config');
 let routes = [];
-
-/**
- * 调整路由数组
- */
-function adjustRoutes(arr) {
-  function compare(str1, str2) {
-    let len1 = str1.length,
-      len2 = str2.length;
-    for (let i = 0; i < len1 && i < len2; i++) {
-      if (str1[i] === ':' || str1[i] === '*') {
-        return -1;
-      }
-      if (str2[i] === ':' || str2[i] === '*') {
-        return 1;
-      }
-      if (str1.charCodeAt(i) !== str2.charCodeAt(i)) {
-        return str1.charCodeAt(i) - str2.charCodeAt(i);
-      }
-    }
-    return len1 - len2;
-  }
-  arr.sort(function (a, b) {
-    if (a.type === 'use' || b.type === 'use') {
-      if (a.type === b.type) {
-        return compare(a.path, b.path);
-      } else {
-        return a.type === 'use' ? -1 : 1;
-      }
-    }
-    return compare(a.path, b.path);
-  });
-  return arr;
-}
 /**
  * 处理路由文件
  * @param {object} info 路径信息
@@ -92,6 +39,9 @@ module.exports = function (app) {
     app[route.type](route.path, async function (req, res, next) {
       // 普通API
       try {
+        if (config.sleep) {
+          await sleep(config.sleep);
+        }
         const result = await route.handle.call(app, req, res, next);
         // 处理列表分页
         if (result !== undefined) {
