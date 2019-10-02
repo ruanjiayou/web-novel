@@ -13,8 +13,8 @@ export default {
   },
   menus: [
     {
-      name: 'book-shelf',
-      path: '/root/user-shelf',
+      name: 'shelf',
+      path: '/root/shelf',
       title: '书架',
       icon: 'FaBook'
     },
@@ -25,8 +25,8 @@ export default {
       icon: 'FaList'
     },
     {
-      name: 'center',
-      path: '/root/user-center',
+      name: 'my',
+      path: '/root/my',
       title: '我的',
       icon: 'FaUserAlt'
     },

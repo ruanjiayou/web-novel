@@ -18,7 +18,7 @@ export default {
   },
   async getUserInfo(params) {
     const result = await shttp({
-      url: '/v1/user/info',
+      url: '/v1/user/self',
       method: 'get',
     });
     return { item: result.data };

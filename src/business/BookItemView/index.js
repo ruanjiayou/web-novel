@@ -7,7 +7,7 @@ export default function ({ item, router }) {
   return <Observer>
     {() => {
       return <Fragment>
-        <div className="full-width" style={{ margin: 10 }} onClick={() => { router.pushView(`/root/book/${item.id}/info`, null, { hideMenu: true }); }}>
+        <div className="full-width" style={{ margin: 10 }} onClick={() => { router.pushView(`/root/book/${item.id}/info`, null, { hideMenu: true, id: item.id }); }}>
           <div className="full-width-fix" style={{ width: 60, height: 80, backgroundColor: 'green', marginRight: 20 }}>
             <img src={item.poster} alt="" />
           </div>

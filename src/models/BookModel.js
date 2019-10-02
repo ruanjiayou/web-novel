@@ -4,7 +4,7 @@ const Model = types.model({
   id: types.string,
   uid: types.string,
   uname: types.string,
-  avatar: types.string,
+  // avatar: types.string,
   title: types.string,
   poster: types.string,
   desc: types.string,

@@ -1,5 +1,6 @@
 const Mock = require('mockjs');
 const crypto = require('crypto');
+
 module.exports = {
   'post /v1/auth/user/refresh': async function login() {
     return {
@@ -23,14 +24,4 @@ module.exports = {
     }
 
   },
-  'get /v1/user/info': async function getInfo() {
-    return Mock.mock({
-      code: 0,
-      'data': {
-        name: '@cname',
-        id: '@id',
-        avatar: '@url',
-      }
-    });
-  }
 };

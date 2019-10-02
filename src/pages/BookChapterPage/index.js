@@ -16,7 +16,7 @@ import { createItemLoader } from 'loader/BaseLoader';
 export default function () {
   const router = useRouterContext();
   const container = useRef(null);
-  const loader = createItemLoader(ChapterModel, async (params) => services.getBookChapter(params), { id: 111, bid: 222 }).create();
+  const loader = createItemLoader(ChapterModel, async (params) => services.getBookChapter(params)).create();
   const emptyView = renderEmpty(loader);
   const localStore = useLocalStore(() => ({
     pop: false,
@@ -24,7 +24,7 @@ export default function () {
   }));
   useEffect(() => {
     if (loader.isEmpty) {
-      loader.refresh();
+      loader.refresh({ id: router.getStateKey('id'), bid: router.getStateKey('bid') });
     }
   });
   return <Observer>

@@ -25,6 +25,9 @@ export function useProvider(history, location) {
       get hideMenu() {
         return history.location.state && history.location.state.hideMenu ? true : false;
       },
+      getStateKey(key) {
+        return history.location.state && history.location.state[key];
+      },
       back() {
         const { userClick, login } = history.location.state || {};
         if (login) {

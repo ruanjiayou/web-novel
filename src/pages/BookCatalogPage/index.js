@@ -13,14 +13,14 @@ import { createItemsLoader } from 'loader/BaseLoader';
 
 export default function () {
   const router = useRouterContext();
-  const loader = createItemsLoader(ChapterModel, async (params) => services.getBookCatalog(params), { id: 111, query: { sort: 'id-asc' } }).create();
+  const loader = createItemsLoader(ChapterModel, async (params) => services.getBookCatalog(params), { query: { sort: 'id-asc' } }).create();
   const localStore = useLocalStore(() => ({
     loading: false,
     sortASC: true,
   }));
   useEffect(() => {
     if (loader.isEmpty) {
-      loader.refresh();
+      loader.refresh({ id: router.getStateKey('id') });
     }
   });
   return <Observer>{

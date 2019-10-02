@@ -1,7 +1,7 @@
 import user from './user';
-import book from './book';
+import public_book from './public-book';
 
 export default {
   ...user,
-  ...book,
+  ...public_book,
 };

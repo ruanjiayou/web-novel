@@ -1,4 +1,5 @@
 import { flow, types } from 'mobx-state-tree';
+import Config from 'config';
 
 function createItemsLoader(model, fn, defaultValue) {
   const unionModel = types.model({
@@ -71,6 +72,9 @@ function createItemsLoader(model, fn, defaultValue) {
           self.error = { code: 1, message: 'x' };
         }
       } catch (err) {
+        if (Config.isDebug && Config.console) {
+          console.log(err, 'loader')
+        }
         // 加载失败
         self.state = 'fail';
         if (err.code) {

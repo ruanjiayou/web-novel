@@ -35,11 +35,11 @@ export default [
   },
   // 用户部分
   {
-    pathname: '/root/user-center',
+    pathname: '/root/my',
     component: UserCenterPage,
   },
   {
-    pathname: '/root/user-shelf',
+    pathname: '/root/shelf',
     component: BookShelfPage,
   },
 ];

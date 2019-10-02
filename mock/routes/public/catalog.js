@@ -1,7 +1,7 @@
 const Mock = require('mockjs');
 
 module.exports = {
-  'get /v1/book/:id([0-9a-zA-Z-]+)/catalog': async function getBookCatalog(req) {
+  'get /v1/public/book/:id([0-9a-zA-Z-]+)/catalog': async function getBookCatalog(req) {
     return Mock.mock({
       code: 0,
       'data|20': [{
@@ -17,7 +17,7 @@ module.exports = {
       }]
     });
   },
-  'get /v1/book/:bid([0-9a-zA-Z-]+)/chapter/:id([0-9a-zA-Z-]+)': async function getBookChapter(req) {
+  'get /v1/public/book/:bid([0-9a-zA-Z-]+)/chapter/:id([0-9a-zA-Z-]+)': async function getBookChapter(req) {
     const params = req.params;
     return Mock.mock({
       code: 0,
