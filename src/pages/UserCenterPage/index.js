@@ -1,19 +1,19 @@
-import React, { Fragment, useEffect } from 'react';
-import { Observer } from 'mobx-react-lite';
-import { ActivityIndicator } from 'antd-mobile';
-import MIconView from 'components/MIconView';
-import { useStoreContext } from 'contexts/store';
-import { useRouterContext } from 'contexts/router';
+import React, { Fragment, useEffect } from 'react'
+import { Observer } from 'mobx-react-lite'
+import { ActivityIndicator } from 'antd-mobile'
+import MIconView from 'components/MIconView'
+import { useStoreContext } from 'contexts/store'
+import { useRouterContext } from 'contexts/router'
 
 export default function () {
-    const store = useStoreContext();
-    const router = useRouterContext();
-    const userLoader = store.userLoader;
+    const store = useStoreContext()
+    const router = useRouterContext()
+    const userLoader = store.userLoader
     useEffect(() => {
         if (userLoader.isEmpty) {
-            userLoader.refresh();
+            userLoader.refresh()
         }
-    });
+    })
     return <Observer>{
         () => {
             return <Fragment>
@@ -26,7 +26,7 @@ export default function () {
                     </div>
                     <div className="full-width-auto">{userLoader.isEmpty ? '---' : userLoader.item.name}</div>
                     <div onClick={() => {
-                        store.app.setLocked(true);
+                        store.app.setLocked(true)
                     }}>
                         <MIconView type="FaLock" />
                     </div>
@@ -55,7 +55,7 @@ export default function () {
                         <MIconView type="FaEllipsisV" />其他
                     </div>
                 </div>
-            </Fragment>;
+            </Fragment>
         }
-    }</Observer>;
+    }</Observer>
 }

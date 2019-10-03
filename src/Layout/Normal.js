@@ -1,20 +1,20 @@
-import React, { Fragment } from 'react';
-import { Observer } from 'mobx-react-lite';
-import { TabBar } from 'antd-mobile';
-import { useRouterContext } from 'contexts/router';
-import MIconView from 'components/MIconView';
+import React, { Fragment } from 'react'
+import { Observer } from 'mobx-react-lite'
+import { TabBar } from 'antd-mobile'
+import { useRouterContext } from 'contexts/router'
+import MIconView from 'components/MIconView'
 
-import config from 'config';
-import store from 'global-state';
+import config from 'config'
+import store from 'global-state'
 
 export default function ({ children }) {
-  let router = useRouterContext();
+  let router = useRouterContext()
   return <Observer>
     {() => {
       if (router.hideMenu) {
         return <Fragment>
           {children}
-        </Fragment>;
+        </Fragment>
       } else {
         return <Fragment>
           <TabBar
@@ -31,18 +31,18 @@ export default function ({ children }) {
                 selectedIcon={<MIconView type={menu.icon} />}
                 selected={menu.name === store.app.selectedMenu}
                 onPress={() => {
-                  store.app.setMenu(menu.name);
+                  store.app.setMenu(menu.name)
                   router.history.push({
                     pathname: menu.path
-                  });
+                  })
                 }}
               >
                 {children}
-              </TabBar.Item>;
+              </TabBar.Item>
             })}
           </TabBar>
-        </Fragment>;
+        </Fragment>
       }
     }}
-  </Observer>;
+  </Observer>
 }

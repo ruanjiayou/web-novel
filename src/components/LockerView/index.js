@@ -1,35 +1,35 @@
-import React, { Fragment } from 'react';
-import { Observer, useLocalStore } from 'mobx-react-lite';
-import globalStore from 'global-state';
-import MIconView from '../MIconView';
-import Sudoku from '../SudokuView';
+import React, { Fragment } from 'react'
+import { Observer, useLocalStore } from 'mobx-react-lite'
+import globalStore from 'global-state'
+import MIconView from '../MIconView'
+import Sudoku from '../SudokuView'
 
-import './index.css';
+import './index.css'
 
 export default function Locker() {
   const store = useLocalStore(() => ({
     pin: [],
     animate: '',
-  }));
+  }))
   function handler(key) {
     if (key === 'x') {
-      store.pin.pop();
+      store.pin.pop()
     } else if (key === '') {
-      store.pin = [];
+      store.pin = []
     } else {
-      store.pin.push(key);
+      store.pin.push(key)
       if (store.pin.length >= globalStore.app.config.lockerLength) {
         if (store.pin.join('') === globalStore.app.config.lockerPin) {
-          store.animate = 'success';
+          store.animate = 'success'
           setTimeout(() => {
-            globalStore.app.setLocked(false);
-          }, 1000);
+            globalStore.app.setLocked(false)
+          }, 1000)
         } else {
-          store.animate = 'fail';
+          store.animate = 'fail'
           setTimeout(() => {
-            store.animate = '';
-            store.pin = [];
-          }, 1000);
+            store.animate = ''
+            store.pin = []
+          }, 1000)
         }
       }
     }
@@ -45,9 +45,9 @@ export default function Locker() {
               {
                 globalStore.app.config.lockerPin.split('').map((it, index) => {
                   if (index >= store.pin.length) {
-                    return <MIconView style={{ margin: '0 8px' }} key={index} type="FaRegCircle" />;
+                    return <MIconView style={{ margin: '0 8px' }} key={index} type="FaRegCircle" />
                   } else {
-                    return <MIconView style={{ margin: '0 8px' }} key={index} type="FaCircle" />;
+                    return <MIconView style={{ margin: '0 8px' }} key={index} type="FaCircle" />
                   }
                 })
               }
@@ -57,7 +57,7 @@ export default function Locker() {
             <Sudoku handler={handler} />
           </div>
         </div>
-      </Fragment>;
+      </Fragment>
     }}
-  </Observer>;
+  </Observer>
 }

@@ -1,6 +1,6 @@
-import React, { useContext as useReactContext, useState } from 'react';
+import React, { useContext as useReactContext, useState } from 'react'
 // 上下文context.避免react多级一直传props
-const Context = React.createContext(null);
+const Context = React.createContext(null)
 
 /**
  * 使用:
@@ -20,29 +20,29 @@ export function useProvider(history) {
     let route = {
       history,
       get params() {
-        return {};
+        return {}
       },
       get hideMenu() {
-        return history.location.state && history.location.state.hideMenu ? true : false;
+        return history.location.state && history.location.state.hideMenu ? true : false
       },
       getStateKey(key) {
-        return history.location.state && history.location.state[key];
+        return history.location.state && history.location.state[key]
       },
       back() {
-        const { userClick, login } = history.location.state || {};
+        const { userClick, login } = history.location.state || {}
         if (login) {
           // 登录跳转进来的页面
-          route.backToRoot();
+          route.backToRoot()
         } else if (userClick) {
           // 正常操作进入
-          route.history.goBack();
+          route.history.goBack()
         } else {
           // 可能是直接通过URL进来的
-          route.backToRoot();
+          route.backToRoot()
         }
       },
       backToRoot(params, state) {
-        const { pathname, search } = getBackToRootLocation(params);
+        const { pathname, search } = getBackToRootLocation(params)
         history.push({
           pathname,
           search,
@@ -51,7 +51,7 @@ export function useProvider(history) {
             userClick: true,
             ...state
           }
-        });
+        })
       },
       gotoLoginTarget() {
         // target 存于全局store中
@@ -60,36 +60,36 @@ export function useProvider(history) {
         // TODO:
       },
       pushView(pathname, params = {}, state) {
-        state = state || {};
-        state.userClick = true;
-        let search = '';
+        state = state || {}
+        state.userClick = true
+        let search = ''
         for (let k in params) {
-          search += `${k}=${params[k]}`;
+          search += `${k}=${params[k]}`
         }
         history.push({
           pathname,
           search,
           state
-        });
+        })
       },
       replaceView({ viewName, params, state }) {
-        state = state || {};
-        state.userClick = true;
-        let { pathname, search } = getLocation();
+        state = state || {}
+        state.userClick = true
+        let { pathname, search } = getLocation()
         history.replace({
           pathname,
           search,
           state
-        });
+        })
       }
-    };
-    return route;
-  });
-  return [state, Context];
+    }
+    return route
+  })
+  return [state, Context]
 }
 
 export function useRouterContext() {
-  return useReactContext(Context);
+  return useReactContext(Context)
 }
 
 function getLocation() {

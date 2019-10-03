@@ -1,37 +1,37 @@
-import React, { Fragment, useEffect } from 'react';
-import { Observer, useLocalStore } from 'mobx-react-lite';
-import { ActivityIndicator } from 'antd-mobile';
+import React, { Fragment, useEffect } from 'react'
+import { Observer, useLocalStore } from 'mobx-react-lite'
+import { ActivityIndicator } from 'antd-mobile'
 
-import { useRouterContext } from 'contexts/router';
-import 'components/common.css';
-import MIconView from 'components/MIconView';
-import AutoCenerView from 'components/AutoCenterView';
-import VisualBoxView from 'components/VisualBoxView';
-import BookLoader from 'loader/BookLoader';
+import { useRouterContext } from 'contexts/router'
+import 'components/common.css'
+import MIconView from 'components/MIconView'
+import AutoCenerView from 'components/AutoCenterView'
+import VisualBoxView from 'components/VisualBoxView'
+import BookLoader from 'loader/BookLoader'
 
 export default function () {
-  const router = useRouterContext();
-  const loader = BookLoader.create();
+  const router = useRouterContext()
+  const loader = BookLoader.create()
   const localStore = useLocalStore(() => ({
     loading: false,
     shouldFix: false,
-  }));
+  }))
   useEffect(() => {
     if (loader.isEmpty) {
-      loader.refresh({ id: router.getStateKey('id') });
+      loader.refresh({ id: router.getStateKey('id') })
     }
-  });
+  })
   return <Observer>{
     () => {
       if (loader.isEmpty) {
         return <AutoCenerView>
           <ActivityIndicator text="加载中..." />
-        </AutoCenerView>;
+        </AutoCenerView>
       } else {
         return <Fragment>
           <div className="full-height">
             <div className="dd-common-alignside" style={{ position: 'absolute', width: '100%', boxSizing: 'border-box', height: 45, padding: '0 15px' }}>
-              <MIconView type="FaChevronLeft" onClick={() => { router.back(); }} />
+              <MIconView type="FaChevronLeft" onClick={() => { router.back() }} />
               <div>
                 <VisualBoxView visible={localStore.shouldFix}>
                   <div>我的机器人女友</div>
@@ -61,7 +61,7 @@ export default function () {
                 <div style={{ padding: '10px 0', borderBottom: '1px solid #ccc' }}>
                   {loader.item.desc}
                 </div>
-                <div className="full-width" style={{ height: 40 }} onClick={() => { router.pushView(`/root/book/${loader.item.id}/catalog`, null, { hideMenu: true, id: loader.item.id }); }}>
+                <div className="full-width" style={{ height: 40 }} onClick={() => { router.pushView(`/root/book/${loader.item.id}/catalog`, null, { hideMenu: true, id: loader.item.id }) }}>
                   <span className="full-width-auto" style={{ fontWeight: 'bolder' }}>目录</span>
                   <span className="full-width-fix">连载至 729章 · 两小时前更新</span>
                   <MIconView style={{ marginLeft: 10 }} className="full-width-fix" type="FaAngleRight" />
@@ -71,11 +71,11 @@ export default function () {
             </div>
             <div className="dd-common-alignside" style={{ height: 50 }}>
               <div className="dd-common-centerXY" style={{ flex: 1, backgroundColor: 'rgb(226, 223, 223)', color: 'gray' }}>+ 加入书架</div>
-              <div className="dd-common-centerXY" style={{ flex: 1, backgroundColor: 'red', color: 'white' }} onClick={() => { router.pushView(`/root/book/${loader.item.id}/chapter/start`, null, { hideMenu: true }); }}>立即阅读</div>
+              <div className="dd-common-centerXY" style={{ flex: 1, backgroundColor: 'red', color: 'white' }} onClick={() => { router.pushView(`/root/book/${loader.item.id}/chapter/start`, null, { hideMenu: true }) }}>立即阅读</div>
             </div>
           </div>
-        </Fragment>;
+        </Fragment>
       }
     }
-  }</Observer>;
+  }</Observer>
 }

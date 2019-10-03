@@ -1,4 +1,4 @@
-const Mock = require('mockjs');
+const Mock = require('mockjs')
 
 module.exports = {
   'get /v1/public/book/:id([0-9a-zA-Z]+)': async function getBookInfo() {
@@ -21,6 +21,6 @@ module.exports = {
         'status|1': ['loading', 'finished'],
         'createdAt': '@datetime'
       }
-    });
+    })
   },
-};
+}

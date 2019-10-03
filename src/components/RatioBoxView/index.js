@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment } from 'react'
 
 export default function (props) {
     return <Fragment>
@@ -7,5 +7,5 @@ export default function (props) {
                 {props.children}
             </div>
         </div>
-    </Fragment>;
+    </Fragment>
 }

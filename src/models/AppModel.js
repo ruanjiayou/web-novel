@@ -1,6 +1,6 @@
-import { types } from 'mobx-state-tree';
-import shttp from '../utils/shttp';
-import storage from '../utils/storage';
+import { types } from 'mobx-state-tree'
+import shttp from '../utils/shttp'
+import storage from '../utils/storage'
 
 const Model = types.model({
   selectedMenu: types.optional(types.string, 'book-shelf'),
@@ -25,69 +25,69 @@ const Model = types.model({
 }).views(self => {
   return {
 
-  };
+  }
 }).actions(self => {
   // locker相关操作
   return {
     initLocker(opt = {}) {
       for (let k in opt) {
-        self.config[k] = opt[k];
+        self.config[k] = opt[k]
       }
     },
     setLocker(lock) {
-      self.config.isLockerOpen = lock;
-      storage.setValue(self.lockerName, self.config);
+      self.config.isLockerOpen = lock
+      storage.setValue(self.lockerName, self.config)
     },
     setLocked(locked) {
-      self.config.isLockerLocked = locked;
-      storage.setValue(self.lockerName, self.config);
+      self.config.isLockerLocked = locked
+      storage.setValue(self.lockerName, self.config)
     },
     setLockerPin(pin) {
-      self.config.lockerPin = pin;
-      storage.setValue(self.lockerName, self.config);
+      self.config.lockerPin = pin
+      storage.setValue(self.lockerName, self.config)
     },
     setLockerLength(len) {
-      self.config.lockerLength = len;
-      storage.setValue(self.lockerName, self.config);
+      self.config.lockerLength = len
+      storage.setValue(self.lockerName, self.config)
     },
     setLockerSeconds(seconds) {
-      self.config.lockerSeconds = seconds;
-      storage.setValue(self.lockerName, self.config);
+      self.config.lockerSeconds = seconds
+      storage.setValue(self.lockerName, self.config)
     },
-  };
+  }
 }).actions(self => {
   return {
     setMenu(name) {
-      self.selectedMenu = name;
+      self.selectedMenu = name
     },
     setBaseURL(url) {
-      self.baseURL = url;
-      shttp.defaults.baseURL = url;
-      storage.setValue('baseURL', url);
+      self.baseURL = url
+      shttp.defaults.baseURL = url
+      storage.setValue('baseURL', url)
     },
     resetLeaveTS() {
-      self.leaveTS = Date.now();
+      self.leaveTS = Date.now()
     }
-  };
+  }
 }).actions(self => {
   // 用户相关配置
   return {
     logout() {
-      self.accessToken = '';
-      self.refreshToken = '';
-      storage.removeKey(self.accessTokenName);
-      storage.removeKey(self.refreshTokenName);
+      self.accessToken = ''
+      self.refreshToken = ''
+      storage.removeKey(self.accessTokenName)
+      storage.removeKey(self.refreshTokenName)
     },
     setAccessToken(token) {
       // {"type":"string","value":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoidXNlciIsImlkIjoxLCJ0b2tlbiI6ImIyNGE3MjFhMGZkZDEzZmYwNTc2OTMzMzUyZGMwNzhiYmM3NTUxNGMiLCJpYXQiOjE1NjU1MjAxMDYsImV4cCI6MTU2NTYwNjUwNn0.FxS0gcrtuNkpCPM6LQ1Al7DLUWEEW7v77IKEitXORN4"}
-      self.accessToken = token;
-      storage.setValue(self.accessTokenName, token);
+      self.accessToken = token
+      storage.setValue(self.accessTokenName, token)
     },
     setRefreshToken(token) {
-      self.refreshToken = token;
-      storage.setValue(self.refreshTokenName, token);
+      self.refreshToken = token
+      storage.setValue(self.refreshTokenName, token)
     }
-  };
-});
+  }
+})
 
-export default Model;
+export default Model

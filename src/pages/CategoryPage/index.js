@@ -1,9 +1,9 @@
-import React, { Fragment, useEffect } from 'react';
-import { Observer, useLocalStore } from 'mobx-react-lite';
-import { useRouterContext } from 'contexts/router';
-import { useStoreContext } from 'contexts/store';
-import 'components/common.css';
-import MIconView from 'components/MIconView';
+import React, { Fragment, useEffect } from 'react'
+import { Observer, useLocalStore } from 'mobx-react-lite'
+import { useRouterContext } from 'contexts/router'
+import { useStoreContext } from 'contexts/store'
+import 'components/common.css'
+import MIconView from 'components/MIconView'
 
 const styles = {
   bigCate: {
@@ -21,7 +21,7 @@ const styles = {
     float: 'left',
     padding: '10px',
   }
-};
+}
 
 function SubCate({ cates, router }) {
   if (cates) {
@@ -33,27 +33,27 @@ function SubCate({ cates, router }) {
       </div>
     </div>)
   } else {
-    return null;
+    return null
   }
 }
 export default function () {
-  const store = useStoreContext();
-  const router = useRouterContext();
-  const loader = store.categoryLoader;
+  const store = useStoreContext()
+  const router = useRouterContext()
+  const loader = store.categoryLoader
   const localStore = useLocalStore(() => ({
     selectIndex: 0,
     count: 0,
   }))
   useEffect(() => {
     if (loader.isEmpty) {
-      loader.refresh();
+      loader.refresh()
     }
-  });
+  })
   return <Observer>{
     () => <Fragment>
       <div className="full-height">
         <div className="dd-common-alignside" style={{ height: 45, padding: '0 15px' }}>
-          <MIconView type="FaChevronLeft" onClick={() => { router.back(); }} />
+          <MIconView type="FaChevronLeft" onClick={() => { router.back() }} />
           <div>分类</div>
           <div onClick={() => router.pushView('/root/book/search', null, { hideMenu: true, })}>全部作品</div>
         </div>

@@ -16,6 +16,10 @@
       "error",
       "single"
     ],
-    "no-extra-semi": "warn"
+    "semi": [
+      "error",
+      "never"
+    ],
+    "no-extra-semi": "error"
   }
 }

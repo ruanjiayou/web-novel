@@ -8,8 +8,8 @@
     "build": "react-app-rewired build",
     "build-dev": "PUBLC_URL=/ react-app-rewired build",
     "test": "react-app-rewired test",
-    "lint": "eslint ./src",
-    "fix": "eslint ./src --fix",
+    "lint": "eslint ./src ./mock",
+    "fix": "eslint ./src ./mock --fix",
     "mock": "cd mock && nodemon index.js"
   },
   "babel": {

@@ -1,23 +1,23 @@
-import React, { Fragment } from 'react';
-import { Observer } from 'mobx-react-lite';
-import { ListView, PullToRefresh } from 'antd-mobile';
-import renderEmptyView from '../EmptyView';
-import AutoCenterView from '../AutoCenterView';
-import SwitchView from '../SwitchView';
+import React, { Fragment } from 'react'
+import { Observer } from 'mobx-react-lite'
+import { ListView, PullToRefresh } from 'antd-mobile'
+import renderEmptyView from '../EmptyView'
+import AutoCenterView from '../AutoCenterView'
+import SwitchView from '../SwitchView'
 
 const dataProvider = new ListView.DataSource({
   rowHasChanged: (row1, row2) => false
-});
+})
 
 function MyBody(props) {
-  return <div className={`am-list-body ${props.className}`}>{props.children}</div>;
+  return <div className={`am-list-body ${props.className}`}>{props.children}</div>
 }
 
 function renderList({ loader, renderItem, onScroll, className }) {
-  const dataSource = dataProvider.cloneWithRows(loader.items.slice());
-  const EmptyView = renderEmptyView(loader);
+  const dataSource = dataProvider.cloneWithRows(loader.items.slice())
+  const EmptyView = renderEmptyView(loader)
   // 必须要这样.不能直接用 loader.isLoading判断
-  const isLoading = loader.isLoading;
+  const isLoading = loader.isLoading
   return <Fragment>
     <SwitchView
       loading={loader.isEmpty}
@@ -41,7 +41,7 @@ function renderList({ loader, renderItem, onScroll, className }) {
       />
     </SwitchView>
 
-  </Fragment>;
+  </Fragment>
 }
 
 export default function (props) {
@@ -54,8 +54,8 @@ export default function (props) {
   return <div style={{ display: 'flex', flex: '1 1', height: '100%', flexDirection: 'column' }}>
     <Observer>
       {() => {
-        return renderList(props);
+        return renderList(props)
       }}
     </Observer>
-  </div>;
+  </div>
 }

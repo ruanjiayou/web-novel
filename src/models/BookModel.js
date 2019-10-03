@@ -1,4 +1,4 @@
-import { types } from 'mobx-state-tree';
+import { types } from 'mobx-state-tree'
 
 const Model = types.model({
   id: types.string,
@@ -16,6 +16,6 @@ const Model = types.model({
   comments: types.number,
   collections: types.number,
   chapters: types.number,
-});
+})
 
-export default Model;
+export default Model

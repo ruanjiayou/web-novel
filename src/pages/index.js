@@ -7,7 +7,7 @@ import HomePage from 'pages/HomePage'
 import AuthLoginPage from 'pages/AuthLoginPage'
 import UserCenterPage from 'pages/UserCenterPage'
 import BookShelfPage from 'pages/UserShelfPage'
-import BookSearchPage from './BookSearchPage';
+import BookSearchPage from './BookSearchPage'
 
 export default [
   {
@@ -47,4 +47,4 @@ export default [
     pathname: '/root/shelf',
     component: BookShelfPage,
   },
-];
+]

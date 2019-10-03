@@ -1,4 +1,4 @@
-const Mock = require('mockjs');
+const Mock = require('mockjs')
 
 module.exports = {
   'get /v1/user/self': async function getInfo() {
@@ -9,6 +9,6 @@ module.exports = {
         id: '@id',
         avatar: '@url',
       }
-    });
+    })
   }
-};
+}

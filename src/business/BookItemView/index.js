@@ -1,13 +1,13 @@
-import React, { Fragment } from 'react';
-import { Observer } from 'mobx-react-lite';
-import 'components/common.css';
-import MIconView from 'components/MIconView';
+import React, { Fragment } from 'react'
+import { Observer } from 'mobx-react-lite'
+import 'components/common.css'
+import MIconView from 'components/MIconView'
 
 export default function ({ item, router }) {
   return <Observer>
     {() => {
       return <Fragment>
-        <div className="full-width" style={{ margin: 10 }} onClick={() => { router.pushView(`/root/book/${item.id}/info`, null, { hideMenu: true, id: item.id }); }}>
+        <div className="full-width" style={{ margin: 10 }} onClick={() => { router.pushView(`/root/book/${item.id}/info`, null, { hideMenu: true, id: item.id }) }}>
           <div className="full-width-fix" style={{ width: 60, height: 80, backgroundColor: 'green', marginRight: 20 }}>
             <img src={item.poster} alt="" />
           </div>
@@ -21,9 +21,9 @@ export default function ({ item, router }) {
             <div style={{ color: 'rgb(146, 145, 145)' }}>17小时前 · 第八百零六章 翻车了</div>
           </div>
         </div>
-      </Fragment>;
+      </Fragment>
     }
     }
-  </Observer>;
+  </Observer>
 
 }

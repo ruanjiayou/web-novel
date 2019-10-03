@@ -37,3 +37,4 @@
 - delete app.js
 - 嵌套的分类model
 - 优化route和page映射
+- 绝定尽量不用分号

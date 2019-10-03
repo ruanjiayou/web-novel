@@ -1,6 +1,6 @@
 export default {
   get isDebug() {
-    return process.env.NODE_ENV !== 'production';
+    return process.env.NODE_ENV !== 'production'
   },
   console: true,
   config: {
@@ -8,7 +8,7 @@ export default {
       host: '/',
     },
     development: {
-      host: 'http://localhost:4444',
+      host: 'http://localhost:4445',
     }
   },
   menus: [
@@ -31,4 +31,4 @@ export default {
       icon: 'FaUserAlt'
     },
   ]
-};
+}

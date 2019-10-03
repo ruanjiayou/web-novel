@@ -1,7 +1,7 @@
-import React from 'react';
-import { Observer } from 'mobx-react-lite';
+import React from 'react'
+import { Observer } from 'mobx-react-lite'
 
-import './index.css';
+import './index.css'
 
 export default function (props) {
     const keys = [
@@ -17,7 +17,7 @@ export default function (props) {
         { char: '', name: '清空', className: '', },
         { char: '0', name: '', className: 'center', },
         { char: 'x', name: '删除', className: '', },
-    ];
+    ]
     return <Observer>
         {() => {
             return <div style={{ width: '100%', position: 'relative', paddingTop: '100%', marginBottom: '35%' }}>
@@ -26,8 +26,8 @@ export default function (props) {
                         keys.map((it, index) => <div key={index} className={['cell', it.className].join(' ')} onClick={()=>props.handler(it.char)}>{it.name || it.char}</div>)
                     }
                 </div>
-            </div>;
+            </div>
         }}
-    </Observer>;
+    </Observer>
 
 }

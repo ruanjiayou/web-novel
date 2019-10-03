@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import 'components/common.css'
 
 export default function ({ children }) {

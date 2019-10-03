@@ -1,4 +1,4 @@
-const Mock = require('mockjs');
+const Mock = require('mockjs')
 
 module.exports = {
   'get /v1/user/my-books': async function getMyBooks() {
@@ -23,6 +23,6 @@ module.exports = {
         'status|1': ['loading', 'finished'],
         'createdAt': '@datetime'
       }]
-    });
+    })
   },
-};
+}
