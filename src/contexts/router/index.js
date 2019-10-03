@@ -15,7 +15,7 @@ const Context = React.createContext(null);
  * let router = useRouterContext();
  * router.goto(...);
  */
-export function useProvider(history, location) {
+export function useProvider(history) {
   let [state] = useState(() => {
     let route = {
       history,

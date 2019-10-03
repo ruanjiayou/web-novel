@@ -16,9 +16,6 @@
       "error",
       "single"
     ],
-    "semi": [
-      "off",
-      "always"
-    ]
+    "no-extra-semi": "warn"
   }
 }

@@ -7,3 +7,10 @@ export function isDeskTop() {
     return isDev || (platformType === 'mobile' && (isChromeApp || isIosApp)) ? true : false;
 }
 
+export function stringfyQuery(query = {}) {
+    let search = '';
+    for (let k in query) {
+        search += `&${k}=${query[k]}`;
+    }
+    return search ? '?' + search.substr(1) : '';
+}

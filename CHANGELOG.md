@@ -33,3 +33,7 @@
 - web-api-admin三端,public-user-admin三角色
 - 真实接口联调
 - state传值
+- globalStore context
+- delete app.js
+- 嵌套的分类model
+- 优化route和page映射

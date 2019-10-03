@@ -1,11 +1,14 @@
 import React, { Fragment, useEffect } from 'react';
 import { Observer } from 'mobx-react-lite';
 import { ActivityIndicator } from 'antd-mobile';
-import globalStore from 'global-state';
 import MIconView from 'components/MIconView';
+import { useStoreContext } from 'contexts/store';
+import { useRouterContext } from 'contexts/router';
 
 export default function () {
-    const userLoader = globalStore.userLoader;
+    const store = useStoreContext();
+    const router = useRouterContext();
+    const userLoader = store.userLoader;
     useEffect(() => {
         if (userLoader.isEmpty) {
             userLoader.refresh();
@@ -19,10 +22,16 @@ export default function () {
                     <div className="full-width-fix">
                         {/* TODO: 测试 */}
                         {/* <img src={userLoader.isEmpty ? '' : userLoader.item.avater} /> */}
-                        <img src="/logo.jpg" style={{ margin: 20, borderRadius: '50%' }} alt=""/>
+                        <img src="/logo.jpg" style={{ margin: 20, borderRadius: '50%' }} alt="" />
                     </div>
                     <div className="full-width-auto">{userLoader.isEmpty ? '---' : userLoader.item.name}</div>
-                    <div className="full-width-fix"><MIconView type="FaAngleRight" /></div>
+                    <div onClick={() => {
+                        store.app.setLocked(true);
+                    }}>
+                        <MIconView type="FaLock" />
+                    </div>
+                    {/* TODO: 个人信息页面 */}
+                    <div className="full-width-fix" onClick={() => router.pushView('/root/user-center/info', null)}><MIconView type="FaAngleRight" /></div>
                 </div>
                 <div className="dd-common-alignside" style={{ padding: '10px 40px' }}>
                     <div>

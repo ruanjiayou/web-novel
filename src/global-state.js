@@ -1,5 +1,6 @@
 import AppModel from 'models/AppModel';
 import UserLoader from 'loader/UserLoader';
+import CategoryLoader from 'loader/CategoryLoader'
 import BookShelfLoader from 'loader/BookShelfLoader';
 
 import Config from 'config.js'
@@ -19,11 +20,13 @@ const target = {};
 
 // loader
 const userLoader = UserLoader.create();
+const categoryLoader = CategoryLoader.create();
 const bookShelfLoader = BookShelfLoader.create();
 
 export default {
   app,
   target,
   userLoader,
+  categoryLoader,
   bookShelfLoader,
 };

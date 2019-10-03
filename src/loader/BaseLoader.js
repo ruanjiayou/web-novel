@@ -4,7 +4,7 @@ import Config from 'config';
 function createItemsLoader(model, fn, defaultValue) {
   const unionModel = types.model({
     // 数据数组
-    items: types.array(model),
+    items: types.optional(types.array(model), []),
     // 当前页码
     page: types.optional(types.number, 1),
     // 是否完毕
@@ -157,6 +157,9 @@ function createItemLoader(model, fn, defaultValue) {
           self.error = { code: 1, message: 'x' };
         }
       } catch (err) {
+        if (Config.isDebug && Config.console) {
+          console.log(err, 'loader')
+        }
         self.state = 'fail';
         if (err.code) {
           self.error = { code: err.code, message: err.message };

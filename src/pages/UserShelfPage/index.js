@@ -1,37 +1,36 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment } from 'react';
+import { useEffectOnce } from 'react-use';
 import { Observer, useLocalStore } from 'mobx-react-lite';
 
 import { useRouterContext } from 'contexts/router';
 import BookItemView from 'business/BookItemView';
 import LoaderListView from 'components/LoaderListView';
-
-import BookModel from 'models/BookModel';
-import services from 'services';
-import { createItemsLoader } from 'loader/BaseLoader';
+import globalStore from 'global-state';
 
 export default function () {
   const router = useRouterContext();
-  const bookShelfLoader = createItemsLoader(BookModel, async (params) => services.getMybooks(params)).create();
+  const loader = globalStore.bookShelfLoader;
   const localStore = useLocalStore(() => ({
     loading: false,
+
   }));
-  useEffect(() => {
-    if (bookShelfLoader.isEmpty) {
-      bookShelfLoader.refresh();
+  useEffectOnce(() => {
+    if (loader.isEmpty) {
+      loader.refresh();
     }
   });
   return <Observer>{
     () => {
       return <Fragment>
         <LoaderListView
-          loader={bookShelfLoader}
+          loader={loader}
           renderItem={(item, sectionId, index) => {
             return <BookItemView
               item={item}
               router={router}
               sectionId={sectionId}
               toggleLoading={() => localStore.loading = !localStore.loading}
-            />;
+            />
           }}
         />
       </Fragment>;
