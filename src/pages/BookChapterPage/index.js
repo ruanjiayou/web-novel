@@ -8,23 +8,22 @@ import renderEmpty from 'components/EmptyView'
 import AutoCenterView from 'components/AutoCenterView'
 import VisualBoxView from 'components/VisualBoxView'
 import MIconView from 'components/MIconView'
-
-import services from 'services'
-import ChapterModel from 'models/ChapterModel'
-import { createItemLoader } from 'loader/BaseLoader'
+import ChapterLoader from 'loader/ChapterLoader'
 
 export default function () {
   const router = useRouterContext()
   const container = useRef(null)
-  const loader = createItemLoader(ChapterModel, async (params) => services.getBookChapter(params)).create()
+  const loader = ChapterLoader.create()
   const emptyView = renderEmpty(loader)
   const localStore = useLocalStore(() => ({
     pop: false,
     percent: 0,
+    id: router.getStateKey('id'),
+    bid: router.getStateKey('bid'),
   }))
   useEffect(() => {
     if (loader.isEmpty) {
-      loader.refresh({ id: router.getStateKey('id'), bid: router.getStateKey('bid') })
+      loader.refresh({ id: localStore.id, bid: localStore.bid })
     }
   })
   return <Observer>
@@ -82,9 +81,17 @@ export default function () {
         <VisualBoxView visible={localStore.pop}>
           <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, fontSize: 12, backgroundColor: '#eee', padding: '0 10px' }}>
             <div className="full-width" style={{ height: 40 }}>
-              <span className="full-width-fix">上一章</span>
+              <span className="full-width-fix" style={{ opacity: loader.isEmpty || loader.item.preId === '' ? 0.5 : 1 }} onClick={() => {
+                if (!loader.isEmpty && loader.item.preId) {
+                  loader.refresh({ bid: localStore.bid, id: loader.item.preId })
+                }
+              }}>上一章</span>
               <Progress percent={localStore.percent} position={'normal'} className="full-width-auto" style={{ margin: '0 10px' }} />
-              <span className="full-width-fix">下一章</span>
+              <span className="full-width-fix" style={{ opacity: loader.isEmpty || loader.item.nextId === '' ? 0.5 : 1 }} onClick={() => {
+                if (!loader.isEmpty && loader.item.nextId) {
+                  loader.refresh({ bid: localStore.bid, id: loader.item.nextId })
+                }
+              }}>下一章</span>
             </div>
             <div className="full-width" style={{ height: 50 }}>
               <div className="full-width-fix dd-common-centerXY" style={{ flexDirection: 'column' }}>

@@ -21,7 +21,7 @@ import './index.css'
 
 export default function ({ type, className = '', size = 'md', style = {}, ...restProps }) {
   const Icon = Icons[type]
-  return <div className={`am-icon am-icon-${type.substr(1)} am-icon-${size} ${className}`} {...restProps}>
+  return <div style={style} className={`am-icon am-icon-${type.substr(1)} am-icon-${size} ${className}`} {...restProps}>
     <Icon />
   </div>
 }

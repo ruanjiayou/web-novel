@@ -11,6 +11,8 @@ const Model = types.model({
   words: types.optional(types.number, 0),
   comments: types.optional(types.number, 0),
   content: types.optional(types.string, ''),
+  preId: types.maybe(types.string),
+  nextId: types.maybe(types.string),
 })
 
 export default Model

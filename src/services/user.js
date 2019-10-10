@@ -29,4 +29,16 @@ export default {
     })
     return { items: result.data, ended: true }
   },
+  async getBookFirstChapter(params) {
+    const result = await shttp({
+      url: `/v1/user/book/${params.id}/first-chapter`
+    })
+    return { item: result.data }
+  },
+  async getBookChapter(params) {
+    const result = await shttp({
+      url: `/v1/user/book/${params.bid}/chapter/${params.id}`
+    })
+    return { item: result.data }
+  },
 }

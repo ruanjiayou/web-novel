@@ -33,15 +33,6 @@ shttp.interceptors.response.use(
     }
     const res = response.data
     // 干点什么
-    res.code = res.ecode
-    if (res.code === undefined) {
-      res.code = 0
-    }
-    if (res && res.rdata !== undefined) {
-      res.data = res.rdata
-      delete res.ecode
-      delete res.rdata
-    }
     if (res.code !== 0) {
       if (res.code === 10110 && response.config.url !== response.config.baseURL + '/v1/auth/user/refresh') {
         globalStore.app.setAccessToken('')

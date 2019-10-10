@@ -29,6 +29,15 @@ function createItemsLoader(model, fn, defaultValue) {
       get length() {
         return self.items.length
       },
+      get fn() {
+        return fn
+      }
+    }
+  }).actions(self => {
+    return {
+      setData(data) {
+        self.items = data || []
+      }
     }
   }).actions(self => {
     const request = flow(function* (params, type = 'refresh') {
@@ -46,8 +55,10 @@ function createItemsLoader(model, fn, defaultValue) {
       self.isLoading = true
       self.state = 'success'
       params.query.page = self.page
+      let res = null
       try {
-        let { ended, items } = yield fn(params, type)
+        res = yield fn(params, type)
+        let { ended, items } = res
         self.isEnded = !!ended
         if (type === 'refresh') {
           // 刷新
@@ -85,6 +96,7 @@ function createItemsLoader(model, fn, defaultValue) {
       } finally {
         self.isLoading = false
       }
+      return res
     })
     return {
       clear() {
@@ -102,11 +114,11 @@ function createItemsLoader(model, fn, defaultValue) {
         self.items.push(item)
       },
       async refresh(params) {
-        await request(params, 'refresh')
+        return await request(params, 'refresh')
       },
       async loadMore(params) {
         self.page++
-        await request(params, 'more')
+        return await request(params, 'more')
       }
     }
   })
@@ -131,7 +143,16 @@ function createItemLoader(model, fn, defaultValue) {
     return {
       get isEmpty() {
         return !self.item
+      },
+      get fn() {
+        return fn
       }
+    }
+  }).actions(self => {
+    return {
+      setData(data) {
+        self.item = data
+      },
     }
   }).actions(self => {
     const request = flow(function* (params, type = 'refresh') {
@@ -148,8 +169,10 @@ function createItemLoader(model, fn, defaultValue) {
       self.error = undefined
       self.isLoading = true
       self.state = 'success'
+      let res = null
       try {
-        let { item } = yield fn(params, type)
+        res = yield fn(params, type)
+        let { item } = res
         if (item) {
           self.item = item
         } else {
@@ -169,10 +192,11 @@ function createItemLoader(model, fn, defaultValue) {
       } finally {
         self.isLoading = false
       }
+      return res
     })
     return {
       async refresh(params) {
-        await request(params, 'refresh')
+        return await request(params, 'refresh')
       }
     }
   })

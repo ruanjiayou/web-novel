@@ -29,7 +29,7 @@
 - mock-server添加控制配置
 - isDebug和console配置
 
-## mater 2019-10-3 03:01:08
+## master 2019-10-3 03:01:08
 - web-api-admin三端,public-user-admin三角色
 - 真实接口联调
 - state传值
@@ -38,3 +38,11 @@
 - 嵌套的分类model
 - 优化route和page映射
 - 绝定尽量不用分号
+
+## master 2019-10-4 02:07:12 该先后端的了
+- 采集
+
+## master 2019-10-10 01:09:02
+- 下一页
+- cache功能
+- 修改约定字段

@@ -16,7 +16,7 @@ export default {
     const result = await shttp({
       url: `/v1/public/book/${params.id}/catalog?${search}`
     })
-    return { items: result.data, ended: result.data.length < 10 }
+    return { items: result.data, ended: result.data.length < 20 }
   },
   async getBookList(params) {
     const result = await shttp({
@@ -24,12 +24,6 @@ export default {
     })
     console.log(result, '>')
     return { items: result.data, ended: result.data.length < 10 }
-  },
-  async getBookChapter(params) {
-    const result = await shttp({
-      url: `/v1/public/book/${params.bid}/chapter/${params.id}`
-    })
-    return { item: result.data }
   },
   async getCategoryList() {
     const result = await shttp({
@@ -51,7 +45,6 @@ export default {
     for (let k in tree) {
       items.push(tree[k])
     }
-    console.log(items)
     return { items, ended: true }
   }
 } 

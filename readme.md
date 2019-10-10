@@ -37,3 +37,4 @@
 - 占位图
 - 没global-store没缓存的问题
 - loader得改改.
+- ~~~需考虑缓存(size,ttl不是很必要)~~~

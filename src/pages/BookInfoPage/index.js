@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
-import { ActivityIndicator } from 'antd-mobile'
+import { ActivityIndicator, Icon } from 'antd-mobile'
 
 import { useRouterContext } from 'contexts/router'
 import 'components/common.css'
@@ -8,18 +8,28 @@ import MIconView from 'components/MIconView'
 import AutoCenerView from 'components/AutoCenterView'
 import VisualBoxView from 'components/VisualBoxView'
 import BookLoader from 'loader/BookLoader'
+import services from 'services'
+import caches from 'utils/cache'
 
 export default function () {
   const router = useRouterContext()
   const loader = BookLoader.create()
+  const bookCache = caches.getCache('book')
   const localStore = useLocalStore(() => ({
     loading: false,
+    firstLoading: false,
     shouldFix: false,
+    id: router.getStateKey('id'),
   }))
   useEffect(() => {
-    if (loader.isEmpty) {
-      loader.refresh({ id: router.getStateKey('id') })
-    }
+    bookCache.getValue(localStore.id).then(book => {
+      loader.setData(book)
+      if (loader.isEmpty) {
+        loader.refresh({ id: localStore.id }).then(res => {
+          bookCache.setValue(localStore.id, res.item)
+        })
+      }
+    })
   })
   return <Observer>{
     () => {
@@ -71,7 +81,17 @@ export default function () {
             </div>
             <div className="dd-common-alignside" style={{ height: 50 }}>
               <div className="dd-common-centerXY" style={{ flex: 1, backgroundColor: 'rgb(226, 223, 223)', color: 'gray' }}>+ 加入书架</div>
-              <div className="dd-common-centerXY" style={{ flex: 1, backgroundColor: 'red', color: 'white' }} onClick={() => { router.pushView(`/root/book/${loader.item.id}/chapter/start`, null, { hideMenu: true }) }}>立即阅读</div>
+              <div className="dd-common-centerXY" style={{ flex: 1, backgroundColor: 'red', color: 'white' }} onClick={async () => {
+                try {
+                  localStore.firstLoading = true
+                  const info = await services.getBookFirstChapter({ id: localStore.id })
+                  router.pushView(`/root/book/${localStore.id}/chapter/${info.item.id}`, null, { hideMenu: true, bid: localStore.id, id: info.item.id })
+                } catch (err) {
+
+                } finally {
+                  localStore.firstLoading = false
+                }
+              }}><VisualBoxView visible={localStore.firstLoading}><Icon type="loading" /></VisualBoxView>立即阅读</div>
             </div>
           </div>
         </Fragment>

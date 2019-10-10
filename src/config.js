@@ -30,5 +30,10 @@ export default {
       title: '我的',
       icon: 'FaUserAlt'
     },
-  ]
+  ],
+  cache: {
+    book: {},
+    catalog: {},
+    chapter: {},
+  }
 }
