@@ -1,9 +1,11 @@
-export function isDeskTop() {
+import * as bowser from 'bowser'
+
+export function isDeskTop(dev) {
+    const browser = bowser.getParser(window.navigator.userAgent)
     const isChromeApp = (window.matchMedia('(display-mode: standalone)').matches)
     const isIosApp = window.navigator.standalone === true
-    const isDev = process.env.NODE_ENV === 'development'
-    // TODO: 根据UA判断
-    const platformType = 'mobile'
+    const isDev = dev === undefined ? process.env.NODE_ENV === 'development' : dev
+    const platformType = browser.getPlatformType()
     return isDev || (platformType === 'mobile' && (isChromeApp || isIosApp)) ? true : false
 }
 

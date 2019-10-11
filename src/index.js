@@ -44,6 +44,12 @@ class ErrorBoundary extends React.Component {
 
   componentDidMount() {
     document.getElementById('start-loading').style.display = 'none'
+    document.getElementById('box').className = this.state.isDesktop ? 'box-app' : 'box-browser'
+    window.addEventListener('resize', () => {
+      let isApp = isDeskTop(false)
+      document.getElementById('box').className = isApp ? 'box-app' : 'box-browser'
+      this.setState({ isDeskTop: isApp })
+    })
     document.addEventListener('visibilitychange', async (e) => {
       // TODO: 时间过长处理.刷新
       if (document.hidden) {
