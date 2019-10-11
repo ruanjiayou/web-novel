@@ -20,7 +20,7 @@ export default {
   },
   async getBookList(params) {
     const result = await shttp({
-      url: `/v1/public/books${stringfyQuery(params)}`,
+      url: `/v1/public/books${stringfyQuery(params.query)}`,
     })
     console.log(result, '>')
     return { items: result.data, ended: result.data.length < 10 }

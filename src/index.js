@@ -44,7 +44,7 @@ class ErrorBoundary extends React.Component {
 
   componentDidMount() {
     document.getElementById('start-loading').style.display = 'none'
-    document.getElementById('box').className = this.state.isDesktop ? 'box-app' : 'box-browser'
+    document.getElementById('box').className = isDeskTop(false) ? 'box-app' : 'box-browser'
     window.addEventListener('resize', () => {
       let isApp = isDeskTop(false)
       document.getElementById('box').className = isApp ? 'box-app' : 'box-browser'
