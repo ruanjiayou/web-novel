@@ -24,14 +24,14 @@ export default function () {
       return <Fragment>
         <LoaderListView
           loader={loader}
-          renderItem={(item, sectionId, index) => {
-            return <BookItemView
+          renderItem={(item, sectionId, index) => (
+            <BookItemView
               item={item}
               router={router}
               sectionId={sectionId}
               toggleLoading={() => localStore.loading = !localStore.loading}
             />
-          }}
+          )}
         />
       </Fragment>
     }

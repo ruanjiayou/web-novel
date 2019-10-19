@@ -15,16 +15,16 @@ export default function () {
   const container = useRef(null)
   const loader = ChapterLoader.create()
   const emptyView = renderEmpty(loader)
+  const patharr = router.history.location.pathname.split('/').reverse()
+  console.log(patharr)
   const localStore = useLocalStore(() => ({
     pop: false,
     percent: 0,
-    id: router.getStateKey('id'),
-    bid: router.getStateKey('bid'),
+    id: patharr[0],
+    bid: patharr[2],
   }))
   useEffect(() => {
-    if (loader.isEmpty) {
-      loader.refresh({ id: localStore.id, bid: localStore.bid })
-    }
+    loader.refresh({ params: { id: localStore.id, bid: localStore.bid } })
   })
   return <Observer>
     {() => {
@@ -48,7 +48,7 @@ export default function () {
             </AutoCenterView>
           </VisualBoxView>
           {!loader.isEmpty && <Fragment>
-            <div style={{ padding: '8px 0', color: 'grey' }}>第{loader.item.order}章 {loader.item.title}</div>
+            <div style={{ padding: '8px 0', color: 'grey' }}>{loader.item.title}</div>
             <div
               ref={container}
               className="full-height-auto"
@@ -83,13 +83,18 @@ export default function () {
             <div className="full-width" style={{ height: 40 }}>
               <span className="full-width-fix" style={{ opacity: loader.isEmpty || loader.item.preId === '' ? 0.5 : 1 }} onClick={() => {
                 if (!loader.isEmpty && loader.item.preId) {
-                  loader.refresh({ bid: localStore.bid, id: loader.item.preId })
+                  loader.refresh({ params: { bid: localStore.bid, id: loader.item.preId } })
                 }
               }}>上一章</span>
               <Progress percent={localStore.percent} position={'normal'} className="full-width-auto" style={{ margin: '0 10px' }} />
               <span className="full-width-fix" style={{ opacity: loader.isEmpty || loader.item.nextId === '' ? 0.5 : 1 }} onClick={() => {
                 if (!loader.isEmpty && loader.item.nextId) {
-                  loader.refresh({ bid: localStore.bid, id: loader.item.nextId })
+                  let id = loader.item.nextId
+                  loader.clear()
+                  router.replaceView(`/root/book/${localStore.bid}/chapter/${id}`, null, { hideMenu: true })
+                  // loader.refresh({ params: { bid: localStore.bid, id: loader.item.nextId } }).then(() => {
+                  //   router.replaceView(`/root/book/${localStore.bid}/chapter/${loader.item.id}`, null, { hideMenu: true })
+                  // })
                 }
               }}>下一章</span>
             </div>

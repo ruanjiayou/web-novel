@@ -2,13 +2,13 @@ import shttp from 'utils/shttp'
 import { stringfyQuery } from 'utils/utils'
 
 export default {
-  async getBookInfo(params) {
+  async getBookInfo({ query, params, data }) {
     const result = await shttp({
       url: `/v1/public/book/${params.id}`
     })
     return { item: result.data }
   },
-  async getBookCatalog(params) {
+  async getBookCatalog({ query, params, data }) {
     let search = ''
     for (let k in params.query) {
       search += `&${k}=${params.query[k]}`
@@ -18,7 +18,7 @@ export default {
     })
     return { items: result.data, ended: result.data.length < 20 }
   },
-  async getBookList(params) {
+  async getBookList({ query, params, data }) {
     const result = await shttp({
       url: `/v1/public/books${stringfyQuery(params.query)}`,
     })
@@ -46,5 +46,11 @@ export default {
       items.push(tree[k])
     }
     return { items, ended: true }
-  }
+  },
+  async getGroupTree({ query, params, data }) {
+    const result = await shttp({
+      url: `/v1/public/group-tree/${params.group_id}`,
+    })
+    return { item: result.data }
+  },
 } 

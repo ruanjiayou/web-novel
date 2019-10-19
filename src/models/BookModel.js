@@ -10,7 +10,6 @@ const Model = types.model({
   desc: types.string,
   tags: types.array(types.string),
   status: types.enumeration(['loading','finished']),
-  isApproved: types.boolean,
   createdAt: types.string,
   words: types.number,
   comments: types.number,

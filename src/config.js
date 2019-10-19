@@ -35,5 +35,6 @@ export default {
     book: {},
     catalog: {},
     chapter: {},
+    tree: {},
   }
 }

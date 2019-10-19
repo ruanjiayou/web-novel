@@ -13,14 +13,16 @@ import { createItemsLoader } from 'loader/BaseLoader'
 
 export default function () {
   const router = useRouterContext()
-  const loader = createItemsLoader(ChapterModel, async (params) => services.getBookCatalog(params), { query: { sort: 'id-asc' } }).create()
+  const loader = createItemsLoader(ChapterModel, async (option) => services.getBookCatalog(option)).create()
   const localStore = useLocalStore(() => ({
     loading: false,
     sortASC: true,
+    id: router.getStateKey('id'),
   }))
   useEffect(() => {
     if (loader.isEmpty) {
-      loader.refresh({ id: router.getStateKey('id') })
+      const params = { id: localStore.id }
+      loader.refresh({ params })
     }
   })
   return <Observer>{
@@ -45,15 +47,23 @@ export default function () {
           <div className="full-height-auto">
             <LoaderListView
               loader={loader}
-              renderItem={(item, sectionId, index) => {
-                return <ChapterItemView
+              refresh={() => {
+                const params = { id: localStore.id }
+                loader.refresh({ params })
+              }}
+              loadMore={() => {
+                const params = { id: localStore.id }
+                loader.loadMore({ params })
+              }}
+              renderItem={(item, sectionId, index) => (
+                <ChapterItemView
                   nth={loader.sort === 'asc' ? parseInt(index) + 1 : loader.items.length - parseInt(index)}
                   item={item}
                   router={router}
                   sectionId={sectionId}
                   toggleLoading={() => localStore.loading = !localStore.loading}
                 />
-              }}
+              )}
             />
           </div>
         </div>

@@ -72,10 +72,13 @@ export function useProvider(history) {
           state
         })
       },
-      replaceView({ viewName, params, state }) {
+      replaceView(pathname, params = {}, state) {
         state = state || {}
         state.userClick = true
-        let { pathname, search } = getLocation()
+        let search = ''
+        for (let k in params) {
+          search += `${k}=${params[k]}`
+        }
         history.replace({
           pathname,
           search,

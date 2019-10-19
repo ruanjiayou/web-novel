@@ -1,7 +1,7 @@
 import { flow, types } from 'mobx-state-tree'
 import Config from 'config'
 
-function createItemsLoader(model, fn, defaultValue) {
+function createItemsLoader(model, fn) {
   const unionModel = types.model({
     // 数据数组
     items: types.optional(types.array(model), []),
@@ -15,6 +15,7 @@ function createItemsLoader(model, fn, defaultValue) {
     state: types.optional(types.enumeration(['success', 'fail']), 'success'),
     // 操作类型
     type: types.optional(types.enumeration(['refresh', 'more']), 'refresh'),
+    // 排列方向
     sort: types.optional(types.enumeration(['asc', 'desc']), 'asc'),
     // 错误信息
     error: types.maybe(types.model({
@@ -29,9 +30,6 @@ function createItemsLoader(model, fn, defaultValue) {
       get length() {
         return self.items.length
       },
-      get fn() {
-        return fn
-      }
     }
   }).actions(self => {
     return {
@@ -40,13 +38,8 @@ function createItemsLoader(model, fn, defaultValue) {
       }
     }
   }).actions(self => {
-    const request = flow(function* (params, type = 'refresh') {
-      if (!params) {
-        params = defaultValue || {}
-      }
-      if (!params.query) {
-        params.query = {}
-      }
+    const request = flow(function* (option = {}, type = 'refresh') {
+      const { query = {}, params = {}, data = {} } = option
       if (self.isLoading || (self.isEnded && type === 'more')) {
         return
       }
@@ -54,30 +47,20 @@ function createItemsLoader(model, fn, defaultValue) {
       self.error = undefined
       self.isLoading = true
       self.state = 'success'
-      params.query.page = self.page
+      query.page = self.page
       let res = null
       try {
-        res = yield fn(params, type)
+        res = yield fn({ query, params, data }, type)
         let { ended, items } = res
         self.isEnded = !!ended
         if (type === 'refresh') {
           // 刷新
           self.page = 1
-          if (self.sort === 'desc') {
-            self.items = items.reverse()
-          } else {
-            self.items = items
-          }
+          self.items = items
         } else if (items.length > 0) {
           // 加载更多
           self.page = params.page
-          if (self.sort === 'desc') {
-            items.forEach(item => {
-              self.items.unshift(item)
-            })
-          } else {
-            self.items.push(...items)
-          }
+          self.items.push(...items)
         } else {
           self.state = 'fail'
           self.error = { code: 1, message: 'x' }
@@ -105,7 +88,6 @@ function createItemsLoader(model, fn, defaultValue) {
       },
       toggleSort() {
         self.sort = self.sort === 'asc' ? 'desc' : 'asc'
-        self.items = self.items.reverse()
       },
       remove(index) {
         self.items = self.items.slice().filter((item, idx) => +index !== +idx)
@@ -113,12 +95,12 @@ function createItemsLoader(model, fn, defaultValue) {
       append(item) {
         self.items.push(item)
       },
-      async refresh(params) {
-        return await request(params, 'refresh')
+      async refresh(option) {
+        return await request(option, 'refresh')
       },
-      async loadMore(params) {
+      async loadMore(option) {
         self.page++
-        return await request(params, 'more')
+        return await request(option, 'more')
       }
     }
   })
@@ -126,7 +108,7 @@ function createItemsLoader(model, fn, defaultValue) {
   return types.optional(unionModel, {})
 }
 
-function createItemLoader(model, fn, defaultValue) {
+function createItemLoader(model, fn) {
   const unionModel = types.model({
     item: types.maybeNull(model),
     // 是否加载中
@@ -155,10 +137,8 @@ function createItemLoader(model, fn, defaultValue) {
       },
     }
   }).actions(self => {
-    const request = flow(function* (params, type = 'refresh') {
-      if (!params) {
-        params = defaultValue || {}
-      }
+    const request = flow(function* (option = {}, type = 'refresh') {
+      const { query, params, data } = option
       if (self.isLoading || (self.isEnded && type === 'more')) {
         return
       }
@@ -171,7 +151,7 @@ function createItemLoader(model, fn, defaultValue) {
       self.state = 'success'
       let res = null
       try {
-        res = yield fn(params, type)
+        res = yield fn({ query, params, data }, type)
         let { item } = res
         if (item) {
           self.item = item
@@ -195,8 +175,11 @@ function createItemLoader(model, fn, defaultValue) {
       return res
     })
     return {
-      async refresh(params) {
-        return await request(params, 'refresh')
+      clear() {
+        self.item = null
+      },
+      async refresh(option) {
+        return await request(option, 'refresh')
       }
     }
   })

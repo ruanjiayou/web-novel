@@ -19,14 +19,14 @@ const Model = types.model({
     isLockerOpen: types.optional(types.boolean, true),
     isLockerLocked: types.optional(types.boolean, false),
     lockerLength: types.optional(types.number, 6),
-    lockerSeconds: types.optional(types.number, 1000 * 60 * 5),
+    lockerSeconds: types.optional(types.number, 1000 * 60 * 30),
     lockerPin: types.optional(types.string, '789654'),
   }, {})
-}).views(self => {
-  return {
-
-  }
-}).actions(self => {
+}).views(self => ({
+  get isLogin() {
+    return !!self.accessToken
+  },
+})).actions(self => {
   // locker相关操作
   return {
     initLocker(opt = {}) {

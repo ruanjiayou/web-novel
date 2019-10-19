@@ -9,12 +9,10 @@ import AutoCenerView from 'components/AutoCenterView'
 import VisualBoxView from 'components/VisualBoxView'
 import BookLoader from 'loader/BookLoader'
 import services from 'services'
-import caches from 'utils/cache'
 
 export default function () {
   const router = useRouterContext()
   const loader = BookLoader.create()
-  const bookCache = caches.getCache('book')
   const localStore = useLocalStore(() => ({
     loading: false,
     firstLoading: false,
@@ -22,14 +20,9 @@ export default function () {
     id: router.getStateKey('id'),
   }))
   useEffect(() => {
-    bookCache.getValue(localStore.id).then(book => {
-      loader.setData(book)
-      if (loader.isEmpty) {
-        loader.refresh({ id: localStore.id }).then(res => {
-          bookCache.setValue(localStore.id, res.item)
-        })
-      }
-    })
+    if (loader.isEmpty) {
+      loader.refresh({ params: { id: localStore.id } })
+    }
   })
   return <Observer>{
     () => {
@@ -84,7 +77,7 @@ export default function () {
               <div className="dd-common-centerXY" style={{ flex: 1, backgroundColor: 'red', color: 'white' }} onClick={async () => {
                 try {
                   localStore.firstLoading = true
-                  const info = await services.getBookFirstChapter({ id: localStore.id })
+                  const info = await services.getBookFirstChapter({ params: { id: localStore.id } })
                   router.pushView(`/root/book/${localStore.id}/chapter/${info.item.id}`, null, { hideMenu: true, bid: localStore.id, id: info.item.id })
                 } catch (err) {
 

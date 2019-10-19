@@ -13,7 +13,7 @@ function MyBody(props) {
   return <div className={`am-list-body ${props.className}`}>{props.children}</div>
 }
 
-function renderList({ loader, renderItem, onScroll, className }) {
+function renderList({ loader, refresh, loadMore, renderItem, onScroll, className }) {
   const dataSource = dataProvider.cloneWithRows(loader.items.slice())
   const EmptyView = renderEmptyView(loader)
   // 必须要这样.不能直接用 loader.isLoading判断
@@ -31,8 +31,8 @@ function renderList({ loader, renderItem, onScroll, className }) {
         renderBodyComponent={() => <MyBody className={className} />}
         initialListSize={Infinity}
         onEndReachedThreshold={10}
-        onEndReached={() => loader.sort === 'asc' ? loader.loadMore() : ''}
-        pullToRefresh={<PullToRefresh refreshing={false} onRefresh={() => loader.sort === 'asc' ? loader.refresh() : loader.loadMore()} />}
+        onEndReached={loadMore ? loadMore : loader.loadMore}
+        pullToRefresh={<PullToRefresh refreshing={false} onRefresh={refresh ? refresh : loader.refresh} />}
         /**
          * useBodyScroll
          * onScroll

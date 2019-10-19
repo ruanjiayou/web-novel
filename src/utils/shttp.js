@@ -60,6 +60,10 @@ shttp.interceptors.response.use(
     if (Config.isDebug && Config.console) {
       console.log(error, 'response error')
     }
+    const data = error.response.data
+    if (data.code === 101020) {
+      globalStore.app.setAccessToken('')
+    }
     return Promise.resolve(error)
   }
 )

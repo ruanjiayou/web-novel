@@ -47,3 +47,5 @@
 - cache功能
 - 修改约定字段
 - 浏览器检测.pc中显示mobile
+- DataLoader 参数改为 {query,params,data}
+- tree类型model定义

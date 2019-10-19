@@ -53,12 +53,14 @@ export default function () {
     () => <Fragment>
       <div className="full-height">
         <div className="dd-common-alignside" style={{ height: 45, padding: '0 15px' }}>
-          <MIconView type="FaChevronLeft" onClick={() => { router.back() }} />
-          <div>分类</div>
-          <div onClick={() => router.pushView('/root/book/search', null, { hideMenu: true, })}>全部作品</div>
+          <div style={{ flex: 1 }}>
+            <MIconView type="FaChevronLeft" onClick={() => { router.back() }} />
+          </div>
+          <div style={{ flex: 1, textAlign: 'center' }}>分类</div>
+          <div style={{ flex: 1, textAlign: 'right' }} onClick={() => router.pushView('/root/book/search', null, { hideMenu: true, })}>全部作品</div>
         </div>
         <div style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
-          <div style={{ borderRight: '1px solid #ccc' }}>
+          <div style={{ borderRight: '1px solid #ccc', minWidth: 140 }}>
             {loader.items.map((item, index) => <div
               key={item.id}
               style={{ ...styles.bigCate, ...(index === localStore.selectIndex ? styles.choosed : {}) }}

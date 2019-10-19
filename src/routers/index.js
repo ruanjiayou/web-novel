@@ -5,7 +5,6 @@ import { useStoreContext } from 'contexts/store'
 import { useProvider } from 'contexts/router'
 
 // import store from 'global-state';
-import storage from 'utils/storage'
 import Locker from 'components/LockerView'
 
 import LayoutNormal from 'Layout/Normal'
@@ -25,9 +24,9 @@ function App(props) {
   return <RouterContext.Provider value={router}>
     <Observer>{
       () => {
-        if (!isLogin() && props.location.pathname.startsWith('/root')) {
+        if (!store.app.isLogin && props.location.pathname.startsWith('/root')) {
           return <Redirect to={'/auth/login'}></Redirect>
-        } else if (isLogin()) {
+        } else if (store.app.isLogin) {
           if (store.app.config.isLockerOpen && store.app.config.isLockerLocked) {
             return <Locker />
           }
@@ -45,16 +44,12 @@ function App(props) {
 }
 
 function NoMatch() {
-  if (isLogin()) {
+  const store = useStoreContext()
+  if (store.app.isLogin) {
     return <Redirect to={'/root/home'}></Redirect>
   } else {
     return <Redirect to={'/auth/login'}></Redirect>
   }
-}
-
-function isLogin() {
-  let token = storage.getValue('access-token')
-  return !!token
 }
 
 export default function Index() {

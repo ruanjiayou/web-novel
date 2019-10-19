@@ -31,10 +31,30 @@ async function login(router, store) {
   }
 }
 
+async function register(router, store) {
+  if (store.account && store.password) {
+    store.isLoading = true
+    let res = await services.register(store)
+    store.isLoading = false
+    if (!res) {
+      return Toast.info('请求失败!')
+    }
+    if (res.code !== 0) {
+      return Toast.info(res.message)
+    } else {
+      Toast.info('注册成功!')
+    }
+  } else {
+    Toast.info('请输入账号密码!')
+  }
+}
+
 export default function ({ self }) {
   let router = useRouterContext()
   let store = useLocalStore(() => ({
     isLoading: false,
+    isLogin: false,
+    isRegister: false,
     account: '',
     password: ''
   }))
@@ -45,9 +65,11 @@ export default function ({ self }) {
           <MIconView type="FaCog" onClick={() => {
             Modal.prompt('地址', '', [
               { text: '取消' },
-              { text: '确定', onPress: val => {
-                globalStore.app.setBaseURL(val)
-              } }
+              {
+                text: '确定', onPress: val => {
+                  globalStore.app.setBaseURL(val)
+                }
+              }
             ], 'default', '')
           }} />
         </div>
@@ -74,8 +96,11 @@ export default function ({ self }) {
               密码
             </InputItem>
           </List.Item>
-          <List.Item>
-            <Button loading={store.isLoading} disabled={store.isLoading} type="primary" onClick={() => login(router, store)}>登录</Button>
+          <List.Item style={{ display: 'flex' }}>
+            <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', justifyContent: 'space-around' }}>
+              <Button loading={store.isLogin} inline disabled={store.isLogin || store.isRegister} type="primary" onClick={() => login(router, store)}>登录</Button>
+              <Button loading={store.isRegister} inline disabled={store.isLogin || store.isRegister} type="primary" onClick={() => register(router, store)}>注册</Button>
+            </div>
           </List.Item>
         </List>
       </div>
