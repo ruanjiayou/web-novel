@@ -53,4 +53,10 @@ export default {
     })
     return { item: result.data }
   },
+  async getGroups({ query, params, data }) {
+    const result = await shttp({
+      url: '/v1/public/groups',
+    })
+    return { items: result.data }
+  },
 } 

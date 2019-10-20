@@ -5,11 +5,12 @@ const GroupModel = types.model('Group', {
   tree_id: types.string,
   group_id: types.string,
   parent_id: types.string,
+  title: types.string,
   name: types.string,
   desc: types.string,
   view: types.string,
   refs: types.array(types.string),
-  data: types.optional(types.array(BookModel), []),
+  data: types.optional(types.frozen([]), []),
   attrs: types.model({
     hide_title: types.boolean,
     allowChange: types.boolean,

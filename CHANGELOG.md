@@ -49,3 +49,11 @@
 - 浏览器检测.pc中显示mobile
 - DataLoader 参数改为 {query,params,data}
 - tree类型model定义
+
+## master 2019-10-20 13:29:03
+- shttp和global-state循环引用bug
+- router添加params获取url的params
+
+## master 2019-10-21 02:00:05
+- Navi写为context(hideMenu默认true)
+- todo添加和列表(暂无修改和删除)

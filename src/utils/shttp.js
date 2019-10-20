@@ -2,9 +2,10 @@ import axios from 'axios'
 import globalStore from '../global-state'
 import Config from '../config'
 import services from '../services'
+import storage from './storage'
 
 const shttp = axios.create({
-  baseURL: '',
+  baseURL: storage.getValue('baseURL') || (Config.isDebug ? Config.config.development.host : Config.config.production) || '',
   withCredentials: false,
   timeout: 5000
 })

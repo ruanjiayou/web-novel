@@ -1,8 +1,10 @@
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom'
 import React from 'react'
 import { Observer } from 'mobx-react-lite'
+import MIconView from 'components/MIconView'
 import { useStoreContext } from 'contexts/store'
 import { useProvider } from 'contexts/router'
+import { useProvider as useNaviProvider } from 'contexts/navi'
 
 // import store from 'global-state';
 import Locker from 'components/LockerView'
@@ -16,30 +18,48 @@ import pages from 'pages'
 function App(props) {
   const store = useStoreContext()
   const [router, RouterContext] = useProvider(props.history)
+  const [navi, NaviContext] = useNaviProvider(function () {
+    return function (prop) {
+      return (
+        <div className="dd-common-alignside" style={{ height: 45, padding: '0 15px' }}>
+          <div style={{ flex: 1 }}>
+            <div style={{ display: 'inline-block' }}>
+              <MIconView type="FaChevronLeft" onClick={() => { router.back() }} />
+            </div>
+          </div>
+          <div style={{ flex: 1, textAlign: 'center', fontSize: 16, fontWeight: '600' }}>{prop.title}</div>
+          <div style={{ flex: 1, textAlign: 'right' }}>{prop.children}</div>
+        </div>
+      )
+    }
+  })
+
   // 默认是home
   const name = props.location.pathname.split('/').pop()
   if (store.app.selectedMenu !== name) {
     store.app.setMenu(name)
   }
   return <RouterContext.Provider value={router}>
-    <Observer>{
-      () => {
-        if (!store.app.isLogin && props.location.pathname.startsWith('/root')) {
-          return <Redirect to={'/auth/login'}></Redirect>
-        } else if (store.app.isLogin) {
-          if (store.app.config.isLockerOpen && store.app.config.isLockerLocked) {
-            return <Locker />
+    <NaviContext.Provider value={navi}>
+      <Observer>{
+        () => {
+          if (!store.app.isLogin && props.location.pathname.startsWith('/root')) {
+            return <Redirect to={'/auth/login'}></Redirect>
+          } else if (store.app.isLogin) {
+            if (store.app.config.isLockerOpen && store.app.config.isLockerLocked) {
+              return <Locker />
+            }
           }
+          return <LayoutNormal>
+            <Switch>
+              {/* <Route path={'/root/*'} component={AppRoot}></Route> */}
+              {pages.map(page => <Route key={page.pathname} path={page.pathname} component={page.component}></Route>)}
+              <Route component={NoMatch}></Route>
+            </Switch>
+          </LayoutNormal>
         }
-        return <LayoutNormal>
-          <Switch>
-            {/* <Route path={'/root/*'} component={AppRoot}></Route> */}
-            {pages.map(page => <Route key={page.pathname} path={page.pathname} component={page.component}></Route>)}
-            <Route component={NoMatch}></Route>
-          </Switch>
-        </LayoutNormal>
-      }
-    }</Observer>
+      }</Observer>
+    </NaviContext.Provider>
   </RouterContext.Provider>
 }
 

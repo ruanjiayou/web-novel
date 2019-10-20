@@ -40,6 +40,7 @@
     "mobx": "^5.10.1",
     "mobx-react-lite": "^1.4.0",
     "mobx-state-tree": "^3.14.0",
+    "path-to-regexp": "^3.1.0",
     "qs": "^6.7.0",
     "react": "^16.8.6",
     "react-app-rewire-workbox": "^2.0.1",

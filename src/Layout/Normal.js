@@ -12,9 +12,7 @@ export default function ({ children }) {
   return <Observer>
     {() => {
       if (router.hideMenu) {
-        return <Fragment>
-          {children}
-        </Fragment>
+        return children
       } else {
         return <Fragment>
           <TabBar
@@ -27,14 +25,12 @@ export default function ({ children }) {
               return <TabBar.Item
                 title={menu.title}
                 key={menu.name}
-                icon={<MIconView type={menu.icon} />}
-                selectedIcon={<MIconView type={menu.icon} />}
+                icon={<MIconView style={{ margin: -5 }} type={menu.icon} />}
+                selectedIcon={<MIconView style={{ marginBottom: -5 }} type={menu.icon} />}
                 selected={menu.name === store.app.selectedMenu}
                 onPress={() => {
                   store.app.setMenu(menu.name)
-                  router.history.push({
-                    pathname: menu.path
-                  })
+                  router.pushView(menu.path, null, { title: menu.title, hideMenu: false })
                 }}
               >
                 {children}

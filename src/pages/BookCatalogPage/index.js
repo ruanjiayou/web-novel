@@ -14,15 +14,15 @@ import { createItemsLoader } from 'loader/BaseLoader'
 export default function () {
   const router = useRouterContext()
   const loader = createItemsLoader(ChapterModel, async (option) => services.getBookCatalog(option)).create()
+  const params = router.params
   const localStore = useLocalStore(() => ({
     loading: false,
     sortASC: true,
-    id: router.getStateKey('id'),
+    id: params.id,
   }))
   useEffect(() => {
     if (loader.isEmpty) {
-      const params = { id: localStore.id }
-      loader.refresh({ params })
+      loader.refresh({ params: { id: localStore.id } })
     }
   })
   return <Observer>{

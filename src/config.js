@@ -19,9 +19,9 @@ export default {
       icon: 'FaBook'
     },
     {
-      name: 'category',
-      path: '/root/category',
-      title: '分类',
+      name: 'groups',
+      path: '/root/groups',
+      title: '频道',
       icon: 'FaList'
     },
     {

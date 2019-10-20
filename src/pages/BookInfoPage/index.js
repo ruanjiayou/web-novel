@@ -13,11 +13,12 @@ import services from 'services'
 export default function () {
   const router = useRouterContext()
   const loader = BookLoader.create()
+  const params = router.params
   const localStore = useLocalStore(() => ({
     loading: false,
     firstLoading: false,
     shouldFix: false,
-    id: router.getStateKey('id'),
+    id: params.id,
   }))
   useEffect(() => {
     if (loader.isEmpty) {

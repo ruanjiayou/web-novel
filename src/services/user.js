@@ -1,4 +1,5 @@
 import shttp from 'utils/shttp'
+import { stringfyQuery } from 'utils/utils'
 
 export default {
   login({ query, params, data }) {
@@ -47,5 +48,38 @@ export default {
       url: `/v1/user/book/${params.bid}/chapter/${params.id}`
     })
     return { item: result.data }
+  },
+  async getTodos({ query, params, data }) {
+    const result = await shttp({
+      url: `/v1/user/todos${stringfyQuery(query)}`
+    })
+    result.data.forEach(d => {
+      d.startedAt = new Date(d.startedAt)
+      d.endedAt = new Date(d.endedAt)
+    })
+    return { items: result.data }
+  },
+  async createTodo({ query, params, data }) {
+    const result = await shttp({
+      url: '/v1/user/todo',
+      method: 'POST',
+      data
+    })
+    return { item: result.data }
+  },
+  async updateTodo({ query, params, data }) {
+    const result = await shttp({
+      url: `/v1/user/todo/${params.id}`,
+      method: 'PUT',
+      data
+    })
+    return { item: result.data }
+  },
+  async destroyTodo({ query, params, data }) {
+    return shttp({
+      url: `/v1/user/todo/${params.id}`,
+      method: 'DELETE',
+      data
+    })
   },
 }

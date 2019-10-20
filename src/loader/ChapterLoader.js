@@ -1,9 +1,9 @@
 import services from 'services/index'
 import Chapter from 'models/ChapterModel'
 import { createItemLoader } from './BaseLoader'
-import caches from 'utils/cache'
+// import caches from 'utils/cache'
 
-const chapterCache = caches.getCache('chapter')
+// const chapterCache = caches.getCache('chapter')
 export default createItemLoader(Chapter, async (params) => {
   return services.getBookChapter(params)
   // let item = await chapterCache.getValue(params.id)

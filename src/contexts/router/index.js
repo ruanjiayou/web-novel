@@ -1,7 +1,19 @@
 import React, { useContext as useReactContext, useState } from 'react'
+import * as path2reg from 'path-to-regexp'
+import pages from '../../pages'
+
 // 上下文context.避免react多级一直传props
 const Context = React.createContext(null)
-
+const rules = pages.map(page => {
+  let url = page.pathname
+  let res = { reg: path2reg(url), params: [] }
+  path2reg.parse(url).forEach(it => {
+    if (typeof it === 'object') {
+      res.params.push(it.name)
+    }
+  })
+  return res
+})
 /**
  * 使用:
  * 创建上下文
@@ -20,7 +32,18 @@ export function useProvider(history) {
     let route = {
       history,
       get params() {
-        return {}
+        let res = {}
+        for (let i = 0; i < rules.length; i++) {
+          let rule = rules[i]
+          let m = rule.reg.exec(history.location.pathname)
+          if (m) {
+            rule.params.forEach((name, index) => {
+              res[name] = m[index + 1]
+            })
+            break
+          }
+        }
+        return res
       },
       get hideMenu() {
         return history.location.state && history.location.state.hideMenu ? true : false
@@ -29,7 +52,7 @@ export function useProvider(history) {
         return history.location.state && history.location.state[key]
       },
       back() {
-        const { userClick, login } = history.location.state || {}
+        const { userClick, login } = history.location.state || { userClick: true }
         if (login) {
           // 登录跳转进来的页面
           route.backToRoot()
@@ -62,6 +85,7 @@ export function useProvider(history) {
       pushView(pathname, params = {}, state) {
         state = state || {}
         state.userClick = true
+        state.hideMenu = state.hideMenu === false ? false : true
         let search = ''
         for (let k in params) {
           search += `${k}=${params[k]}`
@@ -93,10 +117,6 @@ export function useProvider(history) {
 
 export function useRouterContext() {
   return useReactContext(Context)
-}
-
-function getLocation() {
-
 }
 
 function getBackToRootLocation() {

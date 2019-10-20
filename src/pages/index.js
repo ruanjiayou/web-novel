@@ -1,13 +1,18 @@
-import CategoryPage from 'pages/CategoryPage'
-import BookInfoPage from 'pages/BookInfoPage'
-import BookCatalogPage from 'pages/BookCatalogPage'
-import BookChapterPage from 'pages/BookChapterPage'
+import CategoryPage from './CategoryPage'
+import BookInfoPage from './BookInfoPage'
+import BookCatalogPage from './BookCatalogPage'
+import BookChapterPage from './BookChapterPage'
 
-import HomePage from 'pages/HomePage'
-import AuthLoginPage from 'pages/AuthLoginPage'
-import UserCenterPage from 'pages/UserCenterPage'
-import BookShelfPage from 'pages/UserShelfPage'
+import HomePage from './HomePage'
+import AuthLoginPage from './AuthLoginPage'
+import BookShelfPage from './UserShelfPage'
 import BookSearchPage from './BookSearchPage'
+import GroupTreePage from './GroupTreePage'
+import GroupListPage from './GroupListPage'
+import UserCenterPage from './UserCenterPage'
+import SecurePage from './SecurePage'
+import TodoPage from './TodoPage'
+import TodoAddPage from './TodoAddPage'
 
 export default [
   {
@@ -31,12 +36,20 @@ export default [
     component: BookCatalogPage,
   },
   {
-    pathname: '/root/book/:id([0-9a-zA-Z-]+)/chapter/:chapter([0-9a-zA-Z-]+)/',
+    pathname: '/root/book/:bid([0-9a-zA-Z-]+)/chapter/:id([0-9a-zA-Z-]+)',
     component: BookChapterPage,
   },
   {
     pathname: '/root/book/search',
     component: BookSearchPage,
+  },
+  {
+    pathname: '/root/group-tree/:group_id([0-9a-zA-Z-]+)',
+    component: GroupTreePage,
+  },
+  {
+    pathname: '/root/groups',
+    component: GroupListPage,
   },
   // 用户部分
   {
@@ -46,5 +59,17 @@ export default [
   {
     pathname: '/root/shelf',
     component: BookShelfPage,
+  },
+  {
+    pathname: '/root/secure',
+    component: SecurePage,
+  },
+  {
+    pathname: '/root/todo',
+    component: TodoPage,
+  },
+  {
+    pathname: '/root/add-todo',
+    component: TodoAddPage,
   },
 ]

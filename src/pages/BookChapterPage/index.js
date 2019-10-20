@@ -15,13 +15,12 @@ export default function () {
   const container = useRef(null)
   const loader = ChapterLoader.create()
   const emptyView = renderEmpty(loader)
-  const patharr = router.history.location.pathname.split('/').reverse()
-  console.log(patharr)
+  const params = router.params
   const localStore = useLocalStore(() => ({
     pop: false,
     percent: 0,
-    id: patharr[0],
-    bid: patharr[2],
+    id: params.id,
+    bid: params.bid,
   }))
   useEffect(() => {
     loader.refresh({ params: { id: localStore.id, bid: localStore.bid } })

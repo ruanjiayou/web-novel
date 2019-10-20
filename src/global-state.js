@@ -4,13 +4,10 @@ import CategoryLoader from 'loader/CategoryLoader'
 import BookShelfLoader from 'loader/BookShelfLoader'
 
 import Config from 'config.js'
-import shttp from 'utils/shttp'
-import storage from 'utils/storage'
-
-shttp.defaults.baseURL = storage.getValue('baseURL') || (Config.isDebug ? Config.config.development.host : Config.config.production) || ''
+import storage from './utils/storage'
 // 全局状态.
 const app = AppModel.create({
-  baseURL: shttp.defaults.baseURL,
+  baseURL: storage.getValue('baseURL') || (Config.isDebug ? Config.config.development.host : Config.config.production) || '',
   config: {}
 })
 app.setAccessToken(storage.getValue(app.accessTokenName) || '')

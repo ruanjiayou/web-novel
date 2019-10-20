@@ -19,9 +19,9 @@ import './index.css'
 //   </svg>)
 // }
 
-export default function ({ type, className = '', size = 'md', style = {}, ...restProps }) {
+export default function ({ type, className = '', inline = true, size = 'md', style = {}, after = '', before = '', ...restProps }) {
   const Icon = Icons[type]
-  return <div style={style} className={`am-icon am-icon-${type.substr(1)} am-icon-${size} ${className}`} {...restProps}>
-    <Icon />
+  return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', ...style, }} className={`${className}`} {...restProps}>
+    {before}<Icon style={{ margin: 8 }} />{after}
   </div>
 }
