@@ -51,6 +51,14 @@
       width: 100%;
       height: 100%;
     }
+
+    .scroll-smooth {
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .scroll-smooth::-webkit-scrollbar {
+      display: none;
+    }
   </style>
 </head>
 
@@ -63,6 +71,30 @@
   <script>
     document.oncontextmenu = function (e) {
       e.preventDefault();
+    }
+    document.body.addEventListener('touchmove', function (e) {
+      var can = canScroll(e.target, "smooth")
+      if (!can) {
+        e.preventDefault();
+        //阻止默认的处理方式(阻止下拉滑动的效果)
+      }
+    }, { passive: false });
+    function canScroll(element, parentClass) {
+      var ele = element;
+      while (ele.nodeName !== 'BODY') {
+        if (ele.className.indexOf(parentClass) !== -1) {
+          if (ele.scrollTop === 0) {
+            ele.scrollTop = 1;
+          }
+          var height = ele.scrollHeight - ele.offsetHeight;
+          if (ele.scrollTop == height) {
+            ele.scrollTop = height - 1
+          }
+          return true;
+        }
+        ele = ele.parentNode;
+      }
+      return false;
     }
   </script>
 </body>

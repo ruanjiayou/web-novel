@@ -25,6 +25,21 @@ export default {
       icon: 'FaList'
     },
     {
+      name: 'music',
+      path: '/root/music',
+      title: '音乐',
+      big: true,
+      hideMenu: true,
+      icon: 'FaPlayCircle'
+    },
+    {
+      name: 'todos',
+      path: '/root/todos',
+      title: '任务',
+      hideMenu: true,
+      icon: 'FaTasks'
+    },
+    {
       name: 'my',
       path: '/root/my',
       title: '我的',

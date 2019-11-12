@@ -7,7 +7,7 @@ export default {
     return shttp({
       url: '/v1/auth/user/sign-in',
       method: 'post',
-      data: { name: params.account, password: params.password },
+      data: { name: data.account, password: data.password },
     })
   },
   register({ query, params, data }) {
@@ -80,6 +80,12 @@ export default {
       url: `/v1/user/todo/${params.id}`,
       method: 'DELETE',
       data
+    })
+  },
+  async addSongToSheet({ query, params, data }) {
+    return shttp({
+      url: `/v1/user/song-sheet/${params.ssid}/song/${params.id}`,
+      method: 'POST',
     })
   },
 }

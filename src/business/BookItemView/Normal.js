@@ -3,7 +3,6 @@ import { Observer } from 'mobx-react-lite'
 import 'components/common.css'
 import config from 'config'
 import { useRouterContext } from 'contexts/router'
-import MIconView from 'components/MIconView'
 
 export default function ({ item }) {
   const router = useRouterContext()

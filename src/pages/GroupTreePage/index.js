@@ -4,7 +4,7 @@ import { Observer, useLocalStore } from 'mobx-react-lite'
 import { useNaviContext } from 'contexts/navi'
 import { useRouterContext } from 'contexts/router'
 import GroupTreeLoader from 'loader/GroupTreeLoader'
-import GroupTree from 'components/GroupTree'
+import { RenderGroups } from 'group'
 
 export default function GroupTreePage() {
   const loader = GroupTreeLoader.create()
@@ -21,10 +21,8 @@ export default function GroupTreePage() {
   })
   return <Observer>{() => (
     <Fragment>
-      <Navi title={store.title} />
-      <GroupTree
-        loader={loader}
-      />
+      <Navi title={store.title} router={router} />
+      <RenderGroups loader={loader} />
     </Fragment>
   )}</Observer>
 }

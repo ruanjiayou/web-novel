@@ -1,7 +1,6 @@
-import React, { useEffect, Fragment } from 'react'
+import React, { useEffect } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
-import { Switch, Tabs, } from 'antd-mobile'
-import globalStore from 'global-state'
+import { Button, } from 'antd-mobile'
 import { useNaviContext } from 'contexts/navi'
 import { useRouterContext } from 'contexts/router'
 import MIconView from 'components/MIconView'
@@ -12,23 +11,19 @@ import TodoItemView from 'business/TodoItemView'
 export default function SecurePage() {
   const Navi = useNaviContext()
   const router = useRouterContext()
-  const todoAllLoader = TodoListLoader.create()
-  const todoUnfinishLoader = TodoListLoader.create()
-  const todoFinishLoader = TodoListLoader.create()
-
-  const store = useLocalStore(() => ({
-    tabIndex: 0,
+  const todoLoader = TodoListLoader.create()
+  const localStore = useLocalStore(() => ({
+    type: '1'
   }))
-
   useEffect(() => {
-    if (todoAllLoader.isEmpty) {
-      todoAllLoader.refresh()
+    if (todoLoader.isEmpty) {
+      todoLoader.refresh({ query: { type: localStore.type } })
     }
   })
 
   return <Observer>{() => (
-    <Fragment>
-      <Navi title="TODO">
+    <div className="full-height">
+      <Navi title="TODO" router={router}>
         <MIconView
           type="FaPlus"
           style={{ display: 'inline-block' }}
@@ -38,51 +33,19 @@ export default function SecurePage() {
         />
       </Navi>
       <div className="full-height-auto">
-        <Tabs
-          initialPage={store.tabIndex}
-          prerenderingSiblingsNumber={false}
-          tabs={[
-            { title: '全部' },
-            { title: '未完成' },
-            { title: '已完成' },
-          ]}
-          onChange={(tab, index) => {
-            store.tabIndex = index
-            if (index === 1 && todoUnfinishLoader.isEmpty) {
-              todoUnfinishLoader.refresh({ query: { type: '1' } })
-            }
-            if (index === 2 && todoFinishLoader.isEmpty) {
-              todoFinishLoader.refresh({ query: { type: '2' } })
-            }
-          }}
-        >
-          <div className="full-height">
-            <LoaderListView
-              loader={todoAllLoader}
-              renderItem={(item, selectionId, index) => (
-                <TodoItemView item={item} selectionId={selectionId} router={router} />
-              )}
-            />
-          </div>
-          <div className="full-height">
-            <LoaderListView
-              loader={todoUnfinishLoader}
-              renderItem={(item, selectionId, index) => (
-                <TodoItemView item={item} selectionId={selectionId} router={router} />
-              )}
-            />
-          </div>
-          <div className="full-height">
-            <LoaderListView
-              loader={todoFinishLoader}
-              renderItem={(item, selectionId, index) => (
-                <TodoItemView item={item} selectionId={selectionId} router={router} />
-              )}
-            />
-          </div>
-        </Tabs>
+        <LoaderListView
+          loader={todoLoader}
+          renderItem={(item, selectionId, index) => (
+            <TodoItemView item={item} selectionId={selectionId} router={router} />
+          )}
+        />
       </div>
-    </Fragment>
-
+      <div className="full-height-fix">
+        <Button type="primary" onClick={() => {
+          localStore.type = localStore.type === '1' ? '' : '1'
+          todoLoader.refresh({ query: { type: localStore.type } })
+        }}>{localStore.type === '' ? '隐藏已完成' : '显示已完成'}</Button>
+      </div>
+    </div>
   )}</Observer>
 }

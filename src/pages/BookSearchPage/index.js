@@ -4,12 +4,11 @@ import { useNaviContext } from 'contexts/navi'
 import { useRouterContext } from 'contexts/router'
 import 'components/common.css'
 
-import MIconView from 'components/MIconView'
 import LoaderListView from 'components/LoaderListView'
 import BookListLoader from 'loader/BookListLoader'
 import BookItemView from 'business/BookItemView'
 import GroupTreeLoader from 'loader/GroupTreeLoader'
-import GroupTree from 'components/GroupTree'
+import { RenderGroups } from 'group'
 
 export default function () {
   const Navi = useNaviContext()
@@ -26,10 +25,12 @@ export default function () {
   })
   return <Observer>{
     () => <Fragment>
-      <Navi title="全部" />
+      <Navi title="全部" router={router} />
       <div className="full-height-auto" style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
         <div>
-          <GroupTree loader={loader} />
+          <RenderGroups loader={loader} onQueryChange={query => {
+            booksLoader.refresh({ query })
+          }} />
         </div>
         <div style={{ flex: 1 }}>
           <LoaderListView

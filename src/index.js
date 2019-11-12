@@ -2,7 +2,7 @@
 import React, { Fragment } from 'react'
 import ReactDOM from 'react-dom'
 import { ActivityIndicator } from 'antd-mobile'
-import RouterRoot from './routers'
+import RouterRoot from './router'
 import globalStore from './global-state'
 import { isDeskTop } from './utils/utils'
 import { Observer } from 'mobx-react-lite'

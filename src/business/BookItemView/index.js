@@ -18,7 +18,7 @@ export default function ({ item, router }) {
               <MIconView type="FaEllipsisH" />
             </div>
 
-            <div style={{ padding: '4px 0', color: 'rgb(146, 145, 145)' }}>{item.uname}-{'xxxxxx'}</div>
+            <div style={{ padding: '4px 0', color: 'rgb(146, 145, 145)' }}>{item.uname} · {'xxxxxx'}</div>
             <div style={{ color: 'rgb(146, 145, 145)' }}>17小时前 · 第八百零六章 翻车了</div>
           </div>
         </div>

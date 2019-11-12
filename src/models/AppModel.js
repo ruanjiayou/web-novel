@@ -1,6 +1,7 @@
 import { types } from 'mobx-state-tree'
 import shttp from '../utils/shttp'
 import storage from '../utils/storage'
+import events from 'utils/events'
 
 const Model = types.model({
   selectedMenu: types.optional(types.string, 'book-shelf'),
@@ -21,7 +22,7 @@ const Model = types.model({
     lockerLength: types.optional(types.number, 6),
     lockerSeconds: types.optional(types.number, 1000 * 60 * 30),
     lockerPin: types.optional(types.string, '789654'),
-  }, {})
+  }, {}),
 }).views(self => ({
   get isLogin() {
     return !!self.accessToken

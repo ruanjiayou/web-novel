@@ -1,5 +1,4 @@
 import { types } from 'mobx-state-tree'
-import BookModel from './BookModel'
 
 const GroupModel = types.model('Group', {
   tree_id: types.string,

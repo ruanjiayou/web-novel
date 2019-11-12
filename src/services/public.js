@@ -20,9 +20,8 @@ export default {
   },
   async getBookList({ query, params, data }) {
     const result = await shttp({
-      url: `/v1/public/books${stringfyQuery(params.query)}`,
+      url: `/v1/public/books${stringfyQuery(query)}`,
     })
-    console.log(result, '>')
     return { items: result.data, ended: result.data.length < 10 }
   },
   async getCategoryList() {
@@ -58,5 +57,26 @@ export default {
       url: '/v1/public/groups',
     })
     return { items: result.data }
+  },
+  async getSongSheets({ query, params, data }) {
+    const result = await shttp({
+      url: '/v1/public/song-sheets',
+    })
+    return { items: result.data }
+  },
+  async getSongSheet({ query, params, data }) {
+    const result = await shttp({
+      url: `/v1/public/song-sheet/${params.id}`,
+    })
+    result.data.forEach((it, index) => {
+      it.order = index
+    })
+    return { items: result.data }
+  },
+  async getSongs({ query, params, data }) {
+    const result = await shttp({
+      url: `/v1/public/songs${stringfyQuery(query)}`,
+    })
+    return { items: result.data, ended: result.data.length < 10 ? true : false }
   },
 } 

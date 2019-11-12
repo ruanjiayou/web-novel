@@ -65,7 +65,7 @@ export default function () {
                 <div style={{ padding: '10px 0', borderBottom: '1px solid #ccc' }}>
                   {loader.item.desc}
                 </div>
-                <div className="full-width" style={{ height: 40 }} onClick={() => { router.pushView(`/root/book/${loader.item.id}/catalog`, null, { hideMenu: true, id: loader.item.id }) }}>
+                <div className="full-width" style={{ height: 40 }} onClick={() => { router.pushView(`/root/book/${localStore.id}/catalog`, null, { hideMenu: true }) }}>
                   <span className="full-width-auto" style={{ fontWeight: 'bolder' }}>目录</span>
                   <span className="full-width-fix">连载至 729章 · 两小时前更新</span>
                   <MIconView style={{ marginLeft: 10 }} className="full-width-fix" type="FaAngleRight" />

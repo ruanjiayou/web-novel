@@ -42,3 +42,4 @@
 - picker和其他组件
 - ~~~page的URL的params解析~~~
 - ~~~navi写到context~~~
+- 前后端用同一组件库...

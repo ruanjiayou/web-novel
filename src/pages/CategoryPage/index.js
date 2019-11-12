@@ -4,7 +4,6 @@ import { useRouterContext } from 'contexts/router'
 import { useStoreContext } from 'contexts/store'
 import { useNaviContext } from 'contexts/navi'
 import 'components/common.css'
-import MIconView from 'components/MIconView'
 
 const styles = {
   bigCate: {
@@ -54,7 +53,7 @@ export default function () {
   })
   return <Observer>{() => (
     <Fragment>
-      <Navi title="分类">
+      <Navi title="分类" router={router}>
         <div style={{ flex: 1, textAlign: 'right' }} onClick={() => router.pushView('/root/book/search', null, { hideMenu: true, })}>全部作品</div>
       </Navi>
       <div className="full-height-auto" style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
@@ -67,7 +66,7 @@ export default function () {
             {item.name}
           </div>)}
         </div>
-        <div style={{ flex: 1, height: '100%', overflow: 'auto' }}>
+        <div style={{ flex: 1, height: '100%', overflow: 'auto' }} className="smooth">
           <div style={{ padding: 20 }}>总共{localStore.count}部</div>
           <SubCate router={router} cates={loader.items[localStore.selectIndex]} />
         </div>

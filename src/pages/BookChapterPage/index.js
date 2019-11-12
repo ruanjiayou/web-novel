@@ -12,7 +12,6 @@ import ChapterLoader from 'loader/ChapterLoader'
 
 export default function () {
   const router = useRouterContext()
-  const container = useRef(null)
   const loader = ChapterLoader.create()
   const emptyView = renderEmpty(loader)
   const params = router.params
@@ -22,8 +21,12 @@ export default function () {
     id: params.id,
     bid: params.bid,
   }))
+  const container = useRef(null)
   useEffect(() => {
     loader.refresh({ params: { id: localStore.id, bid: localStore.bid } })
+    setTimeout(() => {
+      container.current.scrollTop = 1
+    }, 100)
   })
   return <Observer>
     {() => {
@@ -34,7 +37,7 @@ export default function () {
             <MIconView type="FaChevronLeft" onClick={() => { router.back() }} />
             <div className="dd-common-alignside">
               <MIconView type={'FaCloudDownloadAlt'} style={{ margin: '0 10px' }} />
-              <MIconView type={'FaPlayCircle'} style={{ margin: '0 10px' }} />
+              <MIconView type={'IoIosHeadset'} style={{ margin: '0 10px' }} />
               <MIconView type={'FaEllipsisH'} style={{ margin: '0 10px' }} />
             </div>
           </div>
@@ -50,13 +53,19 @@ export default function () {
             <div style={{ padding: '8px 0', color: 'grey' }}>{loader.item.title}</div>
             <div
               ref={container}
-              className="full-height-auto"
+              className="full-height-auto scroll-smooth smooth"
               style={{ lineHeight: 2, letterSpacing: 2, fontSize: 16, textIndent: 20 }}
               onScroll={() => {
                 // container.current.offsetHeight = container.current.scrollHeight - container.current.scrollTop;
                 let height = container.current.scrollHeight - container.current.offsetHeight
                 if (height <= 0) {
                   height = 1
+                }
+                if (container.current.scrollTop < 1) {
+                  container.current.scrollTop = 1
+                }
+                if (container.current.scrollTop === height) {
+                  container.current.scrollTop = height - 1
                 }
                 localStore.percent = (100 * container.current.scrollTop / height).toFixed(1)
               }}
@@ -88,12 +97,12 @@ export default function () {
               <Progress percent={localStore.percent} position={'normal'} className="full-width-auto" style={{ margin: '0 10px' }} />
               <span className="full-width-fix" style={{ opacity: loader.isEmpty || loader.item.nextId === '' ? 0.5 : 1 }} onClick={() => {
                 if (!loader.isEmpty && loader.item.nextId) {
-                  let id = loader.item.nextId
-                  loader.clear()
-                  router.replaceView(`/root/book/${localStore.bid}/chapter/${id}`, null, { hideMenu: true })
-                  // loader.refresh({ params: { bid: localStore.bid, id: loader.item.nextId } }).then(() => {
-                  //   router.replaceView(`/root/book/${localStore.bid}/chapter/${loader.item.id}`, null, { hideMenu: true })
-                  // })
+                  localStore.id = loader.item.nextId
+                  loader.refresh({ params: { id: localStore.id, bid: localStore.bid } })
+                  container.current.scrollTop = 1
+                  // let id = loader.item.nextId
+                  // loader.clear()
+                  // router.replaceView(`/root/book/${localStore.bid}/chapter/${id}`, null, { hideMenu: true })
                 }
               }}>下一章</span>
             </div>

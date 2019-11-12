@@ -12,7 +12,7 @@ import './index.css'
 async function login(router, store) {
   if (store.account && store.password) {
     store.isLoading = true
-    let res = await services.login(store)
+    let res = await services.login({ data: store })
     store.isLoading = false
     if (!res || !res.data) {
       return Toast.info('请求失败!')

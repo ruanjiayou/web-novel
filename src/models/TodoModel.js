@@ -14,9 +14,11 @@ const TodoModel = types.model('Todo', {
   deletedAt: types.maybeNull(types.Date),
   type: types.string,
 }).views(self => ({
-  
+
 })).actions(self => ({
-  
+  finishToggle() {
+    self.isFinish = !self.isFinish
+  }
 }))
 
 export default TodoModel

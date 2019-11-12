@@ -13,6 +13,8 @@ import UserCenterPage from './UserCenterPage'
 import SecurePage from './SecurePage'
 import TodoPage from './TodoPage'
 import TodoAddPage from './TodoAddPage'
+import MusicPage from './MusicPage'
+import SongSheetPage from './SongSheetPage'
 
 export default [
   {
@@ -51,6 +53,14 @@ export default [
     pathname: '/root/groups',
     component: GroupListPage,
   },
+  {
+    pathname: '/root/music',
+    component: MusicPage,
+  },
+  {
+    pathname: '/root/song-sheet/:id([0-9a-zA-Z-]+)',
+    component: SongSheetPage,
+  },
   // 用户部分
   {
     pathname: '/root/my',
@@ -65,11 +75,15 @@ export default [
     component: SecurePage,
   },
   {
-    pathname: '/root/todo',
+    pathname: '/root/todos',
     component: TodoPage,
   },
   {
     pathname: '/root/add-todo',
+    component: TodoAddPage,
+  },
+  {
+    pathname: '/root/todo/:id([0-9a-zA-Z-]+)',
     component: TodoAddPage,
   },
 ]
