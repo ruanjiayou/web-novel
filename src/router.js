@@ -1,11 +1,11 @@
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom'
-import React, { useRef } from 'react'
-import { Observer, useLocalStore } from 'mobx-react-lite'
+import React, { Fragment } from 'react'
+import { Observer } from 'mobx-react-lite'
 import { useStoreContext } from 'contexts/store'
 import { useProvider } from 'contexts/router'
 import { createNaviProvider } from 'contexts/navi'
-// import createNaviProvider from 'contexts/navi'
 import { createProvider as useMusicPlayerProvider } from 'contexts/music'
+import { createDebugProvider } from 'contexts/debug'
 import Locker from 'components/LockerView'
 import Layout from './layout'
 
@@ -17,8 +17,8 @@ function App(props) {
   const store = useStoreContext()
   const [router, RouterContext] = useProvider(props.history)
   const [navi, NaviContext] = createNaviProvider()
-  const [musicPlayer, MusicPlayerContext] = useMusicPlayerProvider()
-
+  const [MusicPlayer] = useMusicPlayerProvider()
+  const [Debug] = createDebugProvider()
   // 默认是home
   const name = props.location.pathname.split('/').pop()
   if (store.app.selectedMenu !== name) {
@@ -26,26 +26,28 @@ function App(props) {
   }
   return <RouterContext.Provider value={router}>
     <NaviContext.Provider value={navi}>
-      <MusicPlayerContext.Provider value={musicPlayer}>
-        <Observer>{
-          () => {
-            if (!store.app.isLogin && props.location.pathname.startsWith('/root')) {
-              return <Redirect to={'/auth/login'}></Redirect>
-            } else if (store.app.isLogin) {
-              if (store.app.config.isLockerOpen && store.app.config.isLockerLocked) {
-                return <Locker />
-              }
+      <Observer>{
+        () => {
+          if (!store.app.isLogin && props.location.pathname.startsWith('/root')) {
+            return <Redirect to={'/auth/login'}></Redirect>
+          } else if (store.app.isLogin) {
+            if (store.app.config.isLockerOpen && store.app.config.isLockerLocked) {
+              return <Locker />
             }
-            return <Layout>
+          }
+          return <Fragment>
+            <MusicPlayer />
+            <Debug />
+            <Layout>
               <Switch>
                 {/* <Route path={'/root/*'} component={AppRoot}></Route> */}
                 {pages.map(page => <Route key={page.pathname} path={page.pathname} component={page.component}></Route>)}
                 <Route component={NoMatch}></Route>
               </Switch>
             </Layout>
-          }
-        }</Observer>
-      </MusicPlayerContext.Provider>
+          </Fragment>
+        }
+      }</Observer>
     </NaviContext.Provider>
   </RouterContext.Provider>
 }

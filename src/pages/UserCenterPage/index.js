@@ -29,7 +29,7 @@ export default function () {
             <MIconView type="FaQrcode" />
           </div>
           {/* TODO: 个人信息页面 */}
-          <div className="full-width-fix" onClick={() => router.pushView('/root/user-center/info', null)}><MIconView type="FaAngleRight" /></div>
+          <div className="full-width-fix" onClick={() => router.pushView('/root/user-setting', null)}><MIconView type="FaAngleRight" /></div>
         </div>
         <div className="dd-common-alignside" style={{ padding: '10px 50px' }}>
           <div>

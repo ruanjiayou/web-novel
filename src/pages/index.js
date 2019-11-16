@@ -10,6 +10,7 @@ import BookSearchPage from './BookSearchPage'
 import GroupTreePage from './GroupTreePage'
 import GroupListPage from './GroupListPage'
 import UserCenterPage from './UserCenterPage'
+import UserSettingPage from './UserSettingPage'
 import SecurePage from './SecurePage'
 import TodoPage from './TodoPage'
 import TodoAddPage from './TodoAddPage'
@@ -86,4 +87,8 @@ export default [
     pathname: '/root/todo/:id([0-9a-zA-Z-]+)',
     component: TodoAddPage,
   },
+  {
+    pathname: '/root/user-setting',
+    component: UserSettingPage,
+  }
 ]

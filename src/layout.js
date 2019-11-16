@@ -11,7 +11,7 @@ export default function ({ children }) {
   let router = useRouterContext()
   return <Observer>
     {() => {
-      if (router.hideMenu) {
+      if (router.hideMenu || !router.history.location.pathname.startsWith('/root')) {
         return children
       } else {
         return <Fragment>

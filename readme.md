@@ -15,6 +15,10 @@
 ## warning
 - keyboardjs rebound 是 react-use 需要的.
 
+## error
+- NotAllowedError 点击等事件里才能调用play()方法
+- NotSupportError event.on() 里不能直接调用paly() 用定时器
+
 ## TODO: bug与优化
 - cache
 - fullscreen (video player)
@@ -43,3 +47,8 @@
 - ~~~page的URL的params解析~~~
 - ~~~navi写到context~~~
 - 前后端用同一组件库...
+- 不使用橡皮筋效果,自己写(不然得有滚动的地方都加smooth类名~~ 反人类)
+- ~~~开发面板: 可移动/显示调试的参数~~~
+- ~~~歌单里删除歌曲~~~
+- 音乐播放器放到外层 top: -1000px,自己写控制按钮
+- 

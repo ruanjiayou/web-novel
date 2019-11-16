@@ -8,7 +8,7 @@ export default {
       host: '/',
     },
     development: {
-      host: 'http://localhost:4445',
+      host: '/',
     }
   },
   menus: [

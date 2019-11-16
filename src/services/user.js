@@ -88,4 +88,10 @@ export default {
       method: 'POST',
     })
   },
+  async removeSheetSong({ query, params, data }) {
+    return shttp({
+      url: `/v1/user/song-sheet/${params.ssid}/song/${params.id}`,
+      method: 'DELETE',
+    })
+  },
 }

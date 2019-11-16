@@ -46,10 +46,11 @@ const Model = types.model('musicPlayer', {
       events.emit(self.event.PLAY, url, order)
     },
     playNext() {
-      if (self.mode === 'CIRCLE' && self.order >= self.songs.length) {
+      console.log(self.mode, self.order, self.songs.length)
+      if (self.mode === 'circle' && self.order + 1 >= self.songs.length) {
         self.order = 0
         events.emit(self.event.PLAY, self.songs[self.order].url, self.order)
-      } else if (self.order < self.songs.length) {
+      } else if (self.order + 1 < self.songs.length) {
         self.order++
         events.emit(self.event.PLAY, self.songs[self.order].url, self.order)
       }
@@ -62,6 +63,7 @@ const Model = types.model('musicPlayer', {
       events.emit(self.event.PAUSE)
     },
     setMode(type) {
+      store.app.setMusicModeName(type)
       self.mode = type
     },
   }

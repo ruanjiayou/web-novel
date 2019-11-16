@@ -1,7 +1,6 @@
 import { types } from 'mobx-state-tree'
 import shttp from '../utils/shttp'
 import storage from '../utils/storage'
-import events from 'utils/events'
 
 const Model = types.model({
   selectedMenu: types.optional(types.string, 'book-shelf'),
@@ -10,12 +9,15 @@ const Model = types.model({
   refreshTokenName: types.optional(types.string, 'refresh-token'),
   lockerName: types.optional(types.string, 'locker'),
   baseURL: types.optional(types.string, '/'),
-
+  // 账号相关
   account: types.optional(types.string, ''),
   accessToken: types.optional(types.string, ''),
   refreshToken: types.optional(types.string, ''),
+  // 音乐播放器相关
+  musicModeName: types.optional(types.string, 'music-mode'),
 
   leaveTS: types.optional(types.number, Date.now() - 60 * 6),
+  // 软件锁相关
   config: types.model({
     isLockerOpen: types.optional(types.boolean, true),
     isLockerLocked: types.optional(types.boolean, false),
@@ -89,6 +91,10 @@ const Model = types.model({
       storage.setValue(self.refreshTokenName, token)
     }
   }
-})
+}).actions(self => ({
+  setMusicModeName(type) {
+    storage.setValue(self.musicModeName, type)
+  },
+}))
 
 export default Model

@@ -26,7 +26,7 @@
       overscroll-behavior: none;
       position: relative;
     }
-
+    
     body {
       display: flex;
       height: 100%;
@@ -72,30 +72,30 @@
     document.oncontextmenu = function (e) {
       e.preventDefault();
     }
-    document.body.addEventListener('touchmove', function (e) {
-      var can = canScroll(e.target, "smooth")
-      if (!can) {
-        e.preventDefault();
-        //阻止默认的处理方式(阻止下拉滑动的效果)
-      }
-    }, { passive: false });
-    function canScroll(element, parentClass) {
-      var ele = element;
-      while (ele.nodeName !== 'BODY') {
-        if (ele.className.indexOf(parentClass) !== -1) {
-          if (ele.scrollTop === 0) {
-            ele.scrollTop = 1;
-          }
-          var height = ele.scrollHeight - ele.offsetHeight;
-          if (ele.scrollTop == height) {
-            ele.scrollTop = height - 1
-          }
-          return true;
-        }
-        ele = ele.parentNode;
-      }
-      return false;
-    }
+    // document.body.addEventListener('touchmove', function (e) {
+    //   var can = canScroll(e.target, "smooth")
+    //   if (!can) {
+    //     e.preventDefault();
+    //     //阻止默认的处理方式(阻止下拉滑动的效果)
+    //   }
+    // }, { passive: false, capture: true });
+    // function canScroll(element, parentClass) {
+    //   var ele = element;
+    //   while (ele.nodeName !== 'BODY') {
+    //     if (ele.className.split(' ').indexOf(parentClass) !== -1) {
+    //       if (ele.scrollTop === 0) {
+    //         ele.scrollTop = 1;
+    //       }
+    //       var height = ele.scrollHeight - ele.offsetHeight;
+    //       if (ele.scrollTop == height) {
+    //         ele.scrollTop = height - 1
+    //       }
+    //       return true;
+    //     }
+    //     ele = ele.parentNode;
+    //   }
+    //   return false;
+    // }
   </script>
 </body>
 

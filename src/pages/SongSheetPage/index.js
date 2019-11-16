@@ -3,20 +3,18 @@ import { useEffectOnce } from 'react-use'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { useNaviContext } from 'contexts/navi'
 import { useRouterContext } from 'contexts/router'
-import { useMusicPlayerContext } from 'contexts/music'
 import { useStoreContext } from 'contexts/store'
 
 import SongSheetSongLoader from 'loader/SongSheetSongLoader'
 import LoaderListView from 'components/LoaderListView'
 import SongItemView from 'business/SongItemView'
 import MIconView from 'components/MIconView'
-import events from 'utils/events'
+import services from 'services'
 
 export default function SongSheetPage() {
   const Navi = useNaviContext()
   const router = useRouterContext()
   const gStore = useStoreContext()
-  const MusicPlayer = useMusicPlayerContext()
   const loader = SongSheetSongLoader.create()
   const store = useLocalStore(() => ({
     title: router.getStateKey('title')
@@ -39,12 +37,12 @@ export default function SongSheetPage() {
         <LoaderListView
           loader={loader}
           renderItem={(item, selectionId, index) => (
-            <SongItemView item={item} router={router} />
+            <SongItemView mode={'delete'} item={item} router={router} remove={async (data) => {
+              await services.removeSheetSong({ params: { id: data.id, ssid: data.ssid } })
+              loader.remove(index)
+            }} />
           )}
         />
-      </div>
-      <div>
-        <MusicPlayer />
       </div>
     </Fragment>
   )}</Observer>

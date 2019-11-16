@@ -1,34 +1,63 @@
-import React, { useContext, useState, useRef } from 'react'
+import React, { useContext, useRef } from 'react'
 import store from '../../global-state'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { Popover } from 'antd-mobile'
 import events from 'utils/events'
 import MIconView from 'components/MIconView'
 import VisibleBoxView from 'components/VisualBoxView'
+import Dragger from 'components/Dragger'
 
 // 上下文context.避免react多级一直传props
 const Context = React.createContext(null)
 
-function MusicPlayer(prop) {
+function MusicPlayer() {
   const player = useRef(null)
   const music = store.music
   const MODE = music.type
   const EVENT = music.event
   const musicStore = useLocalStore(() => ({
     showModePop: false,
+    url: '',
+    top: 210,
+    left: 100,
   }))
   events.on(EVENT.PLAY, (url, order) => {
     music.setUrl(url, order)
+    musicStore.url = store.app.baseURL + url
+    setTimeout(() => {
+      // TODO: 请求中间态处理 不停重试,除非遇到错误
+      if (player.current) {
+        player.current.play()
+      }
+    }, 100)
   })
   events.on(EVENT.PLAY_SINGLE, (url, order) => {
     music.setUrl(url, order)
+    musicStore.url = store.app.baseURL + url
+    setTimeout(() => {
+      // TODO: 请求中间态处理 不停重试,除非遇到错误
+      if (player.current) {
+        player.current.play()
+      }
+    }, 100)
   })
   events.on(EVENT.PAUSE, () => {
     player.current.pause()
   })
   return <Observer>
     {() => (
-      <div className="full-width">
+      <div style={{
+        position: 'fixed',
+        zIndex: 10,
+        top: musicStore.top,
+        left: musicStore.left,
+      }} className="full-width">
+        <Dragger cb={sstore => {
+          musicStore.left = Math.max(0, sstore.left + sstore.offsetLeft)
+          musicStore.top = Math.max(0, sstore.top + sstore.offsetTop)
+        }}>
+          <MIconView type="FaArrowsAlt" />
+        </Dragger>
         <Popover mask
           placement={'topLeft'}
           visible={musicStore.showModePop}
@@ -65,10 +94,14 @@ function MusicPlayer(prop) {
           music.playNext()
         }} />
         <audio ref={value => { player.current = value }}
+          onCanPlay={() => {
+          }}
+          onLoadedMetadata={() => {
+          }
+          }
           onLoadedData={() => {
-            if (player.current) {
-              player.current.play()
-            }
+          }}
+          onProgress={() => {
           }}
           onEnded={() => {
             if (music.mode === MODE.ONE) {
@@ -84,7 +117,8 @@ function MusicPlayer(prop) {
               music.playNext()
             }
           }}
-          src={music.url} controls="controls" preload="true"></audio>
+          src={musicStore.url} controls="controls" preload="true"></audio>
+        <div>{player.current && player.current.canplay ? 'true' : 'xxx'}</div>
       </div>
     )}
   </Observer>

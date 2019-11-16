@@ -1,6 +1,7 @@
 import * as bowser from 'bowser'
 
 export function isDeskTop(dev) {
+    return true
     const browser = bowser.getParser(window.navigator.userAgent)
     const isChromeApp = (window.matchMedia('(display-mode: standalone)').matches)
     const isIosApp = window.navigator.standalone === true

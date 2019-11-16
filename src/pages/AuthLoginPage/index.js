@@ -31,6 +31,7 @@ async function login(router, store) {
   }
 }
 
+// eslint-disable-next-line
 async function register(router, store) {
   if (store.account && store.password) {
     store.isLoading = true
@@ -97,10 +98,11 @@ export default function ({ self }) {
             </InputItem>
           </List.Item>
           <List.Item style={{ display: 'flex' }}>
-            <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', justifyContent: 'space-around' }}>
-              <Button loading={store.isLogin} inline disabled={store.isLogin || store.isRegister} type="primary" onClick={() => login(router, store)}>登录</Button>
+            <Button loading={store.isLogin} disabled={store.isLogin || store.isRegister} type="primary" onClick={() => login(router, store)}>登录</Button>
+            {/* <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', justifyContent: 'space-around' }}>
+              <Button loading={store.isLogin} disabled={store.isLogin || store.isRegister} type="primary" onClick={() => login(router, store)}>登录</Button>
               <Button loading={store.isRegister} inline disabled={store.isLogin || store.isRegister} type="primary" onClick={() => register(router, store)}>注册</Button>
-            </div>
+            </div> */}
           </List.Item>
         </List>
       </div>
