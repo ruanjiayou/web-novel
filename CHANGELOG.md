@@ -71,3 +71,4 @@
 ## master
 - Dragger
 - 自动播放问题
+- items loader 添加自定义方法

@@ -1,7 +1,7 @@
 import { flow, types } from 'mobx-state-tree'
 import Config from 'config'
 
-function createItemsLoader(model, fn) {
+function createItemsLoader(model, fn, customs = {}) {
   const unionModel = types.model({
     // 数据数组
     items: types.optional(types.array(model), []),
@@ -32,10 +32,15 @@ function createItemsLoader(model, fn) {
       },
     }
   }).actions(self => {
+    const nw = {}
+    for (let k in customs) {
+      nw[k] = function () { customs[k].call(self, ...arguments) }
+    }
     return {
       setData(data) {
         self.items = data || []
-      }
+      },
+      ...nw
     }
   }).actions(self => {
     const request = flow(function* (option = {}, type = 'refresh') {

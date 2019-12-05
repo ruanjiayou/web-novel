@@ -16,6 +16,7 @@ import TodoPage from './TodoPage'
 import TodoAddPage from './TodoAddPage'
 import MusicPage from './MusicPage'
 import SongSheetPage from './SongSheetPage'
+import SongsPage from './SongsPage'
 
 export default [
   {
@@ -57,6 +58,10 @@ export default [
   {
     pathname: '/root/music',
     component: MusicPage,
+  },
+  {
+    pathname: '/root/music-songs',
+    component: SongsPage,
   },
   {
     pathname: '/root/song-sheet/:id([0-9a-zA-Z-]+)',

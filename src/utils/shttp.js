@@ -12,6 +12,7 @@ const shttp = axios.create({
 
 shttp.interceptors.request.use(
   config => {
+    globalStore.debug.append(`${config.method} ${config.url}`)
     if (Config.isDebug && Config.console) {
       console.log(`${config.method} ${config.url}`)
     }
@@ -51,6 +52,7 @@ shttp.interceptors.response.use(
           }
         })
       } else {
+        globalStore.debug.append(res.message)
         // Modal.alert('请求失败', res.message);
       }
 
@@ -58,6 +60,7 @@ shttp.interceptors.response.use(
     return res
   },
   error => {
+    globalStore.debug.append(error.message)
     if (Config.isDebug && Config.console) {
       console.log(error, 'response error')
     }

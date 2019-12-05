@@ -8,8 +8,6 @@ import SongListLoader from 'loader/SongListLoader'
 import LoaderListView from 'components/LoaderListView'
 import SongSheetItemView from 'business/SongSheetItemView'
 
-import SongItemView from 'business/SongItemView'
-
 export default ({ self, children }) => {
   const Navi = useNaviContext()
   const router = useRouterContext()
@@ -26,20 +24,14 @@ export default ({ self, children }) => {
   return <Observer>
     {() => (
       <div className="full-height">
-        <Navi title="音乐" router={router} />
+        <Navi title="音乐" router={router}>
+          <span onClick={e=>router.pushView('/root/music-songs') }>全部歌曲</span>
+        </Navi>
         <div className="full-height-auto">
           <LoaderListView
             loader={loader}
             renderItem={(item, selectionId, index) => (
               <SongSheetItemView key={index} item={item} selectionId={selectionId} router={router} />
-            )}
-          />
-        </div>
-        <div className="full-height-auto">
-          <LoaderListView
-            loader={songListLoader}
-            renderItem={(item) => (
-              <SongItemView mode="add" item={item} router={router} />
             )}
           />
         </div>

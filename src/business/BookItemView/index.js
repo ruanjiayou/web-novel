@@ -2,7 +2,8 @@ import React, { Fragment } from 'react'
 import { Observer } from 'mobx-react-lite'
 import 'components/common.css'
 import MIconView from 'components/MIconView'
-import config from 'config'
+import store from '../../global-state'
+// import config from 'config'
 
 export default function ({ item, router }) {
   return <Observer>
@@ -10,7 +11,7 @@ export default function ({ item, router }) {
       return <Fragment>
         <div className="full-width" style={{ padding: 10 }} onClick={() => { router.pushView(`/root/book/${item.id}/info`, null, { hideMenu: true, id: item.id }) }}>
           <div className="full-width-fix" style={{ width: 60, height: 80, backgroundColor: 'green', marginRight: 20 }}>
-            <img style={{ width: '100%', height: '100%' }} src={item.poster ? config.config.development.host + item.poster : config.config.development.host + '/poster/nocover.jpg'} alt="" />
+            <img style={{ width: '100%', height: '100%' }} src={item.poster ? store.app.baseURL + item.poster : store.app.baseURL + '/poster/nocover.jpg'} alt="" />
           </div>
           <div className="full-width-auto full-height">
             <div className="dd-common-alignside">

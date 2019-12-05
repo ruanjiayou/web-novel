@@ -28,16 +28,14 @@ export default function SongSheetPage() {
     <Fragment>
       <Navi title={store.title} router={router} />
       <MIconView style={{ justifyContent: 'start' }} type="FaPlay" after={'播放全部'} onClick={() => {
-        const items = loader.items.map(item => item.value)
-        gStore.music.setSheet(items)
-        loader.items[0].toggleStatus()
-        gStore.music.playMusic(loader.items[0].url, 0)
+        gStore.music.setSheet(loader.items)
+        gStore.music.playMusic(loader.items.length ? loader.items[0].id : '')
       }} />
       <div className="full-height">
         <LoaderListView
           loader={loader}
           renderItem={(item, selectionId, index) => (
-            <SongItemView mode={'delete'} item={item} router={router} remove={async (data) => {
+            <SongItemView mode={'delete'} order={index} item={item} loader={loader} router={router} remove={async (data) => {
               await services.removeSheetSong({ params: { id: data.id, ssid: data.ssid } })
               loader.remove(index)
             }} />

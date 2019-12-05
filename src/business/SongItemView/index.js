@@ -3,11 +3,11 @@ import { Observer } from 'mobx-react-lite'
 import { ActionSheet } from 'antd-mobile'
 import MIconView from 'components/MIconView'
 import VisibleBoxView from 'components/VisualBoxView'
-import events from 'utils/events'
+// import events from 'utils/events'
 import { useStoreContext } from 'contexts/store'
 import services from 'services'
 
-export default function ({ item, mode = 'normal', router, remove, ...props }) {
+export default function ({ item, mode = 'normal', order, loader, router, remove, ...props }) {
   const store = useStoreContext()
   const music = store.music
   return <Observer>
@@ -16,9 +16,13 @@ export default function ({ item, mode = 'normal', router, remove, ...props }) {
         <div className="dd-common-alignside" style={{ margin: '0 10px', padding: '10px  0 5px 0', borderBottom: '1px solid #eee' }} {...props} >
           {item.title}
           <div className="dd-common-alignside">
-            <MIconView type={item.playing ? 'FaPause' : 'FaPlay'} onClick={() => {
-              item.toggleStatus()
-              events.emit(music.event.PLAY, item.url, item.order)
+            <MIconView type={item.id === music.currentPlayId ? 'FaPause' : 'FaPlay'} onClick={() => {
+              if (item.id === music.currentPlayId) {
+                music.pauseMusic()
+              } else {
+                music.setSheet(loader.items)
+                music.playMusic(item.id)
+              }
             }} />
             <VisibleBoxView visible={mode === 'delete'}>
               <MIconView type="MdDeleteForever" onClick={() => remove(item)} />
@@ -35,9 +39,11 @@ export default function ({ item, mode = 'normal', router, remove, ...props }) {
                   maskClosable: true,
                   cancelButtonIndex: list.length - 1
                 }, index => {
-                  let ssid = result.items[index].id
-                  let id = item.id
-                  services.addSongToSheet({ params: { ssid, id } })
+                  if (index < list.length - 1) {
+                    let ssid = result.items[index].id
+                    let id = item.id
+                    services.addSongToSheet({ params: { ssid, id } })
+                  }
                 })
               }} />
             </VisibleBoxView>

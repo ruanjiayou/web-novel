@@ -3,6 +3,7 @@ import { types } from 'mobx-state-tree'
 const Model = types.model({
   maps: types.array(types.frozen({})),
   messages: types.array(types.string),
+  showMap: types.optional(types.boolean, false),
 }).actions(self => ({
   append(message) {
     self.messages.push(message)
@@ -19,6 +20,9 @@ const Model = types.model({
     self.messages = []
     self.map = {}
   },
+  toggleMap() {
+    self.showMap = !self.showMap
+  }
 }))
 
 export default Model

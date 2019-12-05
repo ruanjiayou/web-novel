@@ -1,4 +1,4 @@
-import { types } from 'mobx-state-tree'
+import { types, getSnapshot } from 'mobx-state-tree'
 
 const SongSheetSongModel = types.model('SongSheetSong', {
   id: types.string,
@@ -8,23 +8,22 @@ const SongSheetSongModel = types.model('SongSheetSong', {
   title: types.string,
   url: types.string,
   poster: types.string,
-  playing: types.optional(types.boolean, false),
+  // playing: types.optional(types.boolean, false),
   order: types.optional(types.number, 0),
 }).views(self => ({
-  get value() {
-    return {
-      id: self.id,
-      ssid: self.ssid,
-      title: self.title,
-      url: self.url,
-      poster: self.poster,
-      uid: self.uid,
-      uname: self.uname,
-    }
-  },
+  
 })).actions(self => ({
-  toggleStatus() {
-    self.playing = !self.playing
+  // toggleStatus(status) {
+  //   if (status !== undefined) {
+  //     self.playing = status
+  //   } else {
+  //     self.playing = !self.playing
+  //   }
+  // },
+})).actions(self => ({
+  toJSON() {
+    let node = getSnapshot(self)
+    return node
   }
 }))
 

@@ -15,7 +15,8 @@ const Model = types.model({
   refreshToken: types.optional(types.string, ''),
   // 音乐播放器相关
   musicModeName: types.optional(types.string, 'music-mode'),
-
+  // 调试
+  showDebug: types.optional(types.boolean, false),
   leaveTS: types.optional(types.number, Date.now() - 60 * 6),
   // 软件锁相关
   config: types.model({
@@ -94,6 +95,9 @@ const Model = types.model({
 }).actions(self => ({
   setMusicModeName(type) {
     storage.setValue(self.musicModeName, type)
+  },
+  toggleDebug() {
+    self.showDebug = !self.showDebug
   },
 }))
 

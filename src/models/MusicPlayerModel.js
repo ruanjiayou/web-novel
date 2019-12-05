@@ -4,10 +4,9 @@ import SongModel from './SongSheetSongModel'
 import store from '../global-state'
 
 const Model = types.model('musicPlayer', {
-  currentPlayUrl: types.optional(types.string, ''),
+  currentPlayId: types.optional(types.string, ''),
   mode: types.optional(types.string, 'list'),
   single: false,
-  order: types.optional(types.number, 0),
   songs: types.array(SongModel),
   mPlayer: types.frozen(),
   type: types.optional(types.frozen(), {
@@ -22,49 +21,80 @@ const Model = types.model('musicPlayer', {
     PAUSE: 'music-pause',
   }),
 }).views(self => ({
-  get url() {
-    return self.currentPlayUrl
-  },
+
 })).actions(self => {
   // 音乐播放器相关
   return {
-    setUrl(url, order = 0) {
-      self.order = order
-      self.currentPlayUrl = store.app.baseURL + url
+    setId(id) {
+      self.currentPlayId = id
     },
-    setSheet(sheet) {
-      self.songs = sheet
-    },
-    playMusicSingle(url, order = 0) {
-      self.single = true
-      self.order = order
-      events.emit(self.event.PLAY_SINGLE, url, order)
-    },
-    playMusic(url, order = 0) {
-      self.single = false
-      self.order = order
-      events.emit(self.event.PLAY, url, order)
-    },
-    playNext() {
-      console.log(self.mode, self.order, self.songs.length)
-      if (self.mode === 'circle' && self.order + 1 >= self.songs.length) {
-        self.order = 0
-        events.emit(self.event.PLAY, self.songs[self.order].url, self.order)
-      } else if (self.order + 1 < self.songs.length) {
-        self.order++
-        events.emit(self.event.PLAY, self.songs[self.order].url, self.order)
-      }
-    },
-    playRandom() {
-      self.order = Math.round(Math.random() * self.songs.length)
-      events.emit(self.event.PLAY, self.songs[self.order], self.order)
-    },
-    pauseMusic() {
-      events.emit(self.event.PAUSE)
+    setSheet(items) {
+      self.songs = items.map(item => item.toJSON())
     },
     setMode(type) {
       store.app.setMusicModeName(type)
       self.mode = type
+    },
+    getUrlById(id) {
+      let url = ''
+      self.songs.forEach(item => {
+        if (item.id === id) {
+          url = item.url
+        }
+      })
+      return url
+    },
+    // 1.1播放全部
+    playByIndex(index, mode) {
+      if (mode) {
+        this.setMode(mode)
+      }
+      if (self.songs[index]) {
+        let id = self.songs[index].id
+        self.currentPlayId = id
+        events.emit(self.event.PLAY, id)
+      }
+    },
+    // 1.2播放列表某个
+    playMusic(id) {
+      self.currentPlayId = id
+      events.emit(self.event.PLAY, id)
+    },
+    // 2.1播放当前id的下一个 顺序和循环模式调用(可以处理额外的逻辑)
+    playNext() {
+      let id = self.currentPlayId
+      let order = self.songs.findIndex(song => song.id === id)
+      if (order === -1) {
+        if (self.songs.length === 0) {
+          return
+        } else {
+          order = 0
+        }
+      }
+      if (self.mode === 'circle') {
+        if (order + 1 === self.songs.length) {
+          id = self.songs[0].id
+        } else {
+          id = self.songs[order + 1].id
+        }
+        self.currentPlayId = id
+        events.emit(self.event.PLAY, id)
+      } else if (order + 1 < self.songs.length) {
+        id = self.songs[order + 1].id
+        self.currentPlayId = id
+        events.emit(self.event.PLAY, id)
+      } else {
+        // 顺序到了最后就停了
+      }
+    },
+    // 2.2也是播放下一曲 不过是随机模式 才调用
+    playRandom() {
+      let order = Math.round(Math.random() * self.songs.length)
+      events.emit(self.event.PLAY, self.songs[order].id)
+    },
+    // 3 暂停
+    pauseMusic() {
+      events.emit(self.event.PAUSE)
     },
   }
 })
