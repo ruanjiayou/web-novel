@@ -77,4 +77,7 @@
 - 开始初始化加载线路或广告
 - context的隐藏(音乐播放的有问题)
 - item都放到resource中
+- BaseLoader添加自定义方法
+- 图片页面
+- 浏览器speaker(失败)
 - 
