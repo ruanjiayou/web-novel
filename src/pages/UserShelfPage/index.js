@@ -3,7 +3,7 @@ import { useEffectOnce } from 'react-use'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 
 import { useRouterContext } from 'contexts/router'
-import BookItemView from 'business/BookItemView'
+import BookItem from 'business/ResourceItem/BookItem'
 import LoaderListView from 'components/LoaderListView'
 import globalStore from 'global-state'
 
@@ -25,7 +25,7 @@ export default function () {
         <LoaderListView
           loader={loader}
           renderItem={(item, sectionId, index) => (
-            <BookItemView
+            <BookItem
               item={item}
               router={router}
               sectionId={sectionId}

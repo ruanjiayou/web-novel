@@ -34,7 +34,7 @@ function createItemsLoader(model, fn, customs = {}) {
   }).actions(self => {
     const nw = {}
     for (let k in customs) {
-      nw[k] = function () { customs[k].call(self, ...arguments) }
+      nw[k] = function () { return customs[k].call(self, ...arguments) }
     }
     return {
       setData(data) {

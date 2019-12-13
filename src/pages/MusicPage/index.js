@@ -6,7 +6,7 @@ import { useRouterContext } from 'contexts/router'
 import SongSheetLoader from 'loader/SongSheetLoader'
 import SongListLoader from 'loader/SongListLoader'
 import LoaderListView from 'components/LoaderListView'
-import SongSheetItemView from 'business/SongSheetItemView'
+import SongItemOnSheet from 'business/ResourceItem/SongItemOnSheet'
 
 export default ({ self, children }) => {
   const Navi = useNaviContext()
@@ -31,7 +31,7 @@ export default ({ self, children }) => {
           <LoaderListView
             loader={loader}
             renderItem={(item, selectionId, index) => (
-              <SongSheetItemView key={index} item={item} selectionId={selectionId} router={router} />
+              <SongItemOnSheet key={index} item={item} selectionId={selectionId} router={router} />
             )}
           />
         </div>

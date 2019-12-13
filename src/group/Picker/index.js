@@ -2,7 +2,7 @@ import React from 'react'
 import { Observer } from 'mobx-react-lite'
 import VisualBoxView from 'components/VisualBoxView'
 import MIconView from 'components/MIconView'
-import BookNormalItemView from 'business/BookItemView/Normal'
+import BookItemPick from 'business/ResourceItem/BookItemPick'
 
 export default function Picker({ self }) {
   return <Observer>{() => (
@@ -16,7 +16,7 @@ export default function Picker({ self }) {
         </VisualBoxView>
       </div>}
       <div>
-        {self.data.map((d, index) => (<BookNormalItemView key={index} item={d} />))}
+        {self.data.map((d, index) => (<BookItemPick key={index} item={d} />))}
       </div>
       <VisualBoxView visible={self.attrs.allowChange === true}>
         <div style={{ textAlign: 'center' }}>

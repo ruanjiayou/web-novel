@@ -6,7 +6,7 @@ import 'components/common.css'
 
 import LoaderListView from 'components/LoaderListView'
 import BookListLoader from 'loader/BookListLoader'
-import BookItemView from 'business/BookItemView'
+import BookItem from 'business/ResourceItem/BookItem'
 import GroupTreeLoader from 'loader/GroupTreeLoader'
 import { RenderGroups } from 'group'
 
@@ -35,7 +35,7 @@ export default function () {
         <div style={{ flex: 1 }}>
           <LoaderListView
             loader={booksLoader}
-            renderItem={(item, selectionId, index) => <BookItemView
+            renderItem={(item, selectionId, index) => <BookItem
               item={item}
               router={router}
               selectionId={selectionId}

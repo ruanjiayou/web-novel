@@ -17,6 +17,7 @@ import TodoAddPage from './TodoAddPage'
 import MusicPage from './MusicPage'
 import SongSheetPage from './SongSheetPage'
 import SongsPage from './SongsPage'
+import GalleryPage from './GalleryPage'
 
 export default [
   {
@@ -66,6 +67,10 @@ export default [
   {
     pathname: '/root/song-sheet/:id([0-9a-zA-Z-]+)',
     component: SongSheetPage,
+  },
+  {
+    pathname: '/root/gallery',
+    component: GalleryPage,
   },
   // 用户部分
   {

@@ -79,4 +79,16 @@ export default {
     })
     return { items: result.data, ended: result.data.length < 10 ? true : false }
   },
+  async getLines({ query, params, data }) {
+    const result = await shttp({
+      url: '/v1/public/lines'
+    })
+    return { items: result.data }
+  },
+  async getImages({ query, params, data }) {
+    const result = await shttp({
+      url: `/v1/public/images${stringfyQuery(query)}`,
+    })
+    return { items: result.data, ended: result.data.length < 10 ? true : false }
+  },
 } 

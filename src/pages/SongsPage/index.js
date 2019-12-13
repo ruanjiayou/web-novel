@@ -6,7 +6,7 @@ import { useRouterContext } from 'contexts/router'
 import SongSheetLoader from 'loader/SongSheetLoader'
 import SongListLoader from 'loader/SongListLoader'
 import LoaderListView from 'components/LoaderListView'
-import SongItemView from 'business/SongItemView'
+import SongItem from 'business/ResourceItem/SongItem'
 
 export default ({ self, children }) => {
   const Navi = useNaviContext()
@@ -29,7 +29,7 @@ export default ({ self, children }) => {
           <LoaderListView
             loader={songListLoader}
             renderItem={(item) => (
-              <SongItemView mode="add" item={item} router={router} />
+              <SongItem mode="add" item={item} router={router} />
             )}
           />
         </div>

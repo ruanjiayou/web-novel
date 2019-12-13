@@ -7,7 +7,7 @@ import { useStoreContext } from 'contexts/store'
 
 import SongSheetSongLoader from 'loader/SongSheetSongLoader'
 import LoaderListView from 'components/LoaderListView'
-import SongItemView from 'business/SongItemView'
+import SongItem from 'business/ResourceItem/SongItem'
 import MIconView from 'components/MIconView'
 import services from 'services'
 
@@ -35,7 +35,7 @@ export default function SongSheetPage() {
         <LoaderListView
           loader={loader}
           renderItem={(item, selectionId, index) => (
-            <SongItemView mode={'delete'} order={index} item={item} loader={loader} router={router} remove={async (data) => {
+            <SongItem mode={'delete'} order={index} item={item} loader={loader} router={router} remove={async (data) => {
               await services.removeSheetSong({ params: { id: data.id, ssid: data.ssid } })
               loader.remove(index)
             }} />

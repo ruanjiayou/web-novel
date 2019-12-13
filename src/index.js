@@ -1,5 +1,5 @@
 // import App from './app';
-import React, { Fragment } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import ReactDOM from 'react-dom'
 import { ActivityIndicator } from 'antd-mobile'
 import RouterRoot from './router'
@@ -15,12 +15,25 @@ import * as serviceWorker from './service-worker'
 // 引入router.顺便做点什么: loading/emptyView什么的
 function App() {
   const [store, StoreContext] = useProvider(globalStore)
+  useEffect(() => {
+    if (store.lineLoader.isEmpty) {
+      store.lineLoader.refresh()
+    }
+  })
   return <Observer>
-    {() => <Fragment>
-      <StoreContext.Provider value={store}>
-        <RouterRoot></RouterRoot>
-      </StoreContext.Provider>
-    </Fragment>
+    {() => {
+      if (store.lineLoader.isEmpty) {
+        return <div className="dd-common-centerXY">选择线路中...</div>
+      } else {
+        return (
+          <Fragment>
+            <StoreContext.Provider value={store}>
+              <RouterRoot></RouterRoot>
+            </StoreContext.Provider>
+          </Fragment>
+        )
+      }
+    }
     }
   </Observer>
 }

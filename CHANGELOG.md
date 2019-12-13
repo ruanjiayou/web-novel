@@ -72,3 +72,9 @@
 - Dragger
 - 自动播放问题
 - items loader 添加自定义方法
+
+## master 2019-12-13 21:48:07
+- 开始初始化加载线路或广告
+- context的隐藏(音乐播放的有问题)
+- item都放到resource中
+- 

@@ -41,93 +41,95 @@ function MusicPlayer() {
   })
   return <Observer>
     {() => (
-      <div style={{
-        position: 'fixed',
-        zIndex: 10,
-        top: musicStore.top,
-        left: musicStore.left,
-      }} className="full-width">
-        <Dragger cb={sstore => {
-          musicStore.left = Math.max(0, sstore.left + sstore.offsetLeft)
-          musicStore.top = Math.max(0, sstore.top + sstore.offsetTop)
-          clearTimeout(timer)
-          timer = null
-          timer = setTimeout(() => {
-            storage.setValue('music', { left: musicStore.left, top: musicStore.top })
-          }, 100)
-        }}>
-          <MIconView type="FaArrowsAlt" />
-        </Dragger>
-        <Popover mask
-          placement={'topLeft'}
-          visible={musicStore.showModePop}
-          overlay={[
-            (<Popover.Item key={MODE.ONE} value={MODE.ONE}><MIconView type="MdRepeatOne" />单曲</Popover.Item>),
-            (<Popover.Item key={MODE.RANDOM} value={MODE.RANDOM}><MIconView type="MdShuffle" />随机</Popover.Item>),
-            (<Popover.Item key={MODE.LIST} value={MODE.LIST}><MIconView type="MdTrendingFlat" />列表</Popover.Item>),
-            (<Popover.Item key={MODE.CIRCLE} value={MODE.CIRCLE}><MIconView type="MdRepeat" />循环</Popover.Item>),
-          ]}
-          onVisibleChange={visible => {
-            musicStore.showModePop = visible
-          }}
-          onSelect={opt => {
-            music.setMode(opt.props.value)
-            musicStore.showModePop = false
-          }}
-        >
-          <span>
-            <VisibleBoxView visible={music.mode === MODE.RANDOM}>
-              <MIconView type="MdShuffle" />
-            </VisibleBoxView>
-            <VisibleBoxView visible={music.mode === MODE.ONE}>
-              <MIconView type="MdRepeatOne" />
-            </VisibleBoxView>
-            <VisibleBoxView visible={music.mode === MODE.LIST}>
-              <MIconView type="MdTrendingFlat" />
-            </VisibleBoxView>
-            <VisibleBoxView visible={music.mode === MODE.CIRCLE}>
-              <MIconView type="MdRepeat" />
-            </VisibleBoxView>
-          </span>
-        </Popover>
-        <MIconView type="MdSkipNext" onClick={() => {
-          if (music.mode === MODE.RANDOM) {
-            music.playRandom()
-          } else {
-            music.playNext()
-          }
-        }} />
-        <audio ref={value => { player.current = value }}
-          onCanPlay={() => {
-          }}
-          onLoadedMetadata={() => {
-          }
-          }
-          onLoadedData={() => {
-          }}
-          onProgress={() => {
-          }}
-          onEnded={() => {
-            if (music.mode === MODE.ONE) {
-              player.current.play()
-            }
+      <VisibleBoxView visible={store.app.showMusic}>
+        <div style={{
+          position: 'fixed',
+          zIndex: 10,
+          top: musicStore.top,
+          left: musicStore.left,
+        }} className="full-width">
+          <Dragger cb={sstore => {
+            musicStore.left = Math.max(0, sstore.left + sstore.offsetLeft)
+            musicStore.top = Math.max(0, sstore.top + sstore.offsetTop)
+            clearTimeout(timer)
+            timer = null
+            timer = setTimeout(() => {
+              storage.setValue('music', { left: musicStore.left, top: musicStore.top })
+            }, 100)
+          }}>
+            <MIconView type="FaArrowsAlt" />
+          </Dragger>
+          <Popover mask
+            placement={'topLeft'}
+            visible={musicStore.showModePop}
+            overlay={[
+              (<Popover.Item key={MODE.ONE} value={MODE.ONE}><MIconView type="MdRepeatOne" />单曲</Popover.Item>),
+              (<Popover.Item key={MODE.RANDOM} value={MODE.RANDOM}><MIconView type="MdShuffle" />随机</Popover.Item>),
+              (<Popover.Item key={MODE.LIST} value={MODE.LIST}><MIconView type="MdTrendingFlat" />列表</Popover.Item>),
+              (<Popover.Item key={MODE.CIRCLE} value={MODE.CIRCLE}><MIconView type="MdRepeat" />循环</Popover.Item>),
+            ]}
+            onVisibleChange={visible => {
+              musicStore.showModePop = visible
+            }}
+            onSelect={opt => {
+              music.setMode(opt.props.value)
+              musicStore.showModePop = false
+            }}
+          >
+            <span>
+              <VisibleBoxView visible={music.mode === MODE.RANDOM}>
+                <MIconView type="MdShuffle" />
+              </VisibleBoxView>
+              <VisibleBoxView visible={music.mode === MODE.ONE}>
+                <MIconView type="MdRepeatOne" />
+              </VisibleBoxView>
+              <VisibleBoxView visible={music.mode === MODE.LIST}>
+                <MIconView type="MdTrendingFlat" />
+              </VisibleBoxView>
+              <VisibleBoxView visible={music.mode === MODE.CIRCLE}>
+                <MIconView type="MdRepeat" />
+              </VisibleBoxView>
+            </span>
+          </Popover>
+          <MIconView type="MdSkipNext" onClick={() => {
             if (music.mode === MODE.RANDOM) {
               music.playRandom()
-            }
-            if (music.mode === MODE.LIST) {
+            } else {
               music.playNext()
             }
-            if (music.mode === MODE.CIRCLE) {
-              music.playNext()
+          }} />
+          <audio ref={value => { player.current = value }}
+            onCanPlay={() => {
+            }}
+            onLoadedMetadata={() => {
             }
-          }}
-          src={musicStore.url} controls="controls" preload="true"></audio>
-      </div>
+            }
+            onLoadedData={() => {
+            }}
+            onProgress={() => {
+            }}
+            onEnded={() => {
+              if (music.mode === MODE.ONE) {
+                player.current.play()
+              }
+              if (music.mode === MODE.RANDOM) {
+                music.playRandom()
+              }
+              if (music.mode === MODE.LIST) {
+                music.playNext()
+              }
+              if (music.mode === MODE.CIRCLE) {
+                music.playNext()
+              }
+            }}
+            src={musicStore.url} controls="controls" preload="true"></audio>
+        </div>
+      </VisibleBoxView>
     )}
   </Observer>
 }
 
-export function createProvider() {
+export function createMusicPlayerProvider() {
   return [MusicPlayer, Context]
 }
 

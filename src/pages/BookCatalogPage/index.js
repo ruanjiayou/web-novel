@@ -51,10 +51,6 @@ export default function () {
                 const params = { id: localStore.id }
                 loader.refresh({ params })
               }}
-              loadMore={() => {
-                const params = { id: localStore.id }
-                loader.loadMore({ params })
-              }}
               renderItem={(item, sectionId, index) => (
                 <ChapterItemView
                   nth={loader.sort === 'asc' ? parseInt(index) + 1 : loader.items.length - parseInt(index)}

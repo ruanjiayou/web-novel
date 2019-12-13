@@ -53,6 +53,11 @@ export default function () {
             <MIconView type="FaListAlt" />分类
           </div>
         </div>
+        <div className="dd-common-alignside" style={{ padding: '10px 50px' }}>
+          <div onClick={() => router.pushView('/root/gallery', null, { hideMenu: true })}>
+            <MIconView type="FaListAlt" />图片
+          </div>
+        </div>
       </div>
     }
   }</Observer >

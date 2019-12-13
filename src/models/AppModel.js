@@ -15,9 +15,12 @@ const Model = types.model({
   refreshToken: types.optional(types.string, ''),
   // 音乐播放器相关
   musicModeName: types.optional(types.string, 'music-mode'),
+  showMusic: false,
   // 调试
   showDebug: types.optional(types.boolean, false),
   leaveTS: types.optional(types.number, Date.now() - 60 * 6),
+  // 语音测试
+  showSpeaker: types.optional(types.boolean, false),
   // 软件锁相关
   config: types.model({
     isLockerOpen: types.optional(types.boolean, true),
@@ -98,6 +101,12 @@ const Model = types.model({
   },
   toggleDebug() {
     self.showDebug = !self.showDebug
+  },
+  toggleMusic() {
+    self.showMusic = !self.showMusic
+  },
+  toggleSpeaker() {
+    self.showSpeaker = !self.showSpeaker
   },
 }))
 

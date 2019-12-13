@@ -1,7 +1,9 @@
 import AppModel from 'models/AppModel'
 import DebugModel from 'models/DebugModel'
 import MusicPlayerModel from 'models/MusicPlayerModel'
+import SpeakerModel from 'models/SpeakerModel'
 import UserLoader from 'loader/UserLoader'
+import LineLoader from 'loader/LineLoader'
 import CategoryLoader from 'loader/CategoryLoader'
 import BookShelfLoader from 'loader/BookShelfLoader'
 
@@ -21,9 +23,11 @@ const target = {}
 const music = MusicPlayerModel.create({
   mode: storage.getValue(app.musicModeName) || 'circle',
 })
+const speaker = SpeakerModel.create({})
 const debug = DebugModel.create({})
 // loader
 const userLoader = UserLoader.create()
+const lineLoader = LineLoader.create()
 const categoryLoader = CategoryLoader.create()
 const bookShelfLoader = BookShelfLoader.create()
 
@@ -31,8 +35,10 @@ export default {
   app,
   debug,
   music,
+  speaker,
   target,
   userLoader,
+  lineLoader,
   categoryLoader,
   bookShelfLoader,
 }

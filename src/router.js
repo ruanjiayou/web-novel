@@ -4,8 +4,9 @@ import { Observer } from 'mobx-react-lite'
 import { useStoreContext } from 'contexts/store'
 import { useProvider } from 'contexts/router'
 import { createNaviProvider } from 'contexts/navi'
-import { createProvider as useMusicPlayerProvider } from 'contexts/music'
+import { createMusicPlayerProvider } from 'contexts/music'
 import { createDebugProvider } from 'contexts/debug'
+import { createSpeakerProvider } from 'contexts/speaker'
 import Locker from 'components/LockerView'
 import Layout from './layout'
 
@@ -17,8 +18,9 @@ function App(props) {
   const store = useStoreContext()
   const [router, RouterContext] = useProvider(props.history)
   const [navi, NaviContext] = createNaviProvider()
-  const [MusicPlayer] = useMusicPlayerProvider()
+  const [MusicPlayer] = createMusicPlayerProvider()
   const [Debug] = createDebugProvider()
+  const [Speaker] = createSpeakerProvider()
   // 默认是home
   const name = props.location.pathname.split('/').pop()
   if (store.app.selectedMenu !== name) {
@@ -38,6 +40,7 @@ function App(props) {
           return <Fragment>
             <MusicPlayer />
             <Debug />
+            <Speaker />
             <Layout>
               <Switch>
                 {/* <Route path={'/root/*'} component={AppRoot}></Route> */}
