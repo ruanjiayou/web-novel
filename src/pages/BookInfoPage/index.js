@@ -62,8 +62,7 @@ export default function () {
                     {loader.item.comments}评论
                   </div>
                 </div>
-                <div style={{ padding: '10px 0', borderBottom: '1px solid #ccc' }}>
-                  {loader.item.desc}
+                <div style={{ padding: '10px 0', borderBottom: '1px solid #ccc' }} dangerouslySetInnerHTML={{ __html: loader.item.desc }}>
                 </div>
                 <div className="full-width" style={{ height: 40 }} onClick={() => { router.pushView(`/root/book/${localStore.id}/catalog`, null, { hideMenu: true }) }}>
                   <span className="full-width-auto" style={{ fontWeight: 'bolder' }}>目录</span>

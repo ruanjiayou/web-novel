@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
 import { Observer } from 'mobx-react-lite'
-import { ActivityIndicator } from 'antd-mobile'
+import { ActivityIndicator, Card, WingBlank, Button } from 'antd-mobile'
 import MIconView from 'components/MIconView'
 import { useStoreContext } from 'contexts/store'
 import { useRouterContext } from 'contexts/router'
+import SwitchView from 'components/SwitchView'
 
 export default function () {
   const store = useStoreContext()
@@ -22,42 +23,60 @@ export default function () {
             {/* TODO: 测试 */}
             {/* <img src={userLoader.isEmpty ? '' : userLoader.item.avater} /> */}
             {userLoader.isLoading ? <ActivityIndicator /> : <img src="/logo.jpg" style={{ borderRadius: '50%' }} alt="" />}
-
           </div>
-          <div className="full-width-auto" style={{ paddingLeft: 10 }}>{userLoader.isEmpty ? '---' : userLoader.item.name}</div>
+          <div className="full-width-auto" style={{ paddingLeft: 10 }}>
+            <SwitchView loading={!store.app.isLogin} holder={<Button type="ghost" inline size="small" onClick={() => { router.pushView('/auth/login', null, { hideMenu: true, showNavi: true }) }}>登录</Button>}>
+              {userLoader.isEmpty ? '---' : userLoader.item.name}
+            </SwitchView>
+          </div>
           <div style={{ color: 'green' }}>
             <MIconView type="FaQrcode" />
           </div>
           {/* TODO: 个人信息页面 */}
+
           <div className="full-width-fix" onClick={() => router.pushView('/root/user-setting', null)}><MIconView type="FaAngleRight" /></div>
         </div>
-        <div className="dd-common-alignside" style={{ padding: '10px 50px' }}>
-          <div>
-            <MIconView type="FaStar" />收藏
+        <WingBlank>
+          <Card>
+            <div className="dd-common-alignside" style={{ padding: '10px 50px' }}>
+              <div style={{ color: '#f97a90' }}>
+                <MIconView type="FaStar" />收藏
+              </div>
+              <div>
+                <MIconView type="FaHistory" style={{ color: '#14b2f7' }} />历史
+              </div>
+              <div>
+                <MIconView type="FaEllipsisV" />其他
+              </div>
+            </div>
+            <div className="dd-common-alignside" style={{ padding: '10px 50px' }}>
+              <div onClick={() => {
+                router.pushView('/root/secure', null, { title: '安全' })
+              }}>
+                <MIconView type="FaLock" style={{ color: '#236f07' }} />安全
+              </div>
+              <div onClick={() => window.location.reload()}>
+                <MIconView type="FaSyncAlt" />刷新
+              </div>
+              <div onClick={() => {
+                router.pushView('/root/category', null, { hideMenu: true })
+              }}>
+                <MIconView type="FaListAlt" style={{ color: '#ff5b05' }} />分类
           </div>
-          <div>
-            <MIconView type="FaHistory" />历史
+            </div>
+            <div className="dd-common-alignside" style={{ padding: '10px 50px' }}>
+              <div onClick={() => {
+                if (store.app.isLogin) {
+                  router.pushView('/root/gallery', null, { hideMenu: true })
+                } else {
+                  router.pushView('/auth/login', null, { hideMenu: true, showNavi: true })
+                }
+              }} style={{ color: 'red' }}>
+                <MIconView type="FaListAlt" />图片
           </div>
-          <div>
-            <MIconView type="FaEllipsisV" />其他
-          </div>
-        </div>
-        <div className="dd-common-alignside" style={{ padding: '10px 50px' }}>
-          <div onClick={() => router.pushView('/root/secure', null, { title: '安全' })}>
-            <MIconView type="FaLock" />安全
-          </div>
-          <div onClick={() => window.location.reload()}>
-            <MIconView type="FaSyncAlt" />刷新
-          </div>
-          <div onClick={() => router.pushView('/root/category', null, { hideMenu: true })}>
-            <MIconView type="FaListAlt" />分类
-          </div>
-        </div>
-        <div className="dd-common-alignside" style={{ padding: '10px 50px' }}>
-          <div onClick={() => router.pushView('/root/gallery', null, { hideMenu: true })}>
-            <MIconView type="FaListAlt" />图片
-          </div>
-        </div>
+            </div>
+          </Card>
+        </WingBlank>
       </div>
     }
   }</Observer >

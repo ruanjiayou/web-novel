@@ -27,20 +27,10 @@ export default function () {
     () => <Fragment>
       <Navi title="全部" router={router} />
       <div className="full-height-auto" style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-        <div>
+        <div style={{ height: '100%' }}>
           <RenderGroups loader={loader} onQueryChange={query => {
             booksLoader.refresh({ query })
           }} />
-        </div>
-        <div style={{ flex: 1 }}>
-          <LoaderListView
-            loader={booksLoader}
-            renderItem={(item, selectionId, index) => <BookItem
-              item={item}
-              router={router}
-              selectionId={selectionId}
-            />}
-          />
         </div>
       </div>
     </Fragment>}

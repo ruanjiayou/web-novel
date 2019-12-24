@@ -17,7 +17,7 @@ export default function ({ children }) {
         return <Fragment>
           <TabBar
             tintColor="#33A3F4"
-            unselectedTintColor="#888"
+            unselectedTintColor="#555"
             tabBarPosition="bottom"
             barTintColor="white"
           >

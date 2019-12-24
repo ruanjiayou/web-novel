@@ -81,3 +81,10 @@
 - 图片页面
 - 浏览器speaker(失败)
 - 
+
+## master 2019-12-24 23:02:09
+- 非强制登录
+- 自定义Empty
+- 全局audio播放bug
+- filter分组自动显示列表(TODO:改为resource列表)
+- 登录页面可控制是否显示返回Navi

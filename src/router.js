@@ -30,12 +30,16 @@ function App(props) {
     <NaviContext.Provider value={navi}>
       <Observer>{
         () => {
-          if (!store.app.isLogin && props.location.pathname.startsWith('/root')) {
-            return <Redirect to={'/auth/login'}></Redirect>
-          } else if (store.app.isLogin) {
-            if (store.app.config.isLockerOpen && store.app.config.isLockerLocked) {
-              return <Locker />
-            }
+          // FIXME: 不再强制登录了
+          // if (!store.app.isLogin && props.location.pathname.startsWith('/root')) {
+          //   return <Redirect to={'/auth/login'}></Redirect>
+          // } else if (store.app.isLogin) {
+          //   if (store.app.config.isLockerOpen && store.app.config.isLockerLocked) {
+          //     return <Locker />
+          //   }
+          // }
+          if (store.app.config.isLockerOpen && store.app.config.isLockerLocked) {
+            return <Locker />
           }
           return <Fragment>
             <MusicPlayer />
@@ -56,12 +60,14 @@ function App(props) {
 }
 
 function NoMatch() {
-  const store = useStoreContext()
-  if (store.app.isLogin) {
-    return <Redirect to={'/root/home'}></Redirect>
-  } else {
-    return <Redirect to={'/auth/login'}></Redirect>
-  }
+  return <Redirect to={'/root/home'}></Redirect>
+  // FIXME: 不再强制登录了
+  // const store = useStoreContext()
+  // if (store.app.isLogin) {
+  //   return <Redirect to={'/root/home'}></Redirect>
+  // } else {
+  //   return <Redirect to={'/auth/login'}></Redirect>
+  // }
 }
 
 export default function Index() {

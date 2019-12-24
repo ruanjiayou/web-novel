@@ -13,7 +13,7 @@ function MyBody(props) {
   return <div className={`am-list-body ${props.className}`}>{props.children}</div>
 }
 
-function renderList({ loader, refresh, loadMore, renderItem, onScroll, className }) {
+function renderList({ loader, refresh, loadMore, renderItem, onScroll, className, renderEmpty }) {
   const dataSource = dataProvider.cloneWithRows(loader.items.slice())
   const EmptyView = renderEmptyView(loader)
   // 必须要这样.不能直接用 loader.isLoading判断
@@ -21,7 +21,7 @@ function renderList({ loader, refresh, loadMore, renderItem, onScroll, className
   return <Fragment>
     <SwitchView
       loading={loader.isEmpty}
-      holder={<AutoCenterView>{EmptyView}</AutoCenterView>}>
+      holder={<AutoCenterView>{renderEmpty || EmptyView}</AutoCenterView>}>
       <ListView
         style={{ height: '100%', overflow: 'auto' }}
         dataSource={dataSource}
