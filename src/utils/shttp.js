@@ -5,7 +5,7 @@ import services from '../services'
 import storage from './storage'
 
 const shttp = axios.create({
-  baseURL: storage.getValue('baseURL') || (Config.isDebug ? Config.config.development.host : Config.config.production) || '',
+  baseURL: storage.getValue('baseURL') || '',
   withCredentials: false,
   timeout: 5000
 })
@@ -21,9 +21,7 @@ shttp.interceptors.request.use(
     return config
   },
   error => {
-    if (Config.isDebug && Config.console) {
-      console.log(error, 'request error')
-    }
+    console.log(error, 'request error')
     return Promise.resolve(error)
   }
 )
@@ -61,9 +59,7 @@ shttp.interceptors.response.use(
   },
   error => {
     globalStore.debug.append(error.message)
-    if (Config.isDebug && Config.console) {
-      console.log(error, 'response error')
-    }
+    console.log(error, 'response error')
     const data = error.response.data
     if (data.code === 101020) {
       globalStore.app.setAccessToken('')
