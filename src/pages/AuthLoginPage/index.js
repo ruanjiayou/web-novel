@@ -77,7 +77,7 @@ export default function ({ self }) {
                         globalStore.app.setBaseURL(val)
                       }
                     }
-                  ], 'default', '')
+                  ], 'default', globalStore.app.baseURL)
                 }} />
               </div>
               <List>

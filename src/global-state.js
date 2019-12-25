@@ -11,7 +11,7 @@ import Config from 'config.js'
 import storage from './utils/storage'
 // 全局状态.
 const app = AppModel.create({
-  baseURL: storage.getValue('baseURL') || (Config.isDebug ? Config.config.development.host : Config.config.production) || '',
+  baseURL: storage.getValue('baseURL') || '',
   config: {},
   music: { url: '' },
 })

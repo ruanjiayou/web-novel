@@ -16,13 +16,13 @@ import * as serviceWorker from './service-worker'
 function App() {
   const [store, StoreContext] = useProvider(globalStore)
   useEffect(() => {
-    if (store.lineLoader.isEmpty) {
+    if (store.app.isLogin && store.lineLoader.isEmpty) {
       store.lineLoader.refresh()
     }
   })
   return <Observer>
     {() => {
-      if (store.lineLoader.isEmpty) {
+      if (store.app.isLogin && store.lineLoader.isEmpty) {
         return <div className="dd-common-centerXY">选择线路中...</div>
       } else {
         return (
@@ -52,6 +52,8 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, info) {
+    console.log(error)
+    console.log(info)
     this.setState({ hasError: true, error, info })
   }
 
