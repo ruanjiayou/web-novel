@@ -1,13 +1,8 @@
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom'
 import React, { Fragment } from 'react'
 import { Observer } from 'mobx-react-lite'
-import { useStoreContext } from 'contexts/store'
-import { useProvider } from 'contexts/router'
-import { createNaviProvider } from 'contexts/navi'
-import { createMusicPlayerProvider } from 'contexts/music'
-import { createDebugProvider } from 'contexts/debug'
-import { createSpeakerProvider } from 'contexts/speaker'
-import Locker from 'components/LockerView'
+import { useStoreContext, createRouteProvider, createNaviProvider, createMusicPlayerProvider, createDebugProvider, createSpeakerProvider } from 'contexts'
+import { LockerView } from 'components'
 import Layout from './layout'
 
 import pages from 'pages'
@@ -16,7 +11,7 @@ import pages from 'pages'
 
 function App(props) {
   const store = useStoreContext()
-  const [router, RouterContext] = useProvider(props.history)
+  const [router, RouterContext] = createRouteProvider(props.history)
   const [navi, NaviContext] = createNaviProvider()
   const [MusicPlayer] = createMusicPlayerProvider()
   const [Debug] = createDebugProvider()
@@ -35,11 +30,11 @@ function App(props) {
           //   return <Redirect to={'/auth/login'}></Redirect>
           // } else if (store.app.isLogin) {
           //   if (store.app.config.isLockerOpen && store.app.config.isLockerLocked) {
-          //     return <Locker />
+          //     return <LockerView />
           //   }
           // }
           if (store.app.config.isLockerOpen && store.app.config.isLockerLocked) {
-            return <Locker />
+            return <LockerView />
           }
           return <Fragment>
             <MusicPlayer />

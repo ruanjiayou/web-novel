@@ -1,6 +1,5 @@
 import React from 'react'
 import { Observer } from 'mobx-react-lite'
-import '../group.css'
 
 export default function FilterTag({ self, selectTag }) {
   return <Observer>{() => (

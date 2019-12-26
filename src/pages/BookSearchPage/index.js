@@ -1,12 +1,8 @@
 import React, { Fragment, useEffect } from 'react'
 import { Observer } from 'mobx-react-lite'
-import { useNaviContext } from 'contexts/navi'
-import { useRouterContext } from 'contexts/router'
-import 'components/common.css'
 
-import LoaderListView from 'components/LoaderListView'
+import { useNaviContext, useRouterContext } from 'contexts/'
 import BookListLoader from 'loader/BookListLoader'
-import BookItem from 'business/ResourceItem/BookItem'
 import GroupTreeLoader from 'loader/GroupTreeLoader'
 import { RenderGroups } from 'group'
 

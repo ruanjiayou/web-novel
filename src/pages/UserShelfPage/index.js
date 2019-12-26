@@ -1,16 +1,15 @@
 import React, { Fragment } from 'react'
 import { useEffectOnce } from 'react-use'
+import { Button } from 'antd-mobile'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 
-import { useRouterContext } from 'contexts/router'
+import { useRouterContext, useStoreContext } from 'contexts'
+import { LoaderListView, AutoCenterView } from 'components'
 import BookItem from 'business/ResourceItem/BookItem'
-import LoaderListView from 'components/LoaderListView'
-import AutoCenterView from 'components/AutoCenterView'
-import globalStore from 'global-state'
 
-import { Button } from 'antd-mobile'
 
 export default function () {
+  const globalStore = useStoreContext()
   const router = useRouterContext()
   const loader = globalStore.bookShelfLoader
   const localStore = useLocalStore(() => ({

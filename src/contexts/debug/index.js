@@ -2,9 +2,8 @@ import React, { useContext as useReactContext } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import store from '../../global-state'
 import storage from 'utils/storage'
-import MIconView from 'components/MIconView'
-import Dragger from 'components/Dragger'
-import VisualBoxView from 'components/VisualBoxView'
+import { MIconView, Dragger, VisualBoxView } from 'components'
+
 // 上下文context.避免react多级一直传props
 const Context = React.createContext(null)
 

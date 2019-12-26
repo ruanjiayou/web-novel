@@ -1,11 +1,10 @@
 import React from 'react'
 import { useEffectOnce } from 'react-use'
 import { Observer } from 'mobx-react-lite'
-import { useNaviContext } from 'contexts/navi'
-import { useRouterContext } from 'contexts/router'
+import { LoaderListView } from 'components'
+import { useNaviContext, useRouterContext } from 'contexts'
 import SongSheetLoader from 'loader/SongSheetLoader'
 import SongListLoader from 'loader/SongListLoader'
-import LoaderListView from 'components/LoaderListView'
 import SongItem from 'business/ResourceItem/SongItem'
 
 export default ({ self, children }) => {

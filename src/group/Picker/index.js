@@ -1,7 +1,6 @@
 import React from 'react'
 import { Observer } from 'mobx-react-lite'
-import VisualBoxView from 'components/VisualBoxView'
-import MIconView from 'components/MIconView'
+import { VisualBoxView, MIconView } from 'components'
 import BookItemPick from 'business/ResourceItem/BookItemPick'
 
 export default function Picker({ self }) {

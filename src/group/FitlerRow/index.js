@@ -1,7 +1,6 @@
 import React from 'react'
 import { Observer } from 'mobx-react-lite'
 import FilterTag from '../FilterTag'
-import '../group.css'
 
 export default function FilterRow({ self, onQueryChange }) {
   function selectTag(group_id) {

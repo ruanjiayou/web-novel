@@ -1,10 +1,9 @@
 import React, { useEffect } from 'react'
 import { Observer } from 'mobx-react-lite'
-import MIconView from 'components/MIconView'
-import { useStoreContext } from 'contexts/store'
-import { useRouterContext } from 'contexts/router'
-import { useNaviContext } from 'contexts/navi'
 import { List, Button } from 'antd-mobile'
+
+import MIconView from 'components/MIconView'
+import { useStoreContext, useRouterContext, useNaviContext } from 'contexts'
 
 export default function () {
   const store = useStoreContext()

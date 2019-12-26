@@ -2,9 +2,7 @@ import React, { Fragment, useEffect } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { useRouterContext } from 'contexts/router'
 
-import 'components/common.css'
-import MIconView from 'components/MIconView'
-import LoaderListView from 'components/LoaderListView'
+import { MIconView, LoaderListView } from 'components'
 import ChapterItemView from 'business/ChapterItemView'
 
 import services from 'services'

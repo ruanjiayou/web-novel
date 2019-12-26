@@ -1,5 +1,5 @@
 import React, { useContext as useReactContext } from 'react'
-import MIconView from 'components/MIconView'
+import { MIconView } from 'components'
 // 上下文context.避免react多级一直传props
 const Context = React.createContext(null)
 

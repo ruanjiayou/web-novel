@@ -1,20 +1,21 @@
 // import App from './app';
 import React, { Fragment, useEffect } from 'react'
 import ReactDOM from 'react-dom'
+import { Observer } from 'mobx-react-lite'
 import { ActivityIndicator } from 'antd-mobile'
 import RouterRoot from './router'
 import globalStore from './global-state'
-import { isDeskTop } from './utils/utils'
-import { Observer } from 'mobx-react-lite'
-import { useProvider } from 'contexts/store'
+import { isPWA } from './utils/utils'
+import { createStoreProvider } from 'contexts'
 import './components/common.css'
+import './group/group.css'
 import 'antd-mobile/dist/antd-mobile.css'
 // https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/src/serviceWorker.js
 import * as serviceWorker from './service-worker'
 
 // 引入router.顺便做点什么: loading/emptyView什么的
 function App() {
-  const [store, StoreContext] = useProvider(globalStore)
+  const [store, StoreContext] = createStoreProvider(globalStore)
   useEffect(() => {
     if (store.app.isLogin && store.lineLoader.isEmpty) {
       store.lineLoader.refresh()
@@ -22,7 +23,7 @@ function App() {
   })
   return <Observer>
     {() => {
-      if (store.app.isLogin && store.lineLoader.isEmpty) {
+      if (store.app.isLogin && store.lineLoader.isLoading) {
         return <div className="dd-common-centerXY">选择线路中...</div>
       } else {
         return (
@@ -47,7 +48,7 @@ class ErrorBoundary extends React.Component {
       info: null,
       isLoading: false,
       lastTS: Date.now(),
-      isDesktop: isDeskTop()
+      isPWA: isPWA()
     }
   }
 
@@ -59,11 +60,11 @@ class ErrorBoundary extends React.Component {
 
   componentDidMount() {
     document.getElementById('start-loading').style.display = 'none'
-    document.getElementById('box').className = isDeskTop(false) ? 'box-app' : 'box-browser'
+    document.getElementById('box').className = isPWA() ? 'box-app' : 'box-browser'
     window.addEventListener('resize', () => {
-      let isApp = isDeskTop(false)
+      let isApp = isPWA()
       document.getElementById('box').className = isApp ? 'box-app' : 'box-browser'
-      this.setState({ isDeskTop: isApp })
+      this.setState({ isPWA: isApp })
     })
     document.addEventListener('visibilitychange', async (e) => {
       // TODO: 时间过长处理.刷新
@@ -93,7 +94,7 @@ class ErrorBoundary extends React.Component {
           animating={this.state.isLoading}
         />
       </Fragment>
-    } else if (this.state.isDesktop) {
+    } else if (this.state.isPWA) {
       return <Fragment>
         {this.props.children}
         <ActivityIndicator

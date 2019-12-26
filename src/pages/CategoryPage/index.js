@@ -1,9 +1,6 @@
 import React, { Fragment, useEffect } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
-import { useRouterContext } from 'contexts/router'
-import { useStoreContext } from 'contexts/store'
-import { useNaviContext } from 'contexts/navi'
-import 'components/common.css'
+import { useRouterContext, useStoreContext, useNaviContext } from 'contexts'
 
 const styles = {
   bigCate: {

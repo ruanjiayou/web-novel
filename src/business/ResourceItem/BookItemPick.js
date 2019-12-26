@@ -1,13 +1,11 @@
 import React, { Fragment } from 'react'
 import { Observer } from 'mobx-react-lite'
-import 'components/common.css'
-import store from '../../global-state'
-import config from 'config'
-import { useRouterContext } from 'contexts/router'
+import { useRouterContext, useStoreContext } from 'contexts'
 
 export default function ({ item }) {
-  let imageHost = store.lineLoader.getHostByType('image')
+  const store = useStoreContext()
   const router = useRouterContext()
+  let imageHost = store.lineLoader.getHostByType('image')
   return <Observer>
     {() => {
       return <Fragment>

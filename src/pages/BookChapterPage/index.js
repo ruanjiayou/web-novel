@@ -2,18 +2,14 @@ import React, { Fragment, useEffect, useRef } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { ActivityIndicator, Progress } from 'antd-mobile'
 
-import { useRouterContext } from 'contexts/router'
-import 'components/common.css'
-import renderEmpty from 'components/EmptyView'
-import AutoCenterView from 'components/AutoCenterView'
-import VisualBoxView from 'components/VisualBoxView'
-import MIconView from 'components/MIconView'
+import { useRouterContext } from 'contexts'
+import { EmptyView, AutoCenterView, VisualBoxView, MIconView } from 'components'
 import ChapterLoader from 'loader/ChapterLoader'
 
 export default function () {
   const router = useRouterContext()
   const loader = ChapterLoader.create()
-  const emptyView = renderEmpty(loader)
+  const emptyView = EmptyView(loader)
   const params = router.params
   const localStore = useLocalStore(() => ({
     pop: false,

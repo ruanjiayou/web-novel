@@ -1,8 +1,7 @@
 import React, { Fragment } from 'react'
 import { useEffectOnce } from 'react-use'
 import { Observer, useLocalStore } from 'mobx-react-lite'
-import { useNaviContext } from 'contexts/navi'
-import { useRouterContext } from 'contexts/router'
+import { useNaviContext, useRouterContext } from 'contexts'
 import GroupTreeLoader from 'loader/GroupTreeLoader'
 import { RenderGroups } from 'group'
 

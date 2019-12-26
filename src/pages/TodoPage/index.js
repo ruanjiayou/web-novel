@@ -1,17 +1,13 @@
 import React, { useEffect } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { Button, } from 'antd-mobile'
-import { useNaviContext } from 'contexts/navi'
-import { useRouterContext } from 'contexts/router'
-import MIconView from 'components/MIconView'
-import LoaderListView from 'components/LoaderListView'
-import AutoCenterView from 'components/AutoCenterView'
+import { useNaviContext, useRouterContext, useStoreContext } from 'contexts'
+import { MIconView, LoaderListView, AutoCenterView, VisualBoxView } from 'components'
 import TodoListLoader from 'loader/TodoListLoader'
 import TodoItemView from 'business/TodoItemView'
-import VisualBoxView from 'components/VisualBoxView'
-import globalStore from 'global-state'
 
 export default function SecurePage() {
+  const globalStore = useStoreContext()
   const Navi = useNaviContext()
   const router = useRouterContext()
   const todoLoader = TodoListLoader.create()

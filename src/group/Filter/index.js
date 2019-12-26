@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react'
 import { Observer } from 'mobx-react-lite'
 import FilterRow from '../FitlerRow'
-import { useRouterContext } from 'contexts/router'
-
-import LoaderListView from 'components/LoaderListView'
+import { useRouterContext } from 'contexts'
+import { LoaderListView } from 'components'
 import BookListLoader from 'loader/BookListLoader'
 import BookItem from 'business/ResourceItem/BookItem'
 

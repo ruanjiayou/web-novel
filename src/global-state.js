@@ -7,7 +7,6 @@ import LineLoader from 'loader/LineLoader'
 import CategoryLoader from 'loader/CategoryLoader'
 import BookShelfLoader from 'loader/BookShelfLoader'
 
-import Config from 'config.js'
 import storage from './utils/storage'
 // 全局状态.
 const app = AppModel.create({

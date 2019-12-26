@@ -1,14 +1,14 @@
 import React, { Fragment } from 'react'
 import { Observer } from 'mobx-react-lite'
 import { TabBar } from 'antd-mobile'
-import { useRouterContext } from 'contexts/router'
-import MIconView from 'components/MIconView'
+import { useRouterContext, useStoreContext } from 'contexts'
+import { MIconView } from 'components'
 
 import config from 'config'
-import store from 'global-state'
 
 export default function ({ children }) {
-  let router = useRouterContext()
+  const router = useRouterContext()
+  const store = useStoreContext()
   return <Observer>
     {() => {
       if (router.hideMenu || !router.history.location.pathname.startsWith('/root')) {

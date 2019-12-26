@@ -2,11 +2,8 @@ import React, { Fragment, useEffect } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { ActivityIndicator, Icon } from 'antd-mobile'
 
-import { useRouterContext } from 'contexts/router'
-import 'components/common.css'
-import MIconView from 'components/MIconView'
-import AutoCenerView from 'components/AutoCenterView'
-import VisualBoxView from 'components/VisualBoxView'
+import { useRouterContext } from 'contexts'
+import { MIconView, AutoCenterView, VisualBoxView } from 'components'
 import BookLoader from 'loader/BookLoader'
 import services from 'services'
 
@@ -28,9 +25,9 @@ export default function () {
   return <Observer>{
     () => {
       if (loader.isEmpty) {
-        return <AutoCenerView>
+        return <AutoCenterView>
           <ActivityIndicator text="加载中..." />
-        </AutoCenerView>
+        </AutoCenterView>
       } else {
         return <Fragment>
           <div className="full-height">

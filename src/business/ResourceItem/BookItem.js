@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react'
 import { Observer } from 'mobx-react-lite'
-import 'components/common.css'
-import MIconView from 'components/MIconView'
-import store from '../../global-state'
+import { MIconView } from 'components'
+import { useStoreContext } from 'contexts'
 // import config from 'config'
 
 export default function ({ item, router }) {
+  const store = useStoreContext()
   let imageHost = store.lineLoader.getHostByType('image')
   return <Observer>
     {() => {

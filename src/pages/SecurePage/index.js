@@ -2,8 +2,7 @@ import React, { Fragment } from 'react'
 import { Observer } from 'mobx-react-lite'
 import { Switch } from 'antd-mobile'
 import globalStore from 'global-state'
-import { useRouterContext } from 'contexts/router'
-import { useNaviContext } from 'contexts/navi'
+import { useRouterContext, useNaviContext } from 'contexts'
 
 export default function SecurePage() {
   const router = useRouterContext()

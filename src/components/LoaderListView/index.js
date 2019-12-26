@@ -15,13 +15,13 @@ function MyBody(props) {
 
 function renderList({ loader, refresh, loadMore, renderItem, onScroll, className, renderEmpty }) {
   const dataSource = dataProvider.cloneWithRows(loader.items.slice())
-  const EmptyView = renderEmptyView(loader)
+  const EmptyView = renderEmptyView(loader, renderEmpty)
   // 必须要这样.不能直接用 loader.isLoading判断
   const isLoading = loader.isLoading
   return <Fragment>
     <SwitchView
       loading={loader.isEmpty}
-      holder={<AutoCenterView>{renderEmpty || EmptyView}</AutoCenterView>}>
+      holder={<AutoCenterView>{EmptyView}</AutoCenterView>}>
       <ListView
         style={{ height: '100%', overflow: 'auto' }}
         dataSource={dataSource}

@@ -1,12 +1,10 @@
 import React, { useContext, useRef } from 'react'
+import { Popover } from 'antd-mobile'
+import events from 'utils/events'
 import store from '../../global-state'
 import storage from 'utils/storage'
 import { Observer, useLocalStore } from 'mobx-react-lite'
-import { Popover } from 'antd-mobile'
-import events from 'utils/events'
-import MIconView from 'components/MIconView'
-import VisibleBoxView from 'components/VisualBoxView'
-import Dragger from 'components/Dragger'
+import { MIconView, Dragger, VisualBoxView } from 'components'
 
 // 上下文context.避免react多级一直传props
 const Context = React.createContext(null)
@@ -76,18 +74,18 @@ function MusicPlayer() {
           }}
         >
           <span>
-            <VisibleBoxView visible={music.mode === MODE.RANDOM}>
+            <VisualBoxView visible={music.mode === MODE.RANDOM}>
               <MIconView type="MdShuffle" />
-            </VisibleBoxView>
-            <VisibleBoxView visible={music.mode === MODE.ONE}>
+            </VisualBoxView>
+            <VisualBoxView visible={music.mode === MODE.ONE}>
               <MIconView type="MdRepeatOne" />
-            </VisibleBoxView>
-            <VisibleBoxView visible={music.mode === MODE.LIST}>
+            </VisualBoxView>
+            <VisualBoxView visible={music.mode === MODE.LIST}>
               <MIconView type="MdTrendingFlat" />
-            </VisibleBoxView>
-            <VisibleBoxView visible={music.mode === MODE.CIRCLE}>
+            </VisualBoxView>
+            <VisualBoxView visible={music.mode === MODE.CIRCLE}>
               <MIconView type="MdRepeat" />
-            </VisibleBoxView>
+            </VisualBoxView>
           </span>
         </Popover>
         <MIconView type="MdSkipNext" onClick={() => {

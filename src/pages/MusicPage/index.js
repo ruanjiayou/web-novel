@@ -1,11 +1,10 @@
 import React from 'react'
 import { useEffectOnce } from 'react-use'
 import { Observer } from 'mobx-react-lite'
-import { useNaviContext } from 'contexts/navi'
-import { useRouterContext } from 'contexts/router'
+import { useNaviContext, useRouterContext } from 'contexts'
 import SongSheetLoader from 'loader/SongSheetLoader'
 import SongListLoader from 'loader/SongListLoader'
-import LoaderListView from 'components/LoaderListView'
+import { LoaderListView } from 'components'
 import SongItemOnSheet from 'business/ResourceItem/SongItemOnSheet'
 
 export default ({ self, children }) => {
@@ -25,7 +24,7 @@ export default ({ self, children }) => {
     {() => (
       <div className="full-height">
         <Navi title="音乐" router={router}>
-          <span onClick={e=>router.pushView('/root/music-songs') }>全部歌曲</span>
+          <span onClick={e => router.pushView('/root/music-songs')}>全部歌曲</span>
         </Navi>
         <div className="full-height-auto">
           <LoaderListView

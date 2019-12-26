@@ -1,9 +1,7 @@
 import React, { Fragment } from 'react'
 import { Observer } from 'mobx-react-lite'
 import { ActionSheet } from 'antd-mobile'
-import MIconView from 'components/MIconView'
-import VisibleBoxView from 'components/VisualBoxView'
-// import events from 'utils/events'
+import { MIconView, VisualBoxView } from 'components'
 import { useStoreContext } from 'contexts/store'
 import services from 'services'
 
@@ -24,10 +22,10 @@ export default function ({ item, mode = 'normal', order, loader, router, remove,
                 music.playMusic(item.id)
               }
             }} />
-            <VisibleBoxView visible={mode === 'delete'}>
+            <VisualBoxView visible={mode === 'delete'}>
               <MIconView type="MdDeleteForever" onClick={() => remove(item)} />
-            </VisibleBoxView>
-            <VisibleBoxView visible={mode === 'add'}>
+            </VisualBoxView>
+            <VisualBoxView visible={mode === 'add'}>
               <MIconView type="FaPlus" onClick={async (e) => {
                 e.preventDefault()
                 e.stopPropagation()
@@ -46,7 +44,7 @@ export default function ({ item, mode = 'normal', order, loader, router, remove,
                   }
                 })
               }} />
-            </VisibleBoxView>
+            </VisualBoxView>
           </div>
         </div>
       </Fragment>

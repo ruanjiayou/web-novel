@@ -1,18 +1,16 @@
 import React, { useEffect } from 'react'
 import { Observer } from 'mobx-react-lite'
 import { ActivityIndicator, Card, WingBlank, Button } from 'antd-mobile'
-import MIconView from 'components/MIconView'
-import { useStoreContext } from 'contexts/store'
-import { useRouterContext } from 'contexts/router'
-import SwitchView from 'components/SwitchView'
+import { useStoreContext, useRouterContext } from 'contexts'
+import { MIconView, SwitchView, VisualBoxView } from 'components'
 
 export default function () {
   const store = useStoreContext()
   const router = useRouterContext()
   const userLoader = store.userLoader
   useEffect(() => {
-    if (userLoader.isEmpty) {
-      // userLoader.refresh()
+    if (store.app.isLogin && userLoader.isEmpty) {
+      userLoader.refresh()
     }
   })
   return <Observer>{
@@ -29,12 +27,13 @@ export default function () {
               {userLoader.isEmpty ? '---' : userLoader.item.name}
             </SwitchView>
           </div>
-          <div style={{ color: 'green' }}>
-            <MIconView type="FaQrcode" />
-          </div>
-          {/* TODO: 个人信息页面 */}
-
-          <div className="full-width-fix" onClick={() => router.pushView('/root/user-setting', null)}><MIconView type="FaAngleRight" /></div>
+          <VisualBoxView visible={store.app.isLogin}>
+            <div style={{ color: 'green' }}>
+              <MIconView type="FaQrcode" />
+            </div>
+            {/* TODO: 个人信息页面 */}
+            <div className="full-width-fix" onClick={() => router.pushView('/root/user-setting', null)}><MIconView type="FaAngleRight" /></div>
+          </VisualBoxView>
         </div>
         <WingBlank>
           <Card>

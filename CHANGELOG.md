@@ -88,3 +88,10 @@
 - 全局audio播放bug
 - filter分组自动显示列表(TODO:改为resource列表)
 - 登录页面可控制是否显示返回Navi
+
+## 2019-12-27 02:00:30
+-router和store的context必须用useProvider不然报错...
+- 修改components和contexts.统一导出
+- userarea
+- line empty bug
+- 个人中心bug

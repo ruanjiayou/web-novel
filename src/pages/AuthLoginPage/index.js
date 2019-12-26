@@ -2,15 +2,11 @@ import React from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { InputItem, List, Button, Toast, Modal } from 'antd-mobile'
 
-import { useRouterContext } from 'contexts/router'
-import { useNaviContext } from 'contexts/navi'
+import { MIconView } from 'components'
+import { useRouterContext, useNaviContext, useStoreContext } from 'contexts'
 import services from 'services'
-import globalStore from 'global-state'
-import MIconView from 'components/MIconView'
 
-import './index.css'
-
-async function login(router, store) {
+async function login(router, store, globalStore) {
   if (store.account && store.password) {
     store.isLoading = true
     let res = await services.login({ data: store })
@@ -52,6 +48,7 @@ async function register(router, store) {
 }
 
 export default function ({ self }) {
+  const globalStore = useStoreContext()
   let Navi = useNaviContext()
   let router = useRouterContext()
   let store = useLocalStore(() => ({
@@ -104,7 +101,7 @@ export default function ({ self }) {
             </InputItem>
                 </List.Item>
                 <List.Item style={{ display: 'flex' }}>
-                  <Button loading={store.isLogin} disabled={store.isLogin || store.isRegister} type="primary" onClick={() => login(router, store)}>登录</Button>
+                  <Button loading={store.isLogin} disabled={store.isLogin || store.isRegister} type="primary" onClick={() => login(router, store, globalStore)}>登录</Button>
                   {/* <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', justifyContent: 'space-around' }}>
               <Button loading={store.isLogin} disabled={store.isLogin || store.isRegister} type="primary" onClick={() => login(router, store)}>登录</Button>
               <Button loading={store.isRegister} inline disabled={store.isLogin || store.isRegister} type="primary" onClick={() => register(router, store)}>注册</Button>

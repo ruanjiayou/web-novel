@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import { Observer } from 'mobx-react-lite'
-import MIconView from 'components/MIconView'
+import { MIconView } from 'components'
 import services from 'services'
 
 export default function ({ item, router }) {
