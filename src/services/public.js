@@ -1,7 +1,13 @@
 import shttp from 'utils/shttp'
-import { stringfyQuery } from 'utils/utils'
+import { stringfyQuery, sleep } from 'utils/utils'
 
 export default {
+  async getBoot() {
+    await sleep(1)
+    return shttp({
+      url: '/v1/public/boot'
+    })
+  },
   async getBookInfo({ query, params, data }) {
     const result = await shttp({
       url: `/v1/public/book/${params.id}`
@@ -47,6 +53,7 @@ export default {
     return { items, ended: true }
   },
   async getGroupTree({ query, params, data }) {
+    await sleep(1)
     const result = await shttp({
       url: `/v1/public/group-tree/${params.group_id}`,
     })

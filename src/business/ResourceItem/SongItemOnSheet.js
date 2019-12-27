@@ -6,7 +6,7 @@ export default function ({ item, router }) {
   return <Observer>
     {() => (
       <Fragment>
-        <div className="dd-common-alignside" style={{ margin: '0 10px', padding: '10px  0 5px 0', borderBottom: '1px solid #eee' }} onClick={() => { router.pushView(`/root/song-sheet/${item.id}`, null, { title: item.title, hideMenu: true }) }}>
+        <div className="dd-common-alignside" style={{ margin: '0 10px', padding: '10px  0 5px 0', borderBottom: '1px solid #eee' }} onClick={() => { router.pushView(`/root/song-sheet/${item.id}`, null, { title: item.title, hideMenu: true, 'music-controls': true }) }}>
           {item.title}
           <MIconView type="FaAngleRight" />
         </div>

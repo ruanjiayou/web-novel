@@ -45,12 +45,12 @@ export function AutoView({ self, ...props }) {
 export function RenderGroups({ loader, ...props }) {
   const emptyView = renderEmptyView(loader)
   return <Observer>{() => {
-    if (loader.item && loader.item.children.length !== 0) {
+    if (loader.isEmpty) {
+      return <AutoCenterView>{emptyView}</AutoCenterView>
+    } else {
       return <div style={{ height: '100%', overflow: 'auto' }}>
         <AutoView self={loader.item} {...props} />
       </div>
-    } else {
-      return <AutoCenterView>{emptyView}fuck</AutoCenterView>
     }
   }}</Observer>
 }

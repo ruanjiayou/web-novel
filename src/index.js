@@ -5,26 +5,42 @@ import { Observer } from 'mobx-react-lite'
 import { ActivityIndicator } from 'antd-mobile'
 import RouterRoot from './router'
 import globalStore from './global-state'
-import { isPWA } from './utils/utils'
+import { isPWAorMobile } from './utils/utils'
 import { createStoreProvider } from 'contexts'
+import GroupTreeLoader from 'loader/GroupTreeLoader'
 import './components/common.css'
 import './group/group.css'
 import 'antd-mobile/dist/antd-mobile.css'
 // https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/src/serviceWorker.js
 import * as serviceWorker from './service-worker'
+import services from 'services'
 
 // 引入router.顺便做点什么: loading/emptyView什么的
 function App() {
   const [store, StoreContext] = createStoreProvider(globalStore)
   useEffect(() => {
-    if (store.app.isLogin && store.lineLoader.isEmpty) {
-      store.lineLoader.refresh()
-    }
+    services.getBoot().then(res => {
+      if (res.code !== 0) {
+        throw res.message
+      } else {
+        store.userLoader.setData(res.data.user)
+        store.lineLoader.setData(res.data.lines)
+        store.app.setTabs(res.data.tabs)
+        store.app.setChannels(res.data.channels)
+        store.channelsLoader = res.data.channels.map(() => {
+          return GroupTreeLoader.create()
+        })
+        store.app.booted()
+      }
+    }).catch(e => {
+      console.log(e, 'boot')
+      throw '启动失败'
+    })
   })
   return <Observer>
     {() => {
-      if (store.app.isLogin && store.lineLoader.isLoading) {
-        return <div className="dd-common-centerXY">选择线路中...</div>
+      if (store.app.isLogin && store.app.booting) {
+        return <div className="dd-common-centerXY">启动中...</div>
       } else {
         return (
           <Fragment>
@@ -48,7 +64,7 @@ class ErrorBoundary extends React.Component {
       info: null,
       isLoading: false,
       lastTS: Date.now(),
-      isPWA: isPWA()
+      isPWAorMobile: isPWAorMobile()
     }
   }
 
@@ -60,12 +76,7 @@ class ErrorBoundary extends React.Component {
 
   componentDidMount() {
     document.getElementById('start-loading').style.display = 'none'
-    document.getElementById('box').className = isPWA() ? 'box-app' : 'box-browser'
-    window.addEventListener('resize', () => {
-      let isApp = isPWA()
-      document.getElementById('box').className = isApp ? 'box-app' : 'box-browser'
-      this.setState({ isPWA: isApp })
-    })
+    document.getElementById('box').className = this.state.isPWAorMobile ? 'box-app' : 'box-browser'
     document.addEventListener('visibilitychange', async (e) => {
       // TODO: 时间过长处理.刷新
       if (document.hidden) {
@@ -94,7 +105,7 @@ class ErrorBoundary extends React.Component {
           animating={this.state.isLoading}
         />
       </Fragment>
-    } else if (this.state.isPWA) {
+    } else if (this.state.isPWAorMobile) {
       return <Fragment>
         {this.props.children}
         <ActivityIndicator

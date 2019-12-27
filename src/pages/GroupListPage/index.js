@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEffectOnce } from 'react-use'
 import { Observer } from 'mobx-react-lite'
-import { useRouterContext } from 'contexts'
+import { useRouterContext, useStoreContext } from 'contexts'
 import GroupListLoader from 'loader/GroupListLoader'
 import { LoaderListView } from 'components'
 import GroupItemView from 'business/GroupItemView'
@@ -10,9 +10,7 @@ export default function GroupTreePage() {
   const loader = GroupListLoader.create()
   const router = useRouterContext()
   useEffectOnce(() => {
-    if (loader.isEmpty) {
-      loader.refresh()
-    }
+    
   })
   return <Observer>{() => (
     <div style={{ flex: 1, height: '100%' }}>

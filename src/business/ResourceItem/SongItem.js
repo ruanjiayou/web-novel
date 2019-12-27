@@ -23,7 +23,7 @@ export default function ({ item, mode = 'normal', order, loader, router, remove,
               }
             }} />
             <VisualBoxView visible={mode === 'delete'}>
-              <MIconView type="MdDeleteForever" onClick={() => remove(item)} />
+              <MIconView type="FaTrashAlt" onClick={() => remove(item)} />
             </VisualBoxView>
             <VisualBoxView visible={mode === 'add'}>
               <MIconView type="FaPlus" onClick={async (e) => {

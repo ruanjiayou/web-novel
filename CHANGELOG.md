@@ -95,3 +95,10 @@
 - userarea
 - line empty bug
 - 个人中心bug
+
+## 2019-12-28 02:04:48
+- boot接口返回lines/tabs/channels以及可能有的user
+- music上下文显示逻辑
+- emptyView的bug
+- loader的isLoading bug
+- 

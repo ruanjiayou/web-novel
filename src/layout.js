@@ -21,7 +21,7 @@ export default function ({ children }) {
             tabBarPosition="bottom"
             barTintColor="white"
           >
-            {config.menus.map(menu => {
+            {store.app.tabs.map(menu => {
               return <TabBar.Item
                 title={menu.big ? '' : menu.title}
                 key={menu.name}

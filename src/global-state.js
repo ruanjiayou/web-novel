@@ -40,4 +40,5 @@ export default {
   lineLoader,
   categoryLoader,
   bookShelfLoader,
+  channelsLoader: []
 }

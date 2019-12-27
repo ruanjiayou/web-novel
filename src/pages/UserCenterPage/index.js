@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Observer } from 'mobx-react-lite'
-import { ActivityIndicator, Card, WingBlank, Button } from 'antd-mobile'
+import { ActivityIndicator, Card, WingBlank, Button, WhiteSpace } from 'antd-mobile'
 import { useStoreContext, useRouterContext } from 'contexts'
 import { MIconView, SwitchView, VisualBoxView } from 'components'
 
@@ -36,19 +36,14 @@ export default function () {
           </VisualBoxView>
         </div>
         <WingBlank>
-          <Card>
-            <div className="dd-common-alignside" style={{ padding: '10px 50px' }}>
+          <Card style={{ minHeight: 40, paddingBottom: 0 }}>
+            <div className="dd-common-alignside" style={{ padding: '10px 40px', }}>
               <div style={{ color: '#f97a90' }}>
                 <MIconView type="FaStar" />收藏
               </div>
               <div>
                 <MIconView type="FaHistory" style={{ color: '#14b2f7' }} />历史
               </div>
-              <div>
-                <MIconView type="FaEllipsisV" />其他
-              </div>
-            </div>
-            <div className="dd-common-alignside" style={{ padding: '10px 50px' }}>
               <div onClick={() => {
                 router.pushView('/root/secure', null, { title: '安全' })
               }}>
@@ -57,22 +52,45 @@ export default function () {
               <div onClick={() => window.location.reload()}>
                 <MIconView type="FaSyncAlt" />刷新
               </div>
+            </div>
+          </Card>
+          <WhiteSpace />
+          <Card style={{ minHeight: 40, padding: '5px 0' }}>
+            <div className="dd-common-alignside" style={{ margin: '5px 50px' }}>
               <div onClick={() => {
                 router.pushView('/root/category', null, { hideMenu: true })
               }}>
-                <MIconView type="FaListAlt" style={{ color: '#ff5b05' }} />分类
-          </div>
-            </div>
-            <div className="dd-common-alignside" style={{ padding: '10px 50px' }}>
+                <MIconView type="FaListAlt" style={{ color: '#ff5b05' }} />小说
+              </div>
               <div onClick={() => {
                 if (store.app.isLogin) {
                   router.pushView('/root/gallery', null, { hideMenu: true })
                 } else {
                   router.pushView('/auth/login', null, { hideMenu: true, showNavi: true })
                 }
+              }} style={{ color: '#0a925d' }}>
+                <MIconView type="FaImages" />图片
+              </div>
+              <div onClick={() => {
+                router.pushView('/root/music', null, { showNavi: true, })
+              }} style={{ color: '#bb00ff' }}>
+                <MIconView type="IoMdMusicalNote" />音乐
+              </div>
+            </div>
+            <div className="dd-common-alignside" style={{ margin: '5px 50px' }}>
+              <div onClick={() => {
+                router.pushView('/root/article', null, { hideMenu: true })
+              }} style={{ color: '#258df1' }}>
+                <MIconView type="FaFileAlt" />文章
+              </div>
+              <div onClick={() => {
+                router.pushView('/root/news', null, { hideMenu: true })
               }} style={{ color: 'red' }}>
-                <MIconView type="FaListAlt" />图片
-          </div>
+                <MIconView type="FaFileAlt" />资讯
+              </div>
+              <div>
+                <MIconView type="FaEllipsisV" />其他
+              </div>
             </div>
           </Card>
         </WingBlank>

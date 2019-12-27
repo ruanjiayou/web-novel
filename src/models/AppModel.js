@@ -1,20 +1,25 @@
 import { types } from 'mobx-state-tree'
 import shttp from '../utils/shttp'
 import storage from '../utils/storage'
+import TabModel from './TabModel'
+import Group from './GroupTreeModel'
 
 const Model = types.model({
+  booting: types.optional(types.boolean, true),
   selectedMenu: types.optional(types.string, 'book-shelf'),
   fullScreen: types.optional(types.boolean, false),
   accessTokenName: types.optional(types.string, 'access-token'),
   refreshTokenName: types.optional(types.string, 'refresh-token'),
   lockerName: types.optional(types.string, 'locker'),
   baseURL: types.optional(types.string, '/'),
+  tabs: types.optional(types.array(TabModel), []),
+  channels: types.optional(types.array(Group), []),
   // 账号相关
   account: types.optional(types.string, ''),
   accessToken: types.optional(types.string, ''),
   refreshToken: types.optional(types.string, ''),
   // 音乐播放器相关
-  musicModeName: types.optional(types.string, 'music-mode'),
+  musicModeName: types.optional(types.string, 'circle'),
   showMusic: false,
   // 调试
   showDebug: types.optional(types.boolean, false),
@@ -107,6 +112,16 @@ const Model = types.model({
   },
   toggleSpeaker() {
     self.showSpeaker = !self.showSpeaker
+  },
+})).actions(self => ({
+  booted() {
+    self.booting = false
+  },
+  setTabs(tabs) {
+    self.tabs = tabs
+  },
+  setChannels(channels) {
+    self.channels = channels
   },
 }))
 

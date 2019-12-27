@@ -38,6 +38,7 @@ function createItemsLoader(model, fn, customs = {}) {
     }
     return {
       setData(data) {
+        self.isLoading = false
         self.items = data || []
       },
       ...nw
@@ -113,13 +114,13 @@ function createItemsLoader(model, fn, customs = {}) {
   return types.optional(unionModel, {})
 }
 
-function createItemLoader(model, fn) {
+function createItemLoader(model, fn, customs = {}) {
   const unionModel = types.model({
     item: types.maybeNull(model),
     // 是否加载中
-    isLoading: types.optional(types.boolean, false),
+    isLoading: types.optional(types.boolean, true),
     // 请求状态
-    state: types.optional(types.enumeration(['success', 'fail']), 'success'),
+    state: types.optional(types.enumeration(['success', 'fail', 'init']), 'init'),
     // 操作类型
     type: types.optional(types.enumeration(['refresh']), 'refresh'),
     error: types.maybe(types.model({
@@ -136,18 +137,23 @@ function createItemLoader(model, fn) {
       }
     }
   }).actions(self => {
+    const nw = {}
+    for (let k in customs) {
+      nw[k] = function () { return customs[k].call(self, ...arguments) }
+    }
     return {
       setData(data) {
+        self.isLoading = false
         self.item = data
       },
+      ...nw,
     }
   }).actions(self => {
     const request = flow(function* (option = {}, type = 'refresh') {
       const { query, params, data } = option
-      if (self.isLoading || (self.isEnded && type === 'more')) {
-        return
-      }
-      if (self.isLoading) {
+      if (self.state === 'init') {
+
+      } else if (self.isLoading || (self.isEnded && type === 'more')) {
         return
       }
       self.type = type
