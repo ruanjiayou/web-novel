@@ -39,7 +39,7 @@ function App() {
   })
   return <Observer>
     {() => {
-      if (store.app.isLogin && store.app.booting) {
+      if (store.app.booting) {
         return <div className="dd-common-centerXY">启动中...</div>
       } else {
         return (
