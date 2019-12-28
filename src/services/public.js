@@ -8,6 +8,18 @@ export default {
       url: '/v1/public/boot'
     })
   },
+  async getResourceList({ query, params, data }) {
+    const result = await shttp({
+      url: `/v1/public/resources${stringfyQuery(query)}`,
+    })
+    return { items: result.data, ended: result.data.length < 10 }
+  },
+  async getResource({ query, params }) {
+    const result = await shttp({
+      url: `/v1/public/resource/${params.id}`
+    })
+    return { item: result.data }
+  },
   async getBookInfo({ query, params, data }) {
     const result = await shttp({
       url: `/v1/public/book/${params.id}`
@@ -53,9 +65,9 @@ export default {
     return { items, ended: true }
   },
   async getGroupTree({ query, params, data }) {
-    await sleep(1)
+    await sleep(3)
     const result = await shttp({
-      url: `/v1/public/group-tree/${params.group_id}`,
+      url: `/v1/public/group-tree/${params.name}`,
     })
     return { item: result.data }
   },

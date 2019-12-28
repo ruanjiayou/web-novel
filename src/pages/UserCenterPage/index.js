@@ -64,7 +64,7 @@ export default function () {
               </div>
               <div onClick={() => {
                 if (store.app.isLogin) {
-                  router.pushView('/root/gallery', null, { hideMenu: true })
+                  router.pushView('/root/group-tree/image', null, { hideMenu: true, title: '图片' })
                 } else {
                   router.pushView('/auth/login', null, { hideMenu: true, showNavi: true })
                 }
@@ -79,12 +79,12 @@ export default function () {
             </div>
             <div className="dd-common-alignside" style={{ margin: '5px 50px' }}>
               <div onClick={() => {
-                router.pushView('/root/article', null, { hideMenu: true })
+                router.pushView('/root/group-tree/article', null, { hideMenu: true, title: '文章' })
               }} style={{ color: '#258df1' }}>
                 <MIconView type="FaFileAlt" />文章
               </div>
               <div onClick={() => {
-                router.pushView('/root/news', null, { hideMenu: true })
+                router.pushView('/root/group-tree/news', null, { hideMenu: true, title: '资讯' })
               }} style={{ color: 'red' }}>
                 <MIconView type="FaFileAlt" />资讯
               </div>

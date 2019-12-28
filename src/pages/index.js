@@ -8,7 +8,6 @@ import AuthLoginPage from './AuthLoginPage'
 import BookShelfPage from './UserShelfPage'
 import BookSearchPage from './BookSearchPage'
 import GroupTreePage from './GroupTreePage'
-import GroupListPage from './GroupListPage'
 import UserCenterPage from './UserCenterPage'
 import UserSettingPage from './UserSettingPage'
 import SecurePage from './SecurePage'
@@ -17,7 +16,7 @@ import TodoAddPage from './TodoAddPage'
 import MusicPage from './MusicPage'
 import SongSheetPage from './SongSheetPage'
 import SongsPage from './SongsPage'
-import GalleryPage from './GalleryPage'
+import ImagePage from './ImagePage'
 
 export default [
   {
@@ -49,12 +48,8 @@ export default [
     component: BookSearchPage,
   },
   {
-    pathname: '/root/group-tree/:group_id([0-9a-zA-Z-]+)',
+    pathname: '/root/group-tree/:name([0-9a-zA-Z-]+)',
     component: GroupTreePage,
-  },
-  {
-    pathname: '/root/groups',
-    component: GroupListPage,
   },
   {
     pathname: '/root/music',
@@ -69,8 +64,8 @@ export default [
     component: SongSheetPage,
   },
   {
-    pathname: '/root/gallery',
-    component: GalleryPage,
+    pathname: '/root/image/:id([0-9a-zA-Z]+)/info',
+    component: ImagePage,
   },
   // 用户部分
   {

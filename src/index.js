@@ -27,8 +27,8 @@ function App() {
         store.lineLoader.setData(res.data.lines)
         store.app.setTabs(res.data.tabs)
         store.app.setChannels(res.data.channels)
-        store.channelsLoader = res.data.channels.map(() => {
-          return GroupTreeLoader.create()
+        res.data.channels.forEach(channel => {
+          store.channelsLoader[channel.name] = GroupTreeLoader.create()
         })
         store.app.booted()
       }

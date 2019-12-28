@@ -4,12 +4,12 @@ import { ActivityIndicator, Icon } from 'antd-mobile'
 
 import { useRouterContext } from 'contexts'
 import { MIconView, AutoCenterView, VisualBoxView } from 'components'
-import BookLoader from 'loader/BookLoader'
+import ResourceLoader from 'loader/ResourceLoader'
 import services from 'services'
 
 export default function () {
   const router = useRouterContext()
-  const loader = BookLoader.create()
+  const loader = ResourceLoader.create()
   const params = router.params
   const localStore = useLocalStore(() => ({
     loading: false,

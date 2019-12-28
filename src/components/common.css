@@ -57,3 +57,11 @@
   line-clamp: 2;
   line-height: 1.3;
 }
+
+@keyframes spin {
+  from { transform: rotate(0deg);}
+  to {transform: rotate(360deg);}
+}
+.spin {
+  animation: spin 4s infinite linear;
+}

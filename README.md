@@ -58,3 +58,7 @@
 - 日志
 - 多类型无限列表
 - 打包优化大小
+- ImageItem交互优化
+- Home的tab路由变化
+- ~~~group单页根据name查询~~~
+- 统一用resource的model

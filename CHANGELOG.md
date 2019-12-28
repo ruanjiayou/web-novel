@@ -101,4 +101,7 @@
 - music上下文显示逻辑
 - emptyView的bug
 - loader的isLoading bug
+
+## 2019-12-28 18:38:10
+- ResourceItem自适应Item类型
 - 

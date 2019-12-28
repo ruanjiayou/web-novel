@@ -4,20 +4,20 @@ import { Observer } from 'mobx-react-lite'
 import { LoaderListView } from 'components'
 import { useNaviContext, useRouterContext } from 'contexts'
 import SongSheetLoader from 'loader/SongSheetLoader'
-import SongListLoader from 'loader/SongListLoader'
-import SongItem from 'business/ResourceItem/SongItem'
+import ResourceListLoader from 'loader/ResourceListLoader'
+import ResourceItem from 'business/ResourceItem'
 
 export default ({ self, children }) => {
   const Navi = useNaviContext()
   const router = useRouterContext()
   const loader = SongSheetLoader.create()
-  const songListLoader = SongListLoader.create()
+  const resourceListLoader = ResourceListLoader.create()
   useEffectOnce(() => {
     if (loader.isEmpty) {
       loader.refresh()
     }
-    if (songListLoader.isEmpty) {
-      songListLoader.refresh()
+    if (resourceListLoader.isEmpty) {
+      resourceListLoader.refresh({ query: { source_type: 'music' } })
     }
   })
   return <Observer>
@@ -26,9 +26,15 @@ export default ({ self, children }) => {
         <Navi title="全部歌曲" router={router} />
         <div className="full-height-auto">
           <LoaderListView
-            loader={songListLoader}
+            loader={resourceListLoader}
+            refresh={() => {
+              resourceListLoader.refresh({ query: { source_type: 'music' } })
+            }}
+            loadMore={() => {
+              resourceListLoader.loadMore({ query: { source_type: 'music' } })
+            }}
             renderItem={(item) => (
-              <SongItem mode="add" item={item} router={router} />
+              <ResourceItem mode="add" item={item} loader={resourceListLoader} />
             )}
           />
         </div>

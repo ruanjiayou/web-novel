@@ -1,6 +1,6 @@
 import { types } from 'mobx-state-tree'
 import events from 'utils/events'
-import SongModel from './SongSheetSongModel'
+import SongModel from './ResourceModel'
 import store from '../global-state'
 
 const Model = types.model('musicPlayer', {

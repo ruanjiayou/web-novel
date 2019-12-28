@@ -3,7 +3,6 @@ import { useEffectOnce } from 'react-use'
 import { Observer } from 'mobx-react-lite'
 import { useNaviContext, useRouterContext } from 'contexts'
 import SongSheetLoader from 'loader/SongSheetLoader'
-import SongListLoader from 'loader/SongListLoader'
 import { LoaderListView } from 'components'
 import SongItemOnSheet from 'business/ResourceItem/SongItemOnSheet'
 
@@ -11,13 +10,9 @@ export default ({ self, children }) => {
   const Navi = useNaviContext()
   const router = useRouterContext()
   const loader = SongSheetLoader.create()
-  const songListLoader = SongListLoader.create()
   useEffectOnce(() => {
     if (loader.isEmpty) {
       loader.refresh()
-    }
-    if (songListLoader.isEmpty) {
-      songListLoader.refresh()
     }
   })
   return <Observer>

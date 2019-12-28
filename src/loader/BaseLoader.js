@@ -10,9 +10,9 @@ function createItemsLoader(model, fn, customs = {}) {
     // 是否完毕
     isEnded: types.optional(types.boolean, false),
     // 是否加载中
-    isLoading: types.optional(types.boolean, false),
+    isLoading: types.optional(types.boolean, true),
     // 请求状态
-    state: types.optional(types.enumeration(['success', 'fail']), 'success'),
+    state: types.optional(types.enumeration(['success', 'fail', 'init']), 'init'),
     // 操作类型
     type: types.optional(types.enumeration(['refresh', 'more']), 'refresh'),
     // 排列方向
@@ -25,7 +25,7 @@ function createItemsLoader(model, fn, customs = {}) {
   }).views(self => {
     return {
       get isEmpty() {
-        return !(self.items && self.items.length > 0)
+        return self.items.length === 0
       },
       get length() {
         return self.items.length
@@ -46,13 +46,15 @@ function createItemsLoader(model, fn, customs = {}) {
   }).actions(self => {
     const request = flow(function* (option = {}, type = 'refresh') {
       const { query = {}, params = {}, data = {} } = option
-      if (self.isLoading || (self.isEnded && type === 'more')) {
+      if (self.state === 'init') {
+
+      } else if (self.isLoading || (self.isEnded && type === 'more')) {
         return
       }
+      self.state = 'success'
+      self.isLoading = true
       self.type = type
       self.error = undefined
-      self.isLoading = true
-      self.state = 'success'
       query.page = self.page
       let res = null
       try {

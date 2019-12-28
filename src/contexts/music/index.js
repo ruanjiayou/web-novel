@@ -100,7 +100,9 @@ function MusicPlayer() {
                 storage.setValue('music', { left: musicStore.left, top: musicStore.top })
               }, 100)
             }}>
-              <div style={{ borderRadius: '50%', border: '2px solid white', background: 'pink', width: 40, height: 40 }}></div>
+              <div className="spin" style={{ borderRadius: '50%', border: '2px solid white', background: 'pink', width: 40, height: 40 }}>
+                <MIconView style={{ height: 40, lineHeight: '40px', color: '#c557c5' }} type="IoMdMusicalNote" />
+              </div>
             </Dragger>
           </div>
         )} loading={!router.getStateKey('music-controls')} >

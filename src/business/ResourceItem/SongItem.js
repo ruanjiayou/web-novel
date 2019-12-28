@@ -18,7 +18,9 @@ export default function ({ item, mode = 'normal', order, loader, router, remove,
               if (item.id === music.currentPlayId) {
                 music.pauseMusic()
               } else {
-                music.setSheet(loader.items)
+                if (loader) {
+                  music.setSheet(loader.items)
+                }
                 music.playMusic(item.id)
               }
             }} />

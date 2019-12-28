@@ -29,6 +29,9 @@ export default function ({ children }) {
                 selectedIcon={<MIconView style={{ margin: 3 }} type={menu.icon} />}
                 selected={menu.name === store.app.selectedMenu}
                 onPress={() => {
+                  if (menu.name === store.app.selectedMenu) {
+                    return
+                  }
                   store.app.setMenu(menu.name)
                   router.pushView(menu.path, null, { title: menu.title, hideMenu: menu.hideMenu ? true : false })
                 }}

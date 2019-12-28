@@ -1,7 +1,7 @@
 import services from 'services/index'
-import BookModel from 'models/BookModel'
+import ResourceModel from 'models/ResourceModel'
 import { createItemsLoader } from './BaseLoader'
 
-export default createItemsLoader(BookModel, async (params) => {
+export default createItemsLoader(ResourceModel, async (params) => {
   return services.getMybooks(params)
 })

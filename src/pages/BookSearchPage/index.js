@@ -2,7 +2,7 @@ import React, { Fragment, useEffect } from 'react'
 import { Observer } from 'mobx-react-lite'
 
 import { useNaviContext, useRouterContext } from 'contexts/'
-import BookListLoader from 'loader/BookListLoader'
+import ResourceListLoader from 'loader/ResourceListLoader'
 import GroupTreeLoader from 'loader/GroupTreeLoader'
 import { RenderGroups } from 'group'
 
@@ -10,13 +10,13 @@ export default function () {
   const Navi = useNaviContext()
   const router = useRouterContext()
   const loader = GroupTreeLoader.create()
-  const booksLoader = BookListLoader.create()
+  const booksLoader = ResourceListLoader.create()
   useEffect(() => {
     if (loader.isEmpty) {
-      loader.refresh({ params: { group_id: 'D5698713D07045ADBBF5F0D5D09E53E4' } })
+      loader.refresh({ params: { name: 'book-search-all' } })
     }
     if (booksLoader.isEmpty) {
-      booksLoader.refresh()
+      booksLoader.refresh({ query: { source_type: 'novel' } })
     }
   })
   return <Observer>{
@@ -25,7 +25,7 @@ export default function () {
       <div className="full-height-auto" style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
         <div style={{ height: '100%' }}>
           <RenderGroups loader={loader} onQueryChange={query => {
-            booksLoader.refresh({ query })
+            booksLoader.refresh({ query: { ...query, source_type: 'novel' } })
           }} />
         </div>
       </div>
