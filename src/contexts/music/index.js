@@ -65,13 +65,9 @@ function MusicPlayer() {
           }
           onLoadedData={() => {
             musicStore.isLoading = false
-            console.log(player.current.currentTime)
-            console.log(player.current.duration)
           }}
           onProgress={() => {
             musicStore.percent = 100 * player.current.currentTime / (player.current.duration || 1)
-            console.log(player.current.currentTime)
-            console.log(player.current.duration)
           }}
           onEnded={() => {
             if (music.mode === MODE.ONE) {

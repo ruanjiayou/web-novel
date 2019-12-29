@@ -1,8 +1,14 @@
 import { flow, types } from 'mobx-state-tree'
 import Config from 'config'
 
+// 默认值问题
+// 第一次刷新 判断
+// loader的name
+// 去掉 type state枚举: init pending success fail/success: true/false state ready/pending
+
 function createItemsLoader(model, fn, customs = {}) {
   const unionModel = types.model({
+    name: types.optional(types.string, ''),
     // 数据数组
     items: types.optional(types.array(model), []),
     // 当前页码
@@ -10,55 +16,58 @@ function createItemsLoader(model, fn, customs = {}) {
     // 是否完毕
     isEnded: types.optional(types.boolean, false),
     // 是否加载中
-    isLoading: types.optional(types.boolean, true),
     // 请求状态
-    state: types.optional(types.enumeration(['success', 'fail', 'init']), 'init'),
-    // 操作类型
-    type: types.optional(types.enumeration(['refresh', 'more']), 'refresh'),
+    state: types.optional(types.enumeration(['ready', 'pending']), 'ready'),
     // 排列方向
     sort: types.optional(types.enumeration(['asc', 'desc']), 'asc'),
-    // 错误信息
-    error: types.maybe(types.model({
-      code: types.maybe(types.string),
+    // 错误信息 success: true/false
+    error: types.maybeNull(types.model('error', {
+      code: types.union(types.number, types.string),
       message: types.maybe(types.string)
     })),
-  }).views(self => {
-    return {
-      get isEmpty() {
-        return self.items.length === 0
-      },
-      get length() {
-        return self.items.length
-      },
-    }
-  }).actions(self => {
+  }).views(self => ({
+    // 默认属性
+    get isEmpty() {
+      return self.items.length === 0
+    },
+    get canStart() {
+      return self.items.length === 0 && self.state === 'ready'
+    },
+    get isLoading() {
+      return self.state === 'pending'
+    },
+    get isError() {
+      return self.error !== null
+    },
+  })).actions(self => ({
+    // 默认方法
+    setName(name) {
+      self.name = name
+    },
+    setData(data) {
+      self.items = data || []
+    },
+  })).actions(self => {
+    // 自定义方法
     const nw = {}
     for (let k in customs) {
       nw[k] = function () { return customs[k].call(self, ...arguments) }
     }
-    return {
-      setData(data) {
-        self.isLoading = false
-        self.items = data || []
-      },
-      ...nw
-    }
+    return nw
   }).actions(self => {
+    // 请求
     const request = flow(function* (option = {}, type = 'refresh') {
       const { query = {}, params = {}, data = {} } = option
-      if (self.state === 'init') {
-
-      } else if (self.isLoading || (self.isEnded && type === 'more')) {
+      if (self.isLoading) {
         return
       }
-      self.state = 'success'
-      self.isLoading = true
-      self.type = type
-      self.error = undefined
+      self.state = 'pending'
+      self.error = null
       if (type === 'more') {
-        self.page++
+        query.page = ++self.page
+      } else {
+        self.page = 1
       }
-      query.page = self.page
       let res = null
       try {
         res = yield fn({ query, params, data }, type)
@@ -66,29 +75,27 @@ function createItemsLoader(model, fn, customs = {}) {
         self.isEnded = !!ended
         if (type === 'refresh') {
           // 刷新
-          self.page = 1
           self.items = items
         } else if (items.length > 0) {
           // 加载更多
-          self.page = params.page
           self.items.push(...items)
         } else {
-          self.state = 'fail'
-          self.error = { code: 1, message: 'x' }
+          self.page = self.page - 1
         }
       } catch (err) {
+        console.log(Object.keys(err))
         if (Config.isDebug && Config.console) {
           console.log(err, 'loader')
         }
+        const data = err['response'] && err['response']['data']
         // 加载失败
-        self.state = 'fail'
-        if (err.code) {
-          self.error = { code: err.code, message: err.message || err.toString() }
+        if (data && data.code) {
+          self.error = { code: data.code, message: data.message }
         } else {
           self.error = { code: 'unknown', message: '未知错误' }
         }
       } finally {
-        self.isLoading = false
+        self.state = 'ready'
       }
       return res
     })
@@ -121,49 +128,52 @@ function createItemsLoader(model, fn, customs = {}) {
 function createItemLoader(model, fn, customs = {}) {
   const unionModel = types.model({
     item: types.maybeNull(model),
-    // 是否加载中
-    isLoading: types.optional(types.boolean, true),
     // 请求状态
-    state: types.optional(types.enumeration(['success', 'fail', 'init']), 'init'),
-    // 操作类型
-    type: types.optional(types.enumeration(['refresh']), 'refresh'),
-    error: types.maybe(types.model({
-      code: types.maybe(types.string),
+    state: types.optional(types.enumeration(['ready', 'pending']), 'ready'),
+    error: types.maybeNull(types.model({
+      code: types.union(types.number, types.string),
       message: types.maybe(types.string),
     }))
   }).views(self => {
+    // 默认数学
     return {
       get isEmpty() {
         return !self.item
       },
-      get fn() {
-        return fn
-      }
+      get isLoading() {
+        return self.state === 'pending'
+      },
+      get canStart() {
+        return !self.item && self.state === 'ready'
+      },
+      get isError() {
+        return self.error !== null
+      },
     }
-  }).actions(self => {
+  }).actions(self => ({
+    // 默认方法
+    setName(name) {
+      self.name = name
+    },
+    setData(data) {
+      self.item = data
+    },
+  })).actions(self => {
+    // 自定义方法
     const nw = {}
     for (let k in customs) {
       nw[k] = function () { return customs[k].call(self, ...arguments) }
     }
-    return {
-      setData(data) {
-        self.isLoading = false
-        self.item = data
-      },
-      ...nw,
-    }
+    return nw
   }).actions(self => {
+    // 请求
     const request = flow(function* (option = {}, type = 'refresh') {
       const { query, params, data } = option
-      if (self.state === 'init') {
-
-      } else if (self.isLoading || (self.isEnded && type === 'more')) {
+      if (self.isLoading) {
         return
       }
-      self.type = type
-      self.error = undefined
-      self.isLoading = true
-      self.state = 'success'
+      self.error = null
+      self.state = 'pending'
       let res = null
       try {
         res = yield fn({ query, params, data }, type)
@@ -171,21 +181,21 @@ function createItemLoader(model, fn, customs = {}) {
         if (item) {
           self.item = item
         } else {
-          self.state = 'fail'
           self.error = { code: 1, message: 'x' }
         }
       } catch (err) {
         if (Config.isDebug && Config.console) {
           console.log(err, 'loader')
         }
-        self.state = 'fail'
-        if (err.code) {
-          self.error = { code: err.code, message: err.message }
+        const data = err['response'] && err['response']['data']
+        // 加载失败
+        if (data && data.code) {
+          self.error = { code: data.code, message: data.message }
         } else {
           self.error = { code: 'unknown', message: '未知错误' }
         }
       } finally {
-        self.isLoading = false
+        self.state = 'ready'
       }
       return res
     })

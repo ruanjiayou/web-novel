@@ -64,7 +64,7 @@ shttp.interceptors.response.use(
     if (data.code === 101020) {
       globalStore.app.setAccessToken('')
     }
-    return Promise.resolve(error)
+    return Promise.reject(error)
   }
 )
 

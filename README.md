@@ -63,4 +63,7 @@
 - ~~~group单页根据name查询~~~
 - ~~~统一用resource的model~~~
 - ~~~onQueryChange 要放顶层? group fetch后调用一次?~~~
-- 重复render的bug
+- ~~~重复render的bug group里就带数据? 先做resource的后台~~~
+- 音乐播放器优化
+- 小窗播放m3u8
+- TODO优化

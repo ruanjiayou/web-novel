@@ -9,16 +9,23 @@ export default ({ self, children }) => {
   const router = useRouterContext()
   const store = useStoreContext()
   const channels = store.app.channels
-  const loaders = store.channelsLoader
+  const loaders = store.channelLoaders
+  const subLoaders = store.resourceListLoaders
   const query = router.getQuery()
   useEffect(() => {
     let loader = loaders[query.tab]
+    let subLoader = subLoaders[query.tab]
     store.app.setTab(query.tab)
     if (!query.tab) {
       query.tab = channels.length ? channels[0].name : ''
       router.replaceView('/root/home', query)
-    } else if (loader && loader.isEmpty) {
-      loader.refresh({ params: { name: query.tab } })
+    } else if (loader && loader.canStart) {
+      loader.refresh({ params: { name: query.tab } }).then(res => {
+        const query = loader.getQuery()
+        if (subLoader.canStart) {
+          subLoader.refresh({ query })
+        }
+      })
     }
   })
   return <Observer>
@@ -30,7 +37,7 @@ export default ({ self, children }) => {
           router.replaceView('/root/home', query)
         }}>{
             channels.map((channel, index) => (
-              <RenderGroups key={index} loader={loaders[channel.name]} />
+              <RenderGroups key={index} loader={loaders[channel.name]} subLoader={subLoaders[channel.name]} />
             ))
           }</Tabs>
       </div>

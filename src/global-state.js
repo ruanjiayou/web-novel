@@ -40,5 +40,7 @@ export default {
   lineLoader,
   categoryLoader,
   bookShelfLoader,
-  channelsLoader: []
+  // 全局loader缓存
+  channelLoaders: {},
+  resourceListLoaders: {},
 }

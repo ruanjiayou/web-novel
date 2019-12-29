@@ -105,3 +105,7 @@
 ## 2019-12-28 18:38:10
 - ResourceItem自适应Item类型
 - fixbug: loadMore page++bug; 首页tab路由bug; 
+
+## 2019-12-29 22:45:19
+- fixbug: 重复渲染调用loader请求
+- fixbug: request错误显示不正常bug

@@ -15,7 +15,7 @@ function MyBody(props) {
 
 function renderList({ loader, refresh, loadMore, renderItem, onScroll, className, renderEmpty }) {
   const dataSource = dataProvider.cloneWithRows(loader.items.slice())
-  const EmptyView = renderEmptyView(loader, renderEmpty)
+  const EmptyView = renderEmptyView(loader, renderEmpty, refresh)
   // 必须要这样.不能直接用 loader.isLoading判断
   const isLoading = loader.isLoading
   return <Fragment>

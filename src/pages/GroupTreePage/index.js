@@ -3,6 +3,7 @@ import { useEffectOnce } from 'react-use'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { useNaviContext, useRouterContext, useStoreContext } from 'contexts'
 import GroupTreeLoader from 'loader/GroupTreeLoader'
+import ResourceListLoader from 'loader/ResourceListLoader'
 import { RenderGroups } from 'group'
 
 export default function GroupTreePage() {
@@ -11,14 +12,20 @@ export default function GroupTreePage() {
   const gStore = useStoreContext()
   const store = useLocalStore(() => ({
     title: router.getStateKey('title'),
-    loader: gStore.channelsLoader[params.name] || GroupTreeLoader.create()
+    loader: gStore.channelLoaders[params.name] || GroupTreeLoader.create(),
+    subLoader: gStore.resourceListLoaders[params.name] || ResourceListLoader.create()
   }))
-  if (!gStore.channelsLoader[params.name]) {
-    gStore.channelsLoader[params.name] = store.loader
+  if (!gStore.channelLoaders[params.name]) {
+    gStore.channelLoaders[params.name] = store.loader
   }
   useEffectOnce(() => {
-    if (store.loader.isEmpty) {
-      store.loader.refresh({ params: { name: params.name } })
+    if (store.loader.canStart) {
+      store.loader.refresh({ params: { name: params.name } }).then(() => {
+        const query = store.loader.getQuery()
+        if (store.subLoader.canStart) {
+          store.subLoader.refresh({ query })
+        }
+      })
     }
   }, [store])
   const Navi = useNaviContext()
@@ -26,7 +33,7 @@ export default function GroupTreePage() {
     <div className="full-height">
       <Navi title={store.title} router={router} />
       <div className="full-height-auto">
-        <RenderGroups loader={store.loader} />
+        <RenderGroups loader={store.loader} subLoader={store.subLoader} />
       </div>
     </div>)
   }</Observer>
