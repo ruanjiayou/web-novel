@@ -55,6 +55,9 @@ function createItemsLoader(model, fn, customs = {}) {
       self.isLoading = true
       self.type = type
       self.error = undefined
+      if (type === 'more') {
+        self.page++
+      }
       query.page = self.page
       let res = null
       try {
@@ -107,7 +110,6 @@ function createItemsLoader(model, fn, customs = {}) {
         return await request(option, 'refresh')
       },
       async loadMore(option) {
-        self.page++
         return await request(option, 'more')
       }
     }

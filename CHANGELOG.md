@@ -104,4 +104,4 @@
 
 ## 2019-12-28 18:38:10
 - ResourceItem自适应Item类型
-- 
+- fixbug: loadMore page++bug; 首页tab路由bug; 

@@ -59,6 +59,8 @@
 - 多类型无限列表
 - 打包优化大小
 - ImageItem交互优化
-- Home的tab路由变化
+- ~~~Home的tab路由变化~~~
 - ~~~group单页根据name查询~~~
-- 统一用resource的model
+- ~~~统一用resource的model~~~
+- ~~~onQueryChange 要放顶层? group fetch后调用一次?~~~
+- 重复render的bug

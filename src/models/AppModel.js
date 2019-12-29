@@ -6,14 +6,19 @@ import Group from './GroupTreeModel'
 
 const Model = types.model({
   booting: types.optional(types.boolean, true),
-  selectedMenu: types.optional(types.string, 'book-shelf'),
+  // 默认tabBar
+  selectedMenu: types.optional(types.string, 'home'),
+  // 底部tabBars菜单
+  tabs: types.optional(types.array(TabModel), []),
+  // 首页tabs
+  channels: types.optional(types.array(Group), []),
+  // 当前tab
+  tab: types.optional(types.string, ''),
   fullScreen: types.optional(types.boolean, false),
   accessTokenName: types.optional(types.string, 'access-token'),
   refreshTokenName: types.optional(types.string, 'refresh-token'),
   lockerName: types.optional(types.string, 'locker'),
   baseURL: types.optional(types.string, '/'),
-  tabs: types.optional(types.array(TabModel), []),
-  channels: types.optional(types.array(Group), []),
   // 账号相关
   account: types.optional(types.string, ''),
   accessToken: types.optional(types.string, ''),
@@ -69,9 +74,6 @@ const Model = types.model({
   }
 }).actions(self => {
   return {
-    setMenu(name) {
-      self.selectedMenu = name
-    },
     setBaseURL(url) {
       self.baseURL = url
       shttp.defaults.baseURL = url
@@ -116,6 +118,12 @@ const Model = types.model({
 })).actions(self => ({
   booted() {
     self.booting = false
+  },
+  setMenu(name) {
+    self.selectedMenu = name
+  },
+  setTab(name) {
+    self.tab = name
   },
   setTabs(tabs) {
     self.tabs = tabs

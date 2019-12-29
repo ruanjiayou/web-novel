@@ -9,20 +9,25 @@ export default function GroupTreePage() {
   const router = useRouterContext()
   const params = router.params
   const gStore = useStoreContext()
-  const loader = gStore.channelsLoader[params.name] || GroupTreeLoader.create()
-  if (!gStore.channelsLoader[params.name]) {
-    gStore.channelsLoader[params.name] = loader
-  }
   const store = useLocalStore(() => ({
     title: router.getStateKey('title'),
+    loader: gStore.channelsLoader[params.name] || GroupTreeLoader.create()
   }))
+  if (!gStore.channelsLoader[params.name]) {
+    gStore.channelsLoader[params.name] = store.loader
+  }
+  useEffectOnce(() => {
+    if (store.loader.isEmpty) {
+      store.loader.refresh({ params: { name: params.name } })
+    }
+  }, [store])
   const Navi = useNaviContext()
   return <Observer>{() => (
     <div className="full-height">
       <Navi title={store.title} router={router} />
       <div className="full-height-auto">
-        <RenderGroups loader={loader} />
+        <RenderGroups loader={store.loader} />
       </div>
-    </div>
-  )}</Observer>
+    </div>)
+  }</Observer>
 }

@@ -65,3 +65,9 @@
 .spin {
   animation: spin 4s infinite linear;
 }
+
+.txt-omit {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}

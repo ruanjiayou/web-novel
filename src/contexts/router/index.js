@@ -1,6 +1,7 @@
 import React, { useContext as useReactContext, useState } from 'react'
 import * as path2reg from 'path-to-regexp'
 import pages from '../../pages'
+import qs from 'qs'
 
 // 上下文context.避免react多级一直传props
 const Context = React.createContext(null)
@@ -50,6 +51,9 @@ export function useProvider(history) {
       },
       getStateKey(key) {
         return history.location.state && history.location.state[key]
+      },
+      getQuery() {
+        return qs.parse(window.location.search.substr(1))
       },
       back() {
         const { userClick, login } = history.location.state || { userClick: true }

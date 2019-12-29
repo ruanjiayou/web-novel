@@ -1,9 +1,7 @@
 import React from 'react'
-import { useEffectOnce } from 'react-use'
 import { Observer } from 'mobx-react-lite'
 import renderEmptyView from 'components/EmptyView'
 import AutoCenterView from 'components/AutoCenterView'
-import { useRouterContext } from 'contexts'
 import Filter from './Filter'
 import FilterRow from './FitlerRow'
 import FilterTag from './FilterTag'
@@ -29,6 +27,9 @@ const views = {
 
 export function AutoView({ self, ...props }) {
   return <Observer>{() => {
+    if (self === null) {
+      return <div>null</div>
+    }
     if (self.parent_id === '') {
       return self.children.map(child => (
         <AutoView key={child.group_id} self={child} {...props} />
@@ -45,17 +46,8 @@ export function AutoView({ self, ...props }) {
   }</Observer>
 }
 export function RenderGroups({ loader, ...props }) {
-  const router = useRouterContext()
-  const params = router.params
   const emptyView = renderEmptyView(loader)
-  console.log(loader.isEmpty, 'group index?')
-  useEffectOnce(() => {
-    if (loader.isEmpty) {
-      loader.refresh({ params: { name: params.name } })
-    }
-  }, [])
   return <Observer>{() => {
-    console.log(loader.isEmpty, 'group index ob?')
     if (loader.isEmpty) {
       return <AutoCenterView>{emptyView}</AutoCenterView>
     } else {

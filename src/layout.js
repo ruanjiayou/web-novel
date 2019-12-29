@@ -33,7 +33,7 @@ export default function ({ children }) {
                     return
                   }
                   store.app.setMenu(menu.name)
-                  router.pushView(menu.path, null, { title: menu.title, hideMenu: menu.hideMenu ? true : false })
+                  router.pushView(menu.path, menu.name === 'home' ? { tab: store.app.tab } : null, { title: menu.title, hideMenu: menu.hideMenu ? true : false })
                 }}
               >
                 {children}

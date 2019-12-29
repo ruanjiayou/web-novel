@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react'
+import React from 'react'
+import { useEffectOnce } from 'react-use'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import FilterRow from '../FitlerRow'
 import { LoaderListView } from 'components'
@@ -7,13 +8,12 @@ import ResourceItem from 'business/ResourceItem'
 import * as _ from 'lodash'
 
 export default function Filter({ self, loader, ...props }) {
-  const resourceListLoader = ResourceListLoader.create()
   const lstore = useLocalStore(() => {
-    return { query: _.cloneDeep(self.params) }
+    return { query: _.cloneDeep(self.params), resourceListLoader: ResourceListLoader.create() }
   })
-  useEffect(() => {
-    if (loader.item && resourceListLoader.isEmpty) {
-      resourceListLoader.refresh({ query: lstore.query })
+  useEffectOnce(() => {
+    if (loader.item && lstore.resourceListLoader.isEmpty) {
+      lstore.resourceListLoader.refresh({ query: lstore.query })
     }
   }, [])
   return <Observer>{() => (
@@ -30,13 +30,13 @@ export default function Filter({ self, loader, ...props }) {
             }
           })
         })
-        resourceListLoader.refresh({ query })
+        lstore.resourceListLoader.refresh({ query })
       }} />))}</div>
       <div className="full-height-auto">
         <LoaderListView
-          loader={resourceListLoader}
+          loader={lstore.resourceListLoader}
           loadMore={() => {
-            let query = _.cloneDeep(self.params)
+            let query = _.cloneDeep(lstore.query)
             self.children.forEach(row => {
               row.children.forEach(tag => {
                 if (tag.attrs.selected) {
@@ -44,10 +44,10 @@ export default function Filter({ self, loader, ...props }) {
                 }
               })
             })
-            resourceListLoader.loadMore({ query })
+            lstore.resourceListLoader.loadMore({ query })
           }}
           refresh={() => {
-            let query = _.cloneDeep(self.params)
+            let query = _.cloneDeep(lstore.query)
             self.children.forEach(row => {
               row.children.forEach(tag => {
                 if (tag.attrs.selected) {
@@ -55,12 +55,12 @@ export default function Filter({ self, loader, ...props }) {
                 }
               })
             })
-            resourceListLoader.refresh({ query })
+            lstore.resourceListLoader.refresh({ query })
           }}
           renderItem={(item, selectionId, index) => <ResourceItem
             key={index}
             item={item}
-            loader={resourceListLoader}
+            loader={lstore.resourceListLoader}
             selectionId={selectionId}
           />}
         />
