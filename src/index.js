@@ -1,5 +1,6 @@
 // import App from './app';
 import React, { Fragment, useEffect } from 'react'
+import Helmet from 'react-helmet'
 import ReactDOM from 'react-dom'
 import { Observer } from 'mobx-react-lite'
 import { ActivityIndicator } from 'antd-mobile'
@@ -124,6 +125,7 @@ class ErrorBoundary extends React.Component {
 
 // 总入口: 将组件挂载到dom上
 ReactDOM.render(<ErrorBoundary>
+  <Helmet title={'demo-' + process.env.VERSION} />
   <App />
 </ErrorBoundary>, document.getElementById('root'))
 
