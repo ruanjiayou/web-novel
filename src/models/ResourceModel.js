@@ -4,6 +4,7 @@ const Model = types.model('resource', {
   id: types.string,
   uid: types.string,
   uname: types.string,
+  country: types.optional(types.string, 'China'),
   title: types.string,
   poster: types.string,
   desc: types.string,

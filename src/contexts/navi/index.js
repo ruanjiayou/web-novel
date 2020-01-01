@@ -15,7 +15,7 @@ function Navi(prop) {
         <div>{prop.left}</div>
       </div>
       <div className="txt-omit" style={{ flex: 1, textAlign: 'center', fontSize: 16, fontWeight: '600' }}>{prop.title}</div>
-      <div style={{ flex: '0 0 0%', textAlign: 'right' }}>{prop.children}</div>
+      <div style={{ flex: '0 0 0%', textAlign: 'right', whiteSpace: 'nowrap' }}>{prop.children}</div>
     </div>
   )
 }

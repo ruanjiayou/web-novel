@@ -19,6 +19,6 @@ export default function FilterRow({ self, onQueryChange }) {
     onQueryChange()
   }
   return <Observer>{() => (
-    <div style={{ margin: '5px 10px', whiteSpace: 'nowrap', overflowX: 'auto', overflowY: 'hidden' }}><span className={`comp-tag ${self.attrs.selected ? 'selected' : ''}`} onClick={() => selectTag(self.group_id)}>{self.name}</span>{self.children.map(child => (<FilterTag self={child} key={child.id} selectTag={selectTag} />))}</div>
+    <div style={{ margin: '5px 10px', whiteSpace: 'nowrap', overflowX: 'auto', overflowY: 'hidden' }}><span className={`comp-tag ${self.attrs.selected ? 'selected' : ''}`} onClick={() => selectTag(self.group_id)}>{self.title}</span>{self.children.map(child => (<FilterTag self={child} key={child.id} selectTag={selectTag} />))}</div>
   )}</Observer>
 }
