@@ -26,7 +26,7 @@ function SubCate({ cates, router }) {
     return cates.children.map(cate => <div key={cate.id} className="full-width" style={styles.subCate}>
       <img src={cate.poster} alt="" style={{ width: 60, height: 70, backgroundColor: '#bbb' }} />
       <div className="dd-common-centerXY" style={{ flexDirection: 'column', alignItems: 'start', paddingLeft: 10, }}>
-        <div style={{ fontSize: '1.2em', color: 'black', fontWeight: 'bold', paddingBottom: 5 }}>{cate.name}</div>
+        <div style={{ fontSize: '1.2em', color: 'black', fontWeight: 'bold', paddingBottom: 5 }}>{cate.title}</div>
         <div>{cate.count}部</div>
       </div>
     </div>)
@@ -60,7 +60,7 @@ export default function () {
             style={{ ...styles.bigCate, ...(index === localStore.selectIndex ? styles.choosed : {}) }}
             onClick={() => localStore.selectIndex = index}
           >
-            {item.name}
+            {item.title}
           </div>)}
         </div>
         <div style={{ flex: 1, height: '100%', overflow: 'auto' }} className="smooth">

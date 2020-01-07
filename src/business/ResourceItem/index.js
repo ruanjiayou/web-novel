@@ -3,6 +3,7 @@ import { Observer } from 'mobx-react-lite'
 import BookItem from './BookItem'
 import SongItem from './SongItem'
 import ImageItem from './ImageItem'
+import ArticleItem from './ArticleItem'
 
 export default function ({ item, loader }) {
   return <Observer>
@@ -17,6 +18,9 @@ export default function ({ item, loader }) {
           break
         case 'music':
           Item = <SongItem item={item} loader={loader} />
+          break
+        case 'article': 
+          Item = <ArticleItem item={item} loader={loader} />
           break
         default:
           break

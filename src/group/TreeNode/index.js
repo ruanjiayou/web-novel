@@ -24,7 +24,7 @@ function Node({ self, isChild = false, ...props }) {
         <div style={{ zIndex: 100, display: store.showMenu && props.mode === 'edit' ? 'flex' : 'none', whiteSpace: 'nowrap', position: 'absolute', top: '100%', left: '100%', backgroundColor: 'white', border: '1px solid #bbb', borderRadius: 5, padding: 5 }}>
           <div style={{ textAlign: 'right' }}>
             <Button type="primary" onClick={() => {
-              props.openGroupEdit({ parent_id: self.group_id, tree_id: self.tree_id, view: 'tree-node' })
+              props.openGroupEdit({ parent_id: self.id, tree_id: self.tree_id, view: 'tree-node' })
             }}>添加</Button>
             <Button onClick={() => { props.destroyGroup(self) }}>删除</Button>
           </div>

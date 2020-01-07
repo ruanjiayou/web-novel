@@ -62,7 +62,7 @@ export default function ({ self }) {
     {() => {
       return (
         <div className="full-height">
-          <Navi left="返回" title="账号登录" router={router} />
+          <Navi left={<span style={{ whiteSpace: 'nowrap' }}>返回</span>} title="账号登录" router={router} />
           <div className="full-height-auto">
             <div className="dd-common-centerXY" style={{ position: 'relative' }}>
               <div style={{ position: 'absolute', right: 0, top: 0, padding: 5 }}>

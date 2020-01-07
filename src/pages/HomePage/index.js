@@ -3,7 +3,6 @@ import { Observer } from 'mobx-react-lite'
 import { Tabs } from 'antd-mobile'
 import { useStoreContext, useRouterContext } from 'contexts'
 import { RenderGroups } from 'group'
-import * as _ from 'lodash'
 
 export default ({ self, children }) => {
   const router = useRouterContext()

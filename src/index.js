@@ -16,6 +16,7 @@ import 'antd-mobile/dist/antd-mobile.css'
 // https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/src/serviceWorker.js
 import * as serviceWorker from './service-worker'
 import services from 'services'
+import config from 'config'
 
 // 引入router.顺便做点什么: loading/emptyView什么的
 function App() {
@@ -79,7 +80,8 @@ class ErrorBoundary extends React.Component {
 
   componentDidMount() {
     document.getElementById('start-loading').style.display = 'none'
-    document.getElementById('box').className = this.state.isPWAorMobile ? 'box-app' : 'box-browser'
+    // document.getElementById('box').className = this.state.isPWAorMobile ? 'box-app' : 'box-browser'
+    document.getElementById('box').className = 'box-app'
     document.addEventListener('visibilitychange', async (e) => {
       // TODO: 时间过长处理.刷新
       if (document.hidden) {
@@ -108,7 +110,7 @@ class ErrorBoundary extends React.Component {
           animating={this.state.isLoading}
         />
       </Fragment>
-    } else if (this.state.isPWAorMobile) {
+    } else {
       return <Fragment>
         {this.props.children}
         <ActivityIndicator
@@ -117,15 +119,18 @@ class ErrorBoundary extends React.Component {
           animating={this.state.isLoading}
         />
       </Fragment>
-    } else {
-      return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>程序正在开发中...</div>
     }
+    // PC网页运行直接显示~~
+    // } else if (this.state.isPWAorMobile) {
+    // else {
+    //   return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>程序正在开发中...</div>
+    // }
   }
 }
 
 // 总入口: 将组件挂载到dom上
 ReactDOM.render(<ErrorBoundary>
-  <Helmet title={'demo-' + process.env.VERSION} />
+  <Helmet title={'demo-' + config.VERSION} />
   <App />
 </ErrorBoundary>, document.getElementById('root'))
 

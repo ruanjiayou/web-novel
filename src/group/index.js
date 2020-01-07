@@ -32,7 +32,7 @@ export function AutoView({ self, ...props }) {
     }
     if (self.parent_id === '') {
       return self.children.map(child => (
-        <AutoView key={child.group_id} self={child} {...props} />
+        <AutoView key={child.id} self={child} {...props} />
       ))
     } else {
       let View = views.view(self.view)

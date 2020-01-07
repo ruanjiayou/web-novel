@@ -3,14 +3,14 @@ import { Observer } from 'mobx-react-lite'
 import FilterTag from '../FilterTag'
 
 export default function FilterRow({ self, onQueryChange }) {
-  function selectTag(group_id) {
-    if (self.group_id === group_id) {
+  function selectTag(id) {
+    if (self.id === id) {
       self.selected(true)
     } else {
       self.selected(false)
     }
     self.children.forEach(child => {
-      if (child.group_id === group_id) {
+      if (child.id === id) {
         child.selected(true)
       } else {
         child.selected(false)
@@ -19,6 +19,6 @@ export default function FilterRow({ self, onQueryChange }) {
     onQueryChange()
   }
   return <Observer>{() => (
-    <div style={{ margin: '5px 10px', whiteSpace: 'nowrap', overflowX: 'auto', overflowY: 'hidden' }}><span className={`comp-tag ${self.attrs.selected ? 'selected' : ''}`} onClick={() => selectTag(self.group_id)}>{self.title}</span>{self.children.map(child => (<FilterTag self={child} key={child.id} selectTag={selectTag} />))}</div>
+    <div style={{ margin: '5px 10px', whiteSpace: 'nowrap', overflowX: 'auto', overflowY: 'hidden' }}>{self.children.map(child => (<FilterTag self={child} key={child.id} selectTag={selectTag} />))}</div>
   )}</Observer>
 }

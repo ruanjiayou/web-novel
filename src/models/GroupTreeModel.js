@@ -2,7 +2,7 @@ import { types } from 'mobx-state-tree'
 
 const GroupModel = types.model('Group', {
   tree_id: types.string,
-  group_id: types.string,
+  id: types.string,
   parent_id: types.string,
   title: types.string,
   name: types.string,
@@ -27,9 +27,7 @@ const GroupModel = types.model('Group', {
   nth: types.number,
   children: types.optional(types.array(types.late(() => GroupModel)), []),
 }).views(self => ({
-  get id() {
-    return self.group_id
-  },
+  
 })).actions(self => ({
   selected(status) {
     if (self.attrs.selected !== status) {

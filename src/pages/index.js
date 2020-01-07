@@ -17,6 +17,7 @@ import MusicPage from './MusicPage'
 import SongSheetPage from './SongSheetPage'
 import SongsPage from './SongsPage'
 import ImagePage from './ImagePage'
+import ArticlePage from './ArticlePage'
 
 export default [
   {
@@ -34,6 +35,10 @@ export default [
   {
     pathname: '/root/book/:id([0-9a-zA-Z-]+)/info',
     component: BookInfoPage,
+  },
+  {
+    pathname: '/root/article/:id([0-9a-zA-Z-]+)/info',
+    component: ArticlePage,
   },
   {
     pathname: '/root/book/:id([0-9a-zA-Z-]+)/catalog',

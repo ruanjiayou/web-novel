@@ -109,3 +109,11 @@
 ## 2019-12-29 22:45:19
 - fixbug: 重复渲染调用loader请求
 - fixbug: request错误显示不正常bug
+
+- group_id => id
+- ArticlePage
+- fullscreen fail
+- lighthigh fail
+
+## 2020-01-08 00:24:18
+- 打包优化 2.9M => 1.1M

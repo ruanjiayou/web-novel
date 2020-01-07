@@ -20,9 +20,6 @@ export default function () {
   const container = useRef(null)
   useEffect(() => {
     loader.refresh({ params: { id: localStore.id, bid: localStore.bid } })
-    setTimeout(() => {
-      container.current.scrollTop = 1
-    }, 100)
   })
   return <Observer>
     {() => {

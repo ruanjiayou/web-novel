@@ -3,7 +3,6 @@ import { Observer } from 'mobx-react-lite'
 import FilterRow from '../FitlerRow'
 import { LoaderListView } from 'components'
 import ResourceItem from 'business/ResourceItem'
-import * as _ from 'lodash'
 
 export default function Filter({ self, loader, subLoader, ...props }) {
   return <Observer>{() => (

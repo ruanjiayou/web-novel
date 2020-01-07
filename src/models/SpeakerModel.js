@@ -1,6 +1,5 @@
 import { types, getSnapshot } from 'mobx-state-tree'
 import storage from '../utils/storage'
-import * as _ from 'lodash'
 
 const cfg = storage.getValue('speaker')
 const Model = types.model('musicPlayer', {
@@ -14,7 +13,13 @@ const Model = types.model('musicPlayer', {
   // 音乐播放器相关
   return {
     store(value) {
-      storage.setValue('speaker', _.pick(value, ['left', 'top', 'rate', 'pitch']))
+      const o = {
+        left: value.left,
+        top: value.top,
+        rate: value.rate,
+        pitch: value.pitch
+      }
+      storage.setValue('speaker', o)
     },
     toJSON() {
       return getSnapshot(self)

@@ -26,7 +26,7 @@
       overscroll-behavior: none;
       position: relative;
     }
-    
+
     body {
       display: flex;
       height: 100%;
@@ -37,6 +37,12 @@
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
+    }
+
+    #root {
+      position: fixed;
+      top: env(safe-area-inset-top);
+      bottom: env(safe-area-inset-bottom);
     }
 
     .box-browser {

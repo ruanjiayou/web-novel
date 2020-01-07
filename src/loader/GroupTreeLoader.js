@@ -6,16 +6,25 @@ function collect(group, query) {
   if (!group) {
     return query
   }
-  if (group.view === 'filter' && group.params) {
-    for (const key in group.params) {
-      query[key] = group.params[key]
-    }
-  }
-  group.children.forEach(child => {
-    if (child.selected) {
+  if (group.view === '') {
+    group.children.forEach(child => {
       collect(child, query)
-    }
-  })
+    })
+  }
+  if (group.view === 'filter') {
+    query.id.push(group.id)
+    group.children.forEach(child => {
+      collect(child, query)
+    })
+  }
+  if (group.view === 'filter-row') {
+    // query.id.push(group.id)
+    group.children.forEach(child => {
+      if (child.attrs.selected) {
+        query.id.push(child.id)
+      }
+    })
+  }
   return query
 }
 export default createItemLoader(
@@ -25,7 +34,8 @@ export default createItemLoader(
   },
   {
     getQuery() {
-      const query = {}
-      return collect(this.item, query)
+      const query = { id: [] }
+      collect(this.item, query)
+      return query
     }
   })

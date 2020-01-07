@@ -1,4 +1,3 @@
-const _ = require('lodash')
 const path = require('path')
 const sleep = require('./utils/sleep')
 const loader = require('./utils/loader')
