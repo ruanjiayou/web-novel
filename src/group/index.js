@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useMount } from 'react-use'
 import { Observer } from 'mobx-react-lite'
 import renderEmptyView from 'components/EmptyView'
 import AutoCenterView from 'components/AutoCenterView'
@@ -45,8 +46,14 @@ export function AutoView({ self, ...props }) {
   }
   }</Observer>
 }
-export function RenderGroups({ loader, ...props }) {
+export function RenderGroups({ loader, group, ...props }) {
   const emptyView = renderEmptyView(loader)
+  useMount(mount => {
+    mount && mount()
+    if (loader.canStart && group) {
+      loader.refresh({ params: { name: group.name } })
+    }
+  }, [])
   return <Observer>{() => {
     if (loader.isEmpty) {
       return <AutoCenterView>{emptyView}</AutoCenterView>

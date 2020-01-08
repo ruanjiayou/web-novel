@@ -31,8 +31,8 @@ function App() {
         store.app.setTabs(res.data.tabs)
         store.app.setChannels(res.data.channels)
         res.data.channels.forEach(channel => {
-          store.channelLoaders[channel.name] = GroupTreeLoader.create()
-          store.resourceListLoaders[channel.name] = ResourceListLoader.create()
+          store.channelLoaders[channel.group_id] = GroupTreeLoader.create()
+          store.resourceListLoaders[channel.group_id] = ResourceListLoader.create()
         })
         store.app.booted()
       }

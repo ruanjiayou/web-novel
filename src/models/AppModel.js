@@ -3,6 +3,7 @@ import shttp from '../utils/shttp'
 import storage from '../utils/storage'
 import TabModel from './TabModel'
 import Group from './GroupTreeModel'
+import Channel from './ChannelModel'
 
 const Model = types.model({
   booting: types.optional(types.boolean, true),
@@ -11,7 +12,7 @@ const Model = types.model({
   // 底部tabBars菜单
   tabs: types.optional(types.array(TabModel), []),
   // 首页tabs
-  channels: types.optional(types.array(Group), []),
+  channels: types.optional(types.array(Channel), []),
   // 当前tab
   tab: types.optional(types.string, ''),
   fullScreen: types.optional(types.boolean, false),
