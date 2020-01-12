@@ -46,7 +46,7 @@ export default function SecurePage() {
           )}
         />
       </div>
-      <div className="full-height-fix">
+      <div className="full-height-fix" style={{ padding: '10px 20px' }}>
         <VisualBoxView visible={globalStore.app.isLogin}>
           <Button type="primary" onClick={() => {
             localStore.type = localStore.type === '1' ? '' : '1'

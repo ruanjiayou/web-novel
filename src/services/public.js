@@ -3,7 +3,6 @@ import { stringfyQuery, sleep } from 'utils/utils'
 
 export default {
   async getBoot() {
-    await sleep(1)
     return shttp({
       url: '/v1/public/boot'
     })
@@ -68,6 +67,9 @@ export default {
     const result = await shttp({
       url: `/v1/public/group-tree/${params.name}`,
     })
+    if (result.code !== 0) {
+      throw result
+    }
     return { item: result.data }
   },
   async getGroups({ query, params, data }) {

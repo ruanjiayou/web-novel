@@ -20,7 +20,7 @@ function renderList({ loader, refresh, loadMore, renderItem, onScroll, className
   const isLoading = loader.isLoading
   return <Fragment>
     <SwitchView
-      loading={loader.isEmpty}
+      loading={loader.isEmpty || loader.isError}
       holder={<AutoCenterView>{EmptyView}</AutoCenterView>}>
       <ListView
         style={{ height: '100%', overflow: 'auto' }}

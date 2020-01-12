@@ -17,7 +17,7 @@ function createItemsLoader(model, fn, customs = {}) {
     isEnded: types.optional(types.boolean, false),
     // 是否加载中
     // 请求状态
-    state: types.optional(types.enumeration(['ready', 'pending']), 'ready'),
+    state: types.optional(types.enumeration(['ready', 'pending', 'init']), 'init'),
     // 排列方向
     sort: types.optional(types.enumeration(['asc', 'desc']), 'asc'),
     // 错误信息 success: true/false
@@ -29,9 +29,6 @@ function createItemsLoader(model, fn, customs = {}) {
     // 默认属性
     get isEmpty() {
       return self.items.length === 0
-    },
-    get canStart() {
-      return self.items.length === 0 && self.state === 'ready'
     },
     get isLoading() {
       return self.state === 'pending'
@@ -87,7 +84,7 @@ function createItemsLoader(model, fn, customs = {}) {
         if (Config.isDebug && Config.console) {
           console.log(err, 'loader')
         }
-        const data = err['response'] && err['response']['data']
+        const data = (err['response'] && err['response']['data']) ||err
         // 加载失败
         if (data && data.code) {
           self.error = { code: data.code, message: data.message }
@@ -129,22 +126,19 @@ function createItemLoader(model, fn, customs = {}) {
   const unionModel = types.model({
     item: types.maybeNull(model),
     // 请求状态
-    state: types.optional(types.enumeration(['ready', 'pending']), 'ready'),
+    state: types.optional(types.enumeration(['ready', 'pending', 'init']), 'init'),
     error: types.maybeNull(types.model({
       code: types.union(types.number, types.string),
       message: types.maybe(types.string),
     }))
   }).views(self => {
-    // 默认数学
+    // 默认属性
     return {
       get isEmpty() {
         return !self.item
       },
       get isLoading() {
         return self.state === 'pending'
-      },
-      get canStart() {
-        return !self.item && self.state === 'ready'
       },
       get isError() {
         return self.error !== null
@@ -187,7 +181,7 @@ function createItemLoader(model, fn, customs = {}) {
         if (Config.isDebug && Config.console) {
           console.log(err, 'loader')
         }
-        const data = err['response'] && err['response']['data']
+        const data = (err['response'] && err['response']['data']) ||err
         // 加载失败
         if (data && data.code) {
           self.error = { code: data.code, message: data.message }

@@ -17,4 +17,5 @@ module.exports = override(
     style: 'css',
   }),
   addWebpackPlugin(plugin),
-  addWebpackPlugin(new analyzer()))
+  // addWebpackPlugin(new analyzer())
+)

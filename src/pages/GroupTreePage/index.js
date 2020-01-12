@@ -19,10 +19,10 @@ export default function GroupTreePage() {
     gStore.channelLoaders[params.name] = store.loader
   }
   useEffectOnce(() => {
-    if (store.loader.canStart) {
+    if (store.loader.state === 'init') {
       store.loader.refresh({ params: { name: params.name } }).then(() => {
         const query = store.loader.getQuery()
-        if (store.subLoader.canStart) {
+        if (store.subLoader.state === 'init') {
           store.subLoader.refresh({ query })
         }
       })

@@ -8,7 +8,7 @@ export default function ({ item, router }) {
     {() => (
       <Fragment>
         <div className="dd-common-alignside" style={{ margin: '0 10px', padding: '10px  0 5px 0', borderBottom: '1px solid #eee' }}>
-          <MIconView size="md" type={item.isFinish ? 'FaRegCheckCircle' : 'FaRegCircle'} onClick={e => {
+          <MIconView size="md" style={{ color: '#999' }} type={item.isFinish ? 'FaRegCheckCircle' : 'FaRegCircle'} onClick={e => {
             item.finishToggle()
             services.updateTodo({ params: { id: item.id }, data: item }).then(res => {
             })

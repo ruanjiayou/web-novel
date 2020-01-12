@@ -50,7 +50,7 @@ export function RenderGroups({ loader, group, ...props }) {
   const emptyView = renderEmptyView(loader)
   useMount(mount => {
     mount && mount()
-    if (loader.canStart && group) {
+    if (loader.state === 'init' && group) {
       loader.refresh({ params: { name: group.name } })
     }
   }, [])

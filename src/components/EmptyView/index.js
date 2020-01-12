@@ -4,8 +4,8 @@ import { ActivityIndicator } from 'antd-mobile'
 const style = { textAlign: 'center' }
 
 export default function renderEmpty(loader, renderEmpty, refresh) {
-  if (loader.isEmpty) {
-    if (loader.isLoading) {
+  if (loader.isEmpty || loader.isError) {
+    if (loader.state !== 'ready') {
       return <div style={style}><ActivityIndicator text="加载中..." /></div>
     } else if (loader.error) {
       return <div style={style}>出错啦!{loader.error.message}<span onClick={() => refresh ? refresh() : loader.refresh()}>点我重试</span></div>
