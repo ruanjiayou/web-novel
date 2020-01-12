@@ -145,6 +145,9 @@ function MusicPlayer() {
               }
             }} />
             <MIconView type={musicStore.status === 'play' ? 'IoIosPlay' : 'IoIosPause'} onClick={() => {
+              if (musicStore.isLoading) {
+                return
+              }
               if (musicStore.status === 'play') {
                 music.pauseMusic()
               } else {

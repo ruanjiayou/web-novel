@@ -18,6 +18,7 @@ import SongSheetPage from './SongSheetPage'
 import SongsPage from './SongsPage'
 import ImagePage from './ImagePage'
 import ArticlePage from './ArticlePage'
+import GroupsPage from './GroupsPage'
 
 export default [
   {
@@ -55,6 +56,10 @@ export default [
   {
     pathname: '/root/group-tree/:name([0-9a-zA-Z-]+)',
     component: GroupTreePage,
+  },
+  {
+    pathname: '/root/groups',
+    component: GroupsPage,
   },
   {
     pathname: '/root/music',

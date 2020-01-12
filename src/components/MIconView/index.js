@@ -47,6 +47,7 @@ import {
   MdRepeatOne,
   MdShuffle,
   MdTrendingFlat,
+  MdApps,
   MdRepeat,
   MdSkipNext,
 } from 'react-icons/md'
@@ -101,6 +102,7 @@ const Mdicons = {
   MdShuffle,
   MdTrendingFlat,
   MdRepeat,
+  MdApps,
   MdSkipNext,
 }
 // https://react-icons.netlify.com/#/icons/fa

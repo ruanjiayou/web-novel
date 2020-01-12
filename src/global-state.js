@@ -6,6 +6,7 @@ import UserLoader from 'loader/UserLoader'
 import LineLoader from 'loader/LineLoader'
 import CategoryLoader from 'loader/CategoryLoader'
 import BookShelfLoader from 'loader/BookShelfLoader'
+import GroupListLoader from 'loader/GroupListLoader'
 
 import storage from './utils/storage'
 // 全局状态.
@@ -29,6 +30,7 @@ const userLoader = UserLoader.create()
 const lineLoader = LineLoader.create()
 const categoryLoader = CategoryLoader.create()
 const bookShelfLoader = BookShelfLoader.create()
+const groupListLoader = GroupListLoader.create()
 
 export default {
   app,
@@ -40,6 +42,7 @@ export default {
   lineLoader,
   categoryLoader,
   bookShelfLoader,
+  groupListLoader,
   // 全局loader缓存
   channelLoaders: {},
   resourceListLoaders: {},
