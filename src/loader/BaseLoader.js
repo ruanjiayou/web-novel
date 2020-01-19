@@ -72,10 +72,18 @@ function createItemsLoader(model, fn, customs = {}) {
         self.isEnded = !!ended
         if (type === 'refresh') {
           // 刷新
-          self.items = items
+          if (self.sort === 'asc') {
+            self.items = items
+          } else {
+            self.items = items.reverse()
+          }
         } else if (items.length > 0) {
           // 加载更多
-          self.items.push(...items)
+          if (self.sort === 'asc') {
+            self.items.push(...items)
+          } else {
+            self.items.unshift(...items)
+          }
         } else {
           self.page = self.page - 1
         }
@@ -84,7 +92,7 @@ function createItemsLoader(model, fn, customs = {}) {
         if (Config.isDebug && Config.console) {
           console.log(err, 'loader')
         }
-        const data = (err['response'] && err['response']['data']) ||err
+        const data = (err['response'] && err['response']['data']) || err
         // 加载失败
         if (data && data.code) {
           self.error = { code: data.code, message: data.message }
@@ -103,6 +111,7 @@ function createItemsLoader(model, fn, customs = {}) {
       },
       toggleSort() {
         self.sort = self.sort === 'asc' ? 'desc' : 'asc'
+        self.items = self.items.reverse()
       },
       remove(index) {
         self.items = self.items.slice().filter((item, idx) => +index !== +idx)
@@ -181,7 +190,7 @@ function createItemLoader(model, fn, customs = {}) {
         if (Config.isDebug && Config.console) {
           console.log(err, 'loader')
         }
-        const data = (err['response'] && err['response']['data']) ||err
+        const data = (err['response'] && err['response']['data']) || err
         // 加载失败
         if (data && data.code) {
           self.error = { code: data.code, message: data.message }

@@ -63,7 +63,7 @@ export default function () {
                 </div>
                 <div className="full-width" style={{ height: 40 }} onClick={() => { router.pushView(`/root/book/${localStore.id}/catalog`, null, { hideMenu: true }) }}>
                   <span className="full-width-auto" style={{ fontWeight: 'bolder' }}>目录</span>
-                  <span className="full-width-fix">连载至 729章 · 两小时前更新</span>
+                  <span className="full-width-fix">连载至 {loader.item.last.title} · 两小时前更新</span>
                   <MIconView style={{ marginLeft: 10 }} className="full-width-fix" type="FaAngleRight" />
                 </div>
               </div>

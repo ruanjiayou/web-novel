@@ -39,7 +39,7 @@ export default function () {
         <div className="full-height" style={{ padding: '0 15px' }} onClick={() => { localStore.pop = !localStore.pop }}>
           <VisualBoxView visible={loader.isEmpty}>
             <AutoCenterView>
-              <ActivityIndicator text="加载中..." />
+              {loader.isError ? <div>{loader.error.code} {loader.error.message}</div> : <ActivityIndicator text="加载中..." />}
             </AutoCenterView>
           </VisualBoxView>
           {!loader.isEmpty && <Fragment>

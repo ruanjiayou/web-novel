@@ -12,6 +12,7 @@ import { createItemsLoader } from 'loader/BaseLoader'
 export default function () {
   const router = useRouterContext()
   const loader = createItemsLoader(ChapterModel, async (option) => services.getBookCatalog(option)).create()
+  loader.toggleSort()
   const params = router.params
   const localStore = useLocalStore(() => ({
     loading: false,
