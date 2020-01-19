@@ -94,6 +94,7 @@ class ErrorBoundary extends React.Component {
 
   render() {
     if (this.state.hasError) {
+      window.localStorage.clear()
       return <Fragment>
         <div>程序崩溃了,<div onClick={() => {
           this.setState({ isLoading: true }, async () => {

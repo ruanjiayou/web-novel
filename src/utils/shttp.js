@@ -5,7 +5,7 @@ import services from '../services'
 import storage from './storage'
 
 const shttp = axios.create({
-  baseURL: storage.getValue('baseURL') || '',
+  baseURL: '',
   withCredentials: false,
   timeout: 5000
 })

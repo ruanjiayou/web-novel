@@ -4,7 +4,7 @@ const GroupModel = types.model('Group', {
   tree_id: types.string,
   id: types.string,
   parent_id: types.string,
-  title: types.string,
+  title: types.optional(types.string, ''),
   name: types.string,
   desc: types.string,
   view: types.string,
