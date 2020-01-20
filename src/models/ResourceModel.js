@@ -20,10 +20,10 @@ const Model = types.model('resource', {
   comments: types.number,
   collections: types.number,
   chapters: types.number,
-  last: types.optional(types.model('last', {
-    url: types.string,
-    title: types.string,
-  }), { url: '', title: '' }),
+  last: types.model('last', {
+    url: types.optional(types.string, ''),
+    title: types.optional(types.string, ''),
+  }),
   playing: types.optional(types.boolean, false),
 }).actions(self => ({
   toggleStatus() {

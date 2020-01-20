@@ -9,7 +9,6 @@ import BookShelfLoader from 'loader/BookShelfLoader'
 import GroupListLoader from 'loader/GroupListLoader'
 
 import storage from './utils/storage'
-console.log('globalStore')
 // 全局状态.
 const app = AppModel.create({
   baseURL: '',
@@ -19,7 +18,7 @@ const app = AppModel.create({
 app.setAccessToken(storage.getValue(app.accessTokenName) || '')
 app.setRefreshToken(storage.getValue(app.refreshTokenName) || '')
 app.initLocker(storage.getValue(app.lockerName) || {})
-app.setBaseURL(storage.getValue('baseURL') || '')
+app.setBaseURL('')
 const target = {}
 // TODO: 记录mode
 const music = MusicPlayerModel.create({

@@ -2,7 +2,7 @@ import { types, getSnapshot } from 'mobx-state-tree'
 
 const SongSheetSongModel = types.model('SongSheetSong', {
   id: types.string,
-  ssid: types.string,
+  ssid: types.optional(types.string, ''),
   uid: types.optional(types.string, ''),
   uname: types.string,
   title: types.string,
