@@ -1,7 +1,7 @@
 import React from 'react'
 import { Observer } from 'mobx-react-lite'
 
-import './index.css'
+import { Wrap, Container, Cell } from './style'
 
 export default function (props) {
     const keys = [
@@ -20,13 +20,13 @@ export default function (props) {
     ]
     return <Observer>
         {() => {
-            return <div style={{ width: '100%', position: 'relative', paddingTop: '100%', marginBottom: '35%' }}>
-                <div className="box" style={{ position: 'absolute', left: 0, right: 0, top: 0, bottom: 0 }}>
+            return <Wrap>
+                <Container className="box">
                     {
-                        keys.map((it, index) => <div key={index} className={['cell', it.className].join(' ')} onClick={()=>props.handler(it.char)}>{it.name || it.char}</div>)
+                        keys.map((it, index) => <Cell key={index} style={it.className === 'center' ? { margin: '0 18px' } : {}} onClick={() => props.handler(it.char)}>{it.name || it.char}</Cell>)
                     }
-                </div>
-            </div>
+                </Container>
+            </Wrap>
         }}
     </Observer>
 

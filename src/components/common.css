@@ -1,3 +1,7 @@
+.respect-gray {
+  -webkit-filter: grayscale(100%);
+  filter: progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);
+}
 /* 1.水平垂直居中 */
 .dd-common-centerXY {
   height: 100%;
