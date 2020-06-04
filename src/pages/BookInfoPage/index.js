@@ -3,7 +3,7 @@ import { Observer, useLocalStore } from 'mobx-react-lite'
 import { ActivityIndicator, Icon } from 'antd-mobile'
 
 import { useRouterContext } from 'contexts'
-import { MIconView, AutoCenterView, VisualBoxView } from 'components'
+import { MIconView, AutoCenterView, VisualBoxView, ImgLine } from 'components'
 import ResourceLoader from 'loader/ResourceLoader'
 import services from 'services'
 
@@ -42,8 +42,8 @@ export default function () {
               <MIconView type="FaEllipsisH" />
             </div>
             <div className="full-height-auto">
-              <div style={{ padding: '20px 0 10px 0', textAlign: 'center', backgroundColor: '#666', color: 'white' }}>
-                <img src={loader.item.poster} alt="" width={100} height={120} />
+              <div style={{ padding: '20px 0 10px 0', textAlign: 'center', backgroundColor: '#bfbaba', color: 'white' }}>
+                <ImgLine src={loader.item.poster} alt="" width={100} height={120} />
                 <div style={{ fontSize: 20, padding: 5 }}>{loader.item.title}</div>
                 <div>{loader.item.uname} · 科幻</div>
               </div>
