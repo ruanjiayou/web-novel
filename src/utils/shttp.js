@@ -38,7 +38,7 @@ shttp.interceptors.response.use(
         globalStore.app.setAccessToken('')
         return new Promise(async (resolve) => {
           const result = await services.refresh({ authorization: globalStore.app.refreshToken })
-          if (result.data) {
+          if (result && result.data) {
             globalStore.app.setAccessToken(result.data.token)
             globalStore.app.setAccessToken(result.data.refresh_token)
             response.config.headers['Authorization'] = result.data.token
@@ -60,9 +60,12 @@ shttp.interceptors.response.use(
   error => {
     globalStore.debug.append(error.message)
     console.log(error, 'response error')
-    const data = error.response.data
-    if (data.code === 101020) {
-      globalStore.app.setAccessToken('')
+    if (error.response) {
+      if (error.response.data.code === 101020) {
+        globalStore.app.setAccessToken('')
+      }
+    } else {
+
     }
     return Promise.reject(error)
   }

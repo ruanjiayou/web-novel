@@ -6,7 +6,7 @@ import Group from './GroupTreeModel'
 import Channel from './ChannelModel'
 
 const Model = types.model({
-  booting: types.optional(types.boolean, true),
+  booting: types.optional(types.boolean, false),
   // 默认tabBar
   selectedMenu: types.optional(types.string, 'home'),
   // 底部tabBars菜单
@@ -82,7 +82,10 @@ const Model = types.model({
     },
     resetLeaveTS() {
       self.leaveTS = Date.now()
-    }
+    },
+    setBoot(status) {
+      self.booting = status
+    },
   }
 }).actions(self => {
   // 用户相关配置
@@ -117,9 +120,6 @@ const Model = types.model({
     self.showSpeaker = !self.showSpeaker
   },
 })).actions(self => ({
-  booted() {
-    self.booting = false
-  },
   setMenu(name) {
     self.selectedMenu = name
   },

@@ -1,13 +1,14 @@
 // import App from './app';
-import React, { Fragment, useEffect } from 'react'
+import React, { Fragment, useEffect, useCallback } from 'react'
 import Helmet from 'react-helmet'
 import ReactDOM from 'react-dom'
-import { Observer } from 'mobx-react-lite'
-import { ActivityIndicator } from 'antd-mobile'
+import { Observer, useLocalStore } from 'mobx-react-lite'
+import { ActivityIndicator, Button } from 'antd-mobile'
 import RouterRoot from './router'
 import globalStore from './global-state'
 import { isPWAorMobile } from './utils/utils'
 import { createStoreProvider } from 'contexts'
+import { AutoCenterView } from 'components'
 import GroupTreeLoader from 'loader/GroupTreeLoader'
 import ResourceListLoader from 'loader/ResourceListLoader'
 import './components/common.css'
@@ -21,30 +22,39 @@ import config from 'config'
 // 引入router.顺便做点什么: loading/emptyView什么的
 function App() {
   const [store, StoreContext] = createStoreProvider(globalStore)
-  useEffect(() => {
+  const local = useLocalStore(() => ({
+    isError: false
+  }))
+  const launch = useCallback(() => {
+    store.app.setBoot(true)
     services.getBoot().then(res => {
       if (res.code !== 0) {
         throw res.message
       } else {
-        store.userLoader.setData(res.data.user)
-        store.lineLoader.setData(res.data.lines)
-        store.app.setTabs(res.data.tabs)
-        store.app.setChannels(res.data.channels)
-        res.data.channels.forEach(channel => {
-          store.channelLoaders[channel.group_id] = GroupTreeLoader.create()
-          store.resourceListLoaders[channel.group_id] = ResourceListLoader.create()
-        })
-        store.app.booted()
+        store.initial(res.data)
       }
     }).catch(e => {
+      store.app.setBoot(false)
+      local.isError = true
       console.log(e, 'boot')
       throw '启动失败'
     })
   })
+  useEffect(() => {
+    launch()
+  })
   return <Observer>
     {() => {
+      console.log(store.app.booting)
       if (store.app.booting) {
-        return <div className="dd-common-centerXY">启动中...</div>
+        return <AutoCenterView>启动中...</AutoCenterView>
+      } else if (local.isError) {
+        return <AutoCenterView>
+          <Button style={{ width: 150 }} type="primary" onClick={() => {
+            launch()
+            local.isError = false
+          }}>点击重试</Button>
+        </AutoCenterView>
       } else {
         return (
           <Fragment>
@@ -96,15 +106,17 @@ class ErrorBoundary extends React.Component {
     if (this.state.hasError) {
       window.localStorage.clear()
       return <Fragment>
-        <div>程序崩溃了,<div onClick={() => {
-          this.setState({ isLoading: true }, async () => {
-            // TODO: 防封处理 const result = await checkHost();
-            this.setState({ isLoading: false })
-            this.setState({ hasError: false }, () => {
-              window.location.reload()
+        <AutoCenterView>
+          程序崩溃了,<div onClick={() => {
+            this.setState({ isLoading: true }, async () => {
+              // TODO: 防封处理 const result = await checkHost();
+              this.setState({ isLoading: false })
+              this.setState({ hasError: false }, () => {
+                window.location.reload()
+              })
             })
-          })
-        }}>点我重试</div></div>
+          }}>点我重试</div>
+        </AutoCenterView>
         <ActivityIndicator
           toast
           text="正在刷新..."

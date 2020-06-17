@@ -7,6 +7,8 @@ import LineLoader from 'loader/LineLoader'
 import CategoryLoader from 'loader/CategoryLoader'
 import BookShelfLoader from 'loader/BookShelfLoader'
 import GroupListLoader from 'loader/GroupListLoader'
+import GroupTreeLoader from 'loader/GroupTreeLoader'
+import ResourceListLoader from 'loader/ResourceListLoader'
 
 import storage from './utils/storage'
 // 全局状态.
@@ -18,7 +20,7 @@ const app = AppModel.create({
 app.setAccessToken(storage.getValue(app.accessTokenName) || '')
 app.setRefreshToken(storage.getValue(app.refreshTokenName) || '')
 app.initLocker(storage.getValue(app.lockerName) || {})
-app.setBaseURL('')
+app.setBaseURL('http://localhost:8097')
 const target = {}
 // TODO: 记录mode
 const music = MusicPlayerModel.create({
@@ -47,4 +49,17 @@ export default {
   // 全局loader缓存
   channelLoaders: {},
   resourceListLoaders: {},
+  initial: function (data) {
+    if (data.user) {
+      this.userLoader.setData(data.user)
+    }
+    this.lineLoader.setData(data.lines)
+    this.app.setTabs(data.tabs)
+    this.app.setChannels(data.channels)
+    data.channels.forEach(channel => {
+      this.channelLoaders[channel.group_id] = GroupTreeLoader.create()
+      this.resourceListLoaders[channel.group_id] = ResourceListLoader.create()
+    })
+    this.app.setBoot(false)
+  }
 }

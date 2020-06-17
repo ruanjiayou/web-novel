@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
-import { ActivityIndicator, Icon } from 'antd-mobile'
-
+import { ActivityIndicator, Icon, Button } from 'antd-mobile'
+import timespan from 'utils/timespan'
 import { useRouterContext } from 'contexts'
 import { MIconView, AutoCenterView, VisualBoxView, ImgLine } from 'components'
 import ResourceLoader from 'loader/ResourceLoader'
@@ -48,9 +48,9 @@ export default function () {
                 <div>{loader.item.uname} · 科幻</div>
               </div>
               <div style={{ padding: '0 20px', borderBottom: '1px solid #ccc', backgroundColor: 'snow' }}>
-                <div className="dd-common-alignside" style={{ height: 50, borderBottom: '1px solid #ccc' }}>
+                <div className="dd-common-alignside" style={{ height: 50 }}>
                   <div className="dd-common-centerXY" style={{ flex: 1 }}>
-                    {loader.item.words}万字
+                    {Math.round(loader.item.words / 10000)}万字
                   </div>
                   <div className="dd-common-centerXY" style={{ flex: 1 }}>
                     {loader.item.chapters}章
@@ -59,29 +59,32 @@ export default function () {
                     {loader.item.comments}评论
                   </div>
                 </div>
-                <div style={{ padding: '10px 0', borderBottom: '1px solid #ccc' }} dangerouslySetInnerHTML={{ __html: loader.item.desc }}>
+                <div className="dd-common-alignside">
+                  <Button type="primary" size="small" loading={localStore.firstLoading} onClick={async () => {
+                    try {
+                      localStore.firstLoading = true
+                      const info = await services.getBookFirstChapter({ params: { id: localStore.id } })
+                      router.pushView(`/root/book/${localStore.id}/chapter/${info.item.id}`, null, { hideMenu: true, bid: localStore.id, id: info.item.id })
+                    } catch (err) {
+
+                    } finally {
+                      localStore.firstLoading = false
+                    }
+                  }}>
+                    立即阅读
+                  </Button>
+                  <Button type="ghost" size="small" style={{ minWidth: 82 }}>下载</Button>
+                </div>
+                <p style={{ marginBottom: 8 }}>内容简介:</p>
+                <div style={{ lineHeight: 1.5, color: '#555', textIndent: 20, borderBottom: '1px solid #ccc', minHeight: 120 }} dangerouslySetInnerHTML={{ __html: loader.item.desc }}>
                 </div>
                 <div className="full-width" style={{ height: 40 }} onClick={() => { router.pushView(`/root/book/${localStore.id}/catalog`, null, { hideMenu: true }) }}>
                   <span className="full-width-auto" style={{ fontWeight: 'bolder' }}>目录</span>
-                  <span className="full-width-fix">连载至 {loader.item.last.title} · 两小时前更新</span>
+                  <span className="full-width-fix">连载至 {loader.item.chapters}章 · {timespan(new Date())}更新</span>
                   <MIconView style={{ marginLeft: 10 }} className="full-width-fix" type="FaAngleRight" />
                 </div>
               </div>
               <p>TODO:作者 名称 头像 几部作品</p>
-            </div>
-            <div className="dd-common-alignside" style={{ height: 50 }}>
-              <div className="dd-common-centerXY" style={{ flex: 1, backgroundColor: 'rgb(226, 223, 223)', color: 'gray' }}>+ 加入书架</div>
-              <div className="dd-common-centerXY" style={{ flex: 1, backgroundColor: 'red', color: 'white' }} onClick={async () => {
-                try {
-                  localStore.firstLoading = true
-                  const info = await services.getBookFirstChapter({ params: { id: localStore.id } })
-                  router.pushView(`/root/book/${localStore.id}/chapter/${info.item.id}`, null, { hideMenu: true, bid: localStore.id, id: info.item.id })
-                } catch (err) {
-
-                } finally {
-                  localStore.firstLoading = false
-                }
-              }}><VisualBoxView visible={localStore.firstLoading}><Icon type="loading" /></VisualBoxView>立即阅读</div>
             </div>
           </div>
         </Fragment>
