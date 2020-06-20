@@ -6,6 +6,7 @@ import { useRouterContext } from 'contexts'
 import { MIconView, AutoCenterView, VisualBoxView, ImgLine } from 'components'
 import ResourceLoader from 'loader/ResourceLoader'
 import services from 'services'
+import store from 'global-state'
 
 export default function () {
   const router = useRouterContext()
@@ -73,7 +74,9 @@ export default function () {
                   }}>
                     立即阅读
                   </Button>
-                  <Button type="ghost" size="small" style={{ minWidth: 82 }}>下载</Button>
+                  <Button type="ghost" size="small" style={{ minWidth: 82 }} onClick={() => {
+                    window.open(`${store.app.baseURL}/v1/public/download/book/${localStore.id}`, '_blank')
+                  }}>下载</Button>
                 </div>
                 <p style={{ marginBottom: 8 }}>内容简介:</p>
                 <div style={{ lineHeight: 1.5, color: '#555', textIndent: 20, borderBottom: '1px solid #ccc', minHeight: 120 }} dangerouslySetInnerHTML={{ __html: loader.item.desc }}>
