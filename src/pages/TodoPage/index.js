@@ -28,7 +28,7 @@ export default function SecurePage() {
             type="FaPlus"
             style={{ display: 'inline-block' }}
             onClick={() => {
-              router.pushView('/root/add-todo')
+              router.pushView('add-todo')
             }}
           />
         </VisualBoxView>
@@ -38,7 +38,7 @@ export default function SecurePage() {
           loader={todoLoader}
           renderEmpty={(
             <AutoCenterView>
-              <Button type="primary" inline onClick={() => { router.pushView('/auth/login', null, { hideMenu: true, showNavi: true }) }}>登录</Button>
+              <Button type="primary" inline onClick={() => { router.pushView('/auth/login') }}>登录</Button>
             </AutoCenterView>
           )}
           renderItem={(item, selectionId, index) => (

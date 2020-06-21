@@ -32,50 +32,62 @@ export default [
   {
     pathname: '/root/category',
     component: CategoryPage,
+    view: 'book-category',
   },
   {
     pathname: '/root/book/:id([0-9a-zA-Z-]+)/info',
     component: BookInfoPage,
+    view: 'book-info',
   },
   {
     pathname: '/root/article/:id([0-9a-zA-Z-]+)/info',
     component: ArticlePage,
+    view: 'article-info'
   },
   {
     pathname: '/root/book/:id([0-9a-zA-Z-]+)/catalog',
     component: BookCatalogPage,
+    view: 'book-catalog',
   },
   {
     pathname: '/root/book/:bid([0-9a-zA-Z-]+)/chapter/:id([0-9a-zA-Z-]+)',
     component: BookChapterPage,
+    view: 'chapter-info',
   },
   {
     pathname: '/root/book/search',
     component: BookSearchPage,
+    view: 'book-search',
   },
   {
     pathname: '/root/group-tree/:name([0-9a-zA-Z-]+)',
     component: GroupTreePage,
+    view: 'group-tree',
   },
   {
     pathname: '/root/groups',
     component: GroupsPage,
+    view: 'groups',
   },
   {
     pathname: '/root/music',
     component: MusicPage,
+    view: 'music',
   },
   {
     pathname: '/root/music-songs',
     component: SongsPage,
+    view: 'songs',
   },
   {
     pathname: '/root/song-sheet/:id([0-9a-zA-Z-]+)',
     component: SongSheetPage,
+    view: 'song-sheet',
   },
   {
     pathname: '/root/image/:id([0-9a-zA-Z]+)/info',
     component: ImagePage,
+    view: 'image',
   },
   // 用户部分
   {
@@ -89,21 +101,26 @@ export default [
   {
     pathname: '/root/secure',
     component: SecurePage,
+    view: 'user-secure',
   },
   {
     pathname: '/root/todos',
     component: TodoPage,
+    view: 'todos',
   },
   {
     pathname: '/root/add-todo',
     component: TodoAddPage,
+    view: 'add-todo',
   },
   {
     pathname: '/root/todo/:id([0-9a-zA-Z-]+)',
     component: TodoAddPage,
+    view: 'todo-info',
   },
   {
     pathname: '/root/user-setting',
     component: UserSettingPage,
+    view: 'user-setting',
   }
 ]

@@ -23,7 +23,7 @@ export default function () {
             {userLoader.isLoading ? <ActivityIndicator /> : <img src="/logo.jpg" style={{ borderRadius: '50%' }} alt="" />}
           </div>
           <div className="full-width-auto" style={{ paddingLeft: 10 }}>
-            <SwitchView loading={!store.app.isLogin} holder={<Button type="ghost" inline size="small" onClick={() => { router.pushView('/auth/login', null, { hideMenu: true, showNavi: true }) }}>登录</Button>}>
+            <SwitchView loading={!store.app.isLogin} holder={<Button type="ghost" inline size="small" onClick={() => { router.pushView('/auth/login') }}>登录</Button>}>
               {userLoader.isEmpty ? '---' : userLoader.item.name}
             </SwitchView>
           </div>
@@ -32,7 +32,7 @@ export default function () {
               <MIconView type="FaQrcode" />
             </div>
             {/* TODO: 个人信息页面 */}
-            <div className="full-width-fix" onClick={() => router.pushView('/root/user-setting', null)}><MIconView type="FaAngleRight" /></div>
+            <div className="full-width-fix" onClick={() => router.pushView('user-setting')}><MIconView type="FaAngleRight" /></div>
           </VisualBoxView>
         </div>
         <WingBlank>
@@ -45,7 +45,7 @@ export default function () {
                 <MIconView type="FaHistory" style={{ color: '#14b2f7' }} />历史
               </div>
               <div onClick={() => {
-                router.pushView('/root/secure', null, { title: '安全' })
+                router.pushView('user-secure')
               }}>
                 <MIconView type="FaLock" style={{ color: '#236f07' }} />安全
               </div>
@@ -58,33 +58,33 @@ export default function () {
           <Card style={{ minHeight: 40, padding: '5px 0' }}>
             <div className="dd-common-alignside" style={{ margin: '5px 50px' }}>
               <div onClick={() => {
-                router.pushView('/root/category', null, { hideMenu: true })
+                router.pushView('book-category')
               }}>
                 <MIconView type="FaListAlt" style={{ color: '#ff5b05' }} />小说
               </div>
               <div onClick={() => {
                 if (store.app.isLogin) {
-                  router.pushView('/root/group-tree/image', null, { hideMenu: true, title: '图片' })
+                  router.pushView('group-tree', { name: 'image' })
                 } else {
-                  router.pushView('/auth/login', null, { hideMenu: true, showNavi: true })
+                  router.pushView('/auth/login')
                 }
               }} style={{ color: '#0a925d' }}>
                 <MIconView type="FaImages" />图片
               </div>
               <div onClick={() => {
-                router.pushView('/root/music', null, { showNavi: true, })
+                router.pushView('music')
               }} style={{ color: '#bb00ff' }}>
                 <MIconView type="IoMdMusicalNote" />音乐
               </div>
             </div>
             <div className="dd-common-alignside" style={{ margin: '5px 50px' }}>
               <div onClick={() => {
-                router.pushView('/root/group-tree/article', null, { hideMenu: true, title: '文章' })
+                router.pushView('group-tree', { name: 'article' })
               }} style={{ color: '#258df1' }}>
                 <MIconView type="FaFileAlt" />文章
               </div>
               <div onClick={() => {
-                router.pushView('/root/group-tree/news', null, { hideMenu: true, title: '资讯' })
+                router.pushView('group-tree/news', { name: 'news' })
               }} style={{ color: 'red' }}>
                 <MIconView type="FaFileAlt" />资讯
               </div>

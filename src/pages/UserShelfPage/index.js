@@ -30,7 +30,7 @@ export default function () {
           loader={loader}
           renderEmpty={(
             <AutoCenterView>
-              <Button type="primary" inline onClick={() => { router.pushView('/auth/login', null, { hideMenu: true, showNavi: true }) }}>登录</Button>
+              <Button type="primary" inline onClick={() => { router.pushView('/auth/login') }}>登录</Button>
             </AutoCenterView>
           )}
           renderItem={(item, sectionId, index) => (

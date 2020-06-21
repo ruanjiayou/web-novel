@@ -9,8 +9,6 @@ import globalStore from './global-state'
 import { isPWAorMobile } from './utils/utils'
 import { createStoreProvider } from 'contexts'
 import { AutoCenterView } from 'components'
-import GroupTreeLoader from 'loader/GroupTreeLoader'
-import ResourceListLoader from 'loader/ResourceListLoader'
 import './components/common.css'
 import './group/group.css'
 import 'antd-mobile/dist/antd-mobile.css'
@@ -45,7 +43,6 @@ function App() {
   })
   return <Observer>
     {() => {
-      console.log(store.app.booting)
       if (store.app.booting) {
         return <AutoCenterView>启动中...</AutoCenterView>
       } else if (local.isError) {

@@ -32,7 +32,6 @@ const Model = types.model('musicPlayer', {
       self.songs = items.map(item => item.toJSON())
     },
     setMode(type) {
-      store.app.setMusicModeName(type)
       self.mode = type
     },
     getUrlById(id) {

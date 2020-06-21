@@ -14,7 +14,7 @@ export default function ({ item, router }) {
             })
           }} />
           <span style={{ flex: 1, padding: '5px 10px' }} onClick={() => {
-            router.pushView(`/root/todo/${item.id}`, null, { data: item })
+            router.pushView(`todo-info`, null, { id: item.id })
           }}>{item.title}</span>
           <MIconView type="FaAngleLeft" onClick={() => {
 

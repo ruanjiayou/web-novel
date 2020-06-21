@@ -96,12 +96,12 @@ const Model = types.model({
       storage.removeKey(self.accessTokenName)
       storage.removeKey(self.refreshTokenName)
     },
-    setAccessToken(token) {
+    setAccessToken(token = '') {
       // {"type":"string","value":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoidXNlciIsImlkIjoxLCJ0b2tlbiI6ImIyNGE3MjFhMGZkZDEzZmYwNTc2OTMzMzUyZGMwNzhiYmM3NTUxNGMiLCJpYXQiOjE1NjU1MjAxMDYsImV4cCI6MTU2NTYwNjUwNn0.FxS0gcrtuNkpCPM6LQ1Al7DLUWEEW7v77IKEitXORN4"}
       self.accessToken = token
       storage.setValue(self.accessTokenName, token)
     },
-    setRefreshToken(token) {
+    setRefreshToken(token = '') {
       self.refreshToken = token
       storage.setValue(self.refreshTokenName, token)
     }

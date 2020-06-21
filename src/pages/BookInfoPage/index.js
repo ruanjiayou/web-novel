@@ -8,15 +8,14 @@ import ResourceLoader from 'loader/ResourceLoader'
 import services from 'services'
 import store from 'global-state'
 
-export default function () {
+export default function ({ params }) {
   const router = useRouterContext()
   const loader = ResourceLoader.create()
-  const params = router.params
   const localStore = useLocalStore(() => ({
     loading: false,
     firstLoading: false,
     shouldFix: false,
-    id: params.id,
+    id: params ? params.id : router.params.id,
   }))
   useEffect(() => {
     if (loader.isEmpty) {
@@ -65,7 +64,7 @@ export default function () {
                     try {
                       localStore.firstLoading = true
                       const info = await services.getBookFirstChapter({ params: { id: localStore.id } })
-                      router.pushView(`/root/book/${localStore.id}/chapter/${info.item.id}`, null, { hideMenu: true, bid: localStore.id, id: info.item.id })
+                      router.pushView(`chapter-info`, null, { bid: localStore.id, id: info.item.id })
                     } catch (err) {
 
                     } finally {
@@ -81,7 +80,7 @@ export default function () {
                 <p style={{ marginBottom: 8 }}>内容简介:</p>
                 <div style={{ lineHeight: 1.5, color: '#555', textIndent: 20, borderBottom: '1px solid #ccc', minHeight: 120 }} dangerouslySetInnerHTML={{ __html: loader.item.desc }}>
                 </div>
-                <div className="full-width" style={{ height: 40 }} onClick={() => { router.pushView(`/root/book/${localStore.id}/catalog`, null, { hideMenu: true }) }}>
+                <div className="full-width" style={{ height: 40 }} onClick={() => { router.pushView(`book-catalog`, null, { id: localStore.id }) }}>
                   <span className="full-width-auto" style={{ fontWeight: 'bolder' }}>目录</span>
                   <span className="full-width-fix">连载至 {loader.item.chapters}章 · {timespan(new Date())}更新</span>
                   <MIconView style={{ marginLeft: 10 }} className="full-width-fix" type="FaAngleRight" />

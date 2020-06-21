@@ -19,7 +19,7 @@ export default ({ self, children }) => {
     {() => (
       <div className="full-height">
         <Navi title="音乐" router={router}>
-          <span onClick={e => router.pushView('/root/music-songs')}>全部歌曲</span>
+          <span onClick={e => router.pushView('music-songs')}>全部歌曲</span>
         </Navi>
         <div className="full-height-auto">
           <LoaderListView

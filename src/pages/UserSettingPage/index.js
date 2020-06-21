@@ -27,7 +27,7 @@ export default function () {
             </List.Item>
           </List>
           <div style={{ padding: 10 }}>
-            <Button type="primary" onClick={() => { store.app.setAccessToken(''); router.pushView('/') }}>退出</Button>
+            <Button type="primary" onClick={() => { store.app.setAccessToken(''); router.pushView('/auth/login') }}>退出</Button>
           </div>
         </div>
       </div>

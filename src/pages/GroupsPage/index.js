@@ -19,7 +19,7 @@ export default function GroupsPage() {
       <div className="full-height-auto">{
         gStore.groupListLoader.isEmpty ? <AutoCenterView>{renderEmptyView(gStore.groupListLoader)}</AutoCenterView> : (
           gStore.groupListLoader.items.map(group => <div style={{ width: '33%', float: 'left', textAlign: 'center', lineHeight: '30px' }} key={group.id} onClick={() => {
-            router.pushView(`/root/group-tree/${group.name}`, null, { title: group.title })
+            router.pushView(`group-tree`, { name: group.name })
           }}>{group.title}</div>)
         )
       }</div>

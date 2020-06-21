@@ -2,6 +2,40 @@ import React, { useContext as useReactContext, useState } from 'react'
 import * as path2reg from 'path-to-regexp'
 import pages from '../../pages'
 import qs from 'qs'
+import _ from 'lodash'
+
+export function getQuery(querystring) {
+  const obj = qs.parse(querystring.substr(1))
+  const query = {};
+  for (let k in obj) {
+    _.set(query, k, obj[k]);
+  }
+  return query;
+}
+export function pathname2views(pathname, querystring = '') {
+  const views = [];
+  const arr = pathname.replace('/root/', '').split('/')
+  const query = getQuery(querystring.substr(1))
+  arr.forEach(item => {
+    views.push({
+      view: item,
+      params: query[item] || {},
+    })
+  })
+  return views;
+}
+
+export function views2pathname(views) {
+  let paths = [];
+  let query = {};
+  views.forEach(view => {
+    paths.push(view.view);
+    for (let k in view.params) {
+      query[`${view.view}.${k}`] = view.params[k]
+    }
+  })
+  return ('/root/' + paths.join('/') + '?' + qs.stringify(query)).replace(/\?$/, '')
+}
 
 // 上下文context.避免react多级一直传props
 const Context = React.createContext(null)
@@ -53,20 +87,7 @@ export function useProvider(history) {
         return history.location.state && history.location.state[key]
       },
       getQuery() {
-        return qs.parse(window.location.search.substr(1))
-      },
-      back() {
-        const { userClick, login } = history.location.state || { userClick: true }
-        if (login) {
-          // 登录跳转进来的页面
-          route.backToRoot()
-        } else if (userClick) {
-          // 正常操作进入
-          route.history.goBack()
-        } else {
-          // 可能是直接通过URL进来的
-          route.backToRoot()
-        }
+        return getQuery(history.location.search.substr(1))
       },
       backToRoot(params, state) {
         const { pathname, search } = getBackToRootLocation(params)
@@ -86,33 +107,43 @@ export function useProvider(history) {
         // getStore => 如果有则跳转,否则到首页
         // TODO:
       },
-      pushView(pathname, params = {}, state) {
-        state = state || {}
-        state.userClick = true
-        state.hideMenu = state.hideMenu === false ? false : true
-        let search = ''
-        for (let k in params) {
-          search += `${k}=${params[k]}`
-        }
-        history.push({
-          pathname,
-          search,
-          state
-        })
+      back() {
+        route.history.goBack()
       },
-      replaceView(pathname, params = {}, state) {
-        state = state || {}
-        state.userClick = true
-        let search = ''
-        for (let k in params) {
-          search += `${k}=${params[k]}`
+      pushView(view, params = {}, state) {
+        if (view.startsWith('/')) {
+          history.push({
+            pathname: view,
+            state,
+          })
+        } else {
+          const views = pathname2views(history.location.pathname, history.location.search)
+          views.push({ view, params });
+          const pathname = views2pathname(views)
+          history.push({
+            pathname,
+            state,
+          })
         }
-        history.replace({
-          pathname,
-          search,
-          state
-        })
-      }
+      },
+      replaceView(view, params = {}, state) {
+        if (view.startsWith('/')) {
+          history.replace({
+            pathname: view,
+            state,
+          })
+        } else {
+          const views = pathname2views(history.location.pathname, history.location.search)
+          views.pop();
+          views.push({ view, params });
+          const pathname = views2pathname(views)
+          history.replace({
+            pathname: pathname,
+            state,
+          })
+        }
+
+      },
     }
     return route
   })
