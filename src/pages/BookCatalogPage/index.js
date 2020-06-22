@@ -7,7 +7,7 @@ import ChapterItemView from 'business/ChapterItemView'
 
 import services from 'services'
 import ChapterModel from 'models/ChapterModel'
-import { createItemsLoader } from 'loader/BaseLoader'
+import { createItemsLoader } from 'page-group-model-loader/BaseLoader'
 
 export default function () {
   const router = useRouterContext()

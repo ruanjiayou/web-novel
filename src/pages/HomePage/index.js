@@ -1,29 +1,27 @@
 import React, { useEffect } from 'react'
-import { Observer } from 'mobx-react-lite'
+import { useEffectOnce } from 'react-use'
+import { Observer, useLocalStore } from 'mobx-react-lite'
 import { Tabs } from 'antd-mobile'
 import { useStoreContext, useRouterContext } from 'contexts'
 import { RenderGroups } from 'group'
+import { channelLoaders, resourceListLoaders } from 'global-state'
 
-export default ({ self, children }) => {
+export default () => {
   const router = useRouterContext()
   const store = useStoreContext()
   const channels = store.app.channels
-  const loaders = store.channelLoaders
-  const query = router.getQuery()
-  useEffect(() => {
-    store.app.setTab(query.tab)
-    if (!query.tab) {
-      query.tab = channels.length ? channels[0].group_id : ''
-      router.replaceView('/root/home', query)
+  const loaders = channelLoaders
+  useEffectOnce(() => {
+    if (!store.app.tab) {
+      store.app.setTab(channels.length ? channels[0].group_id : '')
     }
   })
   return <Observer>
     {() => (
       <div className="full-height">
-        <Tabs initialPage={channels.findIndex(channel => channel.group_id === query.tab)} tabs={channels} onChange={(tab, index) => {
-          query.tab = tab.group_id
-          store.app.setTab(query.tab)
-          router.replaceView('/root/home', query)
+        <Tabs initialPage={channels.findIndex(channel => channel.group_id === store.app.tab)} tabs={channels} onChange={(tab, index) => {
+          store.app.setTab(tab.group_id)
+          router.replaceView('home', { tab: tab.group_id })
         }}>{
             channels.map((channel, index) => (
               <RenderGroups key={index} loader={loaders[channel.group_id]} group={channel.data} />

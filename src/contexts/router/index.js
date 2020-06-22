@@ -5,17 +5,18 @@ import qs from 'qs'
 import _ from 'lodash'
 
 export function getQuery(querystring) {
-  const obj = qs.parse(querystring.substr(1))
+  const obj = qs.parse(querystring)
   const query = {};
   for (let k in obj) {
     _.set(query, k, obj[k]);
   }
   return query;
 }
-export function pathname2views(pathname, querystring = '') {
+export function pathname2views(url) {
+  const [pathname, querystring = ''] = url.split('?')
   const views = [];
   const arr = pathname.replace('/root/', '').split('/')
-  const query = getQuery(querystring.substr(1))
+  const query = getQuery(querystring)
   arr.forEach(item => {
     views.push({
       view: item,
@@ -117,7 +118,7 @@ export function useProvider(history) {
             state,
           })
         } else {
-          const views = pathname2views(history.location.pathname, history.location.search)
+          const views = pathname2views(history.location.pathname + history.location.search)
           views.push({ view, params });
           const pathname = views2pathname(views)
           history.push({
@@ -133,7 +134,7 @@ export function useProvider(history) {
             state,
           })
         } else {
-          const views = pathname2views(history.location.pathname, history.location.search)
+          const views = pathname2views(history.location.pathname + history.location.search)
           views.pop();
           views.push({ view, params });
           const pathname = views2pathname(views)
