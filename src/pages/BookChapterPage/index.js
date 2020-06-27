@@ -4,11 +4,16 @@ import { ActivityIndicator, Progress } from 'antd-mobile'
 
 import { useRouterContext } from 'contexts'
 import { EmptyView, AutoCenterView, VisualBoxView, MIconView } from 'components'
-import ChapterLoader from 'loader/ChapterLoader'
+import loaders from 'loader'
+import createPageModel from 'page-group-loader-model/BasePageModel'
 
-export default function () {
+export const ViewModel = createPageModel({
+  ChapterLoader: loaders.ChapterLoader
+})
+
+export default function ({ self }) {
   const router = useRouterContext()
-  const loader = ChapterLoader.create()
+  const loader = self.ChapterLoader
   const emptyView = EmptyView(loader)
   const params = router.params
   const localStore = useLocalStore(() => ({

@@ -5,15 +5,20 @@ import { Observer, useLocalStore } from 'mobx-react-lite'
 import { LoaderListView, MIconView } from 'components'
 import { useNaviContext, useRouterContext, useStoreContext } from 'contexts'
 
-import SongSheetSongLoader from 'loader/SongSheetSongLoader'
 import SongItem from 'business/ResourceItem/SongItem'
 import services from 'services'
+import loaders from 'loader'
+import createPageModel from 'page-group-loader-model/BasePageModel'
 
-export default function SongSheetPage() {
+export const ViewModel = createPageModel({
+  SongSheetSongLoader: loaders.SongSheetSongLoader
+})
+
+export default function SongSheetPage({ self }) {
   const Navi = useNaviContext()
   const router = useRouterContext()
   const gStore = useStoreContext()
-  const loader = SongSheetSongLoader.create()
+  const loader = self.SongSheetSongLoader
   const store = useLocalStore(() => ({
     title: router.getStateKey('title')
   }))

@@ -3,15 +3,20 @@ import { useEffectOnce } from 'react-use'
 import { Observer } from 'mobx-react-lite'
 import { LoaderListView } from 'components'
 import { useNaviContext, useRouterContext } from 'contexts'
-import SongSheetLoader from 'loader/SongSheetLoader'
-import ResourceListLoader from 'loader/ResourceListLoader'
 import ResourceItem from 'business/ResourceItem'
+import loaders from 'loader'
+import createPageModel from 'page-group-loader-model/BasePageModel'
+
+export const ViewModel = createPageModel({
+  SongSheetLoader: loaders.SongSheetLoader,
+  ResourceListLoader: loaders.ResourceListLoader
+})
 
 export default ({ self, children }) => {
   const Navi = useNaviContext()
   const router = useRouterContext()
-  const loader = SongSheetLoader.create()
-  const resourceListLoader = ResourceListLoader.create()
+  const loader = self.SongSheetLoader
+  const resourceListLoader = self.ResourceListLoader
   useEffectOnce(() => {
     if (loader.isEmpty) {
       loader.refresh()

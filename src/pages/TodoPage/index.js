@@ -3,14 +3,19 @@ import { Observer, useLocalStore } from 'mobx-react-lite'
 import { Button, } from 'antd-mobile'
 import { useNaviContext, useRouterContext, useStoreContext } from 'contexts'
 import { MIconView, LoaderListView, AutoCenterView, VisualBoxView } from 'components'
-import TodoListLoader from 'loader/TodoListLoader'
 import TodoItemView from 'business/TodoItemView'
+import loaders from 'loader'
+import createPageModel from 'page-group-loader-model/BasePageModel'
 
-export default function SecurePage() {
+export const ViewModel = createPageModel({
+  TodoListLoader: loaders.TodoListLoader
+})
+
+export default function SecurePage({ self }) {
   const globalStore = useStoreContext()
   const Navi = useNaviContext()
   const router = useRouterContext()
-  const todoLoader = TodoListLoader.create()
+  const todoLoader = self.TodoListLoader
   const localStore = useLocalStore(() => ({
     type: '1'
   }))

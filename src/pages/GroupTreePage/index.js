@@ -2,38 +2,36 @@ import React, { Fragment } from 'react'
 import { useEffectOnce } from 'react-use'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { useNaviContext, useRouterContext, useStoreContext } from 'contexts'
-import GroupTreeLoader from 'loader/GroupTreeLoader'
-import ResourceListLoader from 'loader/ResourceListLoader'
 import { RenderGroups } from 'group'
+import createPageModel from 'page-group-loader-model/BasePageModel'
+import loaders from 'loader/index'
 
-export default function GroupTreePage() {
+export const ViewModel = createPageModel({
+  GroupTreeLoader: loaders.GroupTreeLoader,
+  ResourceListLoader: loaders.ResourceListLoader,
+})
+
+export default function GroupTreePage({ self, title = '' }) {
   const router = useRouterContext()
   const params = router.params
-  const gStore = useStoreContext()
-  const store = useLocalStore(() => ({
-    title: router.getStateKey('title'),
-    loader: gStore.channelLoaders[params.name] || GroupTreeLoader.create(),
-    subLoader: gStore.resourceListLoaders[params.name] || ResourceListLoader.create()
-  }))
-  if (!gStore.channelLoaders[params.name]) {
-    gStore.channelLoaders[params.name] = store.loader
-  }
+  const loader = self.GroupTreeLoader
+  const subLoader = self.ResourceListLoader
   useEffectOnce(() => {
-    if (store.loader.state === 'init') {
-      store.loader.refresh({ params: { name: params.name } }).then(() => {
-        const query = store.loader.getQuery()
-        if (store.subLoader.state === 'init') {
-          store.subLoader.refresh({ query })
+    if (loader.state === 'init') {
+      loader.refresh({ params: { name: params.name } }).then(() => {
+        const query = loader.getQuery()
+        if (subLoader.state === 'init') {
+          subLoader.refresh({ query })
         }
       })
     }
-  }, [store])
+  }, [])
   const Navi = useNaviContext()
   return <Observer>{() => (
     <div className="full-height">
-      <Navi title={store.title} router={router} />
+      <Navi title={title} router={router} />
       <div className="full-height-auto">
-        <RenderGroups loader={store.loader} subLoader={store.subLoader} />
+        <RenderGroups loader={loader} subLoader={subLoader} />
       </div>
     </div>)
   }</Observer>

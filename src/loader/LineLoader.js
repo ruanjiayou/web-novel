@@ -1,6 +1,6 @@
 import services from '../services/index'
 import LineModel from '../models/LineModel'
-import { createItemsLoader } from './BaseLoader'
+import { createItemsLoader } from '../page-group-loader-model/BaseLoaderModel'
 import Config from 'config'
 
 export default createItemsLoader(LineModel, async (params) => {

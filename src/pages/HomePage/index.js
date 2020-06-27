@@ -4,9 +4,12 @@ import { Observer, useLocalStore } from 'mobx-react-lite'
 import { Tabs } from 'antd-mobile'
 import { useStoreContext, useRouterContext } from 'contexts'
 import { RenderGroups } from 'group'
-import { channelLoaders, resourceListLoaders } from 'global-state'
+import { channelLoaders } from 'global-state'
+import createPageModel from 'page-group-loader-model/BasePageModel'
 
-export default () => {
+const ViewModel = createPageModel({})
+
+function Component({ self }) {
   const router = useRouterContext()
   const store = useStoreContext()
   const channels = store.app.channels
@@ -30,5 +33,13 @@ export default () => {
       </div>
     )}
   </Observer>
+}
 
+export default {
+  config: {
+    view: 'home',
+    attrs: {},
+  },
+  Component,
+  ViewModel,
 }

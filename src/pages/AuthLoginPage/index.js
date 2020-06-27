@@ -59,60 +59,54 @@ export default function ({ self }) {
     password: ''
   }))
   return <Observer>
-    {() => {
-      return (
-        <div className="full-height">
-          <Navi left={<span style={{ whiteSpace: 'nowrap' }}>返回</span>} title="账号登录" router={router} />
-          <div className="full-height-auto">
-            <div className="dd-common-centerXY" style={{ position: 'relative' }}>
-              <div style={{ position: 'absolute', right: 0, top: 0, padding: 5 }}>
-                <MIconView type="FaCog" onClick={() => {
-                  Modal.prompt('地址', '', [
-                    { text: '取消' },
-                    {
-                      text: '确定', onPress: val => {
-                        globalStore.app.setBaseURL(val)
-                      }
+    {() => (
+      <div className="full-height">
+        <Navi left={<span style={{ whiteSpace: 'nowrap' }}>返回</span>} title="账号登录" router={router} />
+        <div className="full-height-auto">
+          <div className="dd-common-centerXY" style={{ position: 'relative' }}>
+            <div style={{ position: 'absolute', right: 0, top: 0, padding: 5 }}>
+              <MIconView type="FaCog" onClick={() => {
+                Modal.prompt('地址', '', [
+                  { text: '取消' },
+                  {
+                    text: '确定', onPress: val => {
+                      globalStore.app.setBaseURL(val)
                     }
-                  ], 'default', globalStore.app.baseURL)
-                }} />
-              </div>
-              <List>
-                <List.Item>
-                  <InputItem
-                    type="text"
-                    placeholder="用户名"
-                    style={{ border: '0 none' }}
-                    defaultValue={store.account}
-                    onBlur={value => store.account = value}
-                  >
-                    用户名
-            </InputItem>
-                </List.Item>
-                <List.Item>
-                  <InputItem
-                    type="password"
-                    placeholder="密码"
-                    defaultValue=""
-                    style={{ border: '0 none' }}
-                    onBlur={value => store.password = value}
-                  >
-                    密码
-            </InputItem>
-                </List.Item>
-                <List.Item style={{ display: 'flex' }}>
-                  <Button loading={store.isLogin} disabled={store.isLogin || store.isRegister} type="primary" onClick={() => login(router, store, globalStore)}>登录</Button>
-                  {/* <div style={{ display: 'flex', alignItems: 'center', flexDirection: 'row', justifyContent: 'space-around' }}>
-              <Button loading={store.isLogin} disabled={store.isLogin || store.isRegister} type="primary" onClick={() => login(router, store)}>登录</Button>
-              <Button loading={store.isRegister} inline disabled={store.isLogin || store.isRegister} type="primary" onClick={() => register(router, store)}>注册</Button>
-            </div> */}
-                </List.Item>
-              </List>
+                  }
+                ], 'default', globalStore.app.baseURL)
+              }} />
             </div>
+            <List>
+              <List.Item>
+                <InputItem
+                  type="text"
+                  placeholder="用户名"
+                  style={{ border: '0 none' }}
+                  defaultValue={store.account}
+                  onBlur={value => store.account = value}
+                >
+                  用户名
+            </InputItem>
+              </List.Item>
+              <List.Item>
+                <InputItem
+                  type="password"
+                  placeholder="密码"
+                  defaultValue=""
+                  style={{ border: '0 none' }}
+                  onBlur={value => store.password = value}
+                >
+                  密码
+            </InputItem>
+              </List.Item>
+              <List.Item style={{ display: 'flex' }}>
+                <Button loading={store.isLogin} disabled={store.isLogin || store.isRegister} type="primary" onClick={() => login(router, store, globalStore)}>登录</Button>
+                
+              </List.Item>
+            </List>
           </div>
         </div>
-      )
-
-    }}
+      </div>
+    )}
   </Observer>
 }

@@ -26,7 +26,7 @@ export default function ({ children }) {
               return
             }
             store.app.setMenu(menu.name)
-            // router.replaceView(menu.name, menu.name === 'home' ? { tab: store.app.tab } : {})
+            router.replaceView(menu.name, menu.name === 'home' ? { tab: store.app.tab } : {})
           }}
         >
           {children}

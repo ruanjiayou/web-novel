@@ -2,39 +2,38 @@ import AppModel from 'models/AppModel'
 import DebugModel from 'models/DebugModel'
 import MusicPlayerModel from 'models/MusicPlayerModel'
 import SpeakerModel from 'models/SpeakerModel'
-import UserLoader from 'loader/UserLoader'
-import LineLoader from 'loader/LineLoader'
-import CategoryLoader from 'loader/CategoryLoader'
-import BookShelfLoader from 'loader/BookShelfLoader'
-import GroupListLoader from 'loader/GroupListLoader'
+import userLoader from 'loader/UserLoader'
+import lineLoader from 'loader/LineLoader'
+import categoryLoader from 'loader/CategoryLoader'
+import bookShelfLoader from 'loader/BookShelfLoader'
+import groupListLoader from 'loader/GroupListLoader'
 import GroupTreeLoader from 'loader/GroupTreeLoader'
 import ResourceListLoader from 'loader/ResourceListLoader'
 
 import storage from './utils/storage'
 import { types } from 'mobx-state-tree'
-import views from 'models/ViewModel'
+import ViewModel, { viewData } from 'router/view-model'
 
-export const userLoader = UserLoader.create()
-export const lineLoader = LineLoader.create()
-export const categoryLoader = CategoryLoader.create()
-export const bookShelfLoader = BookShelfLoader.create()
-export const groupListLoader = GroupListLoader.create()
 export const channelLoaders = {}
 export const resourceListLoaders = {}
-
 const Store = types.model('store', {
   app: AppModel,
   debug: DebugModel,
   music: MusicPlayerModel,
   speaker: SpeakerModel,
-  views: types.map(views),
-  // target
+  userLoader,
+  lineLoader,
+  categoryLoader,
+  bookShelfLoader,
+  groupListLoader,
+  // pages & groups 下面是给src/page-group-loader-model/base.js 用的
+  viewModels: types.map(ViewModel),
 }).actions(self => ({
-  initial(data) {
+  ready(data) {
     if (data.user) {
-      userLoader.setData(data.user)
+      self.userLoader.setData(data.user)
     }
-    lineLoader.setData(data.lines)
+    self.lineLoader.setData(data.lines)
     self.app.setTabs(data.tabs)
     self.app.setChannels(data.channels)
     data.channels.forEach(channel => {
@@ -44,21 +43,6 @@ const Store = types.model('store', {
     self.app.setBoot(false)
   },
 })).views(self => ({
-  get userLoader() {
-    return userLoader
-  },
-  get lineLoader() {
-    return lineLoader
-  },
-  get categoryLoader() {
-    return categoryLoader
-  },
-  get bookShelfLoader() {
-    return bookShelfLoader
-  },
-  get groupListLoader() {
-    return groupListLoader
-  },
   get channelLoaders() {
     return channelLoaders
   },
@@ -78,7 +62,9 @@ const store = Store.create({
   },
   speaker: {},
   debug: {},
+  viewModels: viewData,
 })
+
 window.store = store;
 store.app.setAccessToken(storage.getValue(store.app.accessTokenName) || '')
 store.app.setRefreshToken(storage.getValue(store.app.refreshTokenName) || '')

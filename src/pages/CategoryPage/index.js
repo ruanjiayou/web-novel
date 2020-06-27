@@ -1,6 +1,12 @@
 import React, { Fragment, useEffect } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { useRouterContext, useStoreContext, useNaviContext } from 'contexts'
+import createPageModel from 'page-group-loader-model/BasePageModel'
+import loaders from 'loader'
+
+export const ViewModel = createPageModel({
+  CategoryLoader: loaders.CategoryLoader
+});
 
 const styles = {
   bigCate: {
@@ -21,7 +27,7 @@ const styles = {
   }
 }
 
-function SubCate({ cates, router }) {
+function SubCate({ self, cates, router }) {
   if (cates) {
     return cates.children.map(cate => <div key={cate.id} className="full-width" style={styles.subCate}>
       <img src={cate.poster} alt="" style={{ width: 60, height: 70, backgroundColor: '#bbb' }} />
@@ -34,11 +40,11 @@ function SubCate({ cates, router }) {
     return null
   }
 }
-export default function () {
+export default function ({ self }) {
   const Navi = useNaviContext()
   const store = useStoreContext()
   const router = useRouterContext()
-  const loader = store.categoryLoader
+  const loader = self.CategoryLoader
   const localStore = useLocalStore(() => ({
     selectIndex: 0,
     count: 0,

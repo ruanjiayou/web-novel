@@ -4,12 +4,17 @@ import { ActivityIndicator, Icon, Tag } from 'antd-mobile'
 
 import { useRouterContext, useStoreContext, useNaviContext } from 'contexts'
 import { AutoCenterView } from 'components'
-import ResourceLoader from 'loader/ResourceLoader'
+import loaders from 'loader'
+import createPageModel from 'page-group-loader-model/BasePageModel'
 
-export default function () {
+export const ViewModel = createPageModel({
+  ChapterLoader: loaders.ChapterLoader
+})
+
+export default function ({self}) {
   const Navi = useNaviContext()
   const router = useRouterContext()
-  const loader = ResourceLoader.create()
+  const loader = self.ResourceLoader
   const store = useStoreContext()
   const params = router.params
   let imageHost = store.lineLoader.getHostByType('image')

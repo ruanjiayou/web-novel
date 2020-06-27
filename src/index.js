@@ -29,7 +29,7 @@ function App() {
       if (res.code !== 0) {
         throw res.message
       } else {
-        store.initial(res.data)
+        store.ready(res.data)
       }
     }).catch(e => {
       store.app.setBoot(false)
@@ -101,7 +101,7 @@ class ErrorBoundary extends React.Component {
 
   render() {
     if (this.state.hasError) {
-      window.localStorage.clear()
+      // window.localStorage.clear()
       return <Fragment>
         <AutoCenterView>
           程序崩溃了,<div onClick={() => {

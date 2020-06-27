@@ -3,30 +3,26 @@ import React, { Fragment, useEffect } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { useStoreContext, createRouteProvider, createNaviProvider, createMusicPlayerProvider, createDebugProvider, createSpeakerProvider } from 'contexts'
 import { LockerView } from 'components'
-import Layout from './layout'
-import { pathname2views, views2pathname, getQuery } from 'contexts/router'
-import pages from 'pages'
+import Layout from '../layout'
 import { useEffectOnce } from 'react-use'
-import HomePage from 'pages/HomePage'
-import MinePage from 'pages/UserCenterPage'
-import AuthLoginPage from 'pages/AuthLoginPage/index'
+import AuthLoginPage from 'pages/AuthLoginPage'
 
 // 路由=>组件.没登录跳到登录.登录了匹配root.匹配失败就重定向route.
 
-function AppRoot({ views, layers }) {
+function LayerView({ router }) {
   return <Fragment>
     {
-      views.map((view, i) => {
-        const Comp = layers[view.view]
+      router.layers.map((layer, i) => {
+        const Comp = router.getPage(layer.view)
         if (i === 0) {
           return null;
         }
         if (Comp) {
           return <div key={i} style={{ width: '100%', height: '100%', position: 'absolute', zIndex: i + 99, backgroundColor: '#ffffff' }}>
-            <Comp params={view.params} />
+            <Comp params={layer.params} />
           </div>
         } else {
-          return <div style={{ width: '100%', height: '100%', position: 'absolute', zIndex: i + 99, backgroundColor: '#ffffff' }} key={i}>empty: {view.view} params:{JSON.stringify(view.params)}</div>
+          return <div style={{ width: '100%', height: '100%', position: 'absolute', zIndex: i + 99, backgroundColor: '#ffffff' }} key={i}>empty: {layer.view} params:{JSON.stringify(layer.params)}</div>
         }
       })
     }
@@ -40,40 +36,19 @@ function App(props) {
   const [MusicPlayer] = createMusicPlayerProvider()
   const [Debug] = createDebugProvider()
   const [Speaker] = createSpeakerProvider()
-  const local = useLocalStore(() => ({
-    views: [],
-    layers: [],
-    menus: {
-      Home: <HomePage />,
-      Mine: <MinePage />
-    },
-    getCacheMenu(view) {
-      if (!local.menus[view]) {
-        const Comp = local.layers[view]
-        local.menus[view] = <Comp />
-      }
-      return local.menus[view] || local.menus.home
-    },
-  }))
-
-  const { pathname, search } = props.location
   useEffectOnce(() => {
-    pages.forEach(page => {
-      if (page.view) {
-        local.layers[page.view] = page.component
-      }
-    })
     // 默认是home
     const name = props.location.pathname.split('/').pop()
     if (store.app.selectedMenu !== name) {
       store.app.setMenu(name)
     }
-    const query = getQuery(search.substr(1));
+    const query = router.getQuery();
     if (query.home && query.home.tab) {
       store.app.setTab(query.home.tab)
     }
+    router.boot()
   })
-  local.views = pathname.startsWith('/root/') ? pathname2views(pathname + search) : [];
+  const Page = router.getPage()
   return <RouterContext.Provider value={router}>
     <NaviContext.Provider value={navi}>
       <Observer>{
@@ -92,16 +67,17 @@ function App(props) {
             <MusicPlayer />
             <Debug />
             <Speaker />
-            <Switch>
+            {/* <Switch>
               <Route path="/auth/login" component={AuthLoginPage} />
-              <Route path="/root/*" component={() => (
-                <Layout>
-                  {store.app.selectedMenu === 'home' ? local.menus.Home : local.menus.Mine}
-                </Layout>
+              <Route path="/root/*" component={props => (
+                <div>fuck</div>
               )} />
               <Route component={NoMatch}></Route>
-            </Switch>
-            <AppRoot views={local.views} layers={local.layers} />
+            </Switch> */}
+            <Layout>
+              <Page />
+            </Layout>
+            <LayerView router={router} />
           </Fragment>
         }
       }</Observer>
@@ -111,6 +87,7 @@ function App(props) {
 
 function NoMatch() {
   const store = useStoreContext()
+  console.log('nomatch?')
   if (store.app.isLogin) {
     return <Redirect to={'/root/home'}></Redirect>
   } else {
@@ -120,7 +97,8 @@ function NoMatch() {
 
 export default function Index() {
   return <BrowserRouter basename={'/'}>
-    {/* <Route path="/auth/login" component={() => <AuthLoginPage />}></Route> */}
-    <Route path={'/*'} component={App}></Route>
+    <Route path={'/root/*'} component={App}></Route>
+    <Route path={'/auth/login'} component={AuthLoginPage} />
+    <Route component={NoMatch} />
   </BrowserRouter>
 }

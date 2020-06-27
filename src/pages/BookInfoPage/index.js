@@ -2,20 +2,25 @@ import React, { Fragment, useEffect } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { ActivityIndicator, Icon, Button } from 'antd-mobile'
 import timespan from 'utils/timespan'
-import { useRouterContext } from 'contexts'
+import { useRouterContext, useStoreContext } from 'contexts'
 import { MIconView, AutoCenterView, VisualBoxView, ImgLine } from 'components'
-import ResourceLoader from 'loader/ResourceLoader'
+import createPageModel from 'page-group-loader-model/BasePageModel'
+import loaders from 'loader'
 import services from 'services'
-import store from 'global-state'
 
-export default function ({ params }) {
+export const ViewModel = createPageModel({
+  ResourceLoader: loaders.ResourceLoader
+})
+
+function Component({ self, params }) {
+  const store = useStoreContext()
   const router = useRouterContext()
-  const loader = ResourceLoader.create()
+  const loader = self.ResourceLoader
   const localStore = useLocalStore(() => ({
     loading: false,
     firstLoading: false,
     shouldFix: false,
-    id: params ? params.id : router.params.id,
+    id: '020366D818484494B6ED963B5EFEB0F0',
   }))
   useEffect(() => {
     if (loader.isEmpty) {
@@ -93,4 +98,13 @@ export default function ({ params }) {
       }
     }
   }</Observer>
+}
+
+export default {
+  config: {
+    view: 'bookInfo',
+    attrs: {},
+  },
+  ViewModel,
+  Component,
 }

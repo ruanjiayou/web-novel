@@ -1,6 +1,7 @@
 import React from 'react'
 import { Observer } from 'mobx-react-lite'
 import FilterTag from '../FilterTag'
+import { Container } from './style'
 
 export default function FilterRow({ self, onQueryChange }) {
   function selectTag(id) {
@@ -19,6 +20,6 @@ export default function FilterRow({ self, onQueryChange }) {
     onQueryChange()
   }
   return <Observer>{() => (
-    <div style={{ margin: '5px 10px', whiteSpace: 'nowrap', overflowX: 'auto', overflowY: 'hidden' }}>{self.children.map(child => (<FilterTag self={child} key={child.id} selectTag={selectTag} />))}</div>
+    <Container>{self.children.map(child => (<FilterTag self={child} key={child.id} selectTag={selectTag} />))}</Container>
   )}</Observer>
 }

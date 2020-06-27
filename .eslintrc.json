@@ -21,6 +21,7 @@
       "never"
     ],
     "no-extra-semi": "error",
-    "no-unused-vars": "off"
+    "no-unused-vars": "off",
+    "no-restricted-globals": "off"
   }
 }

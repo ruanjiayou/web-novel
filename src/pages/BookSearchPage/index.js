@@ -2,15 +2,20 @@ import React, { Fragment, useEffect } from 'react'
 import { Observer } from 'mobx-react-lite'
 
 import { useNaviContext, useRouterContext } from 'contexts/'
-import ResourceListLoader from 'loader/ResourceListLoader'
-import GroupTreeLoader from 'loader/GroupTreeLoader'
+import loaders from 'loader'
 import { RenderGroups } from 'group'
+import createPageModel from 'page-group-loader-model/BasePageModel'
 
-export default function () {
+export const ViewModel = createPageModel({
+  ResourceListLoader: loaders.ResourceListLoader,
+  GroupTreeLoader: loaders.GroupTreeLoader
+})
+
+export default function ({ self }) {
   const Navi = useNaviContext()
   const router = useRouterContext()
-  const loader = GroupTreeLoader.create()
-  const booksLoader = ResourceListLoader.create()
+  const loader = self.GroupTreeLoader
+  const booksLoader = self.ResourceListLoader
   useEffect(() => {
     if (loader.isEmpty) {
       loader.refresh({ params: { name: 'book-search-all' } })

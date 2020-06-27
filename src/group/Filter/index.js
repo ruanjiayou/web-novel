@@ -21,7 +21,9 @@ export default function Filter({ self, loader, ...props }) {
     if (!store.resourceListLoaders[loader.item.id]) {
       store.resourceListLoaders[loader.item.id] = lstore.loader
     }
-    refresh()
+    if (lstore.loader.state === 'init') {
+      refresh()
+    }
   }, [])
   return <Observer>{() => (
     <div className="full-height">

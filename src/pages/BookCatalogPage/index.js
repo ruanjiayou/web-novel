@@ -4,14 +4,16 @@ import { useRouterContext } from 'contexts/router'
 
 import { MIconView, LoaderListView } from 'components'
 import ChapterItemView from 'business/ChapterItemView'
+import loaders from 'loader/index'
+import createPageModel from 'page-group-loader-model/BasePageModel'
 
-import services from 'services'
-import ChapterModel from 'models/ChapterModel'
-import { createItemsLoader } from 'page-group-model-loader/BaseLoader'
+export const ViewModel = createPageModel({
+  ChapterLoader: loaders.ChapterLoader
+})
 
-export default function () {
+export default function ({ self }) {
   const router = useRouterContext()
-  const loader = createItemsLoader(ChapterModel, async (option) => services.getBookCatalog(option)).create()
+  const loader = self.ChapterLoader
   loader.toggleSort()
   const params = router.params
   const localStore = useLocalStore(() => ({

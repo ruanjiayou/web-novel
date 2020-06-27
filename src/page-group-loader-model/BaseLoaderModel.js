@@ -1,6 +1,8 @@
 import { flow, types } from 'mobx-state-tree'
 import Config from 'config'
 
+// 根据传入的model返回model
+
 // 默认值问题
 // 第一次刷新 判断
 // loader的name

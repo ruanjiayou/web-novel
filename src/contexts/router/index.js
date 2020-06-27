@@ -1,22 +1,16 @@
 import React, { useContext as useReactContext, useState } from 'react'
 import * as path2reg from 'path-to-regexp'
+import mem from 'mem'
 import pages from '../../pages'
 import qs from 'qs'
 import _ from 'lodash'
+import store from 'global-state'
 
-export function getQuery(querystring) {
-  const obj = qs.parse(querystring)
-  const query = {};
-  for (let k in obj) {
-    _.set(query, k, obj[k]);
-  }
-  return query;
-}
 export function pathname2views(url) {
   const [pathname, querystring = ''] = url.split('?')
   const views = [];
   const arr = pathname.replace('/root/', '').split('/')
-  const query = getQuery(querystring)
+  const query = qs.parse(querystring, { allowDots: true })
   arr.forEach(item => {
     views.push({
       view: item,
@@ -63,7 +57,12 @@ const rules = pages.map(page => {
  * let router = useRouterContext();
  * router.goto(...);
  */
+const memGetViewModel = mem(function (view) {
+  return store.viewModels.get(view)
+})
+
 export function useProvider(history) {
+  const [layers, setLayers] = useState([])
   let [state] = useState(() => {
     let route = {
       history,
@@ -84,11 +83,19 @@ export function useProvider(history) {
       get hideMenu() {
         return history.location.state && history.location.state.hideMenu ? true : false
       },
+      // 多层覆盖
+      layers: layers,
+      getPage(view) {
+        const ps = history.location.pathname.split('?')[0]
+        const p = ps.split('/')[2]
+        const Page = memGetViewModel(view || p)
+        return Page.Comp;
+      },
       getStateKey(key) {
         return history.location.state && history.location.state[key]
       },
       getQuery() {
-        return getQuery(history.location.search.substr(1))
+        return qs.parse(history.location.search.substr(1), { allowDots: true })
       },
       backToRoot(params, state) {
         const { pathname, search } = getBackToRootLocation(params)
@@ -109,7 +116,14 @@ export function useProvider(history) {
         // TODO:
       },
       back() {
-        route.history.goBack()
+        if (this.layers.length) {
+          const views = pathname2views(history.location.pathname + history.location.search)
+          views.pop();
+          setLayers(views);
+          route.history.goBack();
+        } else {
+          route.history.goBack();
+        }
       },
       pushView(view, params = {}, state) {
         if (view.startsWith('/')) {
@@ -120,6 +134,7 @@ export function useProvider(history) {
         } else {
           const views = pathname2views(history.location.pathname + history.location.search)
           views.push({ view, params });
+          setLayers(views);
           const pathname = views2pathname(views)
           history.push({
             pathname,
@@ -137,6 +152,7 @@ export function useProvider(history) {
           const views = pathname2views(history.location.pathname + history.location.search)
           views.pop();
           views.push({ view, params });
+          setLayers(views);
           const pathname = views2pathname(views)
           history.replace({
             pathname: pathname,
@@ -145,6 +161,10 @@ export function useProvider(history) {
         }
 
       },
+      boot() {
+        const views = pathname2views(history.location.pathname + history.location.search)
+        setLayers(views);
+      }
     }
     return route
   })

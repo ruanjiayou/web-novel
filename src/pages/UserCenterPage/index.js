@@ -3,11 +3,17 @@ import { Observer } from 'mobx-react-lite'
 import { ActivityIndicator, Card, WingBlank, Button, WhiteSpace } from 'antd-mobile'
 import { useStoreContext, useRouterContext } from 'contexts'
 import { MIconView, SwitchView, VisualBoxView } from 'components'
+import UserLoader from 'loader/UserLoader'
+import createPageModel from 'page-group-loader-model/BasePageModel'
 
-export default function () {
+const ViewModel = createPageModel({
+  UserLoader
+})
+
+function Component({self}) {
   const store = useStoreContext()
   const router = useRouterContext()
-  const userLoader = store.userLoader
+  const userLoader = self.UserLoader
   useEffect(() => {
     if (store.app.isLogin && userLoader.isEmpty) {
       userLoader.refresh()
@@ -97,4 +103,13 @@ export default function () {
       </div>
     }
   }</Observer >
+}
+
+export default {
+  config: {
+    view: 'mine',
+    attrs: {},
+  },
+  Component,
+  ViewModel,
 }
