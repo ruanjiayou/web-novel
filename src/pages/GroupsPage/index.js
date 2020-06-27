@@ -32,7 +32,7 @@ function View({ self, router, }) {
 
 export default {
   group: {
-    view: 'Group',
+    view: 'groups',
   },
   View,
   model,

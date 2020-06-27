@@ -105,7 +105,7 @@ function View({ self, router, store, }) {
 
 export default {
   group: {
-    view: 'Mine',
+    view: 'mine',
   },
   View,
   model,
