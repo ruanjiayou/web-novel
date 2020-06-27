@@ -3,20 +3,17 @@ import { useEffectOnce } from 'react-use'
 import { Button } from 'antd-mobile'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 
-import { useRouterContext, useNaviContext } from 'contexts'
-import { LoaderListView, AutoCenterView } from 'components'
+import { BookShelfLoader } from 'loader'
 import BookItem from 'business/ResourceItem/BookItem'
-import loaders from 'loader'
+import { LoaderListView, AutoCenterView } from 'components'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 
-export const ViewModel = createPageModel({
-  BookShelfLoader: loaders.BookShelfLoader
+const model = createPageModel({
+  BookShelfLoader,
 })
 
 
-export default function ({ self }) {
-  const Navi = useNaviContext()
-  const router = useRouterContext()
+function View({ self, router, store, Navi }) {
   const loader = self.BookShelfLoader
   const localStore = useLocalStore(() => ({
     loading: false,
@@ -50,4 +47,12 @@ export default function ({ self }) {
       </Fragment>
     }
   }</Observer>
+}
+
+export default {
+  group: {
+    view: 'UserShelf',
+  },
+  View,
+  model,
 }

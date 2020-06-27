@@ -1,20 +1,17 @@
 import React, { useEffect } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { Button, } from 'antd-mobile'
-import { useNaviContext, useRouterContext, useStoreContext } from 'contexts'
-import { MIconView, LoaderListView, AutoCenterView, VisualBoxView } from 'components'
+
+import { TodoListLoader } from 'loader'
 import TodoItemView from 'business/TodoItemView'
-import loaders from 'loader'
+import { MIconView, LoaderListView, AutoCenterView, VisualBoxView } from 'components'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 
-export const ViewModel = createPageModel({
-  TodoListLoader: loaders.TodoListLoader
+const model = createPageModel({
+  TodoListLoader,
 })
 
-export default function SecurePage({ self }) {
-  const globalStore = useStoreContext()
-  const Navi = useNaviContext()
-  const router = useRouterContext()
+function View({ self, router, store, Navi }) {
   const todoLoader = self.TodoListLoader
   const localStore = useLocalStore(() => ({
     type: '1'
@@ -28,7 +25,7 @@ export default function SecurePage({ self }) {
   return <Observer>{() => (
     <div className="full-height">
       <Navi title="TODO" router={router}>
-        <VisualBoxView visible={globalStore.app.isLogin}>
+        <VisualBoxView visible={store.app.isLogin}>
           <MIconView
             type="FaPlus"
             style={{ display: 'inline-block' }}
@@ -52,7 +49,7 @@ export default function SecurePage({ self }) {
         />
       </div>
       <div className="full-height-fix" style={{ padding: '10px 20px' }}>
-        <VisualBoxView visible={globalStore.app.isLogin}>
+        <VisualBoxView visible={store.app.isLogin}>
           <Button type="primary" onClick={() => {
             localStore.type = localStore.type === '1' ? '' : '1'
             todoLoader.refresh({ query: { type: localStore.type } })
@@ -62,4 +59,12 @@ export default function SecurePage({ self }) {
       </div>
     </div>
   )}</Observer>
+}
+
+export default {
+  group: {
+    view: 'TodoList',
+  },
+  View,
+  model,
 }

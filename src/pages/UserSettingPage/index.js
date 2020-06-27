@@ -3,15 +3,11 @@ import { Observer } from 'mobx-react-lite'
 import { List, Button } from 'antd-mobile'
 
 import MIconView from 'components/MIconView'
-import { useStoreContext, useRouterContext, useNaviContext } from 'contexts'
+import createPageModel from 'page-group-loader-model/BasePageModel'
 
-export default function () {
-  const store = useStoreContext()
-  const router = useRouterContext()
-  const Navi = useNaviContext()
-  useEffect(() => {
+const model = createPageModel({});
 
-  })
+function View({ self, router, store, Navi }) {
   return <Observer>{
     () => {
       return <div className="full-height">
@@ -33,4 +29,12 @@ export default function () {
       </div>
     }
   }</Observer >
+}
+
+export default {
+  group: {
+    view: 'UserSetting',
+  },
+  View,
+  model,
 }

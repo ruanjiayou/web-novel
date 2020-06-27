@@ -2,23 +2,15 @@ import React, { Fragment, useEffect, useRef } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { ActivityIndicator, Progress } from 'antd-mobile'
 
-import { useRouterContext } from 'contexts'
-import { EmptyView, AutoCenterView, VisualBoxView, MIconView } from 'components'
-import ResourceLoader from 'loader/ResourceLoader'
+import { ResourceLoader } from 'loader'
 import createPageModel from 'page-group-loader-model/BasePageModel'
+import { EmptyView, AutoCenterView, VisualBoxView, MIconView } from 'components'
 
-export const ViewModel =  createPageModel({ ResourceLoader });
+const model = createPageModel({ ResourceLoader });
 
-export const config = {
-  view: '',
-  attrs: {},
-}
-
-export default function ({ self }) {
-  const router = useRouterContext()
+function View({ self, router, store, params = {} }) {
   const loader = self.ResourceLoader
   const emptyView = EmptyView(loader)
-  const params = router.params
   const localStore = useLocalStore(() => ({
     pop: false,
     percent: 0,
@@ -75,4 +67,13 @@ export default function ({ self }) {
       </Fragment>
     }}
   </Observer>
+}
+
+export default {
+  model,
+  View,
+  group: {
+    view: 'Article',
+    attrs: {},
+  },
 }

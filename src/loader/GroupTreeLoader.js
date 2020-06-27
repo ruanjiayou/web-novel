@@ -1,5 +1,5 @@
 import services from 'services/index'
-import { createItemLoader } from '../page-group-loader-model/BaseLoaderModel'
+import { createItemLoader } from 'page-group-loader-model/BaseLoaderModel'
 import GroupTreeModel from 'models/GroupTreeModel'
 
 function collect(group, query) {

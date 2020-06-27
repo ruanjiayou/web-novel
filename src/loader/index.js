@@ -11,9 +11,8 @@ import SongSheetSongLoader from './SongSheetSongLoader'
 import TodoListLoader from './TodoListLoader'
 import UserLoader from './UserLoader'
 
-export default {
+export {
   BookShelfLoader,
-  CategoryLoader,
   ChapterLoader,
   GroupListLoader,
   GroupTreeLoader,

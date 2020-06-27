@@ -1,5 +1,6 @@
 import AppModel from 'models/AppModel'
 import DebugModel from 'models/DebugModel'
+import ViewModel from 'models/ViewModel'
 import MusicPlayerModel from 'models/MusicPlayerModel'
 import SpeakerModel from 'models/SpeakerModel'
 import userLoader from 'loader/UserLoader'
@@ -12,7 +13,7 @@ import ResourceListLoader from 'loader/ResourceListLoader'
 
 import storage from './utils/storage'
 import { types } from 'mobx-state-tree'
-import ViewModel, { viewData } from 'router/view-model'
+import { groups } from 'pages'
 
 export const channelLoaders = {}
 export const resourceListLoaders = {}
@@ -62,7 +63,7 @@ const store = Store.create({
   },
   speaker: {},
   debug: {},
-  viewModels: viewData,
+  viewModels: groups,
 })
 
 window.store = store;

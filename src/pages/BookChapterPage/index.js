@@ -2,20 +2,17 @@ import React, { Fragment, useEffect, useRef } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { ActivityIndicator, Progress } from 'antd-mobile'
 
-import { useRouterContext } from 'contexts'
-import { EmptyView, AutoCenterView, VisualBoxView, MIconView } from 'components'
-import loaders from 'loader'
+import { ChapterLoader } from 'loader'
 import createPageModel from 'page-group-loader-model/BasePageModel'
+import { EmptyView, AutoCenterView, VisualBoxView, MIconView } from 'components'
 
-export const ViewModel = createPageModel({
-  ChapterLoader: loaders.ChapterLoader
-})
+const model = createPageModel({
+  ChapterLoader,
+});
 
-export default function ({ self }) {
-  const router = useRouterContext()
+function View({ self, router, params }) {
   const loader = self.ChapterLoader
   const emptyView = EmptyView(loader)
-  const params = router.params
   const localStore = useLocalStore(() => ({
     pop: false,
     percent: 0,
@@ -120,4 +117,12 @@ export default function ({ self }) {
       </Fragment>
     }}
   </Observer>
+}
+
+export default {
+  group: {
+    view: 'BookChapter',
+  },
+  model,
+  View,
 }

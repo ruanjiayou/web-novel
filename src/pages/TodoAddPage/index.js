@@ -1,15 +1,14 @@
 import React, { Fragment } from 'react'
 import { Observer, useLocalStore, } from 'mobx-react-lite'
 import { ActivityIndicator, Toast, List, InputItem, TextareaItem, DatePicker, Picker, Switch } from 'antd-mobile'
-import { useNaviContext, useRouterContext } from 'contexts'
-import services from 'services'
 
-export default function TodoAddPage() {
-  const Navi = useNaviContext()
-  const router = useRouterContext()
-  const params = router.params
+import createPageModel from 'page-group-loader-model/BasePageModel'
+
+const model = createPageModel({})
+
+function View({self, router, params, store, services, Navi}) {
   const todo = router.getStateKey('data')
-  const store = useLocalStore(() => ({
+  const local = useLocalStore(() => ({
     loading: false,
     title: params.id ? todo.title : '',
     content: params.id ? todo.content : '',
@@ -25,69 +24,69 @@ export default function TodoAddPage() {
       <Navi title={params.id ? '修改' : '添加'} router={router} />
       <div className="full-height-auto">
         <List>
-          <InputItem type="text" value={store.title} onChange={value => store.title = value}>标题</InputItem>
-          <Picker extra={'请选择'} value={[store.type]} data={[
+          <InputItem type="text" value={local.title} onChange={value => local.title = value}>标题</InputItem>
+          <Picker extra={'请选择'} value={[local.type]} data={[
             { label: '生活', value: 'life' },
             { label: '工作', value: 'work' },
             { label: '设计', value: 'design' },
-          ]} onChange={value => store.type = value[0]}>
+          ]} onChange={value => local.type = value[0]}>
             <List.Item>类型</List.Item>
           </Picker>
-          <TextareaItem title="详情" value={store.content} autoHeight onChange={value => store.content = value}></TextareaItem>
-          <Picker extra={'请选择'} value={[store.priority]} data={[
+          <TextareaItem title="详情" value={local.content} autoHeight onChange={value => local.content = value}></TextareaItem>
+          <Picker extra={'请选择'} value={[local.priority]} data={[
             { label: '不重要不紧急', value: 1 },
             { label: '重要不紧急', value: 2 },
             { label: '不重要紧急', value: 3 },
             { label: '重要紧急', value: 4 },
           ]} onChange={value => {
-            store.priority = value[0]
+            local.priority = value[0]
           }}>
             <List.Item>优先级</List.Item>
           </Picker>
-          <DatePicker value={store.startedAt} onChange={value => store.startedAt = value}>
+          <DatePicker value={local.startedAt} onChange={value => local.startedAt = value}>
             <List.Item>开始时间</List.Item>
           </DatePicker>
-          <DatePicker value={store.endedAt} onChange={value => store.endedAt = value}>
+          <DatePicker value={local.endedAt} onChange={value => local.endedAt = value}>
             <List.Item>结束时间</List.Item>
           </DatePicker>
           <List.Item>
             <div className="dd-common-alignside">
               <span>是否推迟</span>
-              <Switch checked={store.isDelay} onChange={value => store.isDelay = value} />
+              <Switch checked={local.isDelay} onChange={value => local.isDelay = value} />
             </div>
           </List.Item>
           <List.Item>
             <div className="dd-common-alignside">
               <span>是否完成</span>
-              <Switch checked={store.isFinish} onChange={value => store.isFinish = value} />
+              <Switch checked={local.isFinish} onChange={value => local.isFinish = value} />
             </div>
           </List.Item>
         </List>
       </div>
-      <ActivityIndicator animating={store.loading} />
+      <ActivityIndicator animating={local.loading} />
       <div className="full-width" style={{ height: 40, borderTop: '1px solid #eee' }}>
         <div className="full-width-auto dd-common-centerXY" style={{ backgroundColor: 'white' }}>取消</div>
         <div className="full-width-auto dd-common-centerXY" style={{ backgroundColor: '#30a6fb', color: 'white' }} onClick={async () => {
-          store.loading = true
+          local.loading = true
           try {
             if (params.id) {
-              await services.updateTodo({ params, data: store })
+              await services.updateTodo({ params, data: local })
             } else {
               await services.createTodo({
                 data: {
-                  title: store.title,
-                  content: store.content,
-                  type: store.type,
-                  priority: store.priority,
-                  startedAt: store.startedAt,
-                  endedAt: store.endedAt,
+                  title: local.title,
+                  content: local.content,
+                  type: local.type,
+                  priority: local.priority,
+                  startedAt: local.startedAt,
+                  endedAt: local.endedAt,
                 }
               })
             }
           } catch (err) {
 
           } finally {
-            store.loading = false
+            local.loading = false
             Toast.info('编辑成功', 2, () => {
               router.back()
             })
@@ -96,4 +95,12 @@ export default function TodoAddPage() {
       </div>
     </Fragment>
   )}</Observer>
+}
+
+export default {
+  group: {
+    view: 'TodoAdd',
+  },
+  View,
+  model,
 }

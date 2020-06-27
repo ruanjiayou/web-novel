@@ -3,22 +3,24 @@ import { Observer, useLocalStore } from 'mobx-react-lite'
 import { InputItem, List, Button, Toast, Modal } from 'antd-mobile'
 
 import { MIconView } from 'components'
-import { useRouterContext, useNaviContext, useStoreContext } from 'contexts'
-import services from 'services'
+import UserLoader from 'loader/UserLoader'
+import createPageModel from 'page-group-loader-model/BasePageModel'
 
-async function login(router, store, globalStore) {
-  if (store.account && store.password) {
-    store.isLoading = true
-    let res = await services.login({ data: store })
-    store.isLoading = false
+const model = createPageModel({ UserLoader });
+
+async function login({ router, local, store, services }) {
+  if (local.account && local.password) {
+    local.isLoading = true
+    let res = await services.login({ data: local })
+    local.isLoading = false
     if (!res || !res.data) {
       return Toast.info('请求失败!')
     }
     if (res.code !== 0) {
       return Toast.info(res.message)
     } else {
-      globalStore.app.setAccessToken(res.data.token)
-      globalStore.app.setRefreshToken(res.data.refresh_token)
+      store.app.setAccessToken(res.data.token)
+      store.app.setRefreshToken(res.data.refresh_token)
       router.history.push({
         pathname: '/'
       })
@@ -29,11 +31,11 @@ async function login(router, store, globalStore) {
 }
 
 // eslint-disable-next-line
-async function register(router, store) {
-  if (store.account && store.password) {
-    store.isLoading = true
-    let res = await services.register(store)
-    store.isLoading = false
+async function register({ router, local, services }) {
+  if (local.account && local.password) {
+    local.isLoading = true
+    let res = await services.register(local)
+    local.isLoading = false
     if (!res) {
       return Toast.info('请求失败!')
     }
@@ -47,11 +49,8 @@ async function register(router, store) {
   }
 }
 
-export default function ({ self }) {
-  const globalStore = useStoreContext()
-  let Navi = useNaviContext()
-  let router = useRouterContext()
-  let store = useLocalStore(() => ({
+function View({ self, router, store, services, Navi }) {
+  let local = useLocalStore(() => ({
     isLoading: false,
     isLogin: false,
     isRegister: false,
@@ -70,10 +69,10 @@ export default function ({ self }) {
                   { text: '取消' },
                   {
                     text: '确定', onPress: val => {
-                      globalStore.app.setBaseURL(val)
+                      store.app.setBaseURL(val)
                     }
                   }
-                ], 'default', globalStore.app.baseURL)
+                ], 'default', store.app.baseURL)
               }} />
             </div>
             <List>
@@ -82,8 +81,8 @@ export default function ({ self }) {
                   type="text"
                   placeholder="用户名"
                   style={{ border: '0 none' }}
-                  defaultValue={store.account}
-                  onBlur={value => store.account = value}
+                  defaultValue={local.account}
+                  onBlur={value => local.account = value}
                 >
                   用户名
             </InputItem>
@@ -94,14 +93,13 @@ export default function ({ self }) {
                   placeholder="密码"
                   defaultValue=""
                   style={{ border: '0 none' }}
-                  onBlur={value => store.password = value}
+                  onBlur={value => local.password = value}
                 >
                   密码
             </InputItem>
               </List.Item>
               <List.Item style={{ display: 'flex' }}>
-                <Button loading={store.isLogin} disabled={store.isLogin || store.isRegister} type="primary" onClick={() => login(router, store, globalStore)}>登录</Button>
-                
+                <Button loading={local.isLogin} disabled={local.isLogin || local.isRegister} type="primary" onClick={() => login({router, local, store, services})}>登录</Button>
               </List.Item>
             </List>
           </div>
@@ -109,4 +107,12 @@ export default function ({ self }) {
       </div>
     )}
   </Observer>
+}
+
+export default {
+  group: {
+    view: 'Login',
+  },
+  model,
+  View,
 }

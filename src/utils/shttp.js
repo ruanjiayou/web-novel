@@ -2,7 +2,6 @@ import axios from 'axios'
 import globalStore from '../global-state'
 import Config from '../config'
 import services from '../services'
-import storage from './storage'
 
 const shttp = axios.create({
   baseURL: '',

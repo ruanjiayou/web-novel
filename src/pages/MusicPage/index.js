@@ -1,19 +1,17 @@
 import React from 'react'
 import { useEffectOnce } from 'react-use'
 import { Observer } from 'mobx-react-lite'
-import { useNaviContext, useRouterContext } from 'contexts'
+
+import { SongSheetLoader } from 'loader'
 import { LoaderListView } from 'components'
 import SongItemOnSheet from 'business/ResourceItem/SongItemOnSheet'
-import loaders from 'loader'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 
-export const ViewModel = createPageModel({
-  SongSheetLoader: loaders.SongSheetLoader
+const model = createPageModel({
+  SongSheetLoader,
 })
 
-export default ({ self, children }) => {
-  const Navi = useNaviContext()
-  const router = useRouterContext()
+function View({ self, router, Navi, children }) {
   const loader = self.SongSheetLoader
   useEffectOnce(() => {
     if (loader.isEmpty) {
@@ -38,4 +36,12 @@ export default ({ self, children }) => {
     )}
   </Observer>
 
+}
+
+export default {
+  group: {
+    view: 'Music',
+  },
+  View,
+  model,
 }

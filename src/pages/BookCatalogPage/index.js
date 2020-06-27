@@ -1,21 +1,18 @@
 import React, { Fragment, useEffect } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
-import { useRouterContext } from 'contexts/router'
 
+import { ChapterLoader } from 'loader/index'
 import { MIconView, LoaderListView } from 'components'
 import ChapterItemView from 'business/ChapterItemView'
-import loaders from 'loader/index'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 
-export const ViewModel = createPageModel({
-  ChapterLoader: loaders.ChapterLoader
-})
+const model = createPageModel({
+  ChapterLoader,
+});
 
-export default function ({ self }) {
-  const router = useRouterContext()
+function View({ self, router, params, }) {
   const loader = self.ChapterLoader
   loader.toggleSort()
-  const params = router.params
   const localStore = useLocalStore(() => ({
     loading: false,
     sortASC: true,
@@ -67,4 +64,12 @@ export default function ({ self }) {
       </Fragment>
     }
   }</Observer>
+}
+
+export default {
+  group: {
+    view: 'BookCatalog',
+  },
+  model,
+  View,
 }

@@ -1,19 +1,16 @@
 import React, { Fragment, useEffect } from 'react'
 import { Observer } from 'mobx-react-lite'
 
-import { useNaviContext, useRouterContext } from 'contexts/'
-import loaders from 'loader'
 import { RenderGroups } from 'group'
+import {ResourceListLoader,GroupTreeLoader} from 'loader'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 
-export const ViewModel = createPageModel({
-  ResourceListLoader: loaders.ResourceListLoader,
-  GroupTreeLoader: loaders.GroupTreeLoader
+const model = createPageModel({
+  ResourceListLoader,
+  GroupTreeLoader,
 })
 
-export default function ({ self }) {
-  const Navi = useNaviContext()
-  const router = useRouterContext()
+function View({ self, router, Navi }) {
   const loader = self.GroupTreeLoader
   const booksLoader = self.ResourceListLoader
   useEffect(() => {
@@ -36,4 +33,12 @@ export default function ({ self }) {
       </div>
     </Fragment>}
   </Observer>
+}
+
+export default {
+  group: {
+    view: 'BookSearch',
+  },
+  View,
+  model,
 }

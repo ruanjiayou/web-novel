@@ -1,6 +1,6 @@
 import services from 'services/index'
 import Chapter from 'models/ChapterModel'
-import { createItemLoader } from '../page-group-loader-model/BaseLoaderModel'
+import { createItemLoader } from 'page-group-loader-model/BaseLoaderModel'
 // import caches from 'utils/cache'
 
 // const chapterCache = caches.getCache('chapter')

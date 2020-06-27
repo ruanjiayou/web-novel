@@ -1,7 +1,5 @@
 import React, { useContext as useReactContext, useState } from 'react'
-import * as path2reg from 'path-to-regexp'
 import mem from 'mem'
-import pages from '../../pages'
 import qs from 'qs'
 import _ from 'lodash'
 import store from 'global-state'
@@ -34,16 +32,7 @@ export function views2pathname(views) {
 
 // 上下文context.避免react多级一直传props
 const Context = React.createContext(null)
-const rules = pages.map(page => {
-  let url = page.pathname
-  let res = { reg: path2reg(url), params: [] }
-  path2reg.parse(url).forEach(it => {
-    if (typeof it === 'object') {
-      res.params.push(it.name)
-    }
-  })
-  return res
-})
+
 /**
  * 使用:
  * 创建上下文
@@ -62,29 +51,11 @@ const memGetViewModel = mem(function (view) {
 })
 
 export function useProvider(history) {
-  const [layers, setLayers] = useState([])
   let [state] = useState(() => {
     let route = {
       history,
-      get params() {
-        let res = {}
-        for (let i = 0; i < rules.length; i++) {
-          let rule = rules[i]
-          let m = rule.reg.exec(history.location.pathname)
-          if (m) {
-            rule.params.forEach((name, index) => {
-              res[name] = m[index + 1]
-            })
-            break
-          }
-        }
-        return res
-      },
-      get hideMenu() {
-        return history.location.state && history.location.state.hideMenu ? true : false
-      },
       // 多层覆盖
-      layers: layers,
+      layers: [],
       getPage(view) {
         const ps = history.location.pathname.split('?')[0]
         const p = ps.split('/')[2]
@@ -94,8 +65,10 @@ export function useProvider(history) {
       getStateKey(key) {
         return history.location.state && history.location.state[key]
       },
-      getQuery() {
-        return qs.parse(history.location.search.substr(1), { allowDots: true })
+      getQuery(uri) {
+        const url = history.location.pathname + history.location.search;
+        const [pathname, querystring = ''] = (uri || url).split('?')
+        return qs.parse(querystring, { allowDots: true })
       },
       backToRoot(params, state) {
         const { pathname, search } = getBackToRootLocation(params)
@@ -119,7 +92,7 @@ export function useProvider(history) {
         if (this.layers.length) {
           const views = pathname2views(history.location.pathname + history.location.search)
           views.pop();
-          setLayers(views);
+          this.layers = views;
           route.history.goBack();
         } else {
           route.history.goBack();
@@ -134,7 +107,7 @@ export function useProvider(history) {
         } else {
           const views = pathname2views(history.location.pathname + history.location.search)
           views.push({ view, params });
-          setLayers(views);
+          this.layers = views;
           const pathname = views2pathname(views)
           history.push({
             pathname,
@@ -152,7 +125,7 @@ export function useProvider(history) {
           const views = pathname2views(history.location.pathname + history.location.search)
           views.pop();
           views.push({ view, params });
-          setLayers(views);
+          this.layers = views;
           const pathname = views2pathname(views)
           history.replace({
             pathname: pathname,
@@ -161,9 +134,9 @@ export function useProvider(history) {
         }
 
       },
-      boot() {
-        const views = pathname2views(history.location.pathname + history.location.search)
-        setLayers(views);
+      boot(location) {
+        const views = pathname2views(location.pathname + location.search)
+        this.layers = views;
       }
     }
     return route

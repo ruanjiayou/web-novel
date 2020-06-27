@@ -2,21 +2,16 @@ import React, { Fragment, useEffect } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { ActivityIndicator, Icon, Tag } from 'antd-mobile'
 
-import { useRouterContext, useStoreContext, useNaviContext } from 'contexts'
+import { ChapterLoader } from 'loader'
 import { AutoCenterView } from 'components'
-import loaders from 'loader'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 
-export const ViewModel = createPageModel({
-  ChapterLoader: loaders.ChapterLoader
+const model = createPageModel({
+  ChapterLoader,
 })
 
-export default function ({self}) {
-  const Navi = useNaviContext()
-  const router = useRouterContext()
+function View({ self, router, store, params, Navi }) {
   const loader = self.ResourceLoader
-  const store = useStoreContext()
-  const params = router.params
   let imageHost = store.lineLoader.getHostByType('image')
   const localStore = useLocalStore(() => ({
     loading: false,
@@ -43,4 +38,12 @@ export default function ({self}) {
       </div>
     </div>
   }</Observer>
+}
+
+export default {
+  group: {
+    view: 'Image',
+  },
+  model,
+  View,
 }

@@ -1,6 +1,10 @@
 import React from 'react'
 import { destroy, types } from 'mobx-state-tree'
-import { ViewModel, viewComp } from '../router/view-model'
+import ViewModel from 'models/ViewModel'
+import { views } from 'pages'
+import services from 'services'
+import _ from 'lodash'
+import { useRouterContext, useStoreContext, useNaviContext } from 'contexts'
 
 function generate_group_id() {
   return Math.random() + '';
@@ -22,7 +26,6 @@ const BaseViewModel = types.model({
     columns: types.maybe(types.number),
     showCount: types.maybe(types.number),
   }),
-
 }).actions(self => ({
   removeChild(item) {
     destroy(item);
@@ -36,13 +39,27 @@ const BaseViewModel = types.model({
 })).views(self => {
   return {
     Comp(children, ...props) {
+      const router = useRouterContext();
+      const store = useStoreContext();
+      const Navi = useNaviContext();
       let view = self.view;
       // 这个就是写的页面了，挂载self！！！！
-      let Component = viewComp.get(view);
+      let Component = views.get(view);
+      const query = router.getQuery()
+      const params = query[view] || {};
       if (Component) {
-        return <Component self={self} {...props}>{children}</Component>
+        return <Component
+          self={self}
+          services={services}
+          router={router}
+          store={store}
+          Navi={Navi}
+          params={params}
+          {...props}>
+          {children}
+        </Component>
       } else {
-        return <div></div>
+        return <div>模块正在开发中...</div>
       }
     }
   }

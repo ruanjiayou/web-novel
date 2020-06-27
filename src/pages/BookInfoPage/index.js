@@ -1,26 +1,23 @@
 import React, { Fragment, useEffect } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { ActivityIndicator, Icon, Button } from 'antd-mobile'
-import timespan from 'utils/timespan'
-import { useRouterContext, useStoreContext } from 'contexts'
-import { MIconView, AutoCenterView, VisualBoxView, ImgLine } from 'components'
-import createPageModel from 'page-group-loader-model/BasePageModel'
-import loaders from 'loader'
-import services from 'services'
 
-export const ViewModel = createPageModel({
-  ResourceLoader: loaders.ResourceLoader
+import timespan from 'utils/timespan'
+import { ResourceLoader } from 'loader'
+import { MIconView, AutoCenterView, VisualBoxView, ImgLine, EmptyView } from 'components'
+import createPageModel from 'page-group-loader-model/BasePageModel'
+
+const model = createPageModel({
+  ResourceLoader,
 })
 
-function Component({ self, params }) {
-  const store = useStoreContext()
-  const router = useRouterContext()
+function View({ self, router, store, services, params }) {
   const loader = self.ResourceLoader
   const localStore = useLocalStore(() => ({
     loading: false,
     firstLoading: false,
     shouldFix: false,
-    id: '020366D818484494B6ED963B5EFEB0F0',
+    id: params.id,
   }))
   useEffect(() => {
     if (loader.isEmpty) {
@@ -29,10 +26,14 @@ function Component({ self, params }) {
   })
   return <Observer>{
     () => {
-      if (loader.isEmpty) {
+      if (loader.isLoading) {
         return <AutoCenterView>
           <ActivityIndicator text="加载中..." />
         </AutoCenterView>
+      } else if (loader.isEmpty) {
+        return EmptyView(loader, <div>empty</div>, function () {
+          loader.refresh({ params: { id: localStore.id } })
+        })
       } else {
         return <Fragment>
           <div className="full-height">
@@ -101,10 +102,9 @@ function Component({ self, params }) {
 }
 
 export default {
-  config: {
-    view: 'bookInfo',
-    attrs: {},
+  group: {
+    view: 'BookInfo',
   },
-  ViewModel,
-  Component,
+  model,
+  View,
 }

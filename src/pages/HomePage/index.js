@@ -2,19 +2,20 @@ import React, { useEffect } from 'react'
 import { useEffectOnce } from 'react-use'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { Tabs } from 'antd-mobile'
-import { useStoreContext, useRouterContext } from 'contexts'
+
 import { RenderGroups } from 'group'
 import { channelLoaders } from 'global-state'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 
-const ViewModel = createPageModel({})
+const model = createPageModel({})
 
-function Component({ self }) {
-  const router = useRouterContext()
-  const store = useStoreContext()
+function View({ self, router, store, params }) {
   const channels = store.app.channels
   const loaders = channelLoaders
   useEffectOnce(() => {
+    if (params.tab) {
+      store.app.setTab(params.tab)
+    }
     if (!store.app.tab) {
       store.app.setTab(channels.length ? channels[0].group_id : '')
     }
@@ -36,10 +37,9 @@ function Component({ self }) {
 }
 
 export default {
-  config: {
+  group: {
     view: 'home',
-    attrs: {},
   },
-  Component,
-  ViewModel,
+  model,
+  View,
 }

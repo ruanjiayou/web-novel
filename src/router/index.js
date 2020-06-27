@@ -5,7 +5,7 @@ import { useStoreContext, createRouteProvider, createNaviProvider, createMusicPl
 import { LockerView } from 'components'
 import Layout from '../layout'
 import { useEffectOnce } from 'react-use'
-import AuthLoginPage from 'pages/AuthLoginPage'
+import { views } from 'pages'
 
 // 路由=>组件.没登录跳到登录.登录了匹配root.匹配失败就重定向route.
 
@@ -46,7 +46,8 @@ function App(props) {
     if (query.home && query.home.tab) {
       store.app.setTab(query.home.tab)
     }
-    router.boot()
+    // FIXME: router第一次的表现特殊
+    router.boot(props.location)
   })
   const Page = router.getPage()
   return <RouterContext.Provider value={router}>
@@ -67,13 +68,6 @@ function App(props) {
             <MusicPlayer />
             <Debug />
             <Speaker />
-            {/* <Switch>
-              <Route path="/auth/login" component={AuthLoginPage} />
-              <Route path="/root/*" component={props => (
-                <div>fuck</div>
-              )} />
-              <Route component={NoMatch}></Route>
-            </Switch> */}
             <Layout>
               <Page />
             </Layout>
@@ -87,7 +81,6 @@ function App(props) {
 
 function NoMatch() {
   const store = useStoreContext()
-  console.log('nomatch?')
   if (store.app.isLogin) {
     return <Redirect to={'/root/home'}></Redirect>
   } else {
@@ -97,8 +90,10 @@ function NoMatch() {
 
 export default function Index() {
   return <BrowserRouter basename={'/'}>
-    <Route path={'/root/*'} component={App}></Route>
-    <Route path={'/auth/login'} component={AuthLoginPage} />
-    <Route component={NoMatch} />
+    <Switch>
+      <Route path={'/root/**'} component={App}></Route>
+      <Route path={'/auth/login'} component={views.get('Login')} />
+      <Route component={NoMatch} />
+    </Switch>
   </BrowserRouter>
 }

@@ -1,18 +1,16 @@
 import React, { useEffect } from 'react'
 import { Observer } from 'mobx-react-lite'
 import { ActivityIndicator, Card, WingBlank, Button, WhiteSpace } from 'antd-mobile'
-import { useStoreContext, useRouterContext } from 'contexts'
+
+import { UserLoader } from 'loader'
 import { MIconView, SwitchView, VisualBoxView } from 'components'
-import UserLoader from 'loader/UserLoader'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 
-const ViewModel = createPageModel({
-  UserLoader
+const model = createPageModel({
+  UserLoader,
 })
 
-function Component({self}) {
-  const store = useStoreContext()
-  const router = useRouterContext()
+function View({ self, router, store, }) {
   const userLoader = self.UserLoader
   useEffect(() => {
     if (store.app.isLogin && userLoader.isEmpty) {
@@ -106,10 +104,9 @@ function Component({self}) {
 }
 
 export default {
-  config: {
-    view: 'mine',
-    attrs: {},
+  group: {
+    view: 'Mine',
   },
-  Component,
-  ViewModel,
+  View,
+  model,
 }

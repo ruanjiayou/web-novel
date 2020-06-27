@@ -1,6 +1,6 @@
 import services from 'services/index'
 import SongSheetSongModel from 'models/SongSheetSongModel'
-import { createItemsLoader } from '../page-group-loader-model/BaseLoaderModel'
+import { createItemsLoader } from 'page-group-loader-model/BaseLoaderModel'
 
 export default createItemsLoader(SongSheetSongModel, async (params) => {
   return services.getSongSheet(params)

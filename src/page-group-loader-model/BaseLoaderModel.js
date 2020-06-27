@@ -186,7 +186,7 @@ function createItemLoader(model, fn, customs = {}) {
         if (item) {
           self.item = item
         } else {
-          self.error = { code: 1, message: 'x' }
+          self.error = { code: 1, message: '没有数据' }
         }
       } catch (err) {
         if (Config.isDebug && Config.console) {

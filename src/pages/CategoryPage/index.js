@@ -1,11 +1,11 @@
 import React, { Fragment, useEffect } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
-import { useRouterContext, useStoreContext, useNaviContext } from 'contexts'
-import createPageModel from 'page-group-loader-model/BasePageModel'
-import loaders from 'loader'
 
-export const ViewModel = createPageModel({
-  CategoryLoader: loaders.CategoryLoader
+import { CategoryLoader } from 'loader'
+import createPageModel from 'page-group-loader-model/BasePageModel'
+
+const model = createPageModel({
+  CategoryLoader,
 });
 
 const styles = {
@@ -40,10 +40,7 @@ function SubCate({ self, cates, router }) {
     return null
   }
 }
-export default function ({ self }) {
-  const Navi = useNaviContext()
-  const store = useStoreContext()
-  const router = useRouterContext()
+function View({ self, router, store, Navi }) {
   const loader = self.CategoryLoader
   const localStore = useLocalStore(() => ({
     selectIndex: 0,
@@ -76,4 +73,12 @@ export default function ({ self }) {
       </div>
     </Fragment>
   )}</Observer>
+}
+
+export default {
+  group: {
+    view: 'Category',
+  },
+  View,
+  model,
 }
