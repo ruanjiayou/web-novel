@@ -1,23 +1,26 @@
 import React, { Fragment, useEffect } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 
-import { ChapterLoader } from 'loader/index'
+import { BookCatalogLoader } from 'loader/index'
 import { MIconView, LoaderListView } from 'components'
 import ChapterItemView from 'business/ChapterItemView'
 import createPageModel from 'page-group-loader-model/BasePageModel'
+import { useEffectOnce } from 'react-use'
 
 const model = createPageModel({
-  ChapterLoader,
+  BookCatalogLoader,
 });
 
 function View({ self, router, params, }) {
-  const loader = self.ChapterLoader
-  loader.toggleSort()
+  const loader = self.BookCatalogLoader
   const localStore = useLocalStore(() => ({
     loading: false,
     sortASC: true,
     id: params.id,
   }))
+  useEffectOnce(() => {
+    loader.toggleSort()
+  })
   useEffect(() => {
     if (loader.isEmpty) {
       loader.refresh({ params: { id: localStore.id } })

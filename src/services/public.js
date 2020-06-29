@@ -27,8 +27,8 @@ export default {
   },
   async getBookCatalog({ query, params, data }) {
     let search = ''
-    for (let k in params.query) {
-      search += `&${k}=${params.query[k]}`
+    for (let k in query) {
+      search += `&${k}=${query[k]}`
     }
     const result = await shttp({
       url: `/v1/public/book/${params.id}/catalog?${search}`

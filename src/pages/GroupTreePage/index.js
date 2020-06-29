@@ -36,7 +36,7 @@ function View({ self, router, store, params, Navi }) {
 
 export default {
   group: {
-    view: 'GropTree',
+    view: 'GroupTree',
   },
   View,
   model,

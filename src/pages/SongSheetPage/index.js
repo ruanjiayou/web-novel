@@ -11,14 +11,14 @@ const model = createPageModel({
   SongSheetSongLoader,
 })
 
-function View({ self, router, store, services, Navi }) {
+function View({ self, router, store, params, services, Navi }) {
   const loader = self.SongSheetSongLoader
   const local = useLocalStore(() => ({
     title: router.getStateKey('title')
   }))
   useEffectOnce(() => {
     if (loader.isEmpty) {
-      loader.refresh({ params: { id: router.params.id } })
+      loader.refresh({ params, })
     }
   })
   return <Observer>{() => (

@@ -54,7 +54,7 @@ function View({ self, router, store, Navi }) {
   return <Observer>{() => (
     <Fragment>
       <Navi title="分类" router={router}>
-        <div style={{ flex: 1, textAlign: 'right' }} onClick={() => router.pushView('book-search', {})}>全部作品</div>
+        <div style={{ flex: 1, textAlign: 'right' }} onClick={() => router.pushView('BookSearch', {})}>全部作品</div>
       </Navi>
       <div className="full-height-auto" style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
         <div style={{ borderRight: '1px solid #ccc', minWidth: 80 }}>

@@ -19,8 +19,10 @@ import SongsPage from './SongsPage'
 import ImagePage from './ImagePage'
 import ArticlePage from './ArticlePage'
 import GroupsPage from './GroupsPage'
+import NotFound from './404'
 
 const pages = [
+  NotFound,
   CategoryPage,
   BookInfoPage,
   BookCatalogPage,

@@ -1,4 +1,5 @@
 import BookShelfLoader from './BookShelfLoader'
+import BookCatalogLoader from './BookCatalogLoader'
 import CategoryLoader from './CategoryLoader'
 import ChapterLoader from './ChapterLoader'
 import GroupListLoader from './GroupListLoader'
@@ -13,6 +14,7 @@ import UserLoader from './UserLoader'
 
 export {
   BookShelfLoader,
+  BookCatalogLoader,
   ChapterLoader,
   GroupListLoader,
   GroupTreeLoader,

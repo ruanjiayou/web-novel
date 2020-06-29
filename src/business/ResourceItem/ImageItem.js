@@ -10,7 +10,7 @@ export default function ({ item }) {
     {() => {
       return <Fragment>
         <div className="full-width" style={{ backgroundColor: '#eee', width: '100%', position: 'relative' }} onClick={() => {
-          router.pushView(`image`, { id: item.id })
+          router.pushView(`Image`, { id: item.id })
         }}>
           <div className="full-width-fix" style={{ width: 60, height: 80, margin: '0 5px 5px', position: 'relative', overflow: 'hidden' }}>
             <ImgLine style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', height: '100%' }} src={item.poster ? item.poster : '/poster/nocover.jpg'} alt="" />

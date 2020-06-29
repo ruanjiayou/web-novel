@@ -47,7 +47,8 @@ const Context = React.createContext(null)
  * router.goto(...);
  */
 const memGetViewModel = mem(function (view) {
-  return store.viewModels.get(view)
+  const View = store.viewModels.get(view)
+  return View ? View : store.viewModels.get('404')
 })
 
 export function useProvider(history) {

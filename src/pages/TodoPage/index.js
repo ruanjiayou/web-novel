@@ -30,7 +30,7 @@ function View({ self, router, store, Navi }) {
             type="FaPlus"
             style={{ display: 'inline-block' }}
             onClick={() => {
-              router.pushView('add-todo')
+              router.pushView('TodoAdd')
             }}
           />
         </VisualBoxView>
@@ -40,7 +40,7 @@ function View({ self, router, store, Navi }) {
           loader={todoLoader}
           renderEmpty={(
             <AutoCenterView>
-              <Button type="primary" inline onClick={() => { router.pushView('/auth/login') }}>登录</Button>
+              <Button type="primary" inline onClick={() => { router.pushView('login') }}>登录</Button>
             </AutoCenterView>
           )}
           renderItem={(item, selectionId, index) => (

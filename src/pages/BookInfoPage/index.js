@@ -70,7 +70,7 @@ function View({ self, router, store, services, params }) {
                     try {
                       localStore.firstLoading = true
                       const info = await services.getBookFirstChapter({ params: { id: localStore.id } })
-                      router.pushView(`chapter-info`, null, { bid: localStore.id, id: info.item.id })
+                      router.pushView(`BookChapter`, { bid: localStore.id, id: info.item.id })
                     } catch (err) {
 
                     } finally {
@@ -86,7 +86,7 @@ function View({ self, router, store, services, params }) {
                 <p style={{ marginBottom: 8 }}>内容简介:</p>
                 <div style={{ lineHeight: 1.5, color: '#555', textIndent: 20, borderBottom: '1px solid #ccc', minHeight: 120 }} dangerouslySetInnerHTML={{ __html: loader.item.desc }}>
                 </div>
-                <div className="full-width" style={{ height: 40 }} onClick={() => { router.pushView(`book-catalog`, null, { id: localStore.id }) }}>
+                <div className="full-width" style={{ height: 40 }} onClick={() => { router.pushView(`BookCatalog`, { id: localStore.id }) }}>
                   <span className="full-width-auto" style={{ fontWeight: 'bolder' }}>目录</span>
                   <span className="full-width-fix">连载至 {loader.item.chapters}章 · {timespan(new Date())}更新</span>
                   <MIconView style={{ marginLeft: 10 }} className="full-width-fix" type="FaAngleRight" />

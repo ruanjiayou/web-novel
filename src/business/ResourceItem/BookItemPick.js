@@ -8,7 +8,7 @@ export default function ({ item }) {
   return <Observer>
     {() => {
       return <Fragment>
-        <div className="full-width" style={{ margin: 10 }} onClick={() => { router.pushView(`book-info`, { id: item.id }) }}>
+        <div className="full-width" style={{ margin: 10 }} onClick={() => { router.pushView(`BookInfo`, { id: item.id }) }}>
           <div className="full-width-fix" style={{ width: 60, height: 80, backgroundColor: 'green', marginRight: 20 }}>
             <ImgLine style={{ width: '100%', height: '100%' }} src={item.poster ? item.poster : '/poster/nocover.jpg'} alt="" />
           </div>

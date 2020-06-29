@@ -32,7 +32,7 @@ function View({ self, router, store, Navi }) {
           loader={loader}
           renderEmpty={(
             <AutoCenterView>
-              <Button type="primary" inline onClick={() => { router.pushView('/auth/login') }}>登录</Button>
+              <Button type="primary" inline onClick={() => { router.pushView('login') }}>登录</Button>
             </AutoCenterView>
           )}
           renderItem={(item, sectionId, index) => (
