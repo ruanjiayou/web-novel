@@ -27,6 +27,10 @@ const Store = types.model('store', {
   categoryLoader,
   bookShelfLoader,
   groupListLoader,
+  layers: types.array(types.model('layer', {
+    view: types.string,
+    params: types.frozen({})
+  })),
   // pages & groups 下面是给src/page-group-loader-model/base.js 用的
   viewModels: types.map(ViewModel),
 }).actions(self => ({
@@ -42,6 +46,10 @@ const Store = types.model('store', {
       resourceListLoaders[channel.group_id] = ResourceListLoader.create()
     })
     self.app.setBoot(false)
+  },
+  // 多层覆盖 不放这里启动时无法更新变化
+  setLayers(layers) {
+    self.layers = layers
   },
 })).views(self => ({
   get channelLoaders() {

@@ -3,8 +3,10 @@ import { Observer, useLocalStore } from 'mobx-react-lite'
 import { InputItem, List, Button, Toast, Modal } from 'antd-mobile'
 
 import { MIconView } from 'components'
+import services from 'services'
 import UserLoader from 'loader/UserLoader'
 import createPageModel from 'page-group-loader-model/BasePageModel'
+import { useRouterContext, useStoreContext, useNaviContext } from 'contexts'
 
 const model = createPageModel({ UserLoader });
 
@@ -49,7 +51,11 @@ async function register({ router, local, services }) {
   }
 }
 
-function View({ self, router, store, services, Navi }) {
+function View() {
+  // FIXME: 注意此时没有提供context
+  const router = useRouterContext();
+  const store = useStoreContext();
+  const Navi = useNaviContext();
   let local = useLocalStore(() => ({
     isLoading: false,
     isLogin: false,
@@ -99,7 +105,7 @@ function View({ self, router, store, services, Navi }) {
             </InputItem>
               </List.Item>
               <List.Item style={{ display: 'flex' }}>
-                <Button loading={local.isLogin} disabled={local.isLogin || local.isRegister} type="primary" onClick={() => login({router, local, store, services})}>登录</Button>
+                <Button loading={local.isLogin} disabled={local.isLogin || local.isRegister} type="primary" onClick={() => login({ router, local, store, services })}>登录</Button>
               </List.Item>
             </List>
           </div>
@@ -111,7 +117,8 @@ function View({ self, router, store, services, Navi }) {
 
 export default {
   group: {
-    view: 'Login',
+    view: 'login',
+    attrs: {},
   },
   model,
   View,

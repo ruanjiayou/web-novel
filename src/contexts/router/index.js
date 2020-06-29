@@ -54,8 +54,6 @@ export function useProvider(history) {
   let [state] = useState(() => {
     let route = {
       history,
-      // 多层覆盖
-      layers: [],
       getPage(view) {
         const ps = history.location.pathname.split('?')[0]
         const p = ps.split('/')[2]
@@ -89,10 +87,10 @@ export function useProvider(history) {
         // TODO:
       },
       back() {
-        if (this.layers.length) {
+        if (store.layers.length) {
           const views = pathname2views(history.location.pathname + history.location.search)
           views.pop();
-          this.layers = views;
+          store.setLayers(views);
           route.history.goBack();
         } else {
           route.history.goBack();
@@ -107,7 +105,7 @@ export function useProvider(history) {
         } else {
           const views = pathname2views(history.location.pathname + history.location.search)
           views.push({ view, params });
-          this.layers = views;
+          store.setLayers(views);
           const pathname = views2pathname(views)
           history.push({
             pathname,
@@ -125,7 +123,7 @@ export function useProvider(history) {
           const views = pathname2views(history.location.pathname + history.location.search)
           views.pop();
           views.push({ view, params });
-          this.layers = views;
+          store.setLayers(views);
           const pathname = views2pathname(views)
           history.replace({
             pathname: pathname,
@@ -136,7 +134,7 @@ export function useProvider(history) {
       },
       boot(location) {
         const views = pathname2views(location.pathname + location.search)
-        this.layers = views;
+        store.setLayers(views);
       }
     }
     return route

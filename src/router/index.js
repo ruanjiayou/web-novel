@@ -9,10 +9,10 @@ import { views } from 'pages'
 
 // 路由=>组件.没登录跳到登录.登录了匹配root.匹配失败就重定向route.
 
-function LayerView({ router }) {
+function LayerView({ router, store }) {
   return <Fragment>
     {
-      router.layers.map((layer, i) => {
+      store.layers.map((layer, i) => {
         const Comp = router.getPage(layer.view)
         if (i === 0) {
           return null;
@@ -55,7 +55,7 @@ function App(props) {
       <Observer>{
         () => {
           if (!store.app.isLogin && props.location.pathname.startsWith('/root')) {
-            return <Redirect to={'/auth/login'}></Redirect>
+            return <Redirect to={'/root/auth/login'}></Redirect>
           } else if (store.app.isLogin) {
             if (store.app.config.isLockerOpen && store.app.config.isLockerLocked) {
               return <LockerView />
@@ -71,7 +71,7 @@ function App(props) {
             <Layout>
               <Page />
             </Layout>
-            <LayerView router={router} />
+            <LayerView router={router} store={store} />
           </Fragment>
         }
       }</Observer>
@@ -79,20 +79,30 @@ function App(props) {
   </RouterContext.Provider>
 }
 
+function AuthLogin(props) {
+  const [router, RouterContext] = createRouteProvider(props.history)
+  const [navi, NaviContext] = createNaviProvider()
+  const View = views.get('login');
+  return <RouterContext.Provider value={router}>
+    <NaviContext.Provider value={navi}>
+      <View />
+    </NaviContext.Provider>
+  </RouterContext.Provider>
+}
 function NoMatch() {
   const store = useStoreContext()
   if (store.app.isLogin) {
     return <Redirect to={'/root/home'}></Redirect>
   } else {
-    return <Redirect to={'/auth/login'}></Redirect>
+    return <Redirect to={'/root/auth/login'}></Redirect>
   }
 }
 
 export default function Index() {
   return <BrowserRouter basename={'/'}>
     <Switch>
-      <Route path={'/root/**'} component={App}></Route>
-      <Route path={'/auth/login'} component={views.get('Login')} />
+      <Route path={'/root/auth/login'} component={AuthLogin} />
+      <Route path={'/root/*'} component={App}></Route>
       <Route component={NoMatch} />
     </Switch>
   </BrowserRouter>
