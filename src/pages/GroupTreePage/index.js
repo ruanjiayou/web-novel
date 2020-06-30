@@ -12,7 +12,7 @@ const model = createPageModel({
 })
 
 function View({ self, router, store, params, Navi }) {
-  const loader = self.GroupTreeLoader
+  const loader = GroupTreeLoader.create()
   const subLoader = self.ResourceListLoader
   useEffectOnce(() => {
     if (loader.state === 'init') {

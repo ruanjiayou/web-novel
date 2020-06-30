@@ -29,7 +29,7 @@ export default function Dragger({ children, cb, ...props }) {
             }
             store.offsetLeft = 0
             store.offsetTop = 0
-          })
+          }, { passive: true })
           node.addEventListener('touchmove', e => {
             e.stopPropagation()
             e.preventDefault()

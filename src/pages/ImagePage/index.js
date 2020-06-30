@@ -2,16 +2,16 @@ import React, { Fragment, useEffect } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { ActivityIndicator, Icon, Tag } from 'antd-mobile'
 
-import { ChapterLoader } from 'loader'
+import { ResourceLoader } from 'loader'
 import { AutoCenterView } from 'components'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 
 const model = createPageModel({
-  ChapterLoader,
+  ResourceLoader,
 })
 
 function View({ self, router, store, params, Navi }) {
-  const loader = self.ResourceLoader
+  const loader = ResourceLoader.create()
   let imageHost = store.lineLoader.getHostByType('image')
   const localStore = useLocalStore(() => ({
     loading: false,
@@ -30,7 +30,7 @@ function View({ self, router, store, params, Navi }) {
           <ActivityIndicator text="加载中..." />
         </AutoCenterView> : <Fragment>
             <div style={{ margin: 10 }}>
-              {loader.item.tags.map(tag => <Tag disabled>{tag}</Tag>)}
+              {loader.item.tags.map((tag, index) => <Tag key={index} disabled>{tag}</Tag>)}
             </div>
             <img src={imageHost + loader.item.poster} style={{ maxWidth: '100%' }} />
             {loader.item.images.map((image, index) => (<img key={index} src={imageHost + image} style={{ maxWidth: '100%' }} />))}

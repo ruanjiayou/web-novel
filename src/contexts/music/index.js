@@ -6,6 +6,7 @@ import storage from 'utils/storage'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { MIconView, Dragger, VisualBoxView, SwitchView } from 'components'
 import { useStoreContext, useRouterContext } from '../index'
+import { useEffectOnce } from 'react-use'
 
 // 上下文context.避免react多级一直传props
 const Context = React.createContext(null)
@@ -27,27 +28,30 @@ function MusicPlayer() {
     left: pos ? pos.left : 100,
   }))
   let timer = null
-  events.on(EVENT.PLAY, (id) => {
-    if (id === '') {
-      if (musicStore.status === 'pause') {
-        player.current.play()
+  useEffectOnce(() => {
+    events.on(EVENT.PLAY, (id) => {
+      if (id === '') {
+        if (musicStore.status === 'pause') {
+          player.current.play()
+        }
+        return
       }
-      return
-    }
-    musicStore.url = store.app.baseURL + music.getUrlById(id)
-    musicStore.isLoading = true
-    musicStore.status = 'play'
-    setTimeout(() => {
-      // TODO: 请求中间态处理 不停重试,除非遇到错误
-      if (player.current) {
-        player.current.play()
-      }
-    }, 100)
+      musicStore.url = store.app.baseURL + music.getUrlById(id)
+      musicStore.isLoading = true
+      musicStore.status = 'play'
+      setTimeout(() => {
+        // TODO: 请求中间态处理 不停重试,除非遇到错误
+        if (player.current) {
+          player.current.play()
+        }
+      }, 100)
+    })
+    events.on(EVENT.PAUSE, () => {
+      musicStore.status = 'pause'
+      player.current.pause()
+    })
   })
-  events.on(EVENT.PAUSE, () => {
-    musicStore.status = 'pause'
-    player.current.pause()
-  })
+
   return <Observer>
     {() => (
       <div style={{

@@ -46,7 +46,7 @@ export function AutoView({ self, ...props }) {
   }
   }</Observer>
 }
-export function RenderGroups({ loader, group, ...props }) {
+export function RenderGroups({ loader, group, params, ...props }) {
   const emptyView = renderEmptyView(loader)
   useMount(mount => {
     mount && mount()
