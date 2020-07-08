@@ -14,10 +14,12 @@ import ResourceListLoader from 'loader/ResourceListLoader'
 import storage from './utils/storage'
 import { types } from 'mobx-state-tree'
 import { groups } from 'pages'
+import config from './config'
 
 export const channelLoaders = {}
 export const resourceListLoaders = {}
 const Store = types.model('store', {
+  ts: types.number,
   app: AppModel,
   debug: DebugModel,
   music: MusicPlayerModel,
@@ -51,6 +53,9 @@ const Store = types.model('store', {
   setLayers(layers) {
     self.layers = layers
   },
+  setTs() {
+    self.ts = Date.now()
+  },
 })).views(self => ({
   get channelLoaders() {
     return channelLoaders
@@ -61,6 +66,7 @@ const Store = types.model('store', {
 }))
 
 const store = Store.create({
+  ts: Date.now(),
   app: {
     baseURL: '',
     config: {},
@@ -74,11 +80,16 @@ const store = Store.create({
   viewModels: groups,
 })
 
-window.store = store;
+window.store = store
+storage.prefix = store.app.storagePrefix
 store.app.setAccessToken(storage.getValue(store.app.accessTokenName) || '')
 store.app.setRefreshToken(storage.getValue(store.app.refreshTokenName) || '')
 store.app.initLocker(storage.getValue(store.app.lockerName) || {})
-store.app.setBaseURL('http://localhost:8097')
+store.app.setBaseURL(config.isDebug ? 'http://localhost:8097' : '')
 store.music.setMode(storage.getValue(store.app.musicModeName) || 'circle')
 
-export default store;
+window.onpopstate = function () {
+  store.setTs()
+}
+
+export default store

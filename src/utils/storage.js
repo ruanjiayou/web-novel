@@ -1,4 +1,5 @@
-module.exports = {
+export default {
+  prefix: '',
   setValue(key, value) {
     let type = 'string'
     switch (typeof value) {
@@ -7,10 +8,10 @@ module.exports = {
       case 'object': type = 'json'; break
       default: break
     }
-    window.localStorage.setItem(key, JSON.stringify({ type, value }))
+    window.localStorage.setItem(this.prefix + key, JSON.stringify({ type, value }))
   },
   getValue(key) {
-    let str = window.localStorage.getItem(key)
+    let str = window.localStorage.getItem(this.prefix + key)
     let value = null
     if (str !== null && /^\{.*\}$/.test(str)) {
       try {
@@ -29,6 +30,6 @@ module.exports = {
     return value
   },
   removeKey(key) {
-    window.localStorage.removeItem(key)
+    window.localStorage.removeItem(this.prefix + key)
   }
 }

@@ -46,7 +46,7 @@ const Context = React.createContext(null)
  * let router = useRouterContext();
  * router.goto(...);
  */
-const memGetViewModel = mem(function (view) {
+const memGetViewModel = mem(function (view, group_name) {
   const View = store.viewModels.get(view)
   return View ? View : store.viewModels.get('404')
 })
@@ -55,10 +55,12 @@ export function useProvider(history) {
   let [state] = useState(() => {
     let route = {
       history,
-      getPage(view) {
+      get view() {
         const ps = history.location.pathname.split('?')[0]
-        const p = ps.split('/')[2]
-        const Page = memGetViewModel(view || p)
+        return ps.split('/')[2]
+      },
+      getPage(view) {
+        const Page = memGetViewModel(view || this.view)
         return Page.Comp;
       },
       getStateKey(key) {

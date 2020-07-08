@@ -62,7 +62,7 @@ function View({ self, router, store, }) {
           <Card style={{ minHeight: 40, padding: '5px 0' }}>
             <div className="dd-common-alignside" style={{ margin: '5px 50px' }}>
               <div onClick={() => {
-                router.pushView('BookCategory')
+                router.pushView('BookSearch')
               }}>
                 <MIconView type="FaListAlt" style={{ color: '#ff5b05' }} />小说
               </div>

@@ -41,8 +41,8 @@ function View({ self, router, store, services, params }) {
               <MIconView type="FaChevronLeft" onClick={() => { router.back() }} />
               <div>
                 <VisualBoxView visible={localStore.shouldFix}>
-                  <div>我的机器人女友</div>
-                  <div>松下中二 · 科幻</div>
+                  <div>{loader.item.title}</div>
+                  <div>{loader.item.uname} · {loader.item.type}</div>
                 </VisualBoxView>
               </div>
               <MIconView type="FaEllipsisH" />
@@ -51,7 +51,7 @@ function View({ self, router, store, services, params }) {
               <div style={{ padding: '20px 0 10px 0', textAlign: 'center', backgroundColor: '#bfbaba', color: 'white' }}>
                 <ImgLine src={loader.item.poster} alt="" width={100} height={120} />
                 <div style={{ fontSize: 20, padding: 5 }}>{loader.item.title}</div>
-                <div>{loader.item.uname} · 科幻</div>
+                <div>{loader.item.uname} · {loader.item.type}</div>
               </div>
               <div style={{ padding: '0 20px', borderBottom: '1px solid #ccc', backgroundColor: 'snow' }}>
                 <div className="dd-common-alignside" style={{ height: 50 }}>
@@ -88,7 +88,7 @@ function View({ self, router, store, services, params }) {
                 </div>
                 <div className="full-width" style={{ height: 40 }} onClick={() => { router.pushView(`BookCatalog`, { id: localStore.id }) }}>
                   <span className="full-width-auto" style={{ fontWeight: 'bolder' }}>目录</span>
-                  <span className="full-width-fix">连载至 {loader.item.chapters}章 · {timespan(new Date())}更新</span>
+                  <span className="full-width-fix">连载至 {loader.item.chapters}章 · {timespan(new Date(loader.item.last.createdAt || Date.now()))}更新</span>
                   <MIconView style={{ marginLeft: 10 }} className="full-width-fix" type="FaAngleRight" />
                 </div>
               </div>

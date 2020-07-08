@@ -5,6 +5,7 @@ import { ActivityIndicator, Progress } from 'antd-mobile'
 import { ChapterLoader } from 'loader'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 import { EmptyView, AutoCenterView, VisualBoxView, MIconView } from 'components'
+import { FullHeight, FullHeightAuto, FullHeightFix } from 'components/common'
 
 const model = createPageModel({
   ChapterLoader,
@@ -25,30 +26,28 @@ function View({ self, router, params }) {
   })
   return <Observer>
     {() => {
-      return <Fragment>
+      return <FullHeight>
         {/* 顶部导航动态 */}
-        <VisualBoxView visible={localStore.pop}>
-          <div className="dd-common-alignside" style={{ position: 'absolute', left: 0, top: 0, right: 0, backgroundColor: '#eee', height: 45, padding: '0 15px' }}>
-            <MIconView type="FaChevronLeft" onClick={() => { router.back() }} />
-            <div className="dd-common-alignside">
-              <MIconView type={'FaCloudDownloadAlt'} style={{ margin: '0 10px' }} />
-              <MIconView type={'IoIosHeadset'} style={{ margin: '0 10px' }} />
-              <MIconView type={'FaEllipsisH'} style={{ margin: '0 10px' }} />
-            </div>
+        <FullHeightFix className="dd-common-alignside" style={{ backgroundColor: '#eee', height: 45, padding: '0 15px' }}>
+          <MIconView type="FaChevronLeft" onClick={() => { router.back() }} />
+          {loader.item && loader.item.title}
+          <div className="dd-common-alignside">
+            <MIconView type={'FaCloudDownloadAlt'} style={{ margin: '0 10px' }} />
+            <MIconView type={'IoIosHeadset'} style={{ margin: '0 10px' }} />
+            <MIconView type={'FaEllipsisH'} style={{ margin: '0 10px' }} />
           </div>
-        </VisualBoxView>
+        </FullHeightFix>
         {/* 内部文字 */}
-        <div className="full-height" style={{ padding: '0 15px' }} onClick={() => { localStore.pop = !localStore.pop }}>
+        <FullHeightAuto style={{ padding: '0 15px' }} onClick={() => { localStore.pop = !localStore.pop }}>
           <VisualBoxView visible={loader.isEmpty}>
             <AutoCenterView>
               {loader.isError ? <div>{loader.error.code} {loader.error.message}</div> : <ActivityIndicator text="加载中..." />}
             </AutoCenterView>
           </VisualBoxView>
           {!loader.isEmpty && <Fragment>
-            <div style={{ padding: '8px 0', color: 'grey' }}>{loader.item.title}</div>
-            <div
+            <FullHeightAuto
               ref={container}
-              className="full-height-auto scroll-smooth smooth"
+              className="scroll-smooth smooth"
               style={{ lineHeight: 2, letterSpacing: 2, fontSize: 16, textIndent: 20 }}
               onScroll={() => {
                 // container.current.offsetHeight = container.current.scrollHeight - container.current.scrollTop;
@@ -66,20 +65,19 @@ function View({ self, router, params }) {
               }}
             >
               {loader.isEmpty ? emptyView : <div>{loader.item.content}</div>}
-            </div>
-            <div className="dd-common-alignside" style={{ padding: '8px 0', color: 'grey' }}>
-              <div className="dd-common-alignside">
-                <span style={{ marginRight: 10 }}>2/12</span>
-                <span>{localStore.percent}%</span>
-              </div>
-              <div className="dd-common-alignside">
-                <span style={{ marginRight: 10 }}>03:54</span>
-                <MIconView type="FaBatteryHalf" style={{ display: 'inline-block', marginRight: 10 }} />
-                <span>{loader.isEmpty ? 0 : loader.item.content.length}</span>
-              </div>
-            </div>
+            </FullHeightAuto>
           </Fragment>}
-        </div>
+        </FullHeightAuto>
+        <FullHeightFix className="dd-common-alignside" style={{ padding: 8, color: 'grey' }}>
+          <div className="dd-common-alignside">
+            <span style={{ marginRight: 10 }}>2/12</span>
+            <span>{localStore.percent}%</span>
+          </div>
+          <div className="dd-common-alignside">
+            <MIconView type="FaBatteryHalf" style={{ marginRight: 10 }} />
+            <span>{loader.isEmpty ? 0 : loader.item.content.length}</span>
+          </div>
+        </FullHeightFix>
         {/* 底部动态菜单 */}
         <VisualBoxView visible={localStore.pop}>
           <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, fontSize: 12, backgroundColor: '#eee', padding: '0 10px' }}>
@@ -114,7 +112,7 @@ function View({ self, router, params }) {
             </div>
           </div>
         </VisualBoxView>
-      </Fragment>
+      </FullHeight>
     }}
   </Observer>
 }

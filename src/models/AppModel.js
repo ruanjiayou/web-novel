@@ -19,6 +19,7 @@ const Model = types.model({
   accessTokenName: types.optional(types.string, 'access-token'),
   refreshTokenName: types.optional(types.string, 'refresh-token'),
   lockerName: types.optional(types.string, 'locker'),
+  storagePrefix: types.optional(types.string, 'novel_'),
   baseURL: types.optional(types.string, '/'),
   // 账号相关
   account: types.optional(types.string, ''),

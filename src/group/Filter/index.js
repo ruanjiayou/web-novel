@@ -27,7 +27,7 @@ export default function Filter({ self, loader, ...props }) {
   }, [])
   return <Observer>{() => (
     <div className="full-height">
-      <div onTouchStart={e => {
+      <div className="full-height-fix" onTouchStart={e => {
         e.stopPropagation()
         e.preventDefault()
       }}>{self.children.map(child => (<FilterRow self={child} key={child.id} onQueryChange={refresh} />))}</div>

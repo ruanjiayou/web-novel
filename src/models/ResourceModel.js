@@ -23,6 +23,7 @@ const Model = types.model('resource', {
   last: types.model('last', {
     url: types.optional(types.string, ''),
     title: types.optional(types.string, ''),
+    createdAt: types.optional(types.string, ''),
   }),
   playing: types.optional(types.boolean, false),
 }).actions(self => ({

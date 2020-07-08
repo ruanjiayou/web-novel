@@ -50,7 +50,7 @@ function View({ self, router, store, params = {} }) {
               </div>
               <div className="dd-common-alignside">
                 <span style={{ marginRight: 10 }}>03:54</span>
-                <MIconView type="FaBatteryHalf" style={{ display: 'inline-block', marginRight: 10 }} />
+                <MIconView type="FaBatteryHalf" style={{ marginRight: 10 }} />
                 {/* <span>{loader.isEmpty ? 0 : loader.item.content.length}</span> */}
               </div>
             </div>

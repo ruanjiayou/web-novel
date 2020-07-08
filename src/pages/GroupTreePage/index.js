@@ -1,5 +1,4 @@
-import React, { Fragment } from 'react'
-import { useEffectOnce } from 'react-use'
+import React, { Fragment, useEffect } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 
 import { RenderGroups } from 'group'
@@ -12,23 +11,18 @@ const model = createPageModel({
 })
 
 function View({ self, router, store, params, Navi }) {
-  const loader = GroupTreeLoader.create()
-  const subLoader = self.ResourceListLoader
-  useEffectOnce(() => {
-    if (loader.state === 'init') {
-      loader.refresh({ params: { name: params.name } }).then(() => {
-        const query = loader.getQuery()
-        if (subLoader.state === 'init') {
-          subLoader.refresh({ query })
-        }
-      })
-    }
-  }, [])
+  const local = useLocalStore(()=>({
+    loader: GroupTreeLoader.create()
+  }))
+  const loader = local.loader
+  useEffect(() => {
+    loader.refresh({ params: { name: params.name } })
+  }, [params.name])
   return <Observer>{() => (
     <div className="full-height">
-      <Navi title={params.title} router={router} />
+      <Navi title={loader.isEmpty ? '...' : loader.item.title} router={router} />
       <div className="full-height-auto">
-        <RenderGroups loader={loader} subLoader={subLoader} />
+        <RenderGroups loader={loader} />
       </div>
     </div>)
   }</Observer>
