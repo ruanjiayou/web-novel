@@ -1,17 +1,15 @@
-import config from '../config'
 const localforage = require('localforage')
 
-class Store {
+class Recorder {
   constructor(ns, opt) {
     this.ns = ns
     this.api = localforage.createInstance({ name: ns })
   }
   async getValue(key) {
-    const result = await this.api.getItem(key)
-    return result ? result.data : result
+    return await this.api.getItem(key)
   }
-  async setValue(key, data) {
-    await this.api.setItem(key, { data, ts: Date.now() })
+  async setValue(key, data, option) {
+    await this.api.setItem(key, { data, option: { ts: Date.now(), ...option } })
   }
   async removeKey(key) {
     await this.api.removeItem(key)
@@ -22,22 +20,10 @@ class Store {
   async getAll() {
     const result = []
     await this.api.iterate((value, key, index) => {
-      result.push(value.data)
+      result.push(value)
     })
     return result
   }
 }
 
-class Cache {
-  constructor(opt = {}) {
-    this.caches = {}
-    for (let ns in opt) {
-      this.caches[ns] = new Store(ns, opt[ns])
-    }
-  }
-  getCache(ns) {
-    return this.caches[ns]
-  }
-}
-
-export default new Cache(config.cache)
+export default Recorder

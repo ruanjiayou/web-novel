@@ -45,7 +45,9 @@ function View({ self, router, store, }) {
               <div style={{ color: '#f97a90' }}>
                 <MIconView type="FaStar" />收藏
               </div>
-              <div>
+              <div onClick={() => {
+                router.pushView('Record')
+              }} >
                 <MIconView type="FaHistory" style={{ color: '#14b2f7' }} />历史
               </div>
               <div onClick={() => {
@@ -79,6 +81,11 @@ function View({ self, router, store, }) {
                 router.pushView('Music')
               }} style={{ color: '#bb00ff' }}>
                 <MIconView type="IoMdMusicalNote" />音乐
+              </div>
+              <div onClick={() => {
+                router.pushView('UserShelf')
+              }} style={{ color: '#bb00ff' }}>
+                <MIconView type="MdApps" />书架
               </div>
             </div>
             <div className="dd-common-alignside" style={{ margin: '5px 50px' }}>

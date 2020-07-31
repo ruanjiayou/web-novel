@@ -9,7 +9,6 @@ import SudokuView from './SudokuView'
 import SwitchView from './SwitchView'
 import UserAreaView from './UserAreaView'
 import VisualBoxView from './VisualBoxView'
-import ImgLine from './ImgLine'
 
 export {
   AutoCenterView,
@@ -23,5 +22,4 @@ export {
   SwitchView,
   UserAreaView,
   VisualBoxView,
-  ImgLine,
 }

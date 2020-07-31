@@ -4,14 +4,13 @@ import { Button } from 'antd-mobile'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 
 import { BookShelfLoader } from 'loader'
-import BookItem from 'business/ResourceItem/BookItem'
+import RecordBookItem from 'business/ResourceItem/RecordBookItem'
 import { LoaderListView, AutoCenterView } from 'components'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 
 const model = createPageModel({
   BookShelfLoader,
 })
-
 
 function View({ self, router, store, Navi }) {
   const loader = self.BookShelfLoader
@@ -36,7 +35,7 @@ function View({ self, router, store, Navi }) {
             </AutoCenterView>
           )}
           renderItem={(item, sectionId, index) => (
-            <BookItem
+            <RecordBookItem
               item={item}
               router={router}
               sectionId={sectionId}

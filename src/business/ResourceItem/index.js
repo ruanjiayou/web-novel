@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 import { Observer } from 'mobx-react-lite'
 import BookItem from './BookItem'
 import SongItem from './SongItem'
-import ImageItem from './ImageItem'
+import ImageItem from './ImageItem/'
 import ArticleItem from './ArticleItem'
 
 export default function ({ item, loader }) {

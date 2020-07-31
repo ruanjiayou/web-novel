@@ -1,12 +1,15 @@
-import React, { Fragment, useEffect } from 'react'
+import React, { Fragment, useEffect, useCallback } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
-import { ActivityIndicator, Icon, Button } from 'antd-mobile'
+import { ActivityIndicator, Icon, Button, Toast } from 'antd-mobile'
 
 import timespan from 'utils/timespan'
 import { ResourceLoader } from 'loader'
-import { MIconView, AutoCenterView, VisualBoxView, ImgLine, EmptyView } from 'components'
+import { MIconView, AutoCenterView, VisualBoxView, EmptyView } from 'components'
 import createPageModel from 'page-group-loader-model/BasePageModel'
+import Recorder from 'utils/cache'
+import { useEffectOnce } from 'react-use'
 
+const bookRecorder = new Recorder('book')
 const model = createPageModel({
   ResourceLoader,
 })
@@ -17,8 +20,33 @@ function View({ self, router, store, services, params }) {
     loading: false,
     firstLoading: false,
     shouldFix: false,
+    cached: false,
     id: params.id,
   }))
+  const toogleCache = useCallback(async () => {
+    if (loader.isEmpty) {
+      return Toast.info('加载中...')
+    }
+    if (localStore.cached) {
+      bookRecorder.removeKey(params.id)
+    } else {
+      const info = await services.getBookFirstChapter({ params: { id: localStore.id } })
+      if (info) {
+        bookRecorder.setValue(params.id, loader.item.toJSON(), { id: info.item.id, title: info.item.title })
+      } else {
+        return Toast.info('添加失败')
+      }
+
+    }
+    localStore.cached = !localStore.cached
+  })
+  useEffectOnce(() => {
+    bookRecorder.getValue(params.id).then(result => {
+      if (result) {
+        localStore.cached = true
+      }
+    })
+  })
   useEffect(() => {
     if (loader.isEmpty) {
       loader.refresh({ params: { id: localStore.id } })
@@ -49,7 +77,7 @@ function View({ self, router, store, services, params }) {
             </div>
             <div className="full-height-auto">
               <div style={{ padding: '20px 0 10px 0', textAlign: 'center', backgroundColor: '#bfbaba', color: 'white' }}>
-                <ImgLine src={loader.item.poster} alt="" width={100} height={120} />
+                <img src={loader.item.auto_cover} alt="" width={100} height={120} />
                 <div style={{ fontSize: 20, padding: 5 }}>{loader.item.title}</div>
                 <div>{loader.item.uname} · {loader.item.type}</div>
               </div>
@@ -79,6 +107,7 @@ function View({ self, router, store, services, params }) {
                   }}>
                     立即阅读
                   </Button>
+                  <Button type={localStore.cached ? 'ghost' : 'primary'} size="small" onClick={toogleCache}>{localStore.cached ? '移出书架' : '加入书架'}</Button>
                   <Button type="ghost" size="small" style={{ minWidth: 82 }} onClick={() => {
                     window.open(`${store.app.baseURL}/v1/public/download/book/${localStore.id}`, '_blank')
                   }}>下载</Button>

@@ -45,6 +45,9 @@ function createItemsLoader(model, fn, customs = {}) {
     },
     setData(data) {
       self.items = data || []
+      if (self.items.length !== 0) {
+        self.state = 'ready'
+      }
     },
   })).actions(self => {
     // 自定义方法
@@ -172,7 +175,7 @@ function createItemLoader(model, fn, customs = {}) {
     return nw
   }).actions(self => {
     // 请求
-    const request = flow(function* (option = {}, type = 'refresh') {
+    const request = flow(function* (option = {}, type = 'refresh', cb) {
       const { query, params, data } = option
       if (self.isLoading) {
         return
@@ -182,6 +185,9 @@ function createItemLoader(model, fn, customs = {}) {
       let res = null
       try {
         res = yield fn({ query, params, data }, type)
+        if(typeof cb === 'function') {
+          yield cb(res);
+        }
         let { item } = res
         if (item) {
           self.item = item
@@ -208,8 +214,8 @@ function createItemLoader(model, fn, customs = {}) {
       clear() {
         self.item = null
       },
-      async refresh(option) {
-        return await request(option, 'refresh')
+      async refresh(option, cb) {
+        return await request(option, 'refresh', cb)
       }
     }
   })

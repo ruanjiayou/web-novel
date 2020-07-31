@@ -4,7 +4,7 @@ const TodoModel = types.model('Todo', {
   id: types.string,
   title: types.string,
   content: types.string,
-  priority: types.number,
+  priority: types.maybeNull(types.number),
   isFinish: types.boolean,
   isDelay: types.boolean,
   notify: types.boolean,

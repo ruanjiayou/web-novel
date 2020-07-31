@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react'
 import { Observer } from 'mobx-react-lite'
 import { useRouterContext } from 'contexts'
-import { ImgLine } from 'components'
 
 export default function ({ item }) {
   const router = useRouterContext()
@@ -10,7 +9,7 @@ export default function ({ item }) {
       return <Fragment>
         <div className="full-width" style={{ margin: 10 }} onClick={() => { router.pushView(`BookInfo`, { id: item.id }) }}>
           <div className="full-width-fix" style={{ width: 60, height: 80, backgroundColor: 'green', marginRight: 20 }}>
-            <ImgLine style={{ width: '100%', height: '100%' }} src={item.poster ? item.poster : '/poster/nocover.jpg'} alt="" />
+            <img style={{ width: '100%', height: '100%' }} src={item.auto_cover} alt="" />
           </div>
           <div className="full-width-auto full-height">
             <div className="dd-common-alignside">

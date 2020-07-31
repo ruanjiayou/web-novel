@@ -1,4 +1,5 @@
 import { types } from 'mobx-state-tree'
+import store from 'global-state'
 
 const Model = types.model('resource', {
   id: types.string,
@@ -25,10 +26,20 @@ const Model = types.model('resource', {
     title: types.optional(types.string, ''),
     createdAt: types.optional(types.string, ''),
   }),
+  // 临时非数据库字段
+  last_seen_ts: types.optional(types.number, 0),
+  last_seen_id: types.optional(types.string, ''),
+  last_seen_title: types.optional(types.string, ''),
+  last_progress: types.optional(types.number, 0),
   playing: types.optional(types.boolean, false),
 }).actions(self => ({
   toggleStatus() {
     self.playing = !self.playing
+  }
+})).views(self => ({
+  get auto_cover() {
+    const poster = self.poster ? self.poster : '/poster/nocover.jpg'
+    return store.lineLoader.getHostByType('image') + poster;
   }
 }))
 

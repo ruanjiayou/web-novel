@@ -1,4 +1,5 @@
 import { types } from 'mobx-state-tree'
+import ResourceModel from './ResourceModel'
 
 const GroupModel = types.model('Group', {
   tree_id: types.string,
@@ -9,7 +10,7 @@ const GroupModel = types.model('Group', {
   desc: types.string,
   view: types.string,
   refs: types.array(types.string),
-  data: types.optional(types.frozen([]), []),
+  data: types.array(ResourceModel),
   attrs: types.model({
     hide_title: types.boolean,
     allowChange: types.boolean,

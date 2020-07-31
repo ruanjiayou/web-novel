@@ -19,6 +19,7 @@ import SongsPage from './SongsPage'
 import ImagePage from './ImagePage'
 import ArticlePage from './ArticlePage'
 import GroupsPage from './GroupsPage'
+import RecordPage from './RecordPage'
 import NotFound from './404'
 
 const pages = [
@@ -43,6 +44,7 @@ const pages = [
   ImagePage,
   ArticlePage,
   GroupsPage,
+  RecordPage,
 ]
 
 const groups = {};

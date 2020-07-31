@@ -1,12 +1,14 @@
-import React, { Fragment, useEffect, useRef } from 'react'
+import React, { Fragment, useEffect, useRef, useCallback } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { ActivityIndicator, Progress } from 'antd-mobile'
 
 import { ChapterLoader } from 'loader'
+import Recorder from 'utils/cache'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 import { EmptyView, AutoCenterView, VisualBoxView, MIconView } from 'components'
 import { FullHeight, FullHeightAuto, FullHeightFix } from 'components/common'
 
+const bookRecorder = new Recorder('book')
 const model = createPageModel({
   ChapterLoader,
 });
@@ -21,8 +23,20 @@ function View({ self, router, params }) {
     bid: params.bid,
   }))
   const container = useRef(null)
+  const refresh = useCallback(() => {
+    loader.refresh({ params: { id: localStore.id, bid: localStore.bid } }, async function (res) {
+      console.log(res);
+      const data = await bookRecorder.getValue(localStore.bid)
+      if (data && res && res.item) {
+        data.data.last_seen_ts = Date.now();
+        data.data.last_seen_id = res.item.id;
+        data.data.last_seen_title = res.item.title;
+        bookRecorder.setValue(localStore.bid, data.data)
+      }
+    })
+  })
   useEffect(() => {
-    loader.refresh({ params: { id: localStore.id, bid: localStore.bid } })
+    refresh();
   })
   return <Observer>
     {() => {
@@ -84,14 +98,15 @@ function View({ self, router, params }) {
             <div className="full-width" style={{ height: 40 }}>
               <span className="full-width-fix" style={{ opacity: loader.isEmpty || loader.item.preId === '' ? 0.5 : 1 }} onClick={() => {
                 if (!loader.isEmpty && loader.item.preId) {
-                  loader.refresh({ params: { bid: localStore.bid, id: loader.item.preId } })
+                  localStore.id = loader.item.preId
+                  refresh();
                 }
               }}>上一章</span>
               <Progress percent={localStore.percent} position={'normal'} className="full-width-auto" style={{ margin: '0 10px' }} />
               <span className="full-width-fix" style={{ opacity: loader.isEmpty || loader.item.nextId === '' ? 0.5 : 1 }} onClick={() => {
                 if (!loader.isEmpty && loader.item.nextId) {
                   localStore.id = loader.item.nextId
-                  loader.refresh({ params: { id: localStore.id, bid: localStore.bid } })
+                  refresh();
                   container.current.scrollTop = 1
                   // let id = loader.item.nextId
                   // loader.clear()

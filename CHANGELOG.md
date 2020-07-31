@@ -122,3 +122,7 @@
 - 多层layer
 - router <=> view vm实现
 - view和loader结合
+
+## 2020-07-22
+- book history record
+- 
