@@ -6,8 +6,10 @@ import store from '../../global-state'
 import storage from 'utils/storage'
 import { useRouterContext } from 'contexts'
 import { SongSheetSongLoader } from 'loader'
-import { Observer, useLocalStore, useComputed } from 'mobx-react-lite'
-import { MIconView, Dragger, VisualBoxView, SwitchView } from 'components'
+import { Observer, useLocalStore } from 'mobx-react-lite'
+import { MIconView, Dragger } from 'components'
+import { FullWidth, FullWidthAuto, FullWidthFix, AlignCenterXY } from 'components/common'
+import num2time from 'utils/num2time'
 
 // 上下文context.避免react多级一直传props
 const Context = React.createContext(null)
@@ -53,10 +55,10 @@ function MusicPlayer(props) {
       top: pos ? pos.top : 210,
       left: pos ? pos.left : 100,
       get time() {
-        return state.time || 0
+        return num2time(state.time || 0)
       },
       get duration() {
-        return state.duration || 0
+        return num2time(state.duration || 0)
       },
       get percent() {
         return 100 * state.time / (state.duration || 1)
@@ -106,28 +108,31 @@ function MusicPlayer(props) {
         </div>
 
         <div id="musicOpBox" style={{ position: 'fixed', right: 20, top: -100 }}>
-          <div id="musicOperation" style={{ width: '100%', boxSizing: 'border-box', padding: '5px 10px' }} className="full-width">
-            <MIconView type="MdShuffle" />
-            <MIconView type="MdSkipNext" onClick={() => {
-              if (music.mode === music.MODE.RANDOM) {
-                music.playRandom()
-              } else {
-                music.playNext()
-              }
-              controls.play()
-            }} />
-            <MIconView type={state.isPlaying ? 'IoIosPause' : 'IoIosPlay'} onClick={() => {
-              state.isPlaying ? controls.pause() : controls.play()
-            }} />
-            <div className="full-width-auto" style={{ display: 'flex', flexDirection: 'row' }}>
-              <span className="full-width-fix">{local.time.toFixed(0)}</span>
-              <div style={{ flex: 1, marginTop: 8, paddingLeft: 16, paddingRight: 8 }}>
+          <div id="musicOperation" style={{ width: '100%', boxSizing: 'border-box', padding: '5px 10px' }} >
+            <FullWidth style={{ height: 40 }}>
+              <FullWidthFix>{local.time}</FullWidthFix>
+              <FullWidthAuto>
                 <Slider disabled={music.isLoading} value={local.percent} min={0} max={100} onAfterChange={v => {
                   console.log(v)
                 }} />
-              </div>
-              <span className="full-width-fix">{local.duration.toFixed(0)}</span>
-            </div>
+              </FullWidthAuto>
+              <FullWidthFix>{local.duration}</FullWidthFix>
+            </FullWidth>
+            <AlignCenterXY>
+              <MIconView type="MdShuffle" />
+              <MIconView type="MdSkipNext" onClick={() => {
+                if (music.mode === music.MODE.RANDOM) {
+                  music.playRandom()
+                } else {
+                  music.playNext()
+                }
+                controls.play()
+              }} />
+              <MIconView type={state.isPlaying ? 'IoIosPause' : 'IoIosPlay'} onClick={() => {
+                state.isPlaying ? controls.pause() : controls.play()
+              }} />
+              <MIconView type={"IoIosVolumeLow"} />
+            </AlignCenterXY>
           </div>
         </div>
       </div>

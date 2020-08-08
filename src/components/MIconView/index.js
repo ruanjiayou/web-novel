@@ -5,6 +5,8 @@ import {
   IoIosPause,
   IoIosHeadset,
   IoMdMusicalNote,
+  IoIosVolumeLow,
+  IoIosVolumeOff,
 } from 'react-icons/io'
 import {
   FaHome,
@@ -60,6 +62,8 @@ const IOicons = {
   IoIosPause,
   IoIosHeadset,
   IoMdMusicalNote,
+  IoIosVolumeLow,
+  IoIosVolumeOff,
 }
 const Faicons = {
   FaHome,
