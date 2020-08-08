@@ -42,7 +42,7 @@ export default function Dragger({ children, cb, ...props }) {
             if (cb) {
               cb(store)
             }
-          }, { passive: true })
+          }, { passive: false })
           node.addEventListener('touchend', e => {
             store.started = false
           }, { passive: true })

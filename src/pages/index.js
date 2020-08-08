@@ -14,6 +14,7 @@ import SecurePage from './SecurePage'
 import TodoPage from './TodoPage'
 import TodoAddPage from './TodoAddPage'
 import MusicPage from './MusicPage'
+import MusicPlayerPage from './MusicPlayerPage'
 import SongSheetPage from './SongSheetPage'
 import SongsPage from './SongsPage'
 import ImagePage from './ImagePage'
@@ -39,6 +40,7 @@ const pages = [
   TodoAddPage,
   TodoPage,
   MusicPage,
+  MusicPlayerPage,
   SongSheetPage,
   SongsPage,
   ImagePage,
