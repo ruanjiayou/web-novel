@@ -74,6 +74,17 @@ const Model = types.model('musicPlayer', {
       self.item = getSnapshot(self.playList[0])
       self.state = 'playing'
     },
+    play(item) {
+      if (item) {
+        self.item = getSnapshot(item);
+      }
+      self.state = 'playing'
+      window.audioPlayer.play();
+    },
+    pause() {
+      self.state = 'paused'
+      window.audioPlayer.pause();
+    },
     // 2.1播放当前id的下一个 顺序和循环模式调用(可以处理额外的逻辑)
     // audio end事件里调用
     playNext() {

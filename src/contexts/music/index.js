@@ -66,6 +66,15 @@ function MusicPlayer(props) {
       get currentUrl() {
         return music.currentUrl;
       },
+      get state() {
+        if (music.state === 'paused') {
+          controls.pause();
+        }
+        if (music.state === 'playing') {
+          controls.play();
+        }
+        return music.state;
+      },
       mapping: {
         [music.MODE.ONE]: 'MdRepeatOne',
         [music.MODE.RANDOM]: 'MdShuffle',
@@ -74,6 +83,9 @@ function MusicPlayer(props) {
       }
     };
   }, state);
+  useEffectOnce(() => {
+    window.audioPlayer = controls
+  })
   useEffect(() => {
     // 解决相互引用的问题
     setPlayUrl(music.currentUrl)

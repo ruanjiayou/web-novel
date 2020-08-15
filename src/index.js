@@ -12,6 +12,7 @@ import { AutoCenterView } from 'components'
 import './components/common.css'
 import './group/group.css'
 import 'antd-mobile/dist/antd-mobile.css'
+import './transition.css'
 // https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/src/serviceWorker.js
 import * as serviceWorker from './service-worker'
 import services from 'services'

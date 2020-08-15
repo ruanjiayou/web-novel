@@ -54,6 +54,7 @@
     "react-icons": "^3.7.0",
     "react-router-dom": "^5.0.1",
     "react-scripts": "^3.0.1",
+    "react-transition-group": "^4.4.1",
     "react-use": "^9.7.1",
     "rebound": "^0.1.0",
     "styled-components": "^5.1.1",

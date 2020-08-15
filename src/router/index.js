@@ -6,7 +6,7 @@ import { LockerView } from 'components'
 import Layout from '../layout'
 import { useEffectOnce } from 'react-use'
 import { views } from 'pages'
-
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 // 路由=>组件.没登录跳到登录.登录了匹配root.匹配失败就重定向route.
 
 function LayerView({ router, store }) {

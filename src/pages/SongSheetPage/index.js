@@ -16,7 +16,8 @@ function View({ self, router, store, params, services, Navi }) {
   const loader = self.SongSheetSongLoader
   const music = store.music
   const local = useLocalStore(() => ({
-    title: router.getStateKey('title')
+    title: router.getStateKey('title'),
+    loadedList: false,
   }))
   useEffectOnce(() => {
     if (loader.isEmpty) {
@@ -27,7 +28,9 @@ function View({ self, router, store, params, services, Navi }) {
     <Fragment>
       <Navi title={local.title} router={router} />
       <MIconView style={{ justifyContent: 'start' }} type="FaPlay" after={'播放全部'} onClick={() => {
-        music.loadList(loader.items);
+        if (!local.loadedList) {
+          music.loadList(loader.items);
+        }
         music.playAll();
         router.pushView('MusicPlayer')
       }} />
@@ -35,7 +38,13 @@ function View({ self, router, store, params, services, Navi }) {
         <LoaderListView
           loader={loader}
           renderItem={(item, selectionId, index) => (
-            <SongItem mode={'delete'} order={index} item={item} loader={loader} router={router} remove={async (data) => {
+            <SongItem mode={'delete'} order={index} item={item} loader={loader} router={router} onClick={() => {
+              if (!local.loadedList) {
+                music.loadList(loader.items);
+              }
+              music.play(item)
+              router.pushView('MusicPlayer')
+            }} remove={async (data) => {
               await services.removeSheetSong({ params: { id: data.id, ssid: data.ssid } })
               loader.remove(index)
             }} />

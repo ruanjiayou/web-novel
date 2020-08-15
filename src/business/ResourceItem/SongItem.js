@@ -11,19 +11,9 @@ export default function ({ item, mode = 'normal', order, loader, router, remove,
   return <Observer>
     {() => (
       <Fragment>
-        <div className="dd-common-alignside" style={{ margin: '0 10px', padding: '10px  0 5px 0', borderBottom: '1px solid #eee' }} {...props} >
+        <div className="dd-common-alignside" style={{ margin: '0 10px', padding: '10px  0 5px 0', backgroundColor: item.id === music.currentId ? 'grey' : '', borderBottom: '1px solid #eee' }} {...props} >
           {item.title}
           <div className="dd-common-alignside">
-            <MIconView type={item.id === music.currentPlayId ? 'FaPause' : 'FaPlay'} onClick={() => {
-              if (item.id === music.currentPlayId) {
-                music.pauseMusic()
-              } else {
-                if (loader) {
-                  music.setSheet(loader.items)
-                }
-                music.playMusic(item.id)
-              }
-            }} />
             <VisualBoxView visible={mode === 'delete'}>
               <MIconView type="FaTrashAlt" onClick={() => remove(item)} />
             </VisualBoxView>
