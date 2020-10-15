@@ -22,6 +22,9 @@ export default function ({ item, loader }) {
         case 'article': 
           Item = <ArticleItem item={item} loader={loader} />
           break
+          case 'news': 
+            Item = <ArticleItem item={item} loader={loader} />
+            break
         default:
           break
       }

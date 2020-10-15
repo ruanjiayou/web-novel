@@ -102,6 +102,11 @@ function View({ self, router, store, }) {
               <div>
                 <MIconView type="FaEllipsisV" />其他
               </div>
+              <div onClick={() => {
+                router.pushView('MusicPlayer', { id: '692884EACEB545A295E88B66852499C0' })
+              }} style={{ color: '#bb00ff' }}>
+                <MIconView type="IoMdMusicalNote" />音乐
+              </div>
             </div>
           </Card>
         </WingBlank>
