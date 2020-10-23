@@ -8,7 +8,7 @@ import ArticleItem from './ArticleItem'
 export default function ({ item, loader }) {
   return <Observer>
     {() => {
-      let Item = <div></div>
+      let Item = <ArticleItem item={item} loader={loader} />
       switch (item.source_type) {
         case 'novel':
           Item = <BookItem item={item} loader={loader} />

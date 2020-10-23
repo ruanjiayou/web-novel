@@ -12,12 +12,12 @@ const GroupModel = types.model('Group', {
   refs: types.array(types.string),
   data: types.array(ResourceModel),
   attrs: types.model({
-    hide_title: types.boolean,
-    allowChange: types.boolean,
+    // hide_title: types.maybeNull(types.boolean),
+    // allowChange: types.maybeNull(types.boolean),
     selected: types.maybeNull(types.boolean),
     timeout: types.maybeNull(types.number),
     columns: types.maybeNull(types.number),
-    showCount: types.maybeNull(types.number),
+    // showCount: types.maybeNull(types.number),
   }),
   params: types.frozen(null, {}),
   more: types.model({

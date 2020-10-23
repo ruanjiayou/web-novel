@@ -5,6 +5,7 @@ import { ActivityIndicator, Progress } from 'antd-mobile'
 import { ResourceLoader } from 'loader'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 import { EmptyView, AutoCenterView, VisualBoxView, MIconView } from 'components'
+import { FullWidth, FullHeightFix } from 'components/common'
 
 const model = createPageModel({ ResourceLoader });
 
@@ -22,21 +23,23 @@ function View({ self, router, store, params = {} }) {
   return <Observer>
     {() => {
       return <Fragment>
-        {/* 顶部导航动态 */}
-        <VisualBoxView visible={localStore.pop}>
-          <div className="dd-common-alignside" style={{ position: 'absolute', left: 0, top: 0, right: 0, backgroundColor: '#eee', height: 45, padding: '0 15px' }}>
-            <MIconView type="FaChevronLeft" onClick={() => { router.back() }} />
-          </div>
-        </VisualBoxView>
         {/* 内部文字 */}
-        <div className="full-height" style={{ padding: '0 15px' }} onClick={() => { localStore.pop = !localStore.pop }}>
+        <div className="full-height" style={{ padding: '0 15px' }}>
+
+          <FullWidth className="full-height-fix" style={{ padding: '8px 0', color: 'grey' }}>
+            <FullHeightFix>
+              <MIconView type="FaChevronLeft" onClick={() => { router.back() }} />
+            </FullHeightFix>
+            <FullHeightFix>
+              {loader.item ? loader.item.title : 'loading'}
+            </FullHeightFix>
+          </FullWidth>
           <VisualBoxView visible={loader.isEmpty}>
             <AutoCenterView>
               <ActivityIndicator text="加载中..." />
             </AutoCenterView>
           </VisualBoxView>
           {!loader.isEmpty && <Fragment>
-            <div style={{ padding: '8px 0', color: 'grey' }}>{loader.item.title}</div>
             <div
               className="full-height-auto"
               style={{ width: '100%', fontSize: 14 }}
@@ -45,25 +48,14 @@ function View({ self, router, store, params = {} }) {
             </div>
             <div className="dd-common-alignside" style={{ padding: '8px 0', color: 'grey' }}>
               <div className="dd-common-alignside">
-                <span style={{ marginRight: 10 }}>2/12</span>
                 <span>{localStore.percent}%</span>
               </div>
               <div className="dd-common-alignside">
-                <span style={{ marginRight: 10 }}>03:54</span>
-                <MIconView type="FaBatteryHalf" style={{ marginRight: 10 }} />
-                {/* <span>{loader.isEmpty ? 0 : loader.item.content.length}</span> */}
+                <span style={{ marginRight: 10 }}>{new Date().getHours()}:{new Date().getMinutes()}</span>
               </div>
             </div>
           </Fragment>}
         </div>
-        {/* 底部动态菜单 */}
-        <VisualBoxView visible={localStore.pop}>
-          <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, fontSize: 12, backgroundColor: '#eee', padding: '0 10px' }}>
-            <div className="full-width" style={{ height: 40 }}>
-              <Progress percent={localStore.percent} position={'normal'} className="full-width-auto" style={{ margin: '0 10px' }} />
-            </div>
-          </div>
-        </VisualBoxView>
       </Fragment>
     }}
   </Observer>
