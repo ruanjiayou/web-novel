@@ -46,6 +46,9 @@ function View({ self, router, store, services, params }) {
         localStore.cached = true
       }
     })
+    return (() => {
+      loader.clear()
+    })
   })
   useEffect(() => {
     if (loader.isEmpty) {

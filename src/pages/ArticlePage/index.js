@@ -41,7 +41,7 @@ function View({ self, router, store, params = {} }) {
           </VisualBoxView>
           {!loader.isEmpty && <Fragment>
             <div
-              className="full-height-auto"
+              className="full-height-auto content"
               style={{ width: '100%', fontSize: 14 }}
             >
               {loader.isEmpty ? emptyView : <div dangerouslySetInnerHTML={{ __html: loader.item.content }}>{}</div>}

@@ -9,8 +9,8 @@
       "type": "image/jpg"
     }
   ],
-  "start_url": "/",
-  "scope": "/",
+  "start_url": "/root/",
+  "scope": "/root/",
   "display": "fullscreen",
   "background_color": "#ffffff",
   "theme_color": "black"
