@@ -67,6 +67,13 @@ export default {
     })
     return { item: result.data }
   },
+  async getTodo({ query, params, data }) {
+    const result = await shttp({
+      url: `/v1/user/todo/${params.id}`,
+      method: 'GET',
+    })
+    return { item: result.data }
+  },
   async updateTodo({ query, params, data }) {
     const result = await shttp({
       url: `/v1/user/todo/${params.id}`,

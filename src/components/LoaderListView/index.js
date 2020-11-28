@@ -31,7 +31,11 @@ function renderList({ loader, refresh, loadMore, renderItem, onScroll, className
         renderBodyComponent={() => <MyBody className={className} />}
         initialListSize={Infinity}
         onEndReachedThreshold={10}
-        onEndReached={loadMore ? loadMore : loader.loadMore}
+        onEndReached={() => {
+          if (!loader.isEnded) {
+            loadMore ? loadMore() : loader.loadMore()
+          }
+        }}
         pullToRefresh={<PullToRefresh refreshing={false} onRefresh={refresh ? refresh : loader.refresh} />}
         /**
          * useBodyScroll

@@ -3,84 +3,80 @@ import { Observer, useLocalStore, } from 'mobx-react-lite'
 import { ActivityIndicator, Toast, List, InputItem, TextareaItem, DatePicker, Picker, Switch } from 'antd-mobile'
 
 import createPageModel from 'page-group-loader-model/BasePageModel'
+import { useEffectOnce } from 'react-use'
+import TodoLoader from 'loader/TodoLoader'
+import { FullHeight, FullHeightAuto, FullHeightFix, FullWidth, FullWidthAuto, FullWidthFix } from 'components/common'
 
 const model = createPageModel({})
 
-function View({self, router, params, store, services, Navi}) {
-  const todo = router.getStateKey('data')
+function View({ self, router, params, store, services, Navi }) {
+  const loader = TodoLoader.create({ attrs: {} })
   const local = useLocalStore(() => ({
     loading: false,
-    title: params.id ? todo.title : '',
-    content: params.id ? todo.content : '',
-    type: params.id ? todo.type : 'work',
-    priority: params.id ? todo.priority : '',
-    startedAt: params.id ? todo.startedAt : null,
-    endedAt: params.id ? todo.endedAt : null,
-    isDelay: params.id ? todo.isDelay : false,
-    isFinish: params.id ? todo.isFinish : false,
+    data: {}
   }))
+  useEffectOnce(() => {
+    if (params.id) {
+      loader.refresh({ params })
+    }
+  });
   return <Observer>{() => (
-    <Fragment>
+    <FullHeight>
       <Navi title={params.id ? '修改' : '添加'} router={router} />
-      <div className="full-height-auto">
-        <List>
-          <InputItem type="text" value={local.title} onChange={value => local.title = value}>标题</InputItem>
-          <Picker extra={'请选择'} value={[local.type]} data={[
-            { label: '生活', value: 'life' },
-            { label: '工作', value: 'work' },
-            { label: '设计', value: 'design' },
-          ]} onChange={value => local.type = value[0]}>
-            <List.Item>类型</List.Item>
-          </Picker>
-          <TextareaItem title="详情" value={local.content} autoHeight onChange={value => local.content = value}></TextareaItem>
-          <Picker extra={'请选择'} value={[local.priority]} data={[
-            { label: '不重要不紧急', value: 1 },
-            { label: '重要不紧急', value: 2 },
-            { label: '不重要紧急', value: 3 },
-            { label: '重要紧急', value: 4 },
-          ]} onChange={value => {
-            local.priority = value[0]
-          }}>
-            <List.Item>优先级</List.Item>
-          </Picker>
-          <DatePicker value={local.startedAt} onChange={value => local.startedAt = value}>
-            <List.Item>开始时间</List.Item>
-          </DatePicker>
-          <DatePicker value={local.endedAt} onChange={value => local.endedAt = value}>
-            <List.Item>结束时间</List.Item>
-          </DatePicker>
-          <List.Item>
-            <div className="dd-common-alignside">
-              <span>是否推迟</span>
-              <Switch checked={local.isDelay} onChange={value => local.isDelay = value} />
-            </div>
-          </List.Item>
-          <List.Item>
-            <div className="dd-common-alignside">
-              <span>是否完成</span>
-              <Switch checked={local.isFinish} onChange={value => local.isFinish = value} />
-            </div>
-          </List.Item>
-        </List>
-      </div>
+      <FullHeightAuto>
+        {loader.isEmpty ? <div style={{ height: '100%', display: 'flex', justifyContent: 'center' }}><ActivityIndicator animating={true} text="加载中..." /></div> : (loader.isError ? <span>加载失败</span> : (
+          <List>
+            <InputItem type="text" value={local.data.title} onChange={value => local.data.title = value}>标题</InputItem>
+            <Picker extra={'请选择'} value={[local.data.type]} data={[
+              { label: '生活', value: 'life' },
+              { label: '工作', value: 'work' },
+              { label: '设计', value: 'design' },
+            ]} onChange={value => local.data.type = value[0]}>
+              <List.Item>类型</List.Item>
+            </Picker>
+            <TextareaItem title="详情" value={local.data.content} autoHeight onChange={value => local.data.content = value}></TextareaItem>
+            <Picker extra={'请选择'} value={[local.data.priority]} data={[
+              { label: '不重要不紧急', value: 1 },
+              { label: '重要不紧急', value: 2 },
+              { label: '不重要紧急', value: 3 },
+              { label: '重要紧急', value: 4 },
+            ]} onChange={value => {
+              local.data.priority = value[0]
+            }}>
+              <List.Item>优先级</List.Item>
+            </Picker>
+            <DatePicker value={local.data.startedAt} onChange={value => local.data.startedAt = value}>
+              <List.Item>开始时间</List.Item>
+            </DatePicker>
+            <DatePicker value={local.data.endedAt} onChange={value => local.data.endedAt = value}>
+              <List.Item>结束时间</List.Item>
+            </DatePicker>
+            <List.Item>
+              <div className="dd-common-alignside">
+                <span>是否推迟</span>
+                <Switch checked={local.data.isDelay} onChange={value => local.data.isDelay = value} />
+              </div>
+            </List.Item>
+            <List.Item>
+              <div className="dd-common-alignside">
+                <span>是否完成</span>
+                <Switch checked={local.data.isFinish} onChange={value => local.data.isFinish = value} />
+              </div>
+            </List.Item>
+          </List>
+        ))}
+      </FullHeightAuto>
       <ActivityIndicator animating={local.loading} />
-      <div className="full-width" style={{ height: 40, borderTop: '1px solid #eee' }}>
-        <div className="full-width-auto dd-common-centerXY" style={{ backgroundColor: 'white' }}>取消</div>
-        <div className="full-width-auto dd-common-centerXY" style={{ backgroundColor: '#30a6fb', color: 'white' }} onClick={async () => {
+      <FullWidth style={{ height: 40, borderTop: '1px solid #eee', display: loader.isEmpty ? 'none' : '' }}>
+        <FullWidthAuto style={{ backgroundColor: 'white' }}>取消</FullWidthAuto>
+        <FullWidthAuto style={{ backgroundColor: '#30a6fb', color: 'white' }} onClick={async () => {
           local.loading = true
           try {
             if (params.id) {
-              await services.updateTodo({ params, data: local })
+              await services.updateTodo({ params, data: local.data })
             } else {
               await services.createTodo({
-                data: {
-                  title: local.title,
-                  content: local.content,
-                  type: local.type,
-                  priority: local.priority,
-                  startedAt: local.startedAt,
-                  endedAt: local.endedAt,
-                }
+                data: local.data
               })
             }
           } catch (err) {
@@ -91,15 +87,15 @@ function View({self, router, params, store, services, Navi}) {
               router.back()
             })
           }
-        }}>{params.id ? '修改' : '添加'}</div>
-      </div>
-    </Fragment>
+        }}>{params.id ? '修改' : '添加'}</FullWidthAuto>
+      </FullWidth>
+    </FullHeight>
   )}</Observer>
 }
 
 export default {
   group: {
-    view: 'TodoAdd',
+    view: 'TodoInfo',
   },
   View,
   model,

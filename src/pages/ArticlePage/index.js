@@ -6,6 +6,7 @@ import { ResourceLoader } from 'loader'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 import { EmptyView, AutoCenterView, VisualBoxView, MIconView } from 'components'
 import { FullWidth, FullHeightFix } from 'components/common'
+import { useEffectOnce } from 'react-use'
 
 const model = createPageModel({ ResourceLoader });
 
@@ -17,14 +18,17 @@ function View({ self, router, store, params = {} }) {
     percent: 0,
     id: params.id,
   }))
-  useEffect(() => {
+  useEffectOnce(() => {
     loader.refresh({ params: { id: localStore.id } })
-  })
+    return () => {
+      loader.clear()
+    }
+  });
   return <Observer>
     {() => {
       return <Fragment>
         {/* 内部文字 */}
-        <div className="full-height" style={{ padding: '0 15px' }}>
+        <div className="full-height" >
 
           <FullWidth className="full-height-fix" style={{ padding: '8px 0', color: 'grey' }}>
             <FullHeightFix>
@@ -42,7 +46,9 @@ function View({ self, router, store, params = {} }) {
           {!loader.isEmpty && <Fragment>
             <div
               className="full-height-auto content"
-              style={{ width: '100%', fontSize: 14 }}
+              style={{ width: '100%', fontSize: 14, boxSizing: 'border-box', padding: '0 5px' }} onScroll={function (e) {
+                // console.log(e)
+              }}
             >
               {loader.isEmpty ? emptyView : <div dangerouslySetInnerHTML={{ __html: loader.item.content }}>{}</div>}
             </div>

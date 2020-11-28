@@ -21,9 +21,9 @@ const GroupModel = types.model('Group', {
   }),
   params: types.frozen(null, {}),
   more: types.model({
-    channel_id: types.string,
-    keyword: types.string,
-    type: types.string,
+    channel_id: types.maybeNull(types.string),
+    keyword: types.maybeNull(types.string),
+    type: types.maybeNull(types.string),
   }),
   nth: types.number,
   children: types.optional(types.array(types.late(() => GroupModel)), []),

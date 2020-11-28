@@ -9,9 +9,9 @@ const TodoModel = types.model('Todo', {
   isDelay: types.boolean,
   notify: types.boolean,
   giveup: types.boolean,
-  startedAt: types.Date,
-  endedAt: types.maybeNull(types.Date),
-  deletedAt: types.maybeNull(types.Date),
+  startedAt: types.string,
+  endedAt: types.maybeNull(types.string),
+  deletedAt: types.maybeNull(types.string),
   type: types.string,
 }).views(self => ({
 

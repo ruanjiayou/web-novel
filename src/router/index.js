@@ -46,9 +46,12 @@ function App(props) {
     if (query.home && query.home.tab) {
       store.app.setTab(query.home.tab)
     }
+    window.onpopstate = function () {
+      router.boot(props.location)
+    }
     // FIXME: router第一次的表现特殊
     router.boot(props.location)
-  })
+  });
   const Page = router.getPage()
   return <RouterContext.Provider value={router}>
     <NaviContext.Provider value={navi}>
@@ -71,7 +74,7 @@ function App(props) {
             <Layout>
               <Page />
             </Layout>
-            <LayerView router={router} store={store} />
+            <LayerView router={router} key={router.history.location.pathname} store={store} />
           </Fragment>
         }
       }</Observer>

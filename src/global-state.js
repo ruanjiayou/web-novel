@@ -15,6 +15,7 @@ import storage from './utils/storage'
 import { types } from 'mobx-state-tree'
 import { groups } from 'pages'
 import config from './config'
+import { ws } from './utils/ws'
 
 export const channelLoaders = {}
 export const resourceListLoaders = {}
@@ -81,6 +82,7 @@ const store = Store.create({
 })
 
 window.store = store
+window.ws = ws
 storage.prefix = store.app.storagePrefix
 store.app.setAccessToken(storage.getValue(store.app.accessTokenName) || '')
 store.app.setRefreshToken(storage.getValue(store.app.refreshTokenName) || '')

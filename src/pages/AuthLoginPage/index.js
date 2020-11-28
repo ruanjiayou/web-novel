@@ -66,10 +66,10 @@ function View() {
   return <Observer>
     {() => (
       <div className="full-height">
-        <Navi left={<span style={{ whiteSpace: 'nowrap' }}>返回</span>} title="账号登录" router={router} />
+        {/* <Navi left={<span style={{ whiteSpace: 'nowrap' }}>返回</span>} title="账号登录" router={router} /> */}
         <div className="full-height-auto">
           <div className="dd-common-centerXY" style={{ position: 'relative' }}>
-            <div style={{ position: 'absolute', right: 0, top: 0, padding: 5 }}>
+            {/* <div style={{ position: 'absolute', right: 0, top: 0, padding: 5 }}>
               <MIconView type="FaCog" onClick={() => {
                 Modal.prompt('地址', '', [
                   { text: '取消' },
@@ -80,7 +80,7 @@ function View() {
                   }
                 ], 'default', store.app.baseURL)
               }} />
-            </div>
+            </div> */}
             <List>
               <List.Item>
                 <InputItem
@@ -99,7 +99,12 @@ function View() {
                   placeholder="密码"
                   defaultValue=""
                   style={{ border: '0 none' }}
-                  onBlur={value => local.password = value}
+                  onChange={value => local.password = value}
+                  onKeyUpCapture={e => {
+                    if (e.keyCode === 13) {
+                      login({ router, local, store, services })
+                    }
+                  }}
                 >
                   密码
             </InputItem>

@@ -2,6 +2,8 @@ import React, { Fragment } from 'react'
 import { Observer } from 'mobx-react-lite'
 import { useRouterContext } from 'contexts'
 // import config from 'config'
+import timespan from 'utils/timespan'
+import dd from 'date-fns'
 
 export default function ({ item }) {
   const router = useRouterContext()
@@ -17,7 +19,7 @@ export default function ({ item }) {
               <div style={{ fontSize: '1.2rem' }}>{item.title}</div>
             </div>
             <div style={{ padding: '4px 0', color: 'rgb(146, 145, 145)' }}></div>
-            <div style={{ color: 'rgb(146, 145, 145)' }}>{item.createdAt}</div>
+            <div style={{ color: 'rgb(146, 145, 145)' }}>{dd.format(new Date(item.createdAt), 'YYYY-MM-DD HH:mm:ss')}</div>
           </div>
         </div>
       </Fragment>
