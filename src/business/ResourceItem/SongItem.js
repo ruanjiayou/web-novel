@@ -5,7 +5,7 @@ import { MIconView, VisualBoxView } from 'components'
 import { useStoreContext } from 'contexts/store'
 import services from 'services'
 
-export default function ({ item, mode = 'normal', order, loader, router, remove, ...props }) {
+export default function ({ item, mode = 'add', loader, ...props }) {
   const store = useStoreContext()
   const music = store.music
   return <Observer>
@@ -15,13 +15,22 @@ export default function ({ item, mode = 'normal', order, loader, router, remove,
           {item.title}
           <div className="dd-common-alignside">
             <VisualBoxView visible={mode === 'delete'}>
-              <MIconView type="FaTrashAlt" onClick={() => remove(item)} />
+              <MIconView type="FaTrashAlt" onClick={async (e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                try {
+                  await services.removeFromSheet({ params: { id: loader.item.id }, data: { list: [item.id] } })
+                  loader.item.removeById(item.id)
+                } catch (e) {
+
+                }
+              }} />
             </VisualBoxView>
             <VisualBoxView visible={mode === 'add'}>
               <MIconView type="FaPlus" onClick={async (e) => {
                 e.preventDefault()
                 e.stopPropagation()
-                const result = await services.getSongSheets({})
+                const result = await services.getSheets({ query: { type: 'song' } })
                 const list = result.items.map(it => it.title)
                 ActionSheet.showActionSheetWithOptions({
                   options: [...list, '取消'],
@@ -29,14 +38,13 @@ export default function ({ item, mode = 'normal', order, loader, router, remove,
                   maskClosable: true,
                   cancelButtonIndex: list.length - 1
                 }, index => {
-                  if (index < list.length - 1) {
-                    let ssid = result.items[index].id
-                    let id = item.id
-                    services.addSongToSheet({ params: { ssid, id } })
+                  if (index <= list.length - 1) {
+                    services.addToSheet({ params: result.items[index], data: { list: [{ title: item.title, poster: item.poster, id: item.id, url: item.url }] } })
                   }
                 })
               }} />
             </VisualBoxView>
+
           </div>
         </div>
       </Fragment>

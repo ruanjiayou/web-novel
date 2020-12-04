@@ -1,11 +1,15 @@
-import React, { Fragment, useEffect } from 'react'
+import React, { Fragment, useEffect, useCallback } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { ActivityIndicator, Icon, Tag } from 'antd-mobile'
 
 import { ResourceLoader } from 'loader'
-import { AutoCenterView } from 'components'
+import { AutoCenterView, MIconView } from 'components'
 import createPageModel from 'page-group-loader-model/BasePageModel'
+import { ITag } from './style'
+import services from 'services'
+import { useEffectOnce } from 'react-use'
 
+const { createMark, getMark, destroyMark } = services
 const model = createPageModel({
   ResourceLoader,
 })
@@ -16,11 +20,32 @@ function View({ self, router, store, params, Navi }) {
   const localStore = useLocalStore(() => ({
     loading: false,
     id: params.id,
+    markStatus: 'dislike', // like/error
+    markLoading: false,
+    markError: false,
   }))
+  const MStatus  = function() {
+    if(localStore.markLoading) {
+      return <ActivityIndicator animating={true}/>
+    } else if(localStore.markError) {
+      return <MIconView type="FaSyncAlt"/>
+    } else if(localStore.markStatus === 'dislike') {
+      return <MIconView type="FaHeart" style={{ color: 'white' }} />
+    } else {
+      return <MIconView type="FaHeart" style={{ color: 'red' }} />
+    }
+  }
   useEffect(() => {
     if (loader.isEmpty) {
       loader.refresh({ params: { id: localStore.id } })
     }
+  })
+  useEffectOnce(()=>{
+    getMark({params}).then(result=>{
+      if(result.status === 'success') {
+        localStore.markStatus = 'like'
+      }
+    })
   })
   return <Observer>{
     () => <div className="full-height">
@@ -30,7 +55,26 @@ function View({ self, router, store, params, Navi }) {
           <ActivityIndicator text="加载中..." />
         </AutoCenterView> : <Fragment>
             <div style={{ margin: 10 }}>
-              {loader.item.tags.map((tag, index) => <Tag key={index} disabled>{tag}</Tag>)}
+              {loader.item.tags.map((tag, index) => <ITag key={index} disabled>{tag}</ITag>)}
+            </div>
+            <div style={{ position: 'absolute', right: 20, bottom: 20, height: 24, width: 24 }} onClick={async()=>{
+              if (localStore.markLoading) return
+              localStore.markLoading = true
+              try {
+                if(localStore.markStatus=== 'dislike') {
+                  await createMark({data: params})
+                  localStore.markStatus = 'like'
+                } else {
+                  await destroyMark({ params })
+                  localStore.markStatus = 'dislike'
+                }
+              } catch(e) {
+                localStore.markError = true
+              } finally {
+                localStore.markLoading = false
+              }
+            }}>
+              {MStatus()}
             </div>
             <img src={imageHost + loader.item.poster} style={{ maxWidth: '100%' }} />
             {loader.item.images.map((image, index) => (<img key={index} src={imageHost + image} style={{ maxWidth: '100%' }} />))}

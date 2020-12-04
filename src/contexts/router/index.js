@@ -90,14 +90,7 @@ export function useProvider(history) {
         // TODO:
       },
       back() {
-        if (store.layers.length) {
-          const views = pathname2views(history.location.pathname + history.location.search)
-          views.pop();
-          store.setLayers(views);
-          route.history.goBack();
-        } else {
-          route.history.goBack();
-        }
+        route.history.goBack();
       },
       pushView(view, params = {}, state) {
         if (view.startsWith('/')) {
@@ -108,7 +101,6 @@ export function useProvider(history) {
         } else {
           const views = pathname2views(history.location.pathname + history.location.search)
           views.push({ view, params });
-          store.setLayers(views);
           const pathname = views2pathname(views)
           history.push({
             pathname,
@@ -126,7 +118,6 @@ export function useProvider(history) {
           const views = pathname2views(history.location.pathname + history.location.search)
           views.pop();
           views.push({ view, params });
-          store.setLayers(views);
           const pathname = views2pathname(views)
           history.replace({
             pathname: pathname,
@@ -137,7 +128,17 @@ export function useProvider(history) {
       },
       boot(location) {
         const views = pathname2views(location.pathname + location.search)
-        store.setLayers(views);
+        const len = views.length, l = store.layers.length
+        if (store.layers.length === 0) {
+          return store.setLayers(views);
+        }
+        if (len !== 0 && len === store.layers.length) {
+          store.layersReplace(views[views.length - 1])
+        } else if (len === store.layers.length + 1) {
+          store.layersPush(views[views.length - 1])
+        } else if (len === store.layers.length - 1) {
+          store.layersPop()
+        }
       }
     }
     return route

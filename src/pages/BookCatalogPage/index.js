@@ -18,14 +18,12 @@ function View({ self, router, params, }) {
     sortASC: true,
     id: params.id,
   }))
-  useEffectOnce(() => {
-    loader.toggleSort()
-  })
+  // useEffectOnce(() => {
+  //   loader.toggleSort()
+  // })
   useEffect(() => {
-    if (loader.isEmpty) {
-      loader.refresh({ params: { id: localStore.id } })
-    }
-  })
+    loader.refresh({ params: { id: localStore.id } })
+  }, [localStore.id])
   return <Observer>{
     () => {
       return <Fragment>

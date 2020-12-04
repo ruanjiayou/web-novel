@@ -9,6 +9,7 @@ import SudokuView from './SudokuView'
 import SwitchView from './SwitchView'
 import UserAreaView from './UserAreaView'
 import VisualBoxView from './VisualBoxView'
+import Status from './Status'
 
 export {
   AutoCenterView,
@@ -22,4 +23,5 @@ export {
   SwitchView,
   UserAreaView,
   VisualBoxView,
+  Status,
 }

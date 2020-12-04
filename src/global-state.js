@@ -54,6 +54,16 @@ const Store = types.model('store', {
   setLayers(layers) {
     self.layers = layers
   },
+  layersPop() {
+    self.layers.pop()
+  },
+  layersPush(layer) {
+    self.layers.push(layer)
+  },
+  layersReplace(layer) {
+    self.layers.pop()
+    self.layers.push(layer)
+  },
   setTs() {
     self.ts = Date.now()
   },

@@ -1,18 +1,18 @@
 import React from 'react'
 import { ActivityIndicator } from 'antd-mobile'
 
-const style = { textAlign: 'center' }
+const style = { display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center' }
 
-export default function renderEmpty(loader, renderEmpty, refresh) {
+export default function renderBlank(loader, renderEmpty, refresh) {
   if (loader.isEmpty || loader.isError) {
-    if (loader.state !== 'ready') {
+    if (loader.state === 'pending') {
       return <div style={style}><ActivityIndicator text="加载中..." /></div>
     } else if (loader.error) {
-      return <div style={style}>出错啦!{loader.error.message}<span onClick={() => refresh ? refresh() : loader.refresh()}>点我重试</span></div>
+      return <div style={style}>出错啦!{loader.error.message}<span onClick={() => refresh ? refresh() : loader.refresh()}>重新加载</span></div>
     } else if (renderEmpty) {
       return typeof renderEmpty === 'function' ? renderEmpty(loader) : renderEmpty
     } else {
-      return <div style={style}>没有数据,<span onClick={() => refresh ? refresh() : loader.refresh()}>点我重试</span></div>
+      return <div style={style}>没有数据,<span onClick={() => refresh ? refresh() : loader.refresh()}>重新加载</span></div>
     }
   }
 }

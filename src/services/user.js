@@ -101,4 +101,80 @@ export default {
       method: 'DELETE',
     })
   },
+  async createMark({ query, params, data }) {
+    return shttp({
+      url: '/v1/user/mark',
+      method: 'POST',
+      data: data
+    })
+  },
+  async destroyMark({ query, params, data }) {
+    return shttp({
+      url: `/v1/user/mark/${params.id}`,
+      method: 'DELETE',
+      data: data
+    })
+  },
+  async getMark({ query, params, data }) {
+    return shttp({
+      url: `/v1/user/mark/${params.id}`,
+      method: 'GET',
+      data: data
+    })
+  },
+  async getMarks({ query, params, data }) {
+    const result = await shttp({
+      url: `/v1/user/marks?type=${query.type || ''}`,
+      method: 'GET',
+    })
+    return { items: result.data, isEnded: result.data.length < 10 }
+  },
+  async getBatchMarks({ data }) {
+    return shttp({
+      url: '/v1/user/mark-batch',
+      method: 'POST',
+      data
+    })
+  },
+  async createSheet({ query, params, data }) {
+    return shttp({
+      url: '/v1/user/sheet',
+      method: 'POST',
+      data,
+    })
+  },
+  async getSheets({ query }) {
+    const result = await shttp({
+      url: `/v1/user/sheets?type=${query.type}`,
+      method: 'GET',
+    })
+    return { items: result.data, isEnded: result.data.length < 10 }
+  },
+  async getSheet({ params }) {
+    const result = await shttp({
+      url: `/v1/user/sheet/${params.id}`,
+      method: 'GET',
+    })
+    return { item: result.data }
+  },
+  async destroySheet({ query, params, data }) {
+    return shttp({
+      url: `v1/user/sheet/${params.id}`,
+      method: 'DELETE',
+    })
+  },
+  async addToSheet({ query, params, data }) {
+    return shttp({
+      url: `v1/user/sheet/${params.id}/batch`,
+      method: 'POST',
+      data,
+    })
+  },
+  async removeFromSheet({ query, params, data }) {
+    return shttp({
+      url: `v1/user/sheet/${params.id}/batch`,
+      method: 'DELETE',
+      data,
+    })
+  },
 }

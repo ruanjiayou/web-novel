@@ -1,10 +1,10 @@
 import { types, getSnapshot } from 'mobx-state-tree'
 import events from 'utils/events'
-import SongModel from './SongSheetSongModel'
 import store from '../global-state'
+import MarkedSong from './SongSheetSong'
 
 const Model = types.model('musicPlayer', {
-  item: types.maybe(SongModel),
+  item: types.maybe(MarkedSong),
   // 当前状态
   state: types.optional(types.enumeration(['paused', 'playing', 'loading', 'ended']), 'paused'),
   isLoading: types.optional(types.boolean, false),
@@ -23,7 +23,7 @@ const Model = types.model('musicPlayer', {
     PAUSE: 'music-pause',
   }),
   // 当前播放列表.播放记录和歌单列表
-  playList: types.array(SongModel),
+  playList: types.array(MarkedSong),
 
   currentPlayId: types.optional(types.string, ''),
   single: false,

@@ -8,10 +8,11 @@ import LineLoader from './LineLoader'
 import ResourceListLoader from './ResourceListLoader'
 import ResourceLoader from './ResourceLoader'
 import SongSheetLoader from './SongSheetLoader'
-import SongSheetSongLoader from './SongSheetSongLoader'
 import TodoListLoader from './TodoListLoader'
 import TodoLoader from './TodoLoader'
 import UserLoader from './UserLoader'
+import SheetListLoader from './SheetListLoader'
+import MarkListLoader from './MarkListLoader'
 
 export {
   BookShelfLoader,
@@ -24,8 +25,9 @@ export {
   ResourceListLoader,
   ResourceLoader,
   SongSheetLoader,
-  SongSheetSongLoader,
   TodoListLoader,
   TodoLoader,
   UserLoader,
+  SheetListLoader,
+  MarkListLoader,
 }

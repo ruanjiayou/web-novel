@@ -1,5 +1,6 @@
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom'
 import React, { Fragment, useEffect } from 'react'
+import { toJS } from 'mobx'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { useStoreContext, createRouteProvider, createNaviProvider, createMusicPlayerProvider, createDebugProvider, createSpeakerProvider } from 'contexts'
 import { LockerView } from 'components'
@@ -50,8 +51,11 @@ function App(props) {
       router.boot(props.location)
     }
     // FIXME: router第一次的表现特殊
-    router.boot(props.location)
+    // router.boot(props.location)
   });
+  useEffect(() => {
+    router.boot(router.history.location)
+  }, [router.history.location.pathname])
   const Page = router.getPage()
   return <RouterContext.Provider value={router}>
     <NaviContext.Provider value={navi}>
@@ -74,7 +78,22 @@ function App(props) {
             <Layout>
               <Page />
             </Layout>
-            <LayerView router={router} key={router.history.location.pathname} store={store} />
+            {/* <LayerView router={router} key={router.history.location.pathname} store={store} /> */}
+            {
+              store.layers.map((layer, i) => {
+                const Comp = router.getPage(layer.view)
+                if (i === 0) {
+                  return null;
+                }
+                if (Comp) {
+                  return <div key={i} style={{ width: '100%', height: '100%', position: 'absolute', zIndex: i + 99, backgroundColor: '#ffffff' }}>
+                    <Comp params={layer.params} />
+                  </div>
+                } else {
+                  return <div style={{ width: '100%', height: '100%', position: 'absolute', zIndex: i + 99, backgroundColor: '#ffffff' }} key={i}>empty: {layer.view} params:{JSON.stringify(layer.params)}</div>
+                }
+              })
+            }
           </Fragment>
         }
       }</Observer>

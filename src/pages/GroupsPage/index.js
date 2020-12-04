@@ -4,6 +4,7 @@ import { useEffectOnce } from 'react-use'
 
 import { GroupListLoader } from 'loader'
 import { AutoCenterView, EmptyView } from 'components'
+import { FullHeight, FullHeightAuto, FullHeightFix } from 'components/common'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 import { Cell, Icon } from './style'
 
@@ -17,25 +18,28 @@ function View({ self, router, }) {
       self.GroupListLoader.refresh()
     }
   })
-  return <Observer>{() => (
-    <div className="full-height">
+  return <Observer>{() => {
+    const blank = EmptyView(self.GroupListLoader)
+    if (blank) {
+      return blank
+    }
+    return <FullHeight>
       <div style={{ padding: 10, backgroundColor: 'gainsboro', marginBottom: 10 }}>所有频道</div>
-      <div className="full-height-auto">{
-        self.GroupListLoader.isEmpty ? <AutoCenterView>{EmptyView(self.GroupListLoader)}</AutoCenterView> : (
-          self.GroupListLoader.items.map(group => (
-            <Cell
-              key={group.id}
-              onClick={() => {
-                router.pushView(`GroupTree`, { name: group.name })
-              }}>
-              <Icon />
-              <div>{group.title}</div>
-            </Cell>
-          ))
-        )
-      }</div>
-    </div>
-  )}</Observer>
+      <FullHeightAuto>
+        {self.GroupListLoader.items.map(group => (
+          <Cell
+            key={group.id}
+            onClick={() => {
+              router.pushView('GroupTree', { name: group.name })
+            }}>
+            <Icon />
+            <div>{group.title}</div>
+          </Cell>
+        ))
+        }
+      </FullHeightAuto>
+    </FullHeight>
+  }}</Observer>
 }
 
 export default {

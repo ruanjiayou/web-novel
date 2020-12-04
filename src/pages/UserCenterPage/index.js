@@ -42,7 +42,9 @@ function View({ self, router, store, }) {
         <WingBlank>
           <Card style={{ minHeight: 40, paddingBottom: 0 }}>
             <div className="dd-common-alignside" style={{ padding: '10px 40px', }}>
-              <div style={{ color: '#f97a90' }}>
+              <div style={{ color: '#f97a90' }} onClick={() => {
+                router.pushView('Marked')
+              }}>
                 <MIconView type="FaStar" />收藏
               </div>
               <div onClick={() => {
@@ -80,7 +82,7 @@ function View({ self, router, store, }) {
               <div onClick={() => {
                 router.pushView('Music')
               }} style={{ color: '#bb00ff' }}>
-                <MIconView type="IoMdMusicalNote" />音乐
+                <MIconView type="IoMdMusicalNote" />歌单
               </div>
               <div onClick={() => {
                 router.pushView('UserShelf')

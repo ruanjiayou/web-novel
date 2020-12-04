@@ -5,7 +5,7 @@ import events from 'utils/events'
 import store from '../../global-state'
 import storage from 'utils/storage'
 import { useRouterContext } from 'contexts'
-import { SongSheetSongLoader } from 'loader'
+import { ResourceLoader } from 'loader'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { MIconView, Dragger } from 'components'
 import { FullWidth, FullWidthAuto, FullWidthFix, AlignCenterXY } from 'components/common'
@@ -51,7 +51,7 @@ function MusicPlayer(props) {
   const local = useLocalStore((state) => {
     const pos = storage.getValue('music');
     return {
-      loader: SongSheetSongLoader.create(),
+      loader: ResourceLoader.create(),
       top: pos ? pos.top : 210,
       left: pos ? pos.left : 100,
       get time() {

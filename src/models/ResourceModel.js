@@ -32,6 +32,8 @@ const Model = types.model('resource', {
   last_seen_title: types.optional(types.string, ''),
   last_progress: types.optional(types.number, 0),
   playing: types.optional(types.boolean, false),
+  // 
+  marked: types.optional(types.boolean, false),
 }).actions(self => ({
   toggleStatus() {
     self.playing = !self.playing
