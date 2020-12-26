@@ -59,7 +59,7 @@ export function useProvider(history) {
         const ps = history.location.pathname.split('?')[0]
         return ps.split('/')[2]
       },
-      userEvent: false,
+      userEvent: true,
       getPage(view = '') {
         view = view || this.view
         if (view) {

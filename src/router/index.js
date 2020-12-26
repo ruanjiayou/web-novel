@@ -67,26 +67,23 @@ function App(props) {
                 const Comp = router.getPage(layer.view)
                 return <CSSTransition
                   key={i}
-                  timeout={{ enter: 300, exit: !router.userEvent ? 0 : 300 }}
+                  timeout={{ enter: !router.userEvent ? 0 : 300, exit: !router.userEvent ? 0 : 300 }}
                   unmountOnExit={!router.userEvent}
-                  className={router.userEvent ? 'layer-item' : 'hidden'}
+                  className={router.userEvent ? 'layer-item' : local.action === 'enter' ? 'exit-now' : 'enter-now'}
                   onEnter={(node) => {
                     local.action = 'enter'
                     router.userEvent = true
-                    console.log('enter')
                   }}
                   onExit={() => {
+                    router.userEvent = true
                     local.action = 'exit'
                   }}
 
-                  
                   onEntered={() => {
                     router.userEvent = false
-                    console.log('entered')
                   }}
                   onExited={() => {
-                    router.userEvent = true
-                    console.log('exited')
+                    router.userEvent = false
                   }}
                 >
                   <div key={i} className="page" style={{ width: '100%', height: '100%', position: 'absolute', zIndex: i + 99, backgroundColor: '#ffffff' }}>
