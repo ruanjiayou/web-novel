@@ -6,7 +6,7 @@ import { SongSheetLoader } from 'loader'
 import { LoaderListView, MIconView } from 'components'
 import SongItem from 'business/ResourceItem/SongItem'
 import createPageModel from 'page-group-loader-model/BasePageModel'
-import store from '../../global-state'
+import store from '../../store'
 import renderBlank from 'components/EmptyView';
 
 const model = createPageModel({

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import globalStore from '../global-state'
+import globalStore from '../store'
 import Config from '../config'
 import services from '../services'
 

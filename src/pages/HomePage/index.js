@@ -6,7 +6,7 @@ import { Tabs } from 'antd-mobile'
 import { RenderGroups } from 'group'
 import { MIconView } from 'components'
 import { FullHeight, FullWidth, FullHeightAuto, } from 'components/common'
-import { channelLoaders } from 'global-state'
+import { channelLoaders } from 'store'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 
 const model = createPageModel({})
@@ -27,9 +27,9 @@ function View({ self, router, store, params }) {
       <FullHeight>
         <FullWidth style={{ height: 50 }}>
           <img src="/logo.jpg" alt="" style={{ margin: '0 10px', borderRadius: '50%' }} />
-          <FullHeightAuto style={{ height: 25, backgroundColor: '#ccc', borderRadius: 5, }} />
-          <div style={{ color: '#f97a90', margin: '0 10px' }} onClick={() => { router.pushView('Marked') }}>
-            <MIconView type="FaStar" />
+          <FullHeightAuto style={{ height: 30, backgroundColor: '#ccc', borderRadius: 5, }} onClick={() => { router.pushView('Search') }} />
+          <div style={{ color: '#f97a90', margin: '0 5px' }} onClick={() => { router.pushView('Marked') }}>
+            <MIconView type="FaStar" size={'md'} />
           </div>
         </FullWidth>
         <Tabs

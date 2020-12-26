@@ -28,7 +28,9 @@ const GroupModel = types.model('Group', {
   nth: types.number,
   children: types.optional(types.array(types.late(() => GroupModel)), []),
 }).views(self => ({
-  
+  get selectedArr() {
+    return self.children.filter(child => child.attrs.selected).map(child => child.title)
+  },
 })).actions(self => ({
   selected(status) {
     if (self.attrs.selected !== status) {

@@ -3,7 +3,7 @@ import React, { Fragment, useEffect } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { useStoreContext, createRouteProvider, createNaviProvider, createMusicPlayerProvider, createDebugProvider, createSpeakerProvider } from 'contexts'
 import { LockerView, Splash } from 'components'
-import Layout from '../layout'
+import Layout from './layout'
 import { useEffectOnce } from 'react-use'
 import { views } from 'pages'
 import { CSSTransition, TransitionGroup } from 'react-transition-group';

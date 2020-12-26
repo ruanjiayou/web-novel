@@ -1,6 +1,6 @@
 import { types, getSnapshot } from 'mobx-state-tree'
 import events from 'utils/events'
-import store from '../global-state'
+import store from '../store'
 import MarkedSong from './SongSheetSong'
 
 const Model = types.model('musicPlayer', {

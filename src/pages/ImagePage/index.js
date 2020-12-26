@@ -76,7 +76,7 @@ function View({ self, router, store, params, Navi }) {
             }}>
               {MStatus()}
             </div>
-            <img src={imageHost + loader.item.poster} style={{ maxWidth: '100%' }} />
+            {/* <img src={imageHost + loader.item.poster} style={{ maxWidth: '100%' }} /> */}
             {loader.item.images.map((image, index) => (<img key={index} src={imageHost + image} style={{ maxWidth: '100%' }} />))}
           </Fragment>}
       </div>

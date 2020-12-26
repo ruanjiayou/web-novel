@@ -2,7 +2,7 @@ import React, { useContext as useReactContext, useState } from 'react'
 import mem from 'mem'
 import qs from 'qs'
 import _ from 'lodash'
-import store from 'global-state'
+import store from 'store'
 
 export function pathname2views(url) {
   const [pathname, querystring = ''] = url.split('?')

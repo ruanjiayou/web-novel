@@ -23,6 +23,8 @@ import GroupsPage from './GroupsPage'
 import RecordPage from './RecordPage'
 import NotFound from './404'
 import Marked from './MarkedPage'
+import Search from './SearchPage'
+import SearchResult from './SearchResultPage'
 
 const pages = [
   NotFound,
@@ -49,6 +51,8 @@ const pages = [
   GroupsPage,
   RecordPage,
   Marked,
+  Search,
+  SearchResult,
 ]
 
 const groups = {};

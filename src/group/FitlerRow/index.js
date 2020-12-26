@@ -5,11 +5,6 @@ import { Container } from './style'
 
 export default function FilterRow({ self, onQueryChange }) {
   function selectTag(id) {
-    if (self.id === id) {
-      self.selected(true)
-    } else {
-      self.selected(false)
-    }
     self.children.forEach(child => {
       if (child.id === id) {
         child.selected(true)

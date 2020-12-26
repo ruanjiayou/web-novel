@@ -1,7 +1,7 @@
 import services from '../services/index'
 import ResourceModel from '../models/ResourceModel'
 import { createItemsLoader } from 'page-group-loader-model/BaseLoaderModel'
-import store from 'global-state'
+import store from 'store'
 
 export default createItemsLoader(ResourceModel, async (params) => {
   const list = await services.getResourceList(params)

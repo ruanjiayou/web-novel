@@ -1,6 +1,6 @@
 import React, { useContext as useReactContext } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
-import store from '../../global-state'
+import store from '../../store'
 import storage from 'utils/storage'
 import { MIconView, Dragger, VisualBoxView } from 'components'
 

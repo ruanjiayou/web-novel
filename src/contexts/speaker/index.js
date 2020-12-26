@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { Slider } from 'antd-mobile'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { MIconView, Dragger, VisualBoxView } from 'components'
-import store from '../../global-state'
+import store from '../../store'
 
 // 上下文context.避免react多级一直传props
 const Context = React.createContext(null)

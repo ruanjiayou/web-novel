@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
-import globalStore from 'global-state'
+import globalStore from 'store'
 import MIconView from '../MIconView'
 import Sudoku from '../SudokuView'
 

@@ -1,5 +1,5 @@
 import { types } from 'mobx-state-tree'
-import store from 'global-state'
+import store from 'store'
 
 const Model = types.model('resource', {
   id: types.string,

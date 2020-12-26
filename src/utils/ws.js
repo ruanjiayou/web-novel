@@ -1,12 +1,12 @@
 import io from 'socket.io-client';
 
-export const ws = io(process.env.NODE_ENV !== 'production' ? "http://localhost:8097/" : '/', {
+export const ws = io(process.env.NODE_ENV !== 'production' ? 'http://localhost:8097/' : '/', {
   path: '/ws'
 });
 
 ws.on('connect', (socket) => {
   console.log('connected');
-  if (window.Notification && window.Notification.permission !== "granted") {
+  if (window.Notification && window.Notification.permission !== 'granted') {
     window.Notification.requestPermission(function (status) {
       if (window.Notification.permission !== status) {
         window.Notification.permission = status;

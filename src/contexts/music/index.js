@@ -2,7 +2,7 @@ import React, { useContext, useRef, useEffect, useCallback, useState } from 'rea
 import { useAudio, useEffectOnce } from 'react-use'
 import { Popover, Slider } from 'antd-mobile'
 import events from 'utils/events'
-import store from '../../global-state'
+import store from '../../store'
 import storage from 'utils/storage'
 import { useRouterContext } from 'contexts'
 import { ResourceLoader } from 'loader'
