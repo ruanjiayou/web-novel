@@ -10,6 +10,7 @@ import SwitchView from './SwitchView'
 import UserAreaView from './UserAreaView'
 import VisualBoxView from './VisualBoxView'
 import Status from './Status'
+import Splash from './Splash'
 
 export {
   AutoCenterView,
@@ -24,4 +25,5 @@ export {
   UserAreaView,
   VisualBoxView,
   Status,
+  Splash,
 }

@@ -6,6 +6,7 @@ const MarkModel = types.model('MarkModel', {
   poster: types.string,
   title: types.string,
   type: types.string,
+  createdAt: types.string,
 }).views(self => ({
   get auto_cover() {
     const poster = self.poster ? self.poster : '/poster/nocover.jpg'

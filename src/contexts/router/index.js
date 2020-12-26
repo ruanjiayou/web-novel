@@ -59,9 +59,15 @@ export function useProvider(history) {
         const ps = history.location.pathname.split('?')[0]
         return ps.split('/')[2]
       },
-      getPage(view) {
-        const Page = memGetViewModel(view || this.view)
-        return Page.Comp;
+      userEvent: false,
+      getPage(view = '') {
+        view = view || this.view
+        if (view) {
+          const Page = memGetViewModel(view)
+          return Page.Comp;
+        } else {
+          return null
+        }
       },
       getStateKey(key) {
         return history.location.state && history.location.state[key]
@@ -72,6 +78,7 @@ export function useProvider(history) {
         return qs.parse(querystring, { allowDots: true })
       },
       backToRoot(params, state) {
+        this.userEvent = true
         const { pathname, search } = getBackToRootLocation(params)
         history.push({
           pathname,
@@ -90,9 +97,11 @@ export function useProvider(history) {
         // TODO:
       },
       back() {
+        this.userEvent = true
         route.history.goBack();
       },
       pushView(view, params = {}, state) {
+        this.userEvent = true
         if (view.startsWith('/')) {
           history.push({
             pathname: view,
@@ -109,6 +118,7 @@ export function useProvider(history) {
         }
       },
       replaceView(view, params = {}, state) {
+        this.userEvent = true
         if (view.startsWith('/')) {
           history.replace({
             pathname: view,
@@ -126,20 +136,11 @@ export function useProvider(history) {
         }
 
       },
-      boot(location) {
+      bootstrap(location) {
         const views = pathname2views(location.pathname + location.search)
-        const len = views.length, l = store.layers.length
-        if (store.layers.length === 0) {
-          return store.setLayers(views);
-        }
-        if (len !== 0 && len === store.layers.length) {
-          store.layersReplace(views[views.length - 1])
-        } else if (len === store.layers.length + 1) {
-          store.layersPush(views[views.length - 1])
-        } else if (len === store.layers.length - 1) {
-          store.layersPop()
-        }
-      }
+        views.shift()
+        return views;
+      },
     }
     return route
   })

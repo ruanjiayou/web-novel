@@ -27,6 +27,7 @@ function createItemsLoader(model, fn, customs = {}) {
       code: types.union(types.number, types.string),
       message: types.maybe(types.string)
     })),
+    option: types.frozen({ query: {} })
   }).views(self => ({
     // 默认属性
     get isEmpty() {
@@ -49,6 +50,10 @@ function createItemsLoader(model, fn, customs = {}) {
         self.state = 'ready'
       }
     },
+  })).actions(self => ({
+    setOption(option = {}) {
+      self.option = option
+    },
   })).actions(self => {
     // 自定义方法
     const nw = {}
@@ -63,13 +68,15 @@ function createItemsLoader(model, fn, customs = {}) {
       if (self.isLoading) {
         return
       }
+      for (let k in self.option.query) {
+        if (!query[k]) {
+          query[k] = self.option.query[k]
+        }
+      }
       self.state = 'pending'
       self.error = null
-      if (type === 'more') {
-        query.page = ++self.page
-      } else {
-        self.page = 1
-      }
+      self.page = type === 'more' ? self.page + 1 : 1
+      query.page = self.page
       let res = null
       try {
         res = yield fn({ query, params, data }, type)
@@ -185,7 +192,7 @@ function createItemLoader(model, fn, customs = {}) {
       let res = null
       try {
         res = yield fn({ query, params, data }, type)
-        if(typeof cb === 'function') {
+        if (typeof cb === 'function') {
           yield cb(res);
         }
         let { item } = res

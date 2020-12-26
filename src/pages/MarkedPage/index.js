@@ -27,7 +27,11 @@ function View({ self }) {
   const Navi = useNaviContext()
   const router = useRouterContext()
   useEffectOnce(() => {
-    self.images.refresh({ query: { type: 'image' } })
+    self.images.setOption({ type: 'image' })
+    self.articles.setOption({ type: 'article' })
+    self.novels.setOption({ type: 'novel' })
+    self.songs.setOption({ type: 'music' })
+    self.images.refresh({})
   })
   const onChange = useCallback((tab, index) => {
     if (index == 1 && self.articles.isEmpty) {

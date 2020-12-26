@@ -124,7 +124,7 @@ export default {
   },
   async getMarks({ query, params, data }) {
     const result = await shttp({
-      url: `/v1/user/marks?type=${query.type || ''}`,
+      url: `/v1/user/marks?type=${query.type || ''}&page=${query.page}`,
       method: 'GET',
     })
     return { items: result.data, isEnded: result.data.length < 10 }

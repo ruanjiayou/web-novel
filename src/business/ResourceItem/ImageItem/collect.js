@@ -56,18 +56,7 @@ export default function ({ item }) {
             }}>
               {MStatus()}
             </div>
-            <div style={{ position: 'absolute', top: 4, right: 4, zIndex: 2, color: 'white', backgroundColor: 'rgba(0,0,0,0.3)', borderRadius: '50%', padding: '3px 5px' }}>{item.images? item.images.length : 1}</div>
           </FullWidthFix>
-          <FullWidthAuto>
-            <div>{item.title}</div>
-            <div style={{ margin: '5px 0' }}>作者: {item.uname}</div>
-            <TagsRow onTouchStart={e => {
-              e.stopPropagation()
-              e.preventDefault()
-            }}>
-              {item.tags.map((tag, index) => <Tag key={index}>{tag}</Tag>)}
-            </TagsRow>
-          </FullWidthAuto>
         </FullWidth>
       </Fragment>
     }}</Observer >

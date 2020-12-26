@@ -6,7 +6,8 @@ import Group from './GroupTreeModel'
 import Channel from './ChannelModel'
 
 const Model = types.model({
-  booting: types.optional(types.boolean, false),
+  booting: types.optional(types.boolean, true),
+  forceLogin: types.optional(types.boolean, false),
   // 默认tabBar
   selectedMenu: types.optional(types.string, 'home'),
   // 底部tabBars菜单
