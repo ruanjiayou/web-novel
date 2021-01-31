@@ -14,8 +14,8 @@
       "type": "image/png"
     }
   ],
-  "start_url": "/root/",
-  "scope": "/root/",
+  "start_url": "/novel/",
+  "scope": "/novel/",
   "display": "fullscreen",
   "background_color": "#ffffff",
   "theme_color": "black"

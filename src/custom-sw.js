@@ -1,6 +1,6 @@
 // See https://developers.google.com/web/tools/workbox/guides/configure-workbox
 workbox.setConfig({ debug: false })
-workbox.core.setLogLevel(workbox.core.LOG_LEVELS.debug)
+// workbox.core.setLogLevel(workbox.core.LOG_LEVELS.debug)
 
 // self.addEventListener('install', event => event.waitUntil(self.skipWaiting()));
 // self.addEventListener('activate', event => event.waitUntil(self.clients.claim()));
@@ -9,8 +9,8 @@ workbox.core.setLogLevel(workbox.core.LOG_LEVELS.debug)
 workbox.precaching.precacheAndRoute(self.__precacheManifest)
 
 // app-shell
-workbox.routing.registerRoute('/', workbox.strategies.StaleWhileRevalidate())
-workbox.routing.registerRoute('/api', workbox.strategies.networkFirst({
+workbox.routing.registerRoute('/', new workbox.strategies.StaleWhileRevalidate())
+workbox.routing.registerRoute('/api', new workbox.strategies.NetworkFirst({
     networkTimeoutSeconds: 10
 }))
 workbox.routing.registerRoute(/https?:\/\/+(.*)\.(?:png|svg|jpg|gif)$/, new workbox.strategies.CacheFirst({

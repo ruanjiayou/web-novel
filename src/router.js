@@ -7,7 +7,7 @@ import Layout from './layout'
 import { useEffectOnce } from 'react-use'
 import { views } from 'pages'
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
-// 路由=>组件.没登录跳到登录.登录了匹配root.匹配失败就重定向route.
+// 路由=>组件.没登录跳到登录.登录了匹配novel.匹配失败就重定向route.
 
 function App(props) {
   const store = useStoreContext()
@@ -43,10 +43,10 @@ function App(props) {
       <Observer>{
         () => {
           if (!Page) {
-            return <Redirect to={'/root/home'}></Redirect>
+            return <Redirect to={'/novel/home'}></Redirect>
           }
-          if (!store.app.isLogin && props.location.pathname.startsWith('/root') && store.app.forceLogin) {
-            return <Redirect to={'/root/auth/login'}></Redirect>
+          if (!store.app.isLogin && props.location.pathname.startsWith('/novel') && store.app.forceLogin) {
+            return <Redirect to={'/novel/auth/login'}></Redirect>
           } else if (store.app.isLogin) {
             if (store.app.config.isLockerOpen && store.app.config.isLockerLocked) {
               return <LockerView />
@@ -113,17 +113,17 @@ function AuthLogin(props) {
 function NoMatch() {
   const store = useStoreContext()
   if (store.app.isLogin || !store.app.forceLogin) {
-    return <Redirect to={'/root/home'}></Redirect>
+    return <Redirect to={'/novel/home'}></Redirect>
   } else {
-    return <Redirect to={'/root/auth/login'}></Redirect>
+    return <Redirect to={'/novel/auth/login'}></Redirect>
   }
 }
 
 export default function Index() {
   return <BrowserRouter basename={'/'}>
     <Switch>
-      <Route path={'/root/auth/login'} component={AuthLogin} />
-      <Route path={'/root/*'} component={App}></Route>
+      <Route path={'/novel/auth/login'} component={AuthLogin} />
+      <Route path={'/novel/*'} component={App}></Route>
       <Route component={NoMatch} />
     </Switch>
   </BrowserRouter>

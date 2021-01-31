@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "description": "pwa react demo",
   "main": "index.js",
-  "homepage": "/root/",
+  "homepage": "/novel/",
   "scripts": {
     "start": "react-app-rewired start",
     "dev": "react-app-rewired start",
-    "build": "PUBLIC_URL=/root/ react-app-rewired build",
-    "build-windows": "set PUBLIC_URL=/root/&&react-app-rewired build",
-    "build-dev": "PUBLC_URL=/root/ react-app-rewired build",
+    "build": "PUBLIC_URL=/novel/ react-app-rewired build",
+    "build-windows": "set PUBLIC_URL=/novel/&&react-app-rewired build",
+    "build-dev": "PUBLC_URL=/novel/ react-app-rewired build",
     "test": "react-app-rewired test",
     "lint": "eslint ./src ./mock",
     "fix": "eslint ./src ./mock --fix",
@@ -76,7 +76,7 @@
     "react",
     "demo"
   ],
-  "author": "xiaomai",
+  "author": "1024",
   "license": "ISC",
   "browserslist": {
     "production": [

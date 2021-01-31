@@ -110,7 +110,7 @@ function View({ self, router, params }) {
                   container.current.scrollTop = 1
                   // let id = loader.item.nextId
                   // loader.clear()
-                  // router.replaceView(`/root/book/${localStore.bid}/chapter/${id}`, null, { hideMenu: true })
+                  // router.replaceView(`/novel/book/${localStore.bid}/chapter/${id}`, null, { hideMenu: true })
                 }
               }}>下一章</span>
             </div>

@@ -7,7 +7,7 @@ import store from 'store'
 export function pathname2views(url) {
   const [pathname, querystring = ''] = url.split('?')
   const views = [];
-  const arr = pathname.replace('/root/', '').split('/')
+  const arr = pathname.replace('/novel/', '').split('/')
   const query = qs.parse(querystring, { allowDots: true })
   arr.forEach(item => {
     views.push({
@@ -27,7 +27,7 @@ export function views2pathname(views) {
       query[`${view.view}.${k}`] = view.params[k]
     }
   })
-  return ('/root/' + paths.join('/') + '?' + qs.stringify(query)).replace(/\?$/, '')
+  return ('/novel/' + paths.join('/') + '?' + qs.stringify(query)).replace(/\?$/, '')
 }
 
 // 上下文context.避免react多级一直传props

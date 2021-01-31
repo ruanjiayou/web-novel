@@ -137,3 +137,6 @@
 ## 2020-12-07
 - 游客观看
 - /root/ 没匹配到直接跳到home
+
+## 2021-02-01
+- change root path to novel
