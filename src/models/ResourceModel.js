@@ -40,7 +40,7 @@ const Model = types.model('resource', {
   }
 })).views(self => ({
   get auto_cover() {
-    const poster = self.poster ? self.poster : '/poster/nocover.jpg'
+    const poster = self.poster ? self.poster : '/images/poster/nocover.jpg'
     return store.lineLoader.getHostByType('image') + poster;
   }
 }))
