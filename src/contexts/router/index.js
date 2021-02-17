@@ -98,7 +98,11 @@ export function useProvider(history) {
       },
       back() {
         this.userEvent = true
-        route.history.goBack();
+        if (route.history.length === 1) {
+          route.history.replace({ pathname: '/novel/home' })
+        } else {
+          route.history.goBack();
+        }
       },
       pushView(view, params = {}, state) {
         this.userEvent = true

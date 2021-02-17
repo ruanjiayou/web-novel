@@ -34,6 +34,12 @@ const Model = types.model('resource', {
   playing: types.optional(types.boolean, false),
   // 
   marked: types.optional(types.boolean, false),
+  children: types.array(types.model({
+    title: types.union(types.undefined, types.string),
+    path: types.string,
+    nth: types.number,
+    id: types.string,
+  }))
 }).actions(self => ({
   toggleStatus() {
     self.playing = !self.playing

@@ -28,13 +28,12 @@ function App(props) {
     if (store.app.selectedMenu !== name) {
       store.app.setMenu(name)
     }
-    const query = router.getQuery();
-    if (query.home && query.home.tab) {
-      store.app.setTab(query.home.tab)
-    }
   });
   useEffect(() => {
     local.layers = router.bootstrap(router.history.location);
+    if (!store.app.selectedMenu) {
+      store.app.setMenu('home')
+    }
   }, [router.history.location.pathname])
 
   const Page = router.getPage()

@@ -25,6 +25,8 @@ import NotFound from './404'
 import Marked from './MarkedPage'
 import Search from './SearchPage'
 import SearchResult from './SearchResultPage'
+import VideoInfoPage from './VideoInfoPage'
+import VideoPlayerPage from './VideoPlayerPage'
 
 const pages = [
   NotFound,
@@ -53,6 +55,8 @@ const pages = [
   Marked,
   Search,
   SearchResult,
+  VideoInfoPage,
+  VideoPlayerPage,
 ]
 
 const groups = {};

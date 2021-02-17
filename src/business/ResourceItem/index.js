@@ -4,6 +4,7 @@ import BookItem from './BookItem'
 import SongItem from './SongItem'
 import ImageItem from './ImageItem/'
 import ArticleItem from './ArticleItem'
+import VideoItem from './VideoItem'
 
 export default function ResourceItem({ item, loader, type }) {
   if (!type) {
@@ -28,6 +29,9 @@ export default function ResourceItem({ item, loader, type }) {
         case 'news':
           Item = <ArticleItem item={item} loader={loader} />
           break
+          case 'video':
+            Item = <VideoItem item={item} loader={loader} />
+            break
         default:
           break
       }

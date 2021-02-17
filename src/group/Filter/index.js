@@ -51,7 +51,7 @@ export default function Filter({ self, loader, ...props }) {
           lstore.loader.loadMore({ query })
         }}
         onScroll={(e) => {
-          if (e.target.scrollTop > lstore.filterHeight && lstore.filterHeight !== 0) {
+          if (e.target.scrollTop > lstore.filterHeight * 2 && lstore.filterHeight !== 0) {
             lstore.showShort = true
           } else {
             lstore.showShort = false
