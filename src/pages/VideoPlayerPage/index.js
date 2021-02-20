@@ -6,6 +6,7 @@ import { ResourceLoader } from 'loader'
 import { MIconView, AutoCenterView, EmptyView } from 'components'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 import { useEffectOnce } from 'react-use'
+import Player from '../../components/Player'
 
 const model = createPageModel({
   ResourceLoader,
@@ -19,6 +20,7 @@ function View({ self, router, store, services, params }) {
     firstLoading: false,
     id: params.id,
     mid: params.mid,
+    nth: 0,
     path: '',
   }))
   useEffectOnce(() => {
@@ -32,22 +34,17 @@ function View({ self, router, store, services, params }) {
         const item = res.item.children.find(child => child.id === params.id)
         if (item) {
           localStore.path = item.path
+          localStore.nth = res.item.children.findIndex(child => child.id === params.id)
         }
       })
     } else {
       const item = loader.item.children.find(child => child.id === params.id)
+      localStore.nth = loader.item.children.findIndex(child => child.id === params.id)
       if (item) {
         localStore.path = item.path
       }
     }
   }, [localStore.id])
-  const Player = useCallback(() => (
-    <div>
-      <video style={{ height: 210 }} height="210" autoPlay controls>
-        <source type="video/mp4" src={lineLoader.getHostByType('video') + localStore.path}></source>
-      </video>
-    </div>
-  ), [localStore.id])
   return <Observer>{
     () => {
       if (loader.isLoading) {
@@ -61,12 +58,21 @@ function View({ self, router, store, services, params }) {
       } else {
         return <Fragment>
           <div className="full-height">
-            <div className="dd-common-alignside" style={{ width: '100%', boxSizing: 'border-box', height: 45, padding: '0 15px' }}>
+            <div style={{ width: '100%', display: 'flex', justifyContent: 'flex-start', alignItems: 'center', boxSizing: 'border-box', height: 45, padding: '0 15px' }}>
               <MIconView type="FaChevronLeft" onClick={() => { router.back() }} />
-              <MIconView type="FaEllipsisH" />
+              {loader.item && loader.item.title}
             </div>
             <div className="full-height-fix">
-              <Player />
+              <Player
+                router={router}
+                resource={loader.item}
+                srcpath={lineLoader.getHostByType('video') + localStore.path}
+                playNext={localStore.nth === loader.item.children.length ? null : () => {
+                  const child = loader.item.children[localStore.nth + 1]
+                  localStore.id = child.id
+                  router.replaceView('VideoPlayer', { id: child.id, mid: localStore.mid })
+                }}
+              />
             </div>
             <div className="full-height-auto">
               <div style={{ padding: '4px 15px' }}>
@@ -74,7 +80,7 @@ function View({ self, router, store, services, params }) {
               </div>
               <div style={{ padding: '0 20px', backgroundColor: 'snow' }}>
                 <p style={{ fontWeight: 'bolder', margin: 0, padding: '5px 0' }}>播放列表:</p>
-                <div>{loader.item.children.map(child => (
+                <div>{loader.item.children.map((child, i) => (
                   <span key={child.path}
                     style={{
                       display: 'inline-block',

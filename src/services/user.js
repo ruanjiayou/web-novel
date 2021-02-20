@@ -159,20 +159,20 @@ export default {
   },
   async destroySheet({ query, params, data }) {
     return shttp({
-      url: `v1/user/sheet/${params.id}`,
+      url: `/v1/user/sheet/${params.id}`,
       method: 'DELETE',
     })
   },
   async addToSheet({ query, params, data }) {
     return shttp({
-      url: `v1/user/sheet/${params.id}/batch`,
+      url: `/v1/user/sheet/${params.id}/batch`,
       method: 'POST',
       data,
     })
   },
   async removeFromSheet({ query, params, data }) {
     return shttp({
-      url: `v1/user/sheet/${params.id}/batch`,
+      url: `/v1/user/sheet/${params.id}/batch`,
       method: 'DELETE',
       data,
     })

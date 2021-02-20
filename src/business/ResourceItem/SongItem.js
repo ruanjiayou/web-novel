@@ -38,7 +38,7 @@ export default function ({ item, mode = 'add', loader, ...props }) {
                   maskClosable: true,
                   cancelButtonIndex: list.length - 1
                 }, index => {
-                  if (index <= list.length - 1) {
+                  if (index <= list.length - 1 && index >= 0) {
                     services.addToSheet({ params: result.items[index], data: { list: [{ title: item.title, poster: item.poster, id: item.id, url: item.url }] } })
                   }
                 })

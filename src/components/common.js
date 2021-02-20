@@ -16,6 +16,18 @@ justify-content: space-between;
 align-items: center;
 flex-direction: row;
 `;
+export const AlignAround = styled.div`
+display: flex;
+justify-content: space-around;
+align-items: center;
+flex-direction: row;
+`;
+export const AlignRight = styled.div`
+display: flex;
+justify-content: flex-end;
+align-items: center;
+flex-direction: row;
+`;
 
 /* 3.上下高度占满 */
 export const FullHeight = styled.div`
