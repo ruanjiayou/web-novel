@@ -3,16 +3,36 @@ import { Observer } from 'mobx-react-lite'
 import { ActionSheet } from 'antd-mobile'
 import { MIconView, VisualBoxView } from 'components'
 import { useStoreContext } from 'contexts/store'
+import { useRouterContext } from 'contexts'
 import services from 'services'
+import Recorder from 'utils/cache'
+
+const musicRecorder = new Recorder('music')
 
 export default function ({ item, mode = 'add', loader, ...props }) {
+  const router = useRouterContext()
   const store = useStoreContext()
   const music = store.music
   return <Observer>
     {() => (
       <Fragment>
-        <div className="dd-common-alignside" style={{ margin: '0 10px', padding: '10px  0 5px 0', backgroundColor: item.id === music.currentId ? 'grey' : '', borderBottom: '1px solid #eee' }} {...props} >
-          {item.title}
+        <div className="dd-common-alignside" style={{ padding: '10px  10px 5px 10px', backgroundColor: item.id === music.currentId ? 'grey' : '', borderBottom: '1px solid #eee' }} {...props} >
+          <MIconView type={music.currentId === item.id ? 'FaPause' : 'FaPlay'} />
+          <div style={{ flex: 1 }} onClick={async (e) => {
+            if (music.currentId === item.id) return;
+            const data = item.toJSON()
+            e.preventDefault()
+            e.stopPropagation()
+            musicRecorder.setValue(data.id, data, { id: '' })
+            music.play(data)
+            if (router.lastView !== 'MusicPlayer') {
+              router.pushView('MusicPlayer', { id: data.id })
+            } else {
+              router.replaceView('MusicPlayer', { id: data.id })
+            }
+          }}>
+            {item.title}
+          </div>
           <div className="dd-common-alignside">
             <VisualBoxView visible={mode === 'delete'}>
               <MIconView type="FaTrashAlt" onClick={async (e) => {

@@ -22,7 +22,9 @@ class Recorder {
     await this.api.iterate((value, key, index) => {
       result.push(value)
     })
-    return result
+    return result.sort((a, b) => {
+      return b.option.ts - a.option.ts
+    })
   }
 }
 

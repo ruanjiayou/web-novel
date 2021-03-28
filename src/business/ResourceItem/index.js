@@ -6,7 +6,7 @@ import ImageItem from './ImageItem/'
 import ArticleItem from './ArticleItem'
 import VideoItem from './VideoItem'
 
-export default function ResourceItem({ item, loader, type }) {
+export default function ResourceItem({ item, loader, type, ...props }) {
   if (!type) {
     type = item.source_type
   }
@@ -21,7 +21,7 @@ export default function ResourceItem({ item, loader, type }) {
           Item = <ImageItem item={item} loader={loader} />
           break
         case 'music':
-          Item = <SongItem item={item} loader={loader} />
+          Item = <SongItem item={item} loader={loader} mode='' />
           break
         case 'article':
           Item = <ArticleItem item={item} loader={loader} />
@@ -29,9 +29,9 @@ export default function ResourceItem({ item, loader, type }) {
         case 'news':
           Item = <ArticleItem item={item} loader={loader} />
           break
-          case 'video':
-            Item = <VideoItem item={item} loader={loader} />
-            break
+        case 'video':
+          Item = <VideoItem item={item} loader={loader} />
+          break
         default:
           break
       }

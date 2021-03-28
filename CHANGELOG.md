@@ -140,3 +140,7 @@
 
 ## 2021-02-01
 - change root path to novel
+
+## 2021-03-29
+- 最近播放功能
+- pinch

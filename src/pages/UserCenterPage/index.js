@@ -5,6 +5,7 @@ import { ActivityIndicator, Card, WingBlank, Button, WhiteSpace } from 'antd-mob
 import { UserLoader } from 'loader'
 import { MIconView, SwitchView, VisualBoxView } from 'components'
 import createPageModel from 'page-group-loader-model/BasePageModel'
+import PinchZoom from 'components/PinchZoom/self'
 
 const model = createPageModel({
   UserLoader,
@@ -107,10 +108,13 @@ function View({ self, router, store, }) {
               <div onClick={() => {
                 router.pushView('MusicPlayer', { id: '692884EACEB545A295E88B66852499C0' })
               }} style={{ color: '#bb00ff' }}>
-                <MIconView type="IoMdMusicalNote" />音乐
+                <MIconView type="IoMdMusicalNote" />播放列表
               </div>
             </div>
           </Card>
+          <PinchZoom wrapStyle={{ width: '100%', height: 250, position: 'relative' }}>
+            <img style={{ width: '100%', height: '100%' }} src="/logo.jpg" />
+          </PinchZoom>
         </WingBlank>
       </div>
     }
