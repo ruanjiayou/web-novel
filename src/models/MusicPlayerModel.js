@@ -1,7 +1,10 @@
 import { types, getSnapshot } from 'mobx-state-tree'
 import events from 'utils/events'
+import Recorder from 'utils/cache'
 import store from '../store'
 import Resource from './ResourceModel'
+import storage from '../utils/storage'
+const musicRecorder = new Recorder('music')
 /**
  * 播放一首歌曲 写入播放历史(如果已存在则刷新保存时间？最多100首)
  * 有歌单id就是歌单列表，没有就是历史列表
@@ -48,8 +51,9 @@ const Model = types.model('musicPlayer', {
   },
   // 当前播放音频资源文件路径
   get currentUrl() {
-    if (self.item) {
-      return store.lineLoader.getHostByType('image') + self.item.url;
+    if (self.item && self.item.materials) {
+      const mt = self.item.materials.find(item => item.type === 'audio')
+      return store.lineLoader.getHostByType('image') + (mt ? mt.path : '');
     } else {
       return '';
     }
@@ -75,6 +79,7 @@ const Model = types.model('musicPlayer', {
     },
     setMode(mode) {
       self.mode = mode;
+      storage.setValue('music-mode', mode)
     },
     setState(state) {
       self.state = state;
@@ -85,6 +90,7 @@ const Model = types.model('musicPlayer', {
       self.state = 'playing'
     },
     play(item) {
+      console.log('musicPlay')
       if (item.toJSON) {
         self.item = getSnapshot(item);
       } else {
@@ -116,8 +122,22 @@ const Model = types.model('musicPlayer', {
       } else {
         // 顺序到了最后就停了
       }
+      self.state = 'playing'
     },
   }
-})
+}).actions(self => ({
+  initHistory(list) {
+    self.historyList = list;
+  },
+  loadHistory() {
+    musicRecorder.getAll().then(items => {
+      const list = items.map(item => item.data)
+      self.initHistory(list)
+    })
+  },
+  afterCreate() {
+    self.loadHistory()
+  }
+}))
 
 export default Model

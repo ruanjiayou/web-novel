@@ -10,7 +10,7 @@ const Model = types.model('resource', {
   poster: types.string,
   content: types.optional(types.string, ''),
   desc: types.string,
-  url: types.string,
+  // url: types.string,
   source_type: types.maybeNull(types.string),
   tags: types.array(types.string),
   images: types.array(types.string),
@@ -21,17 +21,23 @@ const Model = types.model('resource', {
   comments: types.number,
   collections: types.number,
   chapters: types.maybeNull(types.number),
-  last: types.maybeNull(types.model('last', {
+
+  // 临时非数据库字段
+  last: types.optional(types.model('last', {
     url: types.optional(types.string, ''),
     title: types.optional(types.string, ''),
     createdAt: types.optional(types.string, ''),
-  })),
-  // 临时非数据库字段
+  }), {}),
   last_seen_ts: types.optional(types.number, 0),
   last_seen_id: types.optional(types.string, ''),
   last_seen_title: types.optional(types.string, ''),
   last_progress: types.optional(types.number, 0),
   playing: types.optional(types.boolean, false),
+  materials: types.array(types.model({
+    id: types.string,
+    type: types.string,
+    path: types.string,
+  })),
   // 
   marked: types.optional(types.boolean, false),
   children: types.array(types.model({

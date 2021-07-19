@@ -76,3 +76,7 @@ div.dd-common-alignside {
   white-space: nowrap;
   overflow: hidden;
 }
+
+.am-list-view-scrollview-content {
+  width: 100%;
+}

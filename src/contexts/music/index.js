@@ -37,16 +37,21 @@ function MusicPlayer(props) {
     onProgress={() => {
       console.log('onProgress')
     }}
+    onError={(e) => {
+      // play error
+    }}
     onEnded={() => {
       console.log('ended')
       if (music.mode === music.MODE.ONE) {
         controls.play()
+        return;
       }
       if (music.mode === music.MODE.RANDOM) {
         music.playRandom()
       } else {
         music.playNext()
       }
+      setPlayUrl(music.id)
     }} />);
   const local = useLocalStore((state) => {
     const pos = storage.getValue('music');
@@ -89,6 +94,7 @@ function MusicPlayer(props) {
   useEffect(() => {
     // 解决相互引用的问题
     setPlayUrl(music.currentUrl)
+    console.log(music.currentUrl, 'url')
   }, [music.currentUrl])
 
   let timer = null
@@ -103,7 +109,9 @@ function MusicPlayer(props) {
         {/* 全局播放器 */}
         {audio}
         {/* 歌单列表显示controls 其他在loading或play状态显示cover */}
-        <div style={{ position: 'fixed', right: 20, top: state.isPlaying ? local.top : 100, zIndex: 1000 }}>
+        <div style={{ position: 'fixed', right: 20, top: state.isPlaying ? local.top : 100, zIndex: 1000 }} onClick={() => {
+          router.pushView('MusicPlayer', { id: music.currentId })
+        }}>
           <Dragger cb={sstore => {
             local.left = Math.max(0, sstore.left + sstore.offsetLeft)
             local.top = Math.max(0, sstore.top + sstore.offsetTop)
@@ -131,14 +139,22 @@ function MusicPlayer(props) {
               <FullWidthFix>{local.duration}</FullWidthFix>
             </FullWidth>
             <AlignCenterXY>
-              <MIconView type="MdShuffle" />
+              <MIconView type={local.mapping[music.mode]} onClick={() => {
+                switch (music.mode) {
+                  case music.MODE.ONE: music.setMode(music.MODE.LIST); break;
+                  case music.MODE.LIST: music.setMode(music.MODE.CIRCLE); break;
+                  case music.MODE.CIRCLE: music.setMode(music.MODE.RANDOM); break;
+                  case music.MODE.RANDOM: music.setMode(music.MODE.ONE); break;
+                  default: break;
+                }
+              }} />
               <MIconView type="MdSkipNext" onClick={() => {
                 if (music.mode === music.MODE.RANDOM) {
                   music.playRandom()
                 } else {
                   music.playNext()
                 }
-                controls.play()
+                router.replaceView('MusicPlayer', { id: music.currentId })
               }} />
               <MIconView type={state.isPlaying ? 'IoIosPause' : 'IoIosPlay'} onClick={() => {
                 state.isPlaying ? controls.pause() : controls.play()

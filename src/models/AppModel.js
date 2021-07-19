@@ -27,7 +27,6 @@ const Model = types.model({
   accessToken: types.optional(types.string, ''),
   refreshToken: types.optional(types.string, ''),
   // 音乐播放器相关
-  musicModeName: types.optional(types.string, 'circle'),
   showMusic: false,
   // 调试
   showDebug: types.optional(types.boolean, false),
@@ -109,9 +108,6 @@ const Model = types.model({
     }
   }
 }).actions(self => ({
-  setMusicModeName(type) {
-    storage.setValue(self.musicModeName, type)
-  },
   toggleDebug() {
     self.showDebug = !self.showDebug
   },

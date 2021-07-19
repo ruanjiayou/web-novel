@@ -72,6 +72,15 @@ export default {
     }
     return { item: result.data }
   },
+  async getGroupResources({ params }) {
+    const resp = await shttp({
+      url: `/v1/public/group/${params.group_id}/resources`
+    });
+    if (resp.code !== 0) {
+      throw resp
+    }
+    return { items: resp.data }
+  },
   async getGroups({ query, params, data }) {
     const result = await shttp({
       url: '/v1/public/groups',

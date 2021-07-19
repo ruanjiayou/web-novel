@@ -8,4 +8,5 @@ overflow-y: hidden;
 &::-webkit-scrollbar {
   display: none;
 }
+scrollbar-width: none;
 `;

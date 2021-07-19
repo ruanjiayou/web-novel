@@ -17,7 +17,7 @@ function View({ self, router, Navi, children }) {
   const resourceListLoader = self.ResourceListLoader
   useEffectOnce(() => {
     if (loader.isEmpty) {
-      loader.refresh()
+      // loader.refresh()
     }
     if (resourceListLoader.isEmpty) {
       resourceListLoader.refresh({ query: { source_type: 'music' } })

@@ -23,7 +23,11 @@ export default function ({ item, mode = 'add', loader, ...props }) {
             const data = item.toJSON()
             e.preventDefault()
             e.stopPropagation()
-            musicRecorder.setValue(data.id, data, { id: '' })
+            const old = await musicRecorder.getValue(data.id)
+            if(!old) {
+              musicRecorder.setValue(data.id, data, { id: '' })
+            }
+            music.loadHistory()
             music.play(data)
             if (router.lastView !== 'MusicPlayer') {
               router.pushView('MusicPlayer', { id: data.id })

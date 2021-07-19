@@ -272,7 +272,7 @@ export default ({ children, wrapStyle, style, onUpdate, onDoubleTap, onDragStart
   }, [onTouchMove])
 
   const onResize = useCallback(() => {
-    local.computeInitialOffset()
+    // local.computeInitialOffset()
     local.resetOffset()
     update()
   })

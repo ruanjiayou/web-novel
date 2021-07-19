@@ -10,12 +10,14 @@ import Picker from './Picker'
 import TreeNode from './TreeNode'
 import Tab from './Tab'
 import TabPane from './TabPane'
+import Random from './Random'
 
 const views = {
   'filter': Filter,
   'filter-tag': FilterTag,
   'filter-row': FilterRow,
   'picker': Picker,
+  'random': Random,
   'tab': Tab,
   'tab-pane': TabPane,
   'tree-node': TreeNode,

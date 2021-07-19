@@ -49,6 +49,16 @@ const Store = types.model('store', {
   setTs() {
     self.ts = Date.now()
   },
+  afterCreate() {
+    storage.prefix = self.app.storagePrefix
+
+    const mode = storage.getValue('music-mode') || 'circle'
+    self.music.setMode(mode)
+
+    self.app.setAccessToken(storage.getValue(self.app.accessTokenName) || '')
+    self.app.setRefreshToken(storage.getValue(self.app.refreshTokenName) || '')
+    self.app.initLocker(storage.getValue(self.app.lockerName) || {})
+  },
 })).views(self => ({
   get channelLoaders() {
     return channelLoaders
@@ -63,11 +73,8 @@ const store = Store.create({
   app: {
     baseURL: '',
     config: {},
-    music: { url: '' },
   },
-  music: {
-    mode: 'circle',
-  },
+  music: {},
   speaker: {},
   debug: {},
   viewModels: groups,
@@ -75,11 +82,6 @@ const store = Store.create({
 
 window.store = store
 window.ws = ws
-storage.prefix = store.app.storagePrefix
-store.app.setAccessToken(storage.getValue(store.app.accessTokenName) || '')
-store.app.setRefreshToken(storage.getValue(store.app.refreshTokenName) || '')
-store.app.initLocker(storage.getValue(store.app.lockerName) || {})
-store.app.setBaseURL(config.isDebug ? 'http://localhost:8097' : '')
-store.music.setMode(storage.getValue(store.app.musicModeName) || 'circle')
 
+store.app.setBaseURL(config.isDebug ? 'http://localhost:8097' : '')
 export default store

@@ -1,5 +1,6 @@
-import { types } from 'mobx-state-tree'
+import { types, flow } from 'mobx-state-tree'
 import ResourceModel from './ResourceModel'
+import services from '../services'
 
 const GroupModel = types.model('Group', {
   tree_id: types.string,
@@ -14,6 +15,7 @@ const GroupModel = types.model('Group', {
   attrs: types.model({
     // hide_title: types.maybeNull(types.boolean),
     // allowChange: types.maybeNull(types.boolean),
+    random: types.maybeNull(types.boolean),
     selected: types.maybeNull(types.boolean),
     timeout: types.maybeNull(types.number),
     columns: types.maybeNull(types.number),
@@ -36,6 +38,9 @@ const GroupModel = types.model('Group', {
     if (self.attrs.selected !== status) {
       self.attrs.selected = status
     }
+  },
+  setData(data) {
+    self.data = data || [];
   },
 }))
 
