@@ -55,6 +55,7 @@ import {
   MdRepeat,
   MdSkipNext,
 } from 'react-icons/md'
+import { FiLoader } from 'react-icons/fi'
 import './index.css'
 
 const IOicons = {
@@ -65,6 +66,7 @@ const IOicons = {
   IoMdMusicalNote,
   IoIosVolumeLow,
   IoIosVolumeOff,
+  IoLoader: FiLoader
 }
 const Faicons = {
   FaHome,

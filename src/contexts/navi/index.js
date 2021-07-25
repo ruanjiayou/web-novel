@@ -8,8 +8,8 @@ const Context = React.createContext(null)
 function Navi(prop) {
   const router = useRouterContext()
   return (
-    <AlignSide style={{ height: 45, backgroundColor: 'white', borderBottom: '1px solid #eee' }}>
-      <AlignCenterXY style={{ width: 30 }} onClick={() => { router.back() }}>
+    <AlignSide style={{ height: 45, backgroundColor: 'white', borderBottom: '1px solid #eee', ...prop.wrapStyle }}>
+      <AlignCenterXY onClick={() => { router.back() }}>
         <div style={{ display: prop.showBack === false ? 'none' : 'flex' }}>
           <MIconView type="FaChevronLeft" />
         </div>

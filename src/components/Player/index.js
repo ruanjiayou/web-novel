@@ -2,20 +2,22 @@ import React, { useEffect, useRef, useCallback } from 'react'
 import { useVideo, useEffectOnce } from 'react-use'
 import { useGesture } from 'react-use-gesture'
 import { Observer, useLocalStore } from 'mobx-react-lite'
-import VisualBox from '../VisualBoxView'
 import { Icon } from './style'
 import format from 'utils/num2time'
+import { useNaviContext } from 'contexts'
+import { MIconView, VisualBoxView } from 'components'
 import { FullHeight, FullHeightAuto, FullHeightFix, FullWidth, FullWidthAuto, FullWidthFix, AlignRight, AlignSide, AlignAround, AlignCenterXY } from '../common'
 import { Toast } from 'antd-mobile'
 const styles = {
   videoBG: {
     width: '100%',
     height: '100%',
+    backgroundColor: 'black',
   }
 }
 
 export default function ({ router, store, resource, srcpath, playNext, }) {
-  const videoRef = useRef(null)
+  const Navi = useNaviContext()
   const local = useLocalStore(() => ({
     muted: false,
     paused: false,
@@ -30,6 +32,7 @@ export default function ({ router, store, resource, srcpath, playNext, }) {
     fullscreen: false,
     realtime: 0,
     seektime: 0,
+    duration: 0,
     percent: 0,
     seekDirection: 'forword',
     timer: null,
@@ -40,7 +43,7 @@ export default function ({ router, store, resource, srcpath, playNext, }) {
       clearTimeout(this.timer)
       this.timer = setTimeout(() => {
         this.showControl = false
-      }, 4000)
+      }, 8000)
     },
     closeControl() {
       this.showControl = false
@@ -74,14 +77,6 @@ export default function ({ router, store, resource, srcpath, playNext, }) {
       window.removeEventListener('orientationchange', onRotation)
     }
   }, [])
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.addEventListener('loadedmetadata', onLoadedMetadata)
-      return () => {
-        videoRef.current.removeEventListener('loadedmetadata', onLoadedMetadata)
-      }
-    }
-  }, [onLoadedMetadata, srcpath])
   const [video, state, controls, ref] = useVideo(<video
     style={styles.videoBG}
     autoPlay={local.autoplay}
@@ -93,6 +88,9 @@ export default function ({ router, store, resource, srcpath, playNext, }) {
     airplay="allow"
     webkit-airplay='allow'
     x-webkit-airplay='allow'
+    onLoadedMetadata={e => {
+      local.duration = state.duration
+    }}
     onTouchStart={e => {
       local.origin.x = e.touches[0].clientX
       local.origin.y = e.touches[0].clientY
@@ -124,7 +122,7 @@ export default function ({ router, store, resource, srcpath, playNext, }) {
       if (!local.isSeeking) {
         local.seektime = state.time
       }
-      local.percent = (state.time / (state.duration || 1)).toFixed(2) * 100
+      local.percent = (state.time / (state.duration || 1)).toFixed(4) * 100
     }}
     onWaiting={() => {
       local.isWaiting = true
@@ -134,6 +132,7 @@ export default function ({ router, store, resource, srcpath, playNext, }) {
     }}
     onEnded={() => {
       local.isEnded = true
+      playNext();
     }}
     onPause={() => {
       controls.pause()
@@ -162,50 +161,60 @@ export default function ({ router, store, resource, srcpath, playNext, }) {
       </div>
     </div>
   }
-  const renderControlLayer = function () {
+  const renderControlLayer = function (header) {
     return (
-      <VisualBox visible={local.showControl}>
+      <VisualBoxView visible={local.showControl}>
         <FullHeight
           style={{ position: 'absolute', width: '100%', color: 'white', backgroundColor: 'rgba(0,0,0,0.6)' }}>
-          <AlignRight style={{ paddingTop: 10 }}>
-            <Icon src={require('theme/icon/airplay.svg')} />
-            <Icon style={{ width: 20, height: 20 }} src={require('theme/icon/feedback.svg')} />
-            <Icon style={{ width: 24 }} onClick={() => {
-              local.closeControl()
-              local.showMore = true
-            }} src={require('theme/icon/more.svg')} />
-          </AlignRight>
+          <AlignSide>
+            {header}
+            <div>
+              <Icon src={require('theme/icon/airplay.svg')} />
+              <Icon style={{ width: 16 }} src={require('theme/icon/feedback.svg')} />
+              <Icon style={{ width: 18 }} onClick={() => {
+                local.closeControl()
+                local.showMore = true
+              }} src={require('theme/icon/more.svg')} />
+            </div>
+          </AlignSide>
           <FullHeightAuto onClick={() => {
             local.closeControl()
           }}>
-            <AlignCenterXY>
-              <div onClick={(e) => {
-                local.paused = !local.paused
-                if (local.paused) {
-                  controls.pause()
-                } else {
-                  controls.play()
-                }
-                e.preventDefault()
-                e.stopPropagation()
-              }}><Icon src={local.paused ? require('../../theme/icon/play-fill.svg') : require('../../theme/icon/suspended-fill.svg')} /></div>
-            </AlignCenterXY>
+            <VisualBoxView visible={local.isWaiting === false}>
+              <AlignCenterXY>
+                <div onClick={(e) => {
+                  local.paused = !local.paused
+                  if (local.paused) {
+                    controls.pause()
+                  } else {
+                    controls.play()
+                  }
+                  e.preventDefault()
+                  e.stopPropagation()
+                }}><Icon src={local.paused ? require('../../theme/icon/play-fill.svg') : require('../../theme/icon/suspended-fill.svg')} /></div>
+              </AlignCenterXY>
+            </VisualBoxView>
           </FullHeightAuto>
           <FullWidth style={{ paddingBottom: 10 }}>
             <FullWidthFix onClick={() => local.muted = !local.muted}>
-              <Icon src={local.muted ? require('../../theme/icon/mute.svg') : require('../../theme/icon/soundsize.svg')} />
+              <Icon style={{ width: 24, height: 24 }} src={local.muted ? require('../../theme/icon/mute.svg') : require('../../theme/icon/soundsize.svg')} />
             </FullWidthFix>
-            <VisualBox visible={!!playNext}>
+            <VisualBoxView visible={!!playNext}>
               <FullHeightFix>
-                <Icon onClick={playNext} style={{ width: 20, marginLeft: 0 }} src={require('../../theme/icon/next.svg')} />
+                <Icon onClick={playNext} style={{ width: 16, height: 15, marginLeft: 0 }} src={require('../../theme/icon/next.svg')} />
               </FullHeightFix>
-            </VisualBox>
+            </VisualBoxView>
+            <FullWidthFix style={{ marginRight: 10 }}>{format(Math.ceil(local.realtime))}</FullWidthFix>
             <FullWidthAuto style={{ backgroundColor: 'grey', borderRadius: 3, overflow: 'hidden' }} onClick={e => {
-              console.log(e)
+              const ne = e.nativeEvent;
+              if (controls) {
+                let time = state.duration * (ne.layerX / e.currentTarget.offsetWidth)
+                controls.seek(time)
+              }
             }}>
               <div style={{ width: local.percent + '%', height: 5, backgroundColor: '#1278ae' }}></div>
             </FullWidthAuto>
-            <FullWidthFix style={{ marginLeft: 10 }}>{format(Math.ceil(local.realtime))}</FullWidthFix>
+            <FullWidthFix style={{ marginLeft: 10 }}>{format(Math.ceil(local.duration))}</FullWidthFix>
             <FullWidthFix>
               <Icon onClick={() => {
                 if (!document.fullscreenEnabled) {
@@ -214,35 +223,34 @@ export default function ({ router, store, resource, srcpath, playNext, }) {
                 if (document.fullscreenElement) {
                   document.exitFullscreen()
                   local.fullscreen = false
-                } else if (videoRef.current && videoRef.current.requestFullscreen) {
-                  videoRef.current.requestFullscreen()
+                } else if (ref.current && ref.current.requestFullscreen) {
+                  ref.current.requestFullscreen()
                   local.fullscreen = true
                 } else {
                   Toast.info('全屏失败', 1, null, false)
                 }
-              }} style={{ width: 24 }} src={require('theme/icon/fullscreen.svg')} />
+              }} style={{ width: 20 }} src={require('theme/icon/fullscreen.svg')} />
             </FullWidthFix>
           </FullWidth>
         </FullHeight>
-      </VisualBox>
+      </VisualBoxView>
     )
   }
   const renderMoreLayer = function () {
-    return <VisualBox visible={local.showMore}>
+    return <VisualBoxView visible={local.showMore}>
       <FullHeight style={{ width: '100%', position: 'absolute' }} onClick={() => {
         local.showMore = false
       }}>
         more
     </FullHeight>
-    </VisualBox>
+    </VisualBoxView>
   }
   return <Observer>{() => (
-    <div style={{ width: '100%', position: 'relative', height: Math.ceil(window.screen.width * 9 / 16) }}>
-      <div style={{ position: 'absolute', width: '100%', height: '100%' }} ref={ref => videoRef.current = ref}>
-        {renderVideoLayer()}
-        {renderControlLayer()}
-        {renderMoreLayer()}
-      </div>
+    <div style={{ width: '100%', position: 'relative', height: 211 }}>
+      {renderVideoLayer()}
+      {renderControlLayer(<Navi left={resource.title} showBack wrapStyle={{ flex: 1, backgroundColor: 'transparent', borderBottom: 'none', height: 35 }} />)}
+      {renderMoreLayer()}
+      {local.isWaiting ? <div style={{ position: 'absolute', display: 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}><MIconView type="IoLoader" style={{ color: 'white', backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: '50%', padding: '4px 0' }} /></div> : null}
     </div>
   )}</Observer>
 }

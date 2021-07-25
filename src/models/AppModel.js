@@ -6,6 +6,7 @@ import Group from './GroupTreeModel'
 import Channel from './ChannelModel'
 
 const Model = types.model({
+  initHistoryLength: types.optional(types.number, 1),
   booting: types.optional(types.boolean, true),
   forceLogin: types.optional(types.boolean, false),
   // 默认tabBar
@@ -86,6 +87,9 @@ const Model = types.model({
     },
     setBoot(status) {
       self.booting = status
+    },
+    setHistoryLength(n) {
+      self.initHistoryLength = n
     },
   }
 }).actions(self => {

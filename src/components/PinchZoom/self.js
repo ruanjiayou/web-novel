@@ -273,7 +273,7 @@ export default ({ children, wrapStyle, style, onUpdate, onDoubleTap, onDragStart
 
   const onResize = useCallback(() => {
     // local.computeInitialOffset()
-    local.resetOffset()
+    // local.resetOffset()
     update()
   })
   useEffect(() => {

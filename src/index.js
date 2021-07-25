@@ -26,6 +26,7 @@ function App() {
   }))
   const launch = useCallback(() => {
     store.app.setBoot(true)
+    store.app.setHistoryLength(window.history.length)
     services.getBoot().then(res => {
       if (res.code !== 0) {
         throw res.message
@@ -139,10 +140,15 @@ class ErrorBoundary extends React.Component {
   }
 }
 
+function Sumlator() {
+  return <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', width: 450, height: 720 }}>
+    <iframe src={window.location.href} style={{ height: '100%', width: '100%' }} frameBorder="none"></iframe>
+  </div>
+}
 // 总入口: 将组件挂载到dom上
 ReactDOM.render(<ErrorBoundary>
   <Helmet title={'demo-' + config.VERSION} />
-  <App />
+  {isPWAorMobile() || document.body.clientWidth <= 480 ? <App /> : <Sumlator />}
 </ErrorBoundary>, document.getElementById('root'))
 
 // serviceWorker.unregister();
