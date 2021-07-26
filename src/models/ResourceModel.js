@@ -9,7 +9,7 @@ const Model = types.model('resource', {
   title: types.string,
   poster: types.string,
   content: types.optional(types.string, ''),
-  desc: types.string,
+  desc: types.maybe(types.string),
   // url: types.string,
   source_type: types.maybeNull(types.string),
   tags: types.array(types.string),
@@ -17,10 +17,10 @@ const Model = types.model('resource', {
   status: types.enumeration(['loading', 'finished']),
   type: types.maybeNull(types.string),
   createdAt: types.string,
-  words: types.maybeNull(types.number),
-  comments: types.number,
-  collections: types.number,
-  chapters: types.maybeNull(types.number),
+  words: types.optional(types.number, 0),
+  comments: types.optional(types.number, 0),
+  collections: types.optional(types.number, 0),
+  chapters: types.optional(types.number, 0),
 
   // 临时非数据库字段
   last: types.optional(types.model('last', {

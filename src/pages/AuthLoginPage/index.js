@@ -66,7 +66,7 @@ function View() {
   return <Observer>
     {() => (
       <div className="full-height">
-        {/* <Navi left={<span style={{ whiteSpace: 'nowrap' }}>返回</span>} title="账号登录" router={router} /> */}
+        <Navi title="账号登录" router={router} />
         <div className="full-height-auto">
           <div className="dd-common-centerXY" style={{ position: 'relative' }}>
             {/* <div style={{ position: 'absolute', right: 0, top: 0, padding: 5 }}>

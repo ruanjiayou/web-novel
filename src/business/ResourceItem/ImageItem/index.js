@@ -1,14 +1,16 @@
 import React, { Fragment } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
-import { useRouterContext } from 'contexts'
+import { useRouterContext, useStoreContext } from 'contexts'
 import { Tag, ActivityIndicator } from 'antd-mobile'
 import { FullWidth, FullWidthAuto, FullWidthFix } from 'components/common'
 import { MIconView } from 'components'
 import { TagsRow } from './style'
 import services from 'services'
+import showTip from 'utils/showTip'
 
 export default function ({ item }) {
   const router = useRouterContext()
+  const store = useStoreContext()
   const local = useLocalStore(() => ({
     loading: false,
     id: item.id,
@@ -38,6 +40,9 @@ export default function ({ item }) {
             <div style={{ position: 'absolute', right: 0, bottom: 0, height: 24, width: 24 }} onClick={async (e) => {
               e.stopPropagation()
               e.preventDefault()
+              if (!store.app.isLogin) {
+                return showTip(router)
+              }
               if (local.markLoading) return
               local.markLoading = true
               try {
@@ -60,7 +65,7 @@ export default function ({ item }) {
           </FullWidthFix>
           <FullWidthAuto>
             <div>{item.title}</div>
-            <div style={{ margin: '5px 0' }}>作者: {item.uname}</div>
+            <div style={{ margin: '5px 0' }}>by {item.uname}</div>
             {/* <TagsRow onTouchStart={e => {
               // e.stopPropagation()
               // e.preventDefault()

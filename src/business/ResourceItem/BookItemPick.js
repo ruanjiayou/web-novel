@@ -15,7 +15,7 @@ export default function ({ item }) {
             <div className="dd-common-alignside">
               <div style={{ fontSize: '1.2rem' }}>{item.title}</div>
             </div>
-            <div style={{ padding: '4px 0', color: 'rgb(146, 145, 145)' }}>{item.uname} · {item.catalog} · {item.status === 'loading' ? '连载' : '完结'} · {item.words}</div>
+            <div style={{ padding: '4px 0', color: 'rgb(146, 145, 145)' }}>{item.uname} · {item.status === 'loading' ? '连载' : '完结'} · {Math.round(item.words / 10000)}万字</div>
             <div style={{ color: 'rgb(146, 145, 145)' }} className="line2" dangerouslySetInnerHTML={{ __html: item.desc }}></div>
           </div>
         </div>

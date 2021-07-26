@@ -6,6 +6,7 @@ import { UserLoader } from 'loader'
 import { MIconView, SwitchView, VisualBoxView } from 'components'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 import PinchZoom from 'components/PinchZoom/self'
+import showTip from 'utils/showTip';
 
 const model = createPageModel({
   UserLoader,
@@ -44,7 +45,11 @@ function View({ self, router, store, }) {
           <Card style={{ minHeight: 40, paddingBottom: 0 }}>
             <div className="dd-common-alignside" style={{ padding: '10px 40px', }}>
               <div style={{ color: '#f97a90' }} onClick={() => {
-                router.pushView('Marked')
+                if (store.app.isLogin) {
+                  router.pushView('Marked')
+                } else {
+                  showTip(router)
+                }
               }}>
                 <MIconView type="FaStar" />收藏
               </div>
@@ -81,12 +86,20 @@ function View({ self, router, store, }) {
                 <MIconView type="FaImages" />图片
               </div>
               <div onClick={() => {
-                router.pushView('Music')
+                if (store.app.isLogin) {
+                  router.pushView('Music')
+                } else {
+                  showTip(router);
+                }
               }} style={{ color: '#bb00ff' }}>
                 <MIconView type="IoMdMusicalNote" />歌单
               </div>
               <div onClick={() => {
-                router.pushView('UserShelf')
+                if (store.app.isLogin) {
+                  router.pushView('UserShelf')
+                } else {
+                  showTip(router)
+                }
               }} style={{ color: '#bb00ff' }}>
                 <MIconView type="MdApps" />书架
               </div>
@@ -107,9 +120,9 @@ function View({ self, router, store, }) {
               </div>
             </div>
           </Card>
-          <PinchZoom wrapStyle={{ width: '100%', height: 250, position: 'relative' }}>
+          {/* <PinchZoom wrapStyle={{ width: '100%', height: 250, position: 'relative' }}>
             <img style={{ width: '100%', height: '100%' }} src="/logo.jpg" />
-          </PinchZoom>
+          </PinchZoom> */}
         </WingBlank>
       </div>
     }
