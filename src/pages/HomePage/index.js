@@ -43,6 +43,7 @@ function View({ self, router, store, params }) {
           initialPage={channels.findIndex(channel => channel.group_id === store.app.tab)}
           tabs={channels}
           distanceToChangeTab={0.5}
+          prerenderingSiblingsNumber
           onChange={(tab, index) => {
             store.app.setTab(tab.group_id)
             router.replaceView('home', { tab: tab.group_id })

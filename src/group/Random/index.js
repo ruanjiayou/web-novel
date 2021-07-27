@@ -11,13 +11,13 @@ export default function Random({ self }) {
   }))
   return <Observer>{() => (
     <div>
-      <div className="dd-common-alignside" style={{ borderLeft: '5px solid #ff9999', padding: '10px 0 10px 10px', fontSize: 16 }}>
+      <div className="dd-common-alignside" style={{ borderLeft: '5px solid #ff9999', padding: '10px 0 10px 10px', margin: '10px 0 0 10px', fontSize: 16 }}>
         <span>{self.title}</span>
         <VisualBoxView visible={self.more.channel_id !== ''}>
           <MIconView style={{ fontSize: 12, color: '#888' }} type="FaAngleRight" before="更多" />
         </VisualBoxView>
       </div>
-      <Container>
+      <Container onTouchStart={(e) => { e.stopPropagation() }}>
         {self.data.map((d, index) => (<div key={index} style={{ flex: 1, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}><ResourceItem key={index} item={d} /></div>))}
       </Container>
       <VisualBoxView visible={self.attrs.random === true}>

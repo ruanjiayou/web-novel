@@ -80,3 +80,7 @@ div.dd-common-alignside {
 .am-list-view-scrollview-content {
   width: 100%;
 }
+
+div.am-tabs-horizontal .am-tabs-pane-wrap-inactive {
+  height: auto;
+}

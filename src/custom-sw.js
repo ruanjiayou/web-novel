@@ -13,12 +13,13 @@ workbox.routing.registerRoute('/', new workbox.strategies.StaleWhileRevalidate()
 workbox.routing.registerRoute('/api', new workbox.strategies.NetworkFirst({
     networkTimeoutSeconds: 10
 }))
-workbox.routing.registerRoute(/https?:\/\/+(.*)\.(?:png|svg|jpg|gif)$/, new workbox.strategies.CacheFirst({
+workbox.routing.registerRoute(/https?:\/\/+(.*)\.(?:png|svg|jpg|gif|webp)$/, new workbox.strategies.CacheFirst({
     cacheName: 'images',
     fetchOptions: {mode:'no-cors'},
     plugins: [
       new workbox.cacheableResponse.Plugin({
-        statuses: [0, 200]
+        statuses: [200],
+        headers: {'X-Cacheable': 'true'}
       }),
       new workbox.expiration.Plugin({
         maxEntries: 30,
