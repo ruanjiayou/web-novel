@@ -5,7 +5,7 @@ import { Observer, useLocalStore } from 'mobx-react-lite'
 import { Icon } from './style'
 import format from 'utils/num2time'
 import { useNaviContext } from 'contexts'
-import { MIconView, VisualBoxView } from 'components'
+import { MIconView, VisualBoxView, SwitchView } from 'components'
 import { FullHeight, FullHeightAuto, FullHeightFix, FullWidth, FullWidthAuto, FullWidthFix, AlignRight, AlignSide, AlignAround, AlignCenterXY } from '../common'
 import { Toast } from 'antd-mobile'
 const styles = {
@@ -68,6 +68,9 @@ export default function ({ router, store, resource, srcpath, playNext, }) {
     local.offset.x = e.touches[0].clientX - local.origin.x
     local.offset.y = e.touches[0].clientY - local.origin.y
   }
+  useEffect(() => {
+    local.closeControl()
+  }, [srcpath]);
   useEffectOnce(() => {
     const onRotation = function () {
       local.isRotated = !window.matchMedia('(orientation: portrait)').matches
@@ -128,6 +131,7 @@ export default function ({ router, store, resource, srcpath, playNext, }) {
       local.isWaiting = true
     }}
     onCanPlay={() => {
+      local.paused = !state.isPlaying
       local.isWaiting = false
     }}
     onEnded={() => {
@@ -166,7 +170,8 @@ export default function ({ router, store, resource, srcpath, playNext, }) {
       <VisualBoxView visible={local.showControl}>
         <FullHeight
           style={{ position: 'absolute', width: '100%', color: 'white', backgroundColor: 'rgba(0,0,0,0.6)' }}>
-          <AlignSide>
+          {/* 顶部菜单 */}
+          <AlignSide style={{ position: 'absolute', left: 0, top: 0, width: '100%', zIndex: 2, }}>
             {header}
             <div>
               <Icon src={require('theme/icon/airplay.svg')} />
@@ -180,9 +185,11 @@ export default function ({ router, store, resource, srcpath, playNext, }) {
           <FullHeightAuto onClick={() => {
             local.closeControl()
           }}>
-            <VisualBoxView visible={local.isWaiting === false}>
+            <SwitchView loading={local.isWaiting} holder={
+              <div style={{ position: 'absolute', top: 0, display: 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}><MIconView type="IoLoader" style={{ color: 'white', backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: '50%', padding: '4px 0' }} /></div>
+            }>
               <AlignCenterXY>
-                <div onClick={(e) => {
+                <div style={{ position: 'absolute', top: 0, display: 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}><Icon onClick={(e) => {
                   local.paused = !local.paused
                   if (local.paused) {
                     controls.pause()
@@ -191,11 +198,12 @@ export default function ({ router, store, resource, srcpath, playNext, }) {
                   }
                   e.preventDefault()
                   e.stopPropagation()
-                }}><Icon src={local.paused ? require('../../theme/icon/play-fill.svg') : require('../../theme/icon/suspended-fill.svg')} /></div>
+                }} src={local.paused ? require('../../theme/icon/play-fill.svg') : require('../../theme/icon/suspended-fill.svg')} /></div>
               </AlignCenterXY>
-            </VisualBoxView>
+            </SwitchView>
           </FullHeightAuto>
-          <FullWidth style={{ paddingBottom: 10 }}>
+          {/* 底部菜单 */}
+          <FullWidth style={{ paddingBottom: 10, zIndex: 2 }}>
             <FullWidthFix onClick={() => local.muted = !local.muted}>
               <Icon style={{ width: 24, height: 24 }} src={local.muted ? require('../../theme/icon/mute.svg') : require('../../theme/icon/soundsize.svg')} />
             </FullWidthFix>
@@ -250,7 +258,15 @@ export default function ({ router, store, resource, srcpath, playNext, }) {
       {renderVideoLayer()}
       {renderControlLayer(<Navi left={resource.title} showBack wrapStyle={{ flex: 1, backgroundColor: 'transparent', borderBottom: 'none', height: 35 }} />)}
       {renderMoreLayer()}
-      {local.isWaiting ? <div style={{ position: 'absolute', display: 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}><MIconView type="IoLoader" style={{ color: 'white', backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: '50%', padding: '4px 0' }} /></div> : null}
+      {!local.showControl ? <div
+        onClick={() => local.openControl()}
+        style={{ position: 'absolute', display: 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
+        {local.isWaiting ? <MIconView type="IoLoader" style={{ color: 'white', backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: '50%', padding: '4px 0' }} /> : (local.paused ? <Icon onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          controls.play()
+        }} src={require('../../theme/icon/play-fill.svg')} /> : null)}
+      </div> : null}
     </div>
   )}</Observer>
 }

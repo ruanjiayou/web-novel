@@ -118,6 +118,9 @@ function View({ self, router, store, }) {
               <div>
                 <MIconView type="FaEllipsisV" />其他
               </div>
+              <div style={{ visibility: 'hidden' }}>
+                <MIconView type="FaEllipsisV" />其他
+              </div>
             </div>
           </Card>
           {/* <PinchZoom wrapStyle={{ width: '100%', height: 250, position: 'relative' }}>

@@ -24,7 +24,7 @@ function App(props) {
   }))
   useEffectOnce(() => {
     // 默认是home
-    const name = props.location.pathname.split('/').pop()
+    const name = props.location.pathname.split('/')[2]
     if (store.app.selectedMenu !== name) {
       store.app.setMenu(name)
     }
