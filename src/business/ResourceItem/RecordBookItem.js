@@ -11,7 +11,7 @@ export default function ({ item }) {
     {() => {
       return <Fragment>
         <div className="full-width" style={{ padding: 10 }} onClick={() => { router.pushView('BookInfo', { id: item.id }) }}>
-          <div className="full-width-fix" style={{ width: 60, height: 80, backgroundColor: 'green', marginRight: 20 }}>
+          <div className="full-width-fix" style={{ width: 60, height: 80, backgroundColor: '#0094fd', marginRight: 20 }}>
             <img style={{ width: '100%', height: '100%' }} src={item.auto_cover} alt="" />
           </div>
           <div className="full-width-auto full-height">

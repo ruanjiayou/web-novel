@@ -46,12 +46,7 @@ function App(props) {
           }
           if (!store.app.isLogin && props.location.pathname.startsWith('/novel') && store.app.forceLogin) {
             return <Redirect to={'/novel/auth/login'}></Redirect>
-          } else if (store.app.isLogin) {
-            if (store.app.config.isLockerOpen && store.app.config.isLockerLocked) {
-              return <LockerView />
-            }
-          }
-          if (store.app.config.isLockerOpen && store.app.config.isLockerLocked) {
+          } else if (store.app.config.isLockerOpen && store.app.config.isLockerLocked) {
             return <LockerView />
           }
           return <Fragment>

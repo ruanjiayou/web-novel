@@ -3,7 +3,7 @@ import { useEffectOnce } from 'react-use'
 import { Observer } from 'mobx-react-lite'
 
 import { LoaderListView } from 'components'
-import ResourceItem from 'business/ResourceItem'
+import SongItem from 'business/SongItem'
 import { SongSheetLoader, ResourceListLoader } from 'loader'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 
@@ -37,7 +37,7 @@ function View({ self, router, Navi, children }) {
               resourceListLoader.loadMore({ query: { source_type: 'music' } })
             }}
             renderItem={(item) => (
-              <ResourceItem mode="add" item={item} loader={resourceListLoader} />
+              <SongItem type="cover" more={true} item={item} loader={resourceListLoader} />
             )}
           />
         </div>

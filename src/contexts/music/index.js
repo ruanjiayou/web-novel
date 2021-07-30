@@ -8,7 +8,7 @@ import { useRouterContext } from 'contexts'
 import { ResourceLoader } from 'loader'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { MIconView, Dragger } from 'components'
-import { FullWidth, FullWidthAuto, FullWidthFix, AlignCenterXY } from 'components/common'
+import { FullWidth, FullWidthAuto, FullWidthFix, AlignCenterXY, AlignSide } from 'components/common'
 import num2time from 'utils/num2time'
 
 // 上下文context.避免react多级一直传props
@@ -129,15 +129,23 @@ function MusicPlayer(props) {
 
         <div id="musicOpBox" style={{ position: 'fixed', right: 20, top: -100 }}>
           <div id="musicOperation" style={{ width: '100%', boxSizing: 'border-box', padding: '5px 10px' }} >
-            <FullWidth style={{ height: 40 }}>
-              <FullWidthFix>{local.time}</FullWidthFix>
-              <FullWidthAuto>
-                <Slider disabled={music.isLoading} value={local.percent} min={0} max={100} onAfterChange={v => {
-                  console.log(v)
-                }} />
-              </FullWidthAuto>
-              <FullWidthFix>{local.duration}</FullWidthFix>
-            </FullWidth>
+            <div style={{ display: 'flex', justifyContent: 'space-between', height: 25, flexDirection: 'column', fontSize: 12, color: 'grey' }}>
+              <div style={{ position: 'relative', width: '100%', height: 2, bottom: 0, backgroundColor: 'grey' }} onClick={e => {
+                const ne = e.nativeEvent;
+                if (controls) {
+                  let time = state.duration * (ne.layerX / e.currentTarget.offsetWidth)
+                  controls.seek(time)
+                }
+              }}>
+                <div style={{ position: 'absolute', height: '100%', width: local.percent + '%', backgroundColor: 'rgb(22, 147, 255)' }}>
+                  <span style={{ width: 6, height: 6, top: -2, borderRadius: '50%', display: 'block', position: 'absolute', right: 0, backgroundColor: '#0094fd' }}></span>
+                </div>
+              </div>
+              <AlignSide>
+                <FullWidthFix>{local.time}</FullWidthFix>
+                <FullWidthFix>{local.duration}</FullWidthFix>
+              </AlignSide>
+            </div>
             <AlignCenterXY>
               <MIconView type={local.mapping[music.mode]} onClick={() => {
                 switch (music.mode) {
@@ -159,7 +167,7 @@ function MusicPlayer(props) {
               <MIconView type={state.isPlaying ? 'IoIosPause' : 'IoIosPlay'} onClick={() => {
                 state.isPlaying ? controls.pause() : controls.play()
               }} />
-              <MIconView type={"IoIosVolumeLow"} />
+              <MIconView type={'IoIosVolumeLow'} />
             </AlignCenterXY>
           </div>
         </div>

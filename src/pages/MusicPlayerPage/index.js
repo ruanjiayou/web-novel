@@ -5,8 +5,7 @@ import { SwipeAction } from 'antd-mobile'
 import services from 'services'
 import { useStoreContext } from 'contexts/store'
 import ResourceModel from 'models/ResourceModel'
-import ResourceItem from 'business/ResourceItem'
-import SongItem from 'business/ResourceItem/SongItem'
+import SongItem from 'business/SongItem'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 import { createItemLoader, createItemsLoader } from 'page-group-loader-model/BaseLoaderModel'
 import { FullHeight, FullHeightAuto, FullHeightFix, FullWidthFix, FullWidth } from 'components/common'
@@ -17,8 +16,6 @@ const musicRecorder = new Recorder('music')
 const model = createPageModel({})
 
 function View({ self, router, Navi, params }) {
-  const store = useStoreContext()
-  const music = store.music
   const local = useLocalStore(() => ({
     loader: null,
     history: createItemsLoader(ResourceModel, async function () {
@@ -54,7 +51,7 @@ function View({ self, router, Navi, params }) {
   return <Observer>
     {() => (
       <FullHeight>
-        <Navi title="音乐" router={router} />
+        <Navi title="播放列表" router={router} />
         <FullHeightAuto>
           <LoaderListView
             loader={local.history}
@@ -79,8 +76,7 @@ function View({ self, router, Navi, params }) {
               >
                 <SongItem
                   item={item}
-                  mode=''
-                  router={router}
+                  type='normal'
                 />
               </SwipeAction>
             )}

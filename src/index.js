@@ -95,7 +95,7 @@ class ErrorBoundary extends React.Component {
       // TODO: 时间过长处理.刷新
       if (document.hidden) {
         globalStore.app.resetLeaveTS()
-      } else if (globalStore.app.config.isLockerLocked === false) {
+      } else if (globalStore.app.config.isLockerOpen === false) {
         globalStore.app.setLocked(Date.now() - globalStore.app.leaveTS > globalStore.app.config.lockerSeconds)
       }
     })
@@ -108,7 +108,7 @@ class ErrorBoundary extends React.Component {
         <AutoCenterView>
           程序崩溃了,<div onClick={() => {
             this.setState({ isLoading: true }, async () => {
-              // TODO: 防封处理 const result = await checkHost();
+              // TODO: 域名检测 const result = await checkHost();
               this.setState({ isLoading: false })
               this.setState({ hasError: false }, () => {
                 window.location.reload()
@@ -140,7 +140,7 @@ class ErrorBoundary extends React.Component {
   }
 }
 
-function Sumlator() {
+function Simulator() {
   return <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%, -50%)', width: 450, height: 720 }}>
     <iframe src={window.location.href} style={{ height: '100%', width: '100%' }} frameBorder="none"></iframe>
   </div>
@@ -148,7 +148,7 @@ function Sumlator() {
 // 总入口: 将组件挂载到dom上
 ReactDOM.render(<ErrorBoundary>
   <Helmet title={'demo-' + config.VERSION} />
-  {isPWAorMobile() || document.body.clientWidth <= 480 ? <App /> : <Sumlator />}
+  {isPWAorMobile() || document.body.clientWidth <= 480 ? <App /> : <Simulator />}
 </ErrorBoundary>, document.getElementById('root'))
 
 // serviceWorker.unregister();
