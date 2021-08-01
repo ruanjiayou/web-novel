@@ -1,7 +1,7 @@
 import services from '../services/index'
-import GroupModel from '../models/GroupTreeModel'
+import ChannelModel from '../models/ChannelModel'
 import { createItemsLoader } from 'page-group-loader-model/BaseLoaderModel'
 
-export default createItemsLoader(GroupModel, async () => {
-  return services.getGroups({})
+export default createItemsLoader(ChannelModel, async () => {
+  return services.getChannel({})
 })

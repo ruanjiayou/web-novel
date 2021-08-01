@@ -81,6 +81,12 @@ export default {
     }
     return { items: resp.data }
   },
+  async getChannel({ }) {
+    const result = await shttp({
+      url: '/v1/public/channels',
+    })
+    return { items: result.data }
+  },
   async getGroups({ query, params, data }) {
     const result = await shttp({
       url: '/v1/public/groups',

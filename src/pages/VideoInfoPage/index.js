@@ -25,12 +25,21 @@ function View({ self, router, store, services, params }) {
     shouldFix: true,
     id: params.id,
     playpath: '',
-    nth: 1,
+    child_id: '',
+    looktime: 0,
+    setRecorder(child_id = '', looktime = 0) {
+      if (loader.item) {
+        videoRecorder.getValue(params.id).then(() => {
+          videoRecorder.setValue(localStore.id, loader.item.toJSON(), { child_id, time: looktime })
+        })
+      }
+    }
   }))
   useEffectOnce(() => {
     videoRecorder.getValue(params.id).then(result => {
-      if (result) {
-
+      if (result && result.data && result.option) {
+        localStore.child_id = result.option.child_id;
+        localStore.looktime = result.option.time;
       }
     })
     return (() => {
@@ -40,10 +49,10 @@ function View({ self, router, store, services, params }) {
   useEffect(() => {
     if (loader.isEmpty) {
       loader.refresh({ params: { id: localStore.id } }, async (res) => {
-        const item = res.item.children[0]
-        if (item) {
-          localStore.nth = item.nth;
-          localStore.playpath = lineLoader.getHostByType('video') + item.path;
+        const child = res.item.children.find(child => child.id === localStore.child_id) || res.item.children[0]
+        if (child) {
+          localStore.child_id = child.id
+          localStore.playpath = lineLoader.getHostByType('video') + child.path;
         }
       })
     }
@@ -66,12 +75,18 @@ function View({ self, router, store, services, params }) {
                 router={router}
                 resource={loader.item}
                 srcpath={localStore.playpath}
-                playNext={localStore.nth === loader.item.children.length ? null : () => {
-                  const child = loader.item.children[localStore.nth + 1]
-                  if (child) {
-                    localStore.nth = localStore.nth + 1;
-                    localStore.playpath = lineLoader.getHostByType('video') + child.path;
+                looktime={localStore.looktime}
+                playNext={() => {
+                  const index = loader.item.children.findIndex(child => child.id === localStore.child_id)
+                  if (index + 1 !== loader.item.children.length) {
+                    localStore.child_id = loader.item.children[index + 1].id;
+                    localStore.looktime = 0
+                    localStore.setRecorder(localStore.child_id, localStore.looktime)
+                    localStore.playpath = lineLoader.getHostByType('video') + loader.item.children[index + 1].path;
                   }
+                }}
+                onRecord={async (time) => {
+                  localStore.setRecorder(localStore.child_id, time);
                 }}
               />
               <div style={{ padding: '0 20px', borderBottom: '1px solid #ccc', backgroundColor: 'snow' }}>
@@ -82,8 +97,15 @@ function View({ self, router, store, services, params }) {
                 <div>{loader.item.children.map(child => (
                   <EpTag
                     key={child.path}
-                    onClick={() => { if (localStorage.nth !== child.nth) { localStore.nth = child.nth; localStore.playpath = lineLoader.getHostByType('video') + child.path; } }}
-                    selected={localStore.nth === child.nth}>{child.title || `第${child.nth}集`}</EpTag>
+                    onClick={() => {
+                      if (localStorage.child_id !== child.id) {
+                        localStore.child_id = child.id
+                        localStore.looktime = 0
+                        localStore.playpath = lineLoader.getHostByType('video') + child.path;
+                        localStore.setRecorder(localStore.child_id, localStore.looktime)
+                      }
+                    }}
+                    selected={localStore.child_id === child.id}>{child.title || `第${child.nth}集`}</EpTag>
                 ))}
                 </div>
               </div>

@@ -6,7 +6,7 @@ import { GroupListLoader } from 'loader'
 import { AutoCenterView, EmptyView } from 'components'
 import { FullHeight, FullHeightAuto, FullHeightFix } from 'components/common'
 import createPageModel from 'page-group-loader-model/BasePageModel'
-import { Cell, Icon } from './style'
+import { Cell, ChannelImage } from './style'
 
 const model = createPageModel({
   GroupListLoader,
@@ -30,9 +30,9 @@ function View({ self, router, }) {
           <Cell
             key={group.id}
             onClick={() => {
-              router.pushView('GroupTree', { name: group.name })
+              router.pushView('GroupTree', { name: group.data.name })
             }}>
-            <Icon />
+            <ChannelImage src={group.lineCover} alt="" />
             <div>{group.title}</div>
           </Cell>
         ))

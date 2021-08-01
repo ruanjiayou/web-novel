@@ -8,6 +8,7 @@ import { useNaviContext } from 'contexts'
 import { MIconView, VisualBoxView, SwitchView } from 'components'
 import { FullHeight, FullHeightAuto, FullHeightFix, FullWidth, FullWidthAuto, FullWidthFix, AlignRight, AlignSide, AlignAround, AlignCenterXY } from '../common'
 import { Toast } from 'antd-mobile'
+
 const styles = {
   videoBG: {
     width: '100%',
@@ -16,8 +17,9 @@ const styles = {
   }
 }
 
-export default function ({ router, store, resource, srcpath, playNext, }) {
+export default function ({ router, store, resource, onRecord, srcpath, looktime, playNext, }) {
   const Navi = useNaviContext()
+  const fullScreenRef = useRef(null)
   const local = useLocalStore(() => ({
     muted: false,
     paused: false,
@@ -73,7 +75,7 @@ export default function ({ router, store, resource, srcpath, playNext, }) {
   }, [srcpath]);
   useEffectOnce(() => {
     const onRotation = function () {
-      local.isRotated = !window.matchMedia('(orientation: portrait)').matches
+      local.isRotated = window.matchMedia('(orientation: portrait)').matches
     }
     window.addEventListener('orientationchange', onRotation)
     return () => {
@@ -93,6 +95,7 @@ export default function ({ router, store, resource, srcpath, playNext, }) {
     x-webkit-airplay='allow'
     onLoadedMetadata={e => {
       local.duration = state.duration
+      controls.seek(looktime)
     }}
     onTouchStart={e => {
       local.origin.x = e.touches[0].clientX
@@ -120,6 +123,9 @@ export default function ({ router, store, resource, srcpath, playNext, }) {
       // despirate
     }}
     onTimeUpdate={() => {
+      if (onRecord) {
+        onRecord(state.time)
+      }
       // state.time
       local.realtime = state.time
       if (!local.isSeeking) {
@@ -207,7 +213,7 @@ export default function ({ router, store, resource, srcpath, playNext, }) {
             <FullWidthFix onClick={() => local.muted = !local.muted}>
               <Icon style={{ width: 24, height: 24 }} src={local.muted ? require('../../theme/icon/mute.svg') : require('../../theme/icon/soundsize.svg')} />
             </FullWidthFix>
-            <VisualBoxView visible={!!playNext}>
+            <VisualBoxView visible={resource.children.length < 2}>
               <FullHeightFix>
                 <Icon onClick={playNext} style={{ width: 16, height: 15, marginLeft: 0 }} src={require('../../theme/icon/next.svg')} />
               </FullHeightFix>
@@ -225,14 +231,20 @@ export default function ({ router, store, resource, srcpath, playNext, }) {
             <FullWidthFix style={{ marginLeft: 10 }}>{format(Math.ceil(local.duration))}</FullWidthFix>
             <FullWidthFix>
               <Icon onClick={() => {
+                if (local.isRotated) {
+                  local.isRotated = false;
+                  if (!local.fullscreen) {
+                    return
+                  }
+                }
                 if (!document.fullscreenEnabled) {
                   return
                 }
                 if (document.fullscreenElement) {
                   document.exitFullscreen()
                   local.fullscreen = false
-                } else if (ref.current && ref.current.requestFullscreen) {
-                  ref.current.requestFullscreen()
+                } else if (fullScreenRef.current && fullScreenRef.current.requestFullscreen) {
+                  fullScreenRef.current.requestFullscreen()
                   local.fullscreen = true
                 } else {
                   Toast.info('全屏失败', 1, null, false)
@@ -254,7 +266,7 @@ export default function ({ router, store, resource, srcpath, playNext, }) {
     </VisualBoxView>
   }
   return <Observer>{() => (
-    <div style={{ width: '100%', position: 'relative', height: 211 }}>
+    <div style={{ width: '100%', position: local.isRotated ? 'absolute' : 'relative', height: local.isRotated ? '100%' : 211, zIndex: 2 }} ref={ref => fullScreenRef.current = ref}>
       {renderVideoLayer()}
       {renderControlLayer(<Navi left={resource.title} showBack wrapStyle={{ flex: 1, backgroundColor: 'transparent', borderBottom: 'none', height: 35 }} />)}
       {renderMoreLayer()}

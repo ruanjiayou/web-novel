@@ -16,3 +16,9 @@ export const Icon = styled.div`
  background-color: grey;
  border-radius: 50%;
 `
+
+export const ChannelImage = styled.img`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+`
