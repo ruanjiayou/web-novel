@@ -10,11 +10,11 @@ const Model = types.model({
   order_index: types.number,
   editable: types.optional(types.boolean, false),
   data: types.maybeNull(Group),
-  image: types.maybe(types.string),
+  cover: types.maybe(types.string),
 }).views(self => ({
   get lineCover() {
-    const image = self.image ? self.image : '/images/poster/nocover.jpg'
-    return store.lineLoader.getHostByType('image') + image;
+    const cover = self.cover ? self.cover : '/images/poster/nocover.jpg'
+    return store.lineLoader.getHostByType('image') + cover;
   }
 }))
 

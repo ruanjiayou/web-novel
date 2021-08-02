@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react'
 import { Observer } from 'mobx-react-lite'
 import BookItem from './BookItem'
-import SongItem from './SongItem'
+import SongItem from '../SongItem'
 import ImageItem from './ImageItem/'
 import ArticleItem from './ArticleItem'
 import VideoItem from './VideoItem'
@@ -21,7 +21,7 @@ export default function ResourceItem({ item, loader, type, ...props }) {
           Item = <ImageItem item={item} loader={loader} />
           break
         case 'music':
-          Item = <SongItem item={item} loader={loader} mode='' />
+          Item = <SongItem item={item} loader={loader} mode='' {...props} position="picker" />
           break
         case 'article':
           Item = <ArticleItem item={item} loader={loader} />

@@ -3,17 +3,19 @@ import { useEffectOnce } from 'react-use'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { Modal, InputItem, List, Button } from 'antd-mobile'
 
-import { SheetListLoader } from 'loader'
+import { RenderGroups } from 'group'
+import { SheetListLoader, GroupTreeLoader } from 'loader'
 import { LoaderListView, MIconView } from 'components'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 import services from 'services';
 
 const model = createPageModel({
   SheetListLoader,
+  GroupTreeLoader,
 })
 
 function View({ self, router, Navi, children }) {
-  const loader = self.SheetListLoader
+  const loader = self.GroupTreeLoader
   const refTitle = useRef(null)
   const refDesc = useRef(null)
   const local = useLocalStore(() => ({
@@ -25,13 +27,14 @@ function View({ self, router, Navi, children }) {
   }))
   useEffectOnce(() => {
     if (loader.isEmpty) {
-      loader.refresh({ query: { type: 'song' } })
+      loader.refresh({})
     }
   })
   return <Observer>
     {() => (
       <div className="full-height">
-        <Navi title="歌单列表" router={router}>
+        <RenderGroups loader={loader} group={{ name: 'music' }} style={{ maxWidth: '50%' }} />
+        {/* <Navi title="歌单列表" router={router}>
           <span style={{ paddingRight: 10 }} onClick={e => { local.showModal = true }}>创建</span>
         </Navi>
         <div className="full-height-auto">
@@ -73,7 +76,7 @@ function View({ self, router, Navi, children }) {
               }}>创建</Button>
             </List.Item>
           </List>
-        </Modal>
+        </Modal> */}
       </div>
     )}
   </Observer>
@@ -82,7 +85,7 @@ function View({ self, router, Navi, children }) {
 
 export default {
   group: {
-    view: 'Music',
+    view: 'music',
   },
   View,
   model,

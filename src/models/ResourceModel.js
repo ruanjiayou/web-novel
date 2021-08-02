@@ -8,6 +8,7 @@ const Model = types.model('resource', {
   country: types.optional(types.string, 'China'),
   title: types.string,
   poster: types.string,
+  thumbnail: types.optional(types.string, ''),
   content: types.optional(types.string, ''),
   desc: types.maybe(types.string),
   // url: types.string,
@@ -52,7 +53,7 @@ const Model = types.model('resource', {
   }
 })).views(self => ({
   get auto_cover() {
-    const poster = self.poster ? self.poster : '/images/poster/nocover.jpg'
+    const poster = self.poster || self.thumbnail ? self.poster || self.thumbnail : '/images/poster/nocover.jpg'
     return store.lineLoader.getHostByType('image') + poster;
   }
 }))
