@@ -9,7 +9,7 @@ workbox.setConfig({ debug: false })
 workbox.precaching.precacheAndRoute(self.__precacheManifest)
 
 // app-shell
-workbox.routing.registerRoute('/', new workbox.strategies.StaleWhileRevalidate())
+workbox.routing.registerRoute('/', new workbox.strategies.NetworkFirst())
 workbox.routing.registerRoute('/api', new workbox.strategies.NetworkFirst({
   networkTimeoutSeconds: 10
 }))

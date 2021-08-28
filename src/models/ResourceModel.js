@@ -7,7 +7,7 @@ const Model = types.model('resource', {
   uname: types.maybeNull(types.string),
   country: types.optional(types.string, 'China'),
   title: types.string,
-  poster: types.string,
+  poster: types.maybe(types.string),
   thumbnail: types.optional(types.string, ''),
   content: types.optional(types.string, ''),
   desc: types.maybe(types.string),

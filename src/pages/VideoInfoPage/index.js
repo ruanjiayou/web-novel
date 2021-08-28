@@ -27,6 +27,9 @@ function View({ self, router, store, services, params }) {
     playpath: '',
     child_id: '',
     looktime: 0,
+    get isHLS() {
+      return this.playpath.endsWith('.m3u8');
+    },
     setRecorder(child_id = '', looktime = 0) {
       if (loader.item) {
         videoRecorder.getValue(params.id).then(() => {
@@ -52,7 +55,7 @@ function View({ self, router, store, services, params }) {
         const child = res.item.children.find(child => child.id === localStore.child_id) || res.item.children[0]
         if (child) {
           localStore.child_id = child.id
-          localStore.playpath = lineLoader.getHostByType('video') + child.path;
+          localStore.playpath = lineLoader.getHostByType(child.path.endsWith('m3u8') ? 'hls' : 'video') + child.path;
         }
       })
     }
@@ -73,6 +76,7 @@ function View({ self, router, store, services, params }) {
             <div className="full-height-auto">
               <Player
                 router={router}
+                hls={localStore.isHLS}
                 resource={loader.item}
                 srcpath={localStore.playpath}
                 looktime={localStore.looktime}

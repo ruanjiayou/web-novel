@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useCallback } from 'react'
-import { useVideo, useEffectOnce } from 'react-use'
+import React, { useEffect, useRef, useCallback, useMemo } from 'react'
+import { useVideo, useEffectOnce, } from 'react-use'
 import { useGesture } from 'react-use-gesture'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { Icon } from './style'
@@ -8,6 +8,7 @@ import { useNaviContext } from 'contexts'
 import { MIconView, VisualBoxView, SwitchView } from 'components'
 import { FullHeight, FullHeightAuto, FullHeightFix, FullWidth, FullWidthAuto, FullWidthFix, AlignRight, AlignSide, AlignAround, AlignCenterXY } from '../common'
 import { Toast } from 'antd-mobile'
+import ReactHlsPlayer from 'react-hls-player';
 
 const styles = {
   videoBG: {
@@ -17,7 +18,7 @@ const styles = {
   }
 }
 
-export default function ({ router, store, resource, onRecord, srcpath, looktime, playNext, }) {
+export default function ({ router, hls, store, resource, onRecord, srcpath, looktime, playNext, }) {
   const Navi = useNaviContext()
   const fullScreenRef = useRef(null)
   const local = useLocalStore(() => ({
@@ -36,6 +37,7 @@ export default function ({ router, store, resource, onRecord, srcpath, looktime,
     seektime: 0,
     duration: 0,
     percent: 0,
+    volume: 1,
     seekDirection: 'forword',
     timer: null,
     origin: { x: 0, y: 0 },
@@ -63,12 +65,47 @@ export default function ({ router, store, resource, onRecord, srcpath, looktime,
   const getHistoryTime = useCallback(async () => {
 
   }, [])
-  const onLoadedMetadata = useCallback(async () => {
-    console.log('load metadata')
-  })
+  const onLoadedMetadata = (duration) => {
+    local.duration = duration
+    controls.seek(looktime)
+  }
+  const onTimeUpdate = (time, duration) => {
+    if (onRecord) {
+      onRecord(time)
+    }
+    // state.time
+    local.realtime = time
+    if (!local.isSeeking) {
+      local.seektime = time
+    }
+    local.percent = (time / (duration || 1)).toFixed(4) * 100
+  }
   const onDrag = function (e) {
     local.offset.x = e.touches[0].clientX - local.origin.x
     local.offset.y = e.touches[0].clientY - local.origin.y
+  }
+
+  const onKeyPress = function (e) {
+    switch (e.keyCode) {
+      case 37:
+        // <=
+        controls.seek(state.time - 5)
+        break;
+      case 39:
+        // =>
+        controls.seek(local.realtime + 5)
+        break;
+      case 38:
+        // ^
+        local.volume = state.volume + 0.05 > 1 ? 1 : state.volume + 0.05
+        controls.volume(state.volume)
+        break;
+      case 40:
+        local.volume = state.volume - 0.05 < 0 ? 0 : state.volume - 0.05
+        controls.volume(local.volume)
+        break;
+      default: break;
+    }
   }
   useEffect(() => {
     local.closeControl()
@@ -78,8 +115,10 @@ export default function ({ router, store, resource, onRecord, srcpath, looktime,
       local.isRotated = window.matchMedia('(orientation: portrait)').matches
     }
     window.addEventListener('orientationchange', onRotation)
+    window.addEventListener('keydown', onKeyPress)
     return () => {
       window.removeEventListener('orientationchange', onRotation)
+      window.removeEventListener('keydown', onKeyPress)
     }
   }, [])
   const [video, state, controls, ref] = useVideo(<video
@@ -93,9 +132,9 @@ export default function ({ router, store, resource, onRecord, srcpath, looktime,
     airplay="allow"
     webkit-airplay='allow'
     x-webkit-airplay='allow'
-    onLoadedMetadata={e => {
-      local.duration = state.duration
-      controls.seek(looktime)
+    onLoadedMetadata={() => {
+      local.volume = state.volume
+      onLoadedMetadata(state.duration)
     }}
     onTouchStart={e => {
       local.origin.x = e.touches[0].clientX
@@ -122,16 +161,8 @@ export default function ({ router, store, resource, onRecord, srcpath, looktime,
     onProgress={() => {
       // despirate
     }}
-    onTimeUpdate={() => {
-      if (onRecord) {
-        onRecord(state.time)
-      }
-      // state.time
-      local.realtime = state.time
-      if (!local.isSeeking) {
-        local.seektime = state.time
-      }
-      local.percent = (state.time / (state.duration || 1)).toFixed(4) * 100
+    onTimeUpdate={(e) => {
+      onTimeUpdate(state.time, state.duration)
     }}
     onWaiting={() => {
       local.isWaiting = true
@@ -162,18 +193,36 @@ export default function ({ router, store, resource, onRecord, srcpath, looktime,
       }
     }}
   />)
+  const hlsRef = useRef(null)
 
+  const hlsVideo = useMemo(() => {
+    return <ReactHlsPlayer
+      src={srcpath}
+      autoPlay={true}
+      playerRef={hlsRef}
+      onLoadedMetadata={e => {
+        onLoadedMetadata(e.timeStamp)
+      }}
+      onTimeUpdate={(e) => {
+        onTimeUpdate(e.timeStamp / 100)
+      }}
+      controls={true}
+      width="100%"
+      height="100%"
+    />
+  }, [srcpath])
   const renderVideoLayer = function () {
-    return <div style={{ position: 'absolute', width: '100%', height: '100%', }}>
-      {video}
+    return <div style={{ position: 'absolute', width: '100%', height: '100%', backgroundColor: 'black' }}>
+      {hls ? hlsVideo : video}
       <div style={{ position: 'absolute', width: '100%', height: 2, bottom: 0, backgroundColor: 'grey' }}>
         <div style={{ position: 'absolute', height: '100%', width: local.percent + '%', backgroundColor: 'rgb(22, 147, 255)' }}></div>
+        <div style={{ position: 'absolute', bottom: 20, left: 20 }}>{state.volume}</div>
       </div>
     </div>
   }
   const renderControlLayer = function (header) {
     return (
-      <VisualBoxView visible={local.showControl}>
+      <VisualBoxView visible={local.showControl && !hls}>
         <FullHeight
           style={{ position: 'absolute', width: '100%', color: 'white', backgroundColor: 'rgba(0,0,0,0.6)' }}>
           {/* 顶部菜单 */}
@@ -198,9 +247,9 @@ export default function ({ router, store, resource, onRecord, srcpath, looktime,
                 <div style={{ position: 'absolute', top: 0, display: 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}><Icon onClick={(e) => {
                   local.paused = !local.paused
                   if (local.paused) {
-                    controls.pause()
+                    hls ? hlsRef.current.pause() : controls.pause()
                   } else {
-                    controls.play()
+                    hls ? hlsRef.current.play() : controls.play()
                   }
                   e.preventDefault()
                   e.stopPropagation()
@@ -268,7 +317,7 @@ export default function ({ router, store, resource, onRecord, srcpath, looktime,
   return <Observer>{() => (
     <div style={{ width: '100%', position: local.isRotated ? 'absolute' : 'relative', height: local.isRotated ? '100%' : 211, zIndex: 2 }} ref={ref => fullScreenRef.current = ref}>
       {renderVideoLayer()}
-      {renderControlLayer(<Navi left={resource.title} showBack wrapStyle={{ flex: 1, backgroundColor: 'transparent', borderBottom: 'none', height: 35 }} />)}
+      {hls ? <Navi left={resource.title} showBack wrapStyle={{ position: 'absolute', zIndex: 2, color: 'white', flex: 1, backgroundColor: 'transparent', borderBottom: 'none', height: 35 }} /> : renderControlLayer(<Navi left={resource.title} showBack wrapStyle={{ flex: 1, backgroundColor: 'transparent', borderBottom: 'none', height: 35 }} />)}
       {renderMoreLayer()}
       {!local.showControl ? <div
         onClick={() => local.openControl()}
