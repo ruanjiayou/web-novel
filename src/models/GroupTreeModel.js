@@ -31,6 +31,21 @@ const GroupModel = types.model('Group', {
   children: types.optional(types.array(types.late(() => GroupModel)), []),
 }).views(self => ({
   get selectedArr() {
+    if (self.view === 'filter') {
+      const list = [];
+      self.children.forEach(row => {
+        if (row.children.length) {
+          row.children.forEach(tag => {
+            if (tag.attrs.selected) {
+              list.push(tag.title)
+            }
+          })
+        }
+      })
+      return list;
+    } else {
+      return []
+    }
     return self.children.filter(child => child.attrs.selected).map(child => child.title)
   },
 })).actions(self => ({

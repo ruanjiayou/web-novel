@@ -5,3 +5,12 @@ export const Icon = styled.img`
   height: 32px;
   margin: 0 5px;
 `
+
+export const FlvWrap = styled.div`
+  width: 100%;
+  height: 100%;
+  & > div {
+    width: 100%;
+    height: 100%;
+  }
+`

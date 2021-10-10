@@ -84,3 +84,7 @@ div.dd-common-alignside {
 div.am-tabs-horizontal .am-tabs-pane-wrap-inactive {
   height: auto;
 }
+
+.list-view-section-body {
+  overflow: hidden;
+}

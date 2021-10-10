@@ -27,8 +27,14 @@ function View({ self, router, store, services, params }) {
     playpath: '',
     child_id: '',
     looktime: 0,
-    get isHLS() {
-      return this.playpath.endsWith('.m3u8');
+    get type() {
+      if (this.playpath.endsWith('.m3u8')) {
+        return 'hls'
+      } else if (this.playpath.endsWith('.flv')) {
+        return 'flv'
+      } else {
+        return 'mpeg'
+      }
     },
     setRecorder(child_id = '', looktime = 0) {
       if (loader.item) {
@@ -55,7 +61,7 @@ function View({ self, router, store, services, params }) {
         const child = res.item.children.find(child => child.id === localStore.child_id) || res.item.children[0]
         if (child) {
           localStore.child_id = child.id
-          localStore.playpath = lineLoader.getHostByType(child.path.endsWith('m3u8') ? 'hls' : 'video') + child.path;
+          localStore.playpath = lineLoader.getHostByType(child.path.endsWith('m3u8') ? 'hls' : (child.path.endsWith('flv') ? 'hls' : 'video')) + child.path;
         }
       })
     }
@@ -76,7 +82,7 @@ function View({ self, router, store, services, params }) {
             <div className="full-height-auto">
               <Player
                 router={router}
-                hls={localStore.isHLS}
+                type={localStore.type}
                 resource={loader.item}
                 srcpath={localStore.playpath}
                 looktime={localStore.looktime}
@@ -93,10 +99,7 @@ function View({ self, router, store, services, params }) {
                   localStore.setRecorder(localStore.child_id, time);
                 }}
               />
-              <div style={{ padding: '0 20px', borderBottom: '1px solid #ccc', backgroundColor: 'snow' }}>
-                <p style={{ marginBottom: 8 }}>内容简介:</p>
-                <div style={{ lineHeight: 1.5, color: '#555', textIndent: 20, borderBottom: '1px solid #ccc', minHeight: 120 }} dangerouslySetInnerHTML={{ __html: loader.item.desc }}>
-                </div>
+              <div style={{ padding: '0 20px', }}>
                 <p style={{ fontWeight: 'bolder', margin: 0, padding: '5px 0' }}>播放列表:</p>
                 <div>{loader.item.children.map(child => (
                   <EpTag
@@ -112,6 +115,10 @@ function View({ self, router, store, services, params }) {
                     selected={localStore.child_id === child.id}>{child.title || `第${child.nth}集`}</EpTag>
                 ))}
                 </div>
+                <p style={{ marginBottom: 8 }}>内容简介:</p>
+                <div style={{ lineHeight: 1.5, color: '#555', textIndent: 20 }} dangerouslySetInnerHTML={{ __html: loader.item.desc || '暂无' }}></div>
+                <p style={{ margin: '5px 0' }}>标签:</p>
+                <div>{loader.item.tags.map(tag => (<EpTag key={tag} selected={false}>{tag}</EpTag>))}</div>
               </div>
             </div>
           </div>

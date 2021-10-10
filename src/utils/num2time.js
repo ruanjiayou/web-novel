@@ -2,7 +2,7 @@ export default function (n) {
   let time = '', h = 0, m = 0, s = 0;
   n = n.toFixed(0)
   if (n > 3600) {
-    h = n / 3600;
+    h = (n / 3600).toFixed(0);
     if (h < 10) {
       h = '0' + h
     }

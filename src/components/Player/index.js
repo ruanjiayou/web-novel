@@ -2,13 +2,14 @@ import React, { useEffect, useRef, useCallback, useMemo } from 'react'
 import { useVideo, useEffectOnce, } from 'react-use'
 import { useGesture } from 'react-use-gesture'
 import { Observer, useLocalStore } from 'mobx-react-lite'
-import { Icon } from './style'
+import { Icon, FlvWrap } from './style'
 import format from 'utils/num2time'
 import { useNaviContext } from 'contexts'
 import { MIconView, VisualBoxView, SwitchView } from 'components'
 import { FullHeight, FullHeightAuto, FullHeightFix, FullWidth, FullWidthAuto, FullWidthFix, AlignRight, AlignSide, AlignAround, AlignCenterXY } from '../common'
 import { Toast } from 'antd-mobile'
 import ReactHlsPlayer from 'react-hls-player';
+import { ReactFlvPlayer } from 'react-flv-player'
 
 const styles = {
   videoBG: {
@@ -18,13 +19,13 @@ const styles = {
   }
 }
 
-export default function ({ router, hls, store, resource, onRecord, srcpath, looktime, playNext, }) {
+export default function ({ router, type, store, resource, onRecord, srcpath, looktime, playNext, }) {
   const Navi = useNaviContext()
   const fullScreenRef = useRef(null)
   const local = useLocalStore(() => ({
     muted: false,
-    paused: false,
-    autoplay: true,
+    paused: true,
+    autoplay: false,
     showControl: false,
     showMore: false,
     isWaiting: false,
@@ -69,16 +70,15 @@ export default function ({ router, hls, store, resource, onRecord, srcpath, look
     local.duration = duration
     controls.seek(looktime)
   }
-  const onTimeUpdate = (time, duration) => {
+  const onTimeUpdate = (time) => {
     if (onRecord) {
       onRecord(time)
     }
-    // state.time
     local.realtime = time
     if (!local.isSeeking) {
       local.seektime = time
     }
-    local.percent = (time / (duration || 1)).toFixed(4) * 100
+    local.percent = (time / (local.duration || 1)).toFixed(4) * 100
   }
   const onDrag = function (e) {
     local.offset.x = e.touches[0].clientX - local.origin.x
@@ -89,11 +89,23 @@ export default function ({ router, hls, store, resource, onRecord, srcpath, look
     switch (e.keyCode) {
       case 37:
         // <=
-        controls.seek(state.time - 5)
+        if (type === 'mpeg' && ref.current) {
+          ref.current.currentTime -= 5;
+        } else if (type === 'hls' && hlsRef.current) {
+          hlsRef.current.currentTime -= 5
+        } else if (type === 'flv' && flvRef.current) {
+          flvRef.current.currentTime -= 5
+        }
         break;
       case 39:
         // =>
-        controls.seek(local.realtime + 5)
+        if (type === 'mpeg' && ref.current) {
+          ref.current.currentTime += 5;
+        } else if (type === 'hls' && hlsRef.current) {
+          hlsRef.current.currentTime += 5
+        } else if (type === 'flv' && flvRef.current) {
+          flvRef.current.currentTime += 5
+        }
         break;
       case 38:
         // ^
@@ -194,48 +206,75 @@ export default function ({ router, hls, store, resource, onRecord, srcpath, look
     }}
   />)
   const hlsRef = useRef(null)
-
   const hlsVideo = useMemo(() => {
     return <ReactHlsPlayer
       src={srcpath}
-      autoPlay={true}
+      autoPlay={false}
       playerRef={hlsRef}
       onLoadedMetadata={e => {
-        onLoadedMetadata(e.timeStamp)
+        if (hlsRef.current) {
+          onLoadedMetadata(hlsRef.current.duration)
+        }
       }}
       onTimeUpdate={(e) => {
-        onTimeUpdate(e.timeStamp / 100)
+        onTimeUpdate(hlsRef.current.currentTime)
       }}
-      controls={true}
+      onSeeking={() => {
+        local.isWaiting = true
+      }}
+      onSeeked={() => {
+        local.isWaiting = false
+      }}
+      controls={false}
       width="100%"
       height="100%"
     />
   }, [srcpath])
+  const flvRef = useRef(null)
+  const flvVideo = useMemo(() => {
+    return <FlvWrap>
+      <ReactFlvPlayer
+        ref={ref => {
+          if (ref) {
+            flvRef.current = ref.myRef.current
+            if (!local.autoplay) {
+              flvRef.current.pause()
+            }
+            flvRef.current.muted = local.muted
+            flvRef.current.controls = false
+          }
+        }}
+        url={srcpath}
+        isMuted={local.muted}
+        handleError={e => {
+          console.log(e, 'flv play error')
+        }}
+      />
+    </FlvWrap>
+  }, [srcpath])
   const renderVideoLayer = function () {
     return <div style={{ position: 'absolute', width: '100%', height: '100%', backgroundColor: 'black' }}>
-      {hls ? hlsVideo : video}
+      {type === 'hls' ? hlsVideo : (type === 'flv' ? flvVideo : video)}
       <div style={{ position: 'absolute', width: '100%', height: 2, bottom: 0, backgroundColor: 'grey' }}>
         <div style={{ position: 'absolute', height: '100%', width: local.percent + '%', backgroundColor: 'rgb(22, 147, 255)' }}></div>
-        <div style={{ position: 'absolute', bottom: 20, left: 20 }}>{state.volume}</div>
       </div>
     </div>
   }
   const renderControlLayer = function (header) {
     return (
-      <VisualBoxView visible={local.showControl && !hls}>
+      <VisualBoxView visible={local.showControl}>
         <FullHeight
           style={{ position: 'absolute', width: '100%', color: 'white', backgroundColor: 'rgba(0,0,0,0.6)' }}>
           {/* 顶部菜单 */}
           <AlignSide style={{ position: 'absolute', left: 0, top: 0, width: '100%', zIndex: 2, }}>
-            {header}
-            <div>
+            {header(<div>
               <Icon src={require('theme/icon/airplay.svg')} />
               <Icon style={{ width: 16 }} src={require('theme/icon/feedback.svg')} />
               <Icon style={{ width: 18 }} onClick={() => {
                 local.closeControl()
                 local.showMore = true
               }} src={require('theme/icon/more.svg')} />
-            </div>
+            </div>)}
           </AlignSide>
           <FullHeightAuto onClick={() => {
             local.closeControl()
@@ -245,21 +284,28 @@ export default function ({ router, hls, store, resource, onRecord, srcpath, look
             }>
               <AlignCenterXY>
                 <div style={{ position: 'absolute', top: 0, display: 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}><Icon onClick={(e) => {
-                  local.paused = !local.paused
-                  if (local.paused) {
-                    hls ? hlsRef.current.pause() : controls.pause()
-                  } else {
-                    hls ? hlsRef.current.play() : controls.play()
+                  if (type === 'mpeg') {
+                    local.paused ? controls.play() : controls.pause()
+                  } else if (type === 'hls' && hlsRef.current) {
+                    local.paused ? hlsRef.current.play() : hlsRef.current.pause()
+                  } else if (type === 'flv' && flvRef.current) {
+                    local.paused ? flvRef.current.play() : flvRef.current.pause()
                   }
                   e.preventDefault()
                   e.stopPropagation()
+                  local.paused = !local.paused
                 }} src={local.paused ? require('../../theme/icon/play-fill.svg') : require('../../theme/icon/suspended-fill.svg')} /></div>
               </AlignCenterXY>
             </SwitchView>
           </FullHeightAuto>
           {/* 底部菜单 */}
           <FullWidth style={{ paddingBottom: 10, zIndex: 2 }}>
-            <FullWidthFix onClick={() => local.muted = !local.muted}>
+            <FullWidthFix onClick={() => {
+              local.muted = !local.muted
+              if (flvRef.current) {
+                flvRef.current.muted = local.muted
+              }
+            }}>
               <Icon style={{ width: 24, height: 24 }} src={local.muted ? require('../../theme/icon/mute.svg') : require('../../theme/icon/soundsize.svg')} />
             </FullWidthFix>
             <VisualBoxView visible={resource.children.length < 2}>
@@ -270,9 +316,15 @@ export default function ({ router, hls, store, resource, onRecord, srcpath, look
             <FullWidthFix style={{ marginRight: 10 }}>{format(Math.ceil(local.realtime))}</FullWidthFix>
             <FullWidthAuto style={{ backgroundColor: 'grey', borderRadius: 3, overflow: 'hidden' }} onClick={e => {
               const ne = e.nativeEvent;
-              if (controls) {
-                let time = state.duration * (ne.layerX / e.currentTarget.offsetWidth)
-                controls.seek(time)
+              let time = local.duration * (ne.layerX / e.currentTarget.offsetWidth)
+              if (type === 'mpeg') {
+                if (controls) {
+                  controls.seek(time)
+                }
+              } else if (type === 'hls' && hlsRef.current) {
+                hlsRef.current.currentTime = time;
+              } else if (type === 'hlv' && flvRef.current) {
+                flvRef.current.currentTime = time;
               }
             }}>
               <div style={{ width: local.percent + '%', height: 5, backgroundColor: '#1278ae' }}></div>
@@ -317,16 +369,27 @@ export default function ({ router, hls, store, resource, onRecord, srcpath, look
   return <Observer>{() => (
     <div style={{ width: '100%', position: local.isRotated ? 'absolute' : 'relative', height: local.isRotated ? '100%' : 211, zIndex: 2 }} ref={ref => fullScreenRef.current = ref}>
       {renderVideoLayer()}
-      {hls ? <Navi left={resource.title} showBack wrapStyle={{ position: 'absolute', zIndex: 2, color: 'white', flex: 1, backgroundColor: 'transparent', borderBottom: 'none', height: 35 }} /> : renderControlLayer(<Navi left={resource.title} showBack wrapStyle={{ flex: 1, backgroundColor: 'transparent', borderBottom: 'none', height: 35 }} />)}
+      {renderControlLayer(child => <Navi title={resource.title} showBack wrapStyle={{ flex: 1, backgroundColor: 'transparent', borderBottom: 'none', width: '100%', height: 35 }}>{child}</Navi>)}
       {renderMoreLayer()}
       {!local.showControl ? <div
         onClick={() => local.openControl()}
         style={{ position: 'absolute', display: 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
-        {local.isWaiting ? <MIconView type="IoLoader" style={{ color: 'white', backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: '50%', padding: '4px 0' }} /> : (local.paused ? <Icon onClick={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          controls.play()
-        }} src={require('../../theme/icon/play-fill.svg')} /> : null)}
+        <SwitchView loading={local.isWaiting} holder={<MIconView type="IoLoader" style={{ color: 'white', backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: '50%', padding: '4px 0' }} />}>
+          {(local.paused ? <Icon onClick={(e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            if (type === 'mpeg') {
+              controls.play();
+              local.paused = false
+            } else if (type === 'hls' && hlsRef.current) {
+              hlsRef.current.play();
+              local.paused = false
+            } else if (type === 'flv' && flvRef.current) {
+              flvRef.current.play()
+              local.paused = false;
+            }
+          }} src={require('../../theme/icon/play-fill.svg')} /> : null)}
+        </SwitchView>
       </div> : null}
     </div>
   )}</Observer>
