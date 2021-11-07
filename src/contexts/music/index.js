@@ -18,7 +18,7 @@ function MusicPlayer(props) {
   const router = useRouterContext()
   const music = store.music
   const [playUrl, setPlayUrl] = useState('')
-  const [audio, state, controls] = useAudio(<audio id="music-player"
+  const [audio, state, controls, ref] = useAudio(<audio id="music-player"
     autoPlay={true}
     src={playUrl}
     controls="controls"

@@ -100,7 +100,6 @@ function createItemsLoader(model, fn, customs = {}) {
           self.page = self.page - 1
         }
       } catch (err) {
-        console.log(Object.keys(err))
         if (Config.isDebug && Config.console) {
           console.log(err, 'loader')
         }
@@ -109,7 +108,7 @@ function createItemsLoader(model, fn, customs = {}) {
         if (data && data.code) {
           self.error = { code: data.code, message: data.message }
         } else {
-          self.error = { code: 'unknown', message: '未知错误' }
+          self.error = { code: 'unknown', message: err.message }
         }
       } finally {
         self.state = 'ready'
@@ -210,7 +209,7 @@ function createItemLoader(model, fn, customs = {}) {
         if (data && data.code) {
           self.error = { code: data.code, message: data.message }
         } else {
-          self.error = { code: 'unknown', message: '未知错误' }
+          self.error = { code: 'unknown', message: err.message }
         }
       } finally {
         self.state = 'ready'

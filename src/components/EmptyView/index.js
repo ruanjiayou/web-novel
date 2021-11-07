@@ -8,7 +8,11 @@ export default function renderBlank(loader, renderEmpty, refresh) {
     if (loader.state === 'pending') {
       return <div style={style}><ActivityIndicator text="加载中..." /></div>
     } else if (loader.error) {
-      return <div style={style}>出错啦!{loader.error.message}<span onClick={() => refresh ? refresh() : loader.refresh()}>重新加载</span></div>
+      return <div>
+        出错啦!
+        <div className="txt-omit">{loader.error.message}</div>
+        <span onClick={() => refresh ? refresh() : loader.refresh()}>重新加载</span>
+      </div>
     } else if (renderEmpty) {
       return typeof renderEmpty === 'function' ? renderEmpty(loader) : renderEmpty
     } else {
