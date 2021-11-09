@@ -27,6 +27,7 @@ import Search from './SearchPage'
 import SearchResult from './SearchResultPage'
 import VideoInfoPage from './VideoInfoPage'
 import VideoPlayerPage from './VideoPlayerPage'
+import AwhilePage from './AwhilePage'
 
 const pages = [
   NotFound,
@@ -57,6 +58,7 @@ const pages = [
   SearchResult,
   VideoInfoPage,
   VideoPlayerPage,
+  AwhilePage,
 ]
 
 const groups = {};

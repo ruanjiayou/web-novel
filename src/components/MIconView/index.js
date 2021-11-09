@@ -46,6 +46,7 @@ import {
   FaQrcode,
   FaListUl,
   FaHeart,
+  FaPlayCircle,
 } from 'react-icons/fa'
 import {
   MdRepeatOne,
@@ -106,6 +107,7 @@ const Faicons = {
   FaSortNumericUp,
   FaListUl,
   FaHeart,
+  FaPlayCircle,
 }
 const Mdicons = {
   MdRepeatOne,

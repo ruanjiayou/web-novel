@@ -36,7 +36,7 @@ const GroupModel = types.model('Group', {
       self.children.forEach(row => {
         if (row.children.length) {
           row.children.forEach(tag => {
-            if (tag.attrs.selected) {
+            if (tag.attrs.selected && tag.title !== '全部') {
               list.push(tag.title)
             }
           })

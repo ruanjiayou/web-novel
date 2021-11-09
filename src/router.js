@@ -21,18 +21,14 @@ function App(props) {
     remainSeconds: 5,
     layers: [],
     action: 'enter'
-  }))
-  useEffectOnce(() => {
-    // 默认是home
-    const name = props.location.pathname.split('/')[2]
-    if (store.app.selectedMenu !== name) {
-      store.app.setMenu(name)
-    }
-  });
+  }));
   useEffect(() => {
     local.layers = router.bootstrap(router.history.location);
+    const name = (props.location.pathname.split('/')[2]).split('?')[0]
     if (!store.app.selectedMenu) {
       store.app.setMenu('home')
+    } else if (store.app.selectedMenu !== name) {
+      store.app.setMenu(name)
     }
   }, [router.history.location.pathname])
 
