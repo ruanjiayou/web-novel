@@ -5,6 +5,7 @@ import SongItem from '../SongItem'
 import ImageItem from './ImageItem/'
 import ArticleItem from './ArticleItem'
 import VideoItem from './VideoItem'
+import ComicItem from './ComicItem'
 
 export default function ResourceItem({ item, loader, type, ...props }) {
   if (!type) {
@@ -32,6 +33,9 @@ export default function ResourceItem({ item, loader, type, ...props }) {
         case 'video':
           Item = <VideoItem item={item} loader={loader} />
           break
+          case 'comic':
+            Item = <ComicItem item={item} loader={loader} />
+            break
         default:
           break
       }

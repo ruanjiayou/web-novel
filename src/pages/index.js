@@ -28,6 +28,8 @@ import SearchResult from './SearchResultPage'
 import VideoInfoPage from './VideoInfoPage'
 import VideoPlayerPage from './VideoPlayerPage'
 import AwhilePage from './AwhilePage'
+import ComicInfoPage from './ComicInfoPage'
+import ComicGalleryPage from './ComicGalleryPage'
 
 const pages = [
   NotFound,
@@ -59,6 +61,8 @@ const pages = [
   VideoInfoPage,
   VideoPlayerPage,
   AwhilePage,
+  ComicInfoPage,
+  ComicGalleryPage,
 ]
 
 const groups = {};

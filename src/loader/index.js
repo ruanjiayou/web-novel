@@ -13,6 +13,8 @@ import TodoLoader from './TodoLoader'
 import UserLoader from './UserLoader'
 import SheetListLoader from './SheetListLoader'
 import MarkListLoader from './MarkListLoader'
+import GalleryListLoader from './GalleryListLoader'
+import GalleryLoader from './GalleryLoader'
 
 export {
   BookShelfLoader,
@@ -30,4 +32,6 @@ export {
   UserLoader,
   SheetListLoader,
   MarkListLoader,
+  GalleryListLoader,
+  GalleryLoader,
 }

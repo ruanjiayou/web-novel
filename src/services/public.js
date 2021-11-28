@@ -126,4 +126,16 @@ export default {
     })
     return { items: result.data, ended: result.data.length < 10 ? true : false }
   },
+  async getGalleryItems({ params }) {
+    const result = await shttp({
+      url: `/v1/public/comic/${params.bid}/galleries`,
+    })
+    return { items: result.data, ended: true }
+  },
+  async getGalleryDetail({ params }) {
+    const result = await shttp({
+      url: `/v1/public/comic/${params.bid}/galleries/${params.id}`
+    })
+    return { item: result.data }
+  },
 } 
