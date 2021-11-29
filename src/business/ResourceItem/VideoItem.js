@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import { Observer } from 'mobx-react-lite'
 import { useRouterContext } from 'contexts'
+import timeFormat from 'utils/num2time'
 
 export default function ({ item }) {
   const router = useRouterContext()
@@ -15,7 +16,7 @@ export default function ({ item }) {
             <div className="dd-common-alignside">
               <div className="line2" style={{ fontSize: '1.2rem', wordBreak: 'break-all' }}>{item.title}</div>
             </div>
-            <div style={{ padding: '4px 0', color: 'rgb(146, 145, 145)' }}>{item.status === 'loading' ? '连载' : '完结'} · {item.chapters}集</div>
+            <div style={{ padding: '4px 0', color: 'rgb(146, 145, 145)' }}>{item.status === 'loading' ? '连载' : '完结'} · {timeFormat(item.duration)}</div>
             <div style={{ color: 'rgb(146, 145, 145)', wordBreak: 'break-all' }} className="line2" dangerouslySetInnerHTML={{ __html: item.desc }}></div>
           </div>
         </div>

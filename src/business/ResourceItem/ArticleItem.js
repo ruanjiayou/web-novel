@@ -19,7 +19,7 @@ export default function ({ item }) {
               <div style={{ fontSize: '1.2rem' }}>{item.title}</div>
             </div>
             <div style={{ padding: '4px 0', color: 'rgb(146, 145, 145)' }}></div>
-            <div style={{ color: 'rgb(146, 145, 145)' }}>{dd.format(new Date(item.createdAt), 'YYYY-MM-DD HH:mm:ss')}</div>
+            <div style={{ color: 'rgb(146, 145, 145)' }}>{timespan(new Date(item.createdAt), 'YYYY-MM-DD HH:mm:ss')}</div>
           </div>
         </div>
       </Fragment>
