@@ -39,10 +39,19 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
     duration: 0,
     percent: 0,
     volume: 1,
+    showVolume: false,
+    volumeTimer: null,
     seekDirection: 'forword',
     timer: null,
     origin: { x: 0, y: 0 },
     offset: { x: 0, y: 0 },
+    takePeek() {
+      this.showVolume = true;
+      clearTimeout(this.volumeTimer);
+      this.volumeTimer = setTimeout(() => {
+        this.showVolume = false;
+      }, 1000)
+    },
     openControl() {
       this.showControl = true
       clearTimeout(this.timer)
@@ -62,7 +71,7 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
       console.log('close control')
     },
 
-  }))
+  }), [])
   const getHistoryTime = useCallback(async () => {
 
   }, [])
@@ -109,12 +118,34 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
         break;
       case 38:
         // ^
-        local.volume = state.volume + 0.05 > 1 ? 1 : state.volume + 0.05
-        controls.volume(state.volume)
+        if (hlsRef.current) {
+          local.volume = (hlsRef.current.volume + 0.1 > 1 ? 1 : hlsRef.current.volume + 0.1).toFixed(2)
+          hlsRef.current.volume = local.volume
+        }
+        if (ref.current) {
+          local.volume = (state.volume + 0.1 > 1 ? 1 : state.volume + 0.1).toFixed(2)
+          controls.volume(state.volume)
+        }
+        if (flvRef.current) {
+          local.volume = (flvRef.current.volume + 0.1 > 1 ? 1 : flvRef.current.volume + 0.1).toFixed(2)
+          flvRef.current.volume = local.volume
+        }
+        local.takePeek()
         break;
       case 40:
-        local.volume = state.volume - 0.05 < 0 ? 0 : state.volume - 0.05
-        controls.volume(local.volume)
+        if (hlsRef.current) {
+          local.volume = (hlsRef.current.volume - 0.1 < 0 ? 0 : hlsRef.current.volume - 0.1).toFixed(2)
+          hlsRef.current.volume = local.volume
+        }
+        if (ref.current) {
+          local.volume = (state.volume - 0.1 < 0 ? 0 : state.volume - 0.1).toFixed(2)
+          controls.volume(state.volume)
+        }
+        if (flvRef.current) {
+          local.volume = (flvRef.current.volume - 0.1 < 0 ? 1 : flvRef.current.volume - 0.1).toFixed(2)
+          flvRef.current.volume = local.volume
+        }
+        local.takePeek()
         break;
       default: break;
     }
@@ -255,27 +286,28 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
   const renderVideoLayer = function () {
     return <div style={{ position: 'absolute', width: '100%', height: '100%', backgroundColor: 'black' }}>
       {type === 'hls' ? hlsVideo : (type === 'flv' ? flvVideo : video)}
-      <div style={{ position: 'absolute', width: '100%', height: 2, bottom: 0, backgroundColor: 'grey' }}>
+      {!local.showControl && <div style={{ position: 'absolute', width: '100%', height: 2, zIndex: 2, bottom: 0, backgroundColor: 'grey' }}>
         <div style={{ position: 'absolute', height: '100%', width: local.percent + '%', backgroundColor: 'rgb(22, 147, 255)' }}></div>
-      </div>
+      </div>}
     </div>
   }
   const renderControlLayer = function (header) {
     return (
-      <VisualBoxView visible={local.showControl}>
-        <FullHeight
-          style={{ position: 'absolute', width: '100%', color: 'white', backgroundColor: 'rgba(0,0,0,0.6)' }}>
-          {/* 顶部菜单 */}
-          <AlignSide style={{ position: 'absolute', left: 0, top: 0, width: '100%', zIndex: 2, }}>
-            {header(<div>
-              <Icon src={require('theme/icon/airplay.svg')} />
-              <Icon style={{ width: 16 }} src={require('theme/icon/feedback.svg')} />
-              <Icon style={{ width: 18 }} onClick={() => {
-                local.closeControl()
-                local.showMore = true
-              }} src={require('theme/icon/more.svg')} />
-            </div>)}
-          </AlignSide>
+      <FullHeight
+        style={{ position: 'absolute', width: '100%', color: 'white', backgroundColor: local.showControl ? 'rgba(0,0,0,0.6)' : '' }}>
+        {/* 顶部菜单 */}
+        <AlignSide style={{ position: 'absolute', left: 0, top: 0, width: '100%', zIndex: 2, }}>
+          {header(local.showControl && !local.fullscreen ? <div>
+            <Icon src={require('theme/icon/airplay.svg')} />
+            <Icon style={{ width: 16 }} src={require('theme/icon/feedback.svg')} />
+            <Icon style={{ width: 18 }} onClick={() => {
+              local.closeControl()
+              local.showMore = true
+            }} src={require('theme/icon/more.svg')} />
+          </div> : null)}
+        </AlignSide>
+        {local.showVolume && <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', padding: '10px', borderRadius: 10, backgroundColor: 'rgba(0,0,0,0.6)', color: 'white' }}>{local.volume * 100}%</div>}
+        <VisualBoxView visible={local.showControl}>
           <FullHeightAuto onClick={() => {
             local.closeControl()
           }}>
@@ -299,22 +331,21 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
             </SwitchView>
           </FullHeightAuto>
           {/* 底部菜单 */}
-          <FullWidth style={{ paddingBottom: 10, zIndex: 2 }}>
-            <FullWidthFix onClick={() => {
+          <FullWidth style={{ paddingBottom: 5, zIndex: 2 }}>
+            {/* <FullWidthFix onClick={() => {
               local.muted = !local.muted
               if (flvRef.current) {
                 flvRef.current.muted = local.muted
               }
             }}>
               <Icon style={{ width: 24, height: 24 }} src={local.muted ? require('../../theme/icon/mute.svg') : require('../../theme/icon/soundsize.svg')} />
-            </FullWidthFix>
-            <VisualBoxView visible={resource.children.length < 2}>
+            </FullWidthFix> */}
+            {/* <VisualBoxView visible={resource.children.length < 2}>
               <FullHeightFix>
                 <Icon onClick={playNext} style={{ width: 16, height: 15, marginLeft: 0 }} src={require('../../theme/icon/next.svg')} />
               </FullHeightFix>
-            </VisualBoxView>
-            <FullWidthFix style={{ marginRight: 10 }}>{format(Math.ceil(local.realtime))}</FullWidthFix>
-            <FullWidthAuto style={{ backgroundColor: 'grey', borderRadius: 3, overflow: 'hidden' }} onClick={e => {
+            </VisualBoxView> */}
+            <FullWidthAuto style={{ backgroundColor: 'grey', margin: '0 5px', borderRadius: 3, overflow: 'hidden' }} onClick={e => {
               const ne = e.nativeEvent;
               let time = local.duration * (ne.layerX / e.currentTarget.offsetWidth)
               if (type === 'mpeg') {
@@ -329,7 +360,8 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
             }}>
               <div style={{ width: local.percent + '%', height: 5, backgroundColor: '#1278ae' }}></div>
             </FullWidthAuto>
-            <FullWidthFix style={{ marginLeft: 10 }}>{format(Math.ceil(local.duration))}</FullWidthFix>
+            <FullWidthFix>{format(Math.ceil(local.realtime))}</FullWidthFix>/
+            <FullWidthFix>{format(Math.ceil(local.duration))}</FullWidthFix>
             <FullWidthFix>
               <Icon onClick={() => {
                 if (local.isRotated) {
@@ -350,11 +382,11 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
                 } else {
                   Toast.info('全屏失败', 1, null, false)
                 }
-              }} style={{ width: 20 }} src={require('theme/icon/fullscreen.svg')} />
+              }} style={{ width: 20, height: 20 }} src={require('theme/icon/fullscreen.svg')} />
             </FullWidthFix>
           </FullWidth>
-        </FullHeight>
-      </VisualBoxView>
+        </VisualBoxView>
+      </FullHeight>
     )
   }
   const renderMoreLayer = function () {
@@ -369,7 +401,7 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
   return <Observer>{() => (
     <div style={{ width: '100%', position: local.isRotated ? 'absolute' : 'relative', height: local.isRotated ? '100%' : 211, zIndex: 2 }} ref={ref => fullScreenRef.current = ref}>
       {renderVideoLayer()}
-      {renderControlLayer(child => <Navi title={resource.title} showBack wrapStyle={{ flex: 1, backgroundColor: 'transparent', borderBottom: 'none', width: '100%', height: 35 }}>{child}</Navi>)}
+      {renderControlLayer(child => <Navi title={local.isRotated && local.showControl ? resource.title : null} showBack wrapStyle={{ flex: 1, backgroundColor: 'transparent', borderBottom: 'none', width: '100%', height: 35 }}>{child}</Navi>)}
       {renderMoreLayer()}
       {!local.showControl ? <div
         onClick={() => local.openControl()}
