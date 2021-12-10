@@ -25,6 +25,8 @@ function App(props) {
   useEffect(() => {
     local.layers = router.bootstrap(router.history.location);
     const name = (props.location.pathname.split('/')[2]).split('?')[0]
+    // 沉浸式
+    store.app.setShowBar(store.app.selectedMenu !== 'awhile')
     if (!store.app.selectedMenu) {
       store.app.setMenu('home')
     } else if (store.app.selectedMenu !== name) {

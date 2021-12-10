@@ -27,6 +27,7 @@ const Model = types.model({
   account: types.optional(types.string, ''),
   accessToken: types.optional(types.string, ''),
   refreshToken: types.optional(types.string, ''),
+  showBar: types.optional(types.boolean, true),
   // 音乐播放器相关
   showMusic: false,
   // 调试
@@ -49,6 +50,9 @@ const Model = types.model({
 })).actions(self => {
   // locker相关操作
   return {
+    setShowBar(shown) {
+      self.showBar = shown;
+    },
     initLocker(opt = {}) {
       for (let k in opt) {
         self.config[k] = opt[k]

@@ -8,7 +8,7 @@ import RouterRoot from './router'
 import globalStore from './store'
 import { isPWAorMobile } from './utils/utils'
 import { createStoreProvider } from 'contexts'
-import { AutoCenterView } from 'components'
+import { AutoCenterView, UserAreaView } from 'components'
 import './components/common.css'
 import './group/group.css'
 import 'antd-mobile/dist/antd-mobile.css'
@@ -58,7 +58,9 @@ function App() {
         return (
           <Fragment>
             <StoreContext.Provider value={store}>
-              <RouterRoot></RouterRoot>
+              <UserAreaView bar={store.app.showBar}>
+                <RouterRoot></RouterRoot>
+              </UserAreaView>
             </StoreContext.Provider>
           </Fragment>
         )
