@@ -7,7 +7,7 @@ import { MIconView } from 'components'
 export default function ({ children }) {
   const router = useRouterContext()
   const store = useStoreContext()
-  return <Observer>{() => <Fragment>
+  return <Observer>{() => <div style={{ width: '100%' }}>
     <TabBar
       tintColor="#33A3F4"
       unselectedTintColor="#555"
@@ -33,5 +33,5 @@ export default function ({ children }) {
         </TabBar.Item>
       })}
     </TabBar>
-  </Fragment>}</Observer>
+  </div>}</Observer>
 }
