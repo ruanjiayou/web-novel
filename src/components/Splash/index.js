@@ -20,7 +20,7 @@ export default function Splash({ children, booting, remainSeconds = 5, can = fal
     }, 1000)
   })
   return <Observer>{() => (
-    <Wrapper style={{ display: booting || local.showSplash ? 'block' : 'none' }}>
+    <Wrapper style={{ display: booting || local.showSplash ? 'block' : 'none', position: 'fixed', left: 0, top: 0 }}>
       <img src="/logo.jpg" style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', borderRadius: '50%', width: 50 }} alt="" />
       {/* <CloseBtn onClick={() => { if (local.remainSeconds === 0 || can) { local.showSplash = false } }}>{local.remainSeconds === 0 ? 'X' : local.remainSeconds}</CloseBtn> */}
       {children}

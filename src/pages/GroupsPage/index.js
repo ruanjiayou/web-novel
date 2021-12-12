@@ -12,7 +12,7 @@ const model = createPageModel({
   GroupListLoader,
 })
 
-function View({ self, router, }) {
+function View({ self, router, store }) {
   useEffectOnce(() => {
     if (self.GroupListLoader.isEmpty) {
       self.GroupListLoader.refresh()
@@ -24,7 +24,7 @@ function View({ self, router, }) {
       return blank
     }
     return <FullHeight>
-      <div style={{ padding: 10, backgroundColor: 'gainsboro', marginBottom: 10 }}>所有频道</div>
+      <div style={{ padding: 10, backgroundColor: store.app.barBGC, marginBottom: 10 }}>所有频道</div>
       <FullHeightAuto>
         {self.GroupListLoader.items.map(group => (
           <Cell

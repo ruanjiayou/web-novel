@@ -15,6 +15,9 @@ export default function FilterRow({ self, onQueryChange }) {
     onQueryChange()
   }
   return <Observer>{() => (
-    <Container>{self.children.map(child => (<FilterTag self={child} key={child.id} selectTag={selectTag} />))}</Container>
+    <Container onTouchStartCapture={e => {
+      e.preventDefault()
+      e.stopPropagation()
+    }}>{self.children.map(child => (<FilterTag self={child} key={child.id} selectTag={selectTag} />))}</Container>
   )}</Observer>
 }

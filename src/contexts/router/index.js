@@ -65,6 +65,7 @@ export function useProvider(history) {
         return views[views.length - 1] || ''
       },
       userEvent: true,
+      hideMenu: false,
       getPage(view = '') {
         view = view || this.view
         if (view) {

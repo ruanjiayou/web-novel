@@ -25,13 +25,29 @@ function App(props) {
   useEffect(() => {
     local.layers = router.bootstrap(router.history.location);
     const name = (props.location.pathname.split('/')[2]).split('?')[0]
-    // 沉浸式
-    store.app.setShowBar(store.app.selectedMenu !== 'awhile')
     if (!store.app.selectedMenu) {
       store.app.setMenu('home')
     } else if (store.app.selectedMenu !== name) {
       store.app.setMenu(name)
     }
+    if (store.app.selectedMenu === 'home') {
+      store.app.setBarBGC('#108ee9')
+    }
+    if (store.app.selectedMenu === 'groups') {
+      store.app.setBarBGC('rgb(150 159 169)')
+    }
+    if (store.app.selectedMenu === 'awhile') {
+      store.app.setBarBGC('black')
+    }
+    if (store.app.selectedMenu === 'music') {
+      store.app.setBarBGC('plum')
+    }
+    if (store.app.selectedMenu === 'mine') {
+      store.app.setBarBGC('rgb(249, 122, 144)')
+    }
+    // 沉浸式
+    store.app.setShowBar(store.app.selectedMenu !== 'awhile')
+    store.app.setHideMenu(store.app.selectedMenu === 'awhile')
   }, [router.history.location.pathname])
 
   const Page = router.getPage()
@@ -84,7 +100,7 @@ function App(props) {
                 </CSSTransition>
               })}
             </TransitionGroup>
-            <Splash remainSeconds={1} can={true} booting={store.app.booting}></Splash>
+            {/* <Splash remainSeconds={1} can={true} booting={store.app.booting}></Splash> */}
           </Fragment>
         }
       }</Observer>

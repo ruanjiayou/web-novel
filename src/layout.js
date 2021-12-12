@@ -7,12 +7,13 @@ import { MIconView } from 'components'
 export default function ({ children }) {
   const router = useRouterContext()
   const store = useStoreContext()
-  return <Observer>{() => <div style={{ width: '100%' }}>
+  return <Observer>{() => <div style={{ width: '100%', height: '100%' }}>
     <TabBar
       tintColor="#33A3F4"
       unselectedTintColor="#555"
       tabBarPosition="bottom"
       barTintColor="white"
+      hidden={store.app.hideMenu}
     >
       {store.app.tabs.map(menu => {
         return <TabBar.Item

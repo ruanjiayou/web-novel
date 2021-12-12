@@ -2,13 +2,15 @@ import React, { useContext as useReactContext } from 'react'
 import { MIconView } from 'components'
 import { AlignSide, AlignCenterXY } from 'components/common'
 import { useRouterContext } from '../router'
+import { useStoreContext } from '../store'
 // 上下文context.避免react多级一直传props
 const Context = React.createContext(null)
 
 function Navi(prop) {
   const router = useRouterContext()
+  const store = useStoreContext()
   return (
-    <AlignSide style={{ height: 45, backgroundColor: 'white', borderBottom: '1px solid #eee', ...prop.wrapStyle }}>
+    <AlignSide style={{ height: 45, backgroundColor: store.app.barBGC, borderBottom: '1px solid #eee', ...prop.wrapStyle }}>
       <AlignCenterXY onClick={() => { router.back() }}>
         <div style={{ display: prop.showBack === false ? 'none' : 'flex' }}>
           <MIconView type="FaChevronLeft" />

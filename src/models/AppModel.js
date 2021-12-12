@@ -28,6 +28,8 @@ const Model = types.model({
   accessToken: types.optional(types.string, ''),
   refreshToken: types.optional(types.string, ''),
   showBar: types.optional(types.boolean, true),
+  barBGC: types.optional(types.string, 'black'),
+  hideMenu: types.optional(types.boolean, false),
   // 音乐播放器相关
   showMusic: false,
   // 调试
@@ -48,11 +50,22 @@ const Model = types.model({
     return !!self.accessToken
   },
 })).actions(self => {
-  // locker相关操作
+  // navBar
   return {
     setShowBar(shown) {
       self.showBar = shown;
     },
+    setBarBGC(color) {
+      self.barBGC = color;
+    },
+    setHideMenu(hide) {
+      self.hideMenu = hide;
+    }
+  }
+}).actions(self => {
+  // locker相关操作
+  return {
+
     initLocker(opt = {}) {
       for (let k in opt) {
         self.config[k] = opt[k]

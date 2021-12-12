@@ -26,7 +26,7 @@ function View({ self, router, store, params }) {
   return <Observer>
     {() => (
       <FullHeight>
-        <FullWidth style={{ height: 50 }}>
+        <FullWidth style={{ height: 50, backgroundColor: store.app.barBGC }}>
           <img src="/logo.jpg" alt="" style={{ margin: '0 10px', borderRadius: '50%' }} />
           <FullHeightAuto style={{ height: 30, backgroundColor: '#ccc', borderRadius: 5, }} onClick={() => { router.pushView('Search') }} />
           <div style={{ color: '#f97a90', margin: '0 5px' }} onClick={() => {
@@ -36,7 +36,7 @@ function View({ self, router, store, params }) {
               showTip(router)
             }
           }}>
-            <MIconView type="FaStar" size={'md'} />
+            <MIconView type="FaStar" size={'md'} style={{ color: '#ccc' }} />
           </div>
         </FullWidth>
         <Tabs

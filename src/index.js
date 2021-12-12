@@ -8,7 +8,7 @@ import RouterRoot from './router'
 import globalStore from './store'
 import { isPWAorMobile } from './utils/utils'
 import { createStoreProvider } from 'contexts'
-import { AutoCenterView, UserAreaView } from 'components'
+import { AutoCenterView, UserAreaView, Splash } from 'components'
 import './components/common.css'
 import './group/group.css'
 import 'antd-mobile/dist/antd-mobile.css'
@@ -46,7 +46,7 @@ function App() {
   return <Observer>
     {() => {
       if (store.app.booting) {
-        return <AutoCenterView>启动中...</AutoCenterView>
+        return <Splash />
       } else if (local.isError) {
         return <AutoCenterView>
           <Button style={{ width: 150 }} type="primary" onClick={() => {
@@ -56,13 +56,11 @@ function App() {
         </AutoCenterView>
       } else {
         return (
-          <Fragment>
-            <StoreContext.Provider value={store}>
-              <UserAreaView bar={store.app.showBar}>
-                <RouterRoot></RouterRoot>
-              </UserAreaView>
-            </StoreContext.Provider>
-          </Fragment>
+          <StoreContext.Provider value={store}>
+            <UserAreaView bar={store.app.showBar}>
+              <RouterRoot></RouterRoot>
+            </UserAreaView>
+          </StoreContext.Provider>
         )
       }
     }

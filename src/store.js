@@ -44,7 +44,9 @@ const Store = types.model('store', {
       channelLoaders[channel.group_id] = GroupTreeLoader.create()
       resourceListLoaders[channel.group_id] = ResourceListLoader.create()
     })
-    self.app.setBoot(false)
+    setTimeout(() => {
+      self.app.setBoot(false)
+    }, 500)
   },
   setTs() {
     self.ts = Date.now()

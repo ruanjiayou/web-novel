@@ -1,7 +1,8 @@
 {
   "name": "novel",
   "short_name": "novel",
-  "lang": "zh-cn",
+  "orientation": "portrait",
+  "lang": "zh-CN",
   "icons": [
     {
       "src": "logo.jpg",

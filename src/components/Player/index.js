@@ -10,6 +10,7 @@ import { FullHeight, FullHeightAuto, FullHeightFix, FullWidth, FullWidthAuto, Fu
 import { Toast } from 'antd-mobile'
 import ReactHlsPlayer from 'react-hls-player';
 import { ReactFlvPlayer } from 'react-flv-player'
+import { isPWAorMobile } from '../../utils/utils'
 
 const styles = {
   videoBG: {
@@ -18,6 +19,8 @@ const styles = {
     backgroundColor: 'black',
   }
 }
+// status: ready,waiting,playing,paused,error,ended,
+// 
 
 export default function ({ router, type, store, resource, onRecord, srcpath, looktime, playNext, }) {
   const Navi = useNaviContext()
@@ -32,7 +35,9 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
     isSeeking: false,
     isEnded: false,
     isReady: false,
-    isRotated: false,
+    isMobile: isPWAorMobile(),
+    isVertical: window.matchMedia('(orientation: portrait)').matches,
+    isError: false,
     fullscreen: false,
     realtime: 0,
     seektime: 0,
@@ -43,6 +48,8 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
     volumeTimer: null,
     seekDirection: 'forword',
     timer: null,
+    dblTimer: null,
+    dblCount: 0,
     origin: { x: 0, y: 0 },
     offset: { x: 0, y: 0 },
     takePeek() {
@@ -93,6 +100,11 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
     local.offset.x = e.touches[0].clientX - local.origin.x
     local.offset.y = e.touches[0].clientY - local.origin.y
   }
+  const bind = useGesture({
+    onMoveStart: (state) => { console.log(state, 'start') },
+    onMoveEnd: (state) => { console.log(state, 'end') },
+    onPointerDown: (state) => { console.log(state, '?') }
+  })
 
   const onKeyPress = function (e) {
     switch (e.keyCode) {
@@ -150,12 +162,24 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
       default: break;
     }
   }
+  const onAction = function () {
+    if (type === 'mpeg') {
+      local.paused ? controls.play() : controls.pause()
+    } else if (type === 'hls' && hlsRef.current) {
+      local.paused ? hlsRef.current.play() : hlsRef.current.pause()
+    } else if (type === 'flv' && flvRef.current) {
+      local.paused ? flvRef.current.play() : flvRef.current.pause()
+    }
+    local.paused = !local.paused
+  }
   useEffect(() => {
+    local.isError = false;
     local.closeControl()
   }, [srcpath]);
   useEffectOnce(() => {
     const onRotation = function () {
-      local.isRotated = window.matchMedia('(orientation: portrait)').matches
+      // 竖屏模式
+      local.isVertical = !local.isVertical
     }
     window.addEventListener('orientationchange', onRotation)
     window.addEventListener('keydown', onKeyPress)
@@ -228,6 +252,9 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
     onSeeking={() => {
       local.isWaiting = true
     }}
+    onError={e => {
+      local.isError = true;
+    }}
     onSeeked={() => {
       local.isWaiting = false
       if (local.isEnded) {
@@ -255,6 +282,18 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
       }}
       onSeeked={() => {
         local.isWaiting = false
+      }}
+      onErrorCapture={e => {
+        console.log(e)
+      }}
+      onError={(e) => {
+        local.isError = true
+        console.log(e)
+      }}
+      hlsConfig={{
+        onError(e) {
+          console.log(e)
+        }
       }}
       controls={false}
       width="100%"
@@ -316,16 +355,9 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
             }>
               <AlignCenterXY>
                 <div style={{ position: 'absolute', top: 0, display: 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}><Icon onClick={(e) => {
-                  if (type === 'mpeg') {
-                    local.paused ? controls.play() : controls.pause()
-                  } else if (type === 'hls' && hlsRef.current) {
-                    local.paused ? hlsRef.current.play() : hlsRef.current.pause()
-                  } else if (type === 'flv' && flvRef.current) {
-                    local.paused ? flvRef.current.play() : flvRef.current.pause()
-                  }
+                  onAction()
                   e.preventDefault()
                   e.stopPropagation()
-                  local.paused = !local.paused
                 }} src={local.paused ? require('../../theme/icon/play-fill.svg') : require('../../theme/icon/suspended-fill.svg')} /></div>
               </AlignCenterXY>
             </SwitchView>
@@ -364,12 +396,6 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
             <FullWidthFix>{format(Math.ceil(local.duration))}</FullWidthFix>
             <FullWidthFix>
               <Icon onClick={() => {
-                if (local.isRotated) {
-                  local.isRotated = false;
-                  if (!local.fullscreen) {
-                    return
-                  }
-                }
                 if (!document.fullscreenEnabled) {
                   return
                 }
@@ -399,13 +425,30 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
     </VisualBoxView>
   }
   return <Observer>{() => (
-    <div style={{ width: '100%', position: local.isRotated ? 'absolute' : 'relative', height: local.isRotated ? '100%' : 211, zIndex: 2 }} ref={ref => fullScreenRef.current = ref}>
+    <div style={{ width: '100%', position: !local.isVertical && local.isMobile ? 'absolute' : 'relative', height: !local.isVertical && local.isMobile ? '100%' : 211, zIndex: 2 }} ref={ref => fullScreenRef.current = ref}>
       {renderVideoLayer()}
-      {renderControlLayer(child => <Navi title={local.isRotated && local.showControl ? resource.title : null} showBack wrapStyle={{ flex: 1, backgroundColor: 'transparent', borderBottom: 'none', width: '100%', height: 35 }}>{child}</Navi>)}
+      {renderControlLayer(child => <Navi title={!local.isVertical && local.isMobile && local.showControl ? resource.title : null} showBack wrapStyle={{ flex: 1, backgroundColor: 'transparent', borderBottom: 'none', width: '100%', height: 35 }}>{child}</Navi>)}
       {renderMoreLayer()}
       {!local.showControl ? <div
-        onClick={() => local.openControl()}
+        // {...bind()}
+        onClick={() => {
+          local.dblCount++;
+          if (local.dblTimer) {
+            clearTimeout(local.dblTimer);
+            local.dblTimer = null;
+          }
+          if (local.dblCount > 1) {
+            onAction();
+          }
+          local.dblTimer = setTimeout(function () {
+            if (local.dblCount === 1) {
+              local.openControl()
+            }
+            local.dblCount = 0;
+          }, 300)
+        }}
         style={{ position: 'absolute', display: 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
+        {local.isError && <span style={{ color: 'white' }}>播放错误</span>}
         <SwitchView loading={local.isWaiting} holder={<MIconView type="IoLoader" style={{ color: 'white', backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: '50%', padding: '4px 0' }} />}>
           {(local.paused ? <Icon onClick={(e) => {
             e.stopPropagation();
