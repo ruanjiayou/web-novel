@@ -32,11 +32,11 @@ export default function ({ item }) {
   return <Observer>
     {() => {
       return <Fragment>
-        <FullWidth style={{ backgroundColor: '#eee', position: 'relative' }} onClick={() => {
+        <FullWidth style={{ backgroundColor: '#eee', position: 'relative', flex: 1, width: '100%' }} onClick={() => {
           router.pushView('Image', { id: item.id })
         }}>
-          <FullWidthFix style={{ width: 60, height: 80, margin: '0 5px 5px', position: 'relative', overflow: 'hidden' }}>
-            <img style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', height: '100%' }} src={item.auto_cover} alt="" />
+          <FullWidthFix style={{ width: 60, height: 80, margin: 5, position: 'relative', overflow: 'hidden', flexShrink: 0 }}>
+            <img style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', height: '100%', minWidth: '100%' }} src={item.auto_cover} alt="" />
             <div style={{ position: 'absolute', right: 0, bottom: 0, height: 24, width: 24 }} onClick={async (e) => {
               e.stopPropagation()
               e.preventDefault()
@@ -63,16 +63,16 @@ export default function ({ item }) {
             </div>
             <div style={{ position: 'absolute', top: 4, right: 4, zIndex: 2, color: 'white', backgroundColor: 'rgba(0,0,0,0.3)', borderRadius: '50%', padding: '3px 5px' }}>{item.images ? item.images.length + 1 : 1}</div>
           </FullWidthFix>
-          <FullWidthAuto>
-            <div>{item.title}</div>
-            <div style={{ margin: '5px 0' }}>by {item.uname}</div>
+          <div style={{ flex: 1, }}>
+            <div className="line2">{item.title}</div>
+            <div style={{ margin: '5px 0', whiteSpace: 'nowrap', overflow: 'hidden' }}>by {item.uname}</div>
             {/* <TagsRow onTouchStart={e => {
               // e.stopPropagation()
               // e.preventDefault()
             }}>
               {item.tags.map((tag, index) => <Tag key={index}>{tag}</Tag>)}
             </TagsRow> */}
-          </FullWidthAuto>
+          </div>
         </FullWidth>
       </Fragment>
     }}</Observer >

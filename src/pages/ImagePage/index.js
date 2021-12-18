@@ -5,7 +5,7 @@ import { ActivityIndicator, Icon, Tag } from 'antd-mobile'
 import { ResourceLoader } from 'loader'
 import { AutoCenterView, MIconView } from 'components'
 import createPageModel from 'page-group-loader-model/BasePageModel'
-import { ITag } from './style'
+import { ITag, Container } from './style'
 import services from 'services'
 import { useEffectOnce } from 'react-use'
 
@@ -24,12 +24,12 @@ function View({ self, router, store, params, Navi }) {
     markLoading: false,
     markError: false,
   }))
-  const MStatus  = function() {
-    if(localStore.markLoading) {
-      return <ActivityIndicator animating={true}/>
-    } else if(localStore.markError) {
-      return <MIconView type="FaSyncAlt"/>
-    } else if(localStore.markStatus === 'dislike') {
+  const MStatus = function () {
+    if (localStore.markLoading) {
+      return <ActivityIndicator animating={true} />
+    } else if (localStore.markError) {
+      return <MIconView type="FaSyncAlt" />
+    } else if (localStore.markStatus === 'dislike') {
       return <MIconView type="FaHeart" style={{ color: 'white' }} />
     } else {
       return <MIconView type="FaHeart" style={{ color: 'red' }} />
@@ -40,9 +40,9 @@ function View({ self, router, store, params, Navi }) {
       loader.refresh({ params: { id: localStore.id } })
     }
   })
-  useEffectOnce(()=>{
-    getMark({params}).then(result=>{
-      if(result.status === 'success') {
+  useEffectOnce(() => {
+    getMark({ params }).then(result => {
+      if (result.status === 'success') {
         localStore.markStatus = 'like'
       }
     })
@@ -54,21 +54,18 @@ function View({ self, router, store, params, Navi }) {
         {loader.isEmpty ? <AutoCenterView>
           <ActivityIndicator text="加载中..." />
         </AutoCenterView> : <Fragment>
-            <div style={{ margin: 10 }}>
-              {loader.item.tags.map((tag, index) => <ITag key={index} disabled>{tag}</ITag>)}
-            </div>
-            <div style={{ position: 'absolute', right: 20, bottom: 20, height: 24, width: 24 }} onClick={async()=>{
+            <div style={{ position: 'absolute', right: 20, bottom: 50, height: 24, width: 24 }} onClick={async () => {
               if (localStore.markLoading) return
               localStore.markLoading = true
               try {
-                if(localStore.markStatus=== 'dislike') {
-                  await createMark({data: params})
+                if (localStore.markStatus === 'dislike') {
+                  await createMark({ data: params })
                   localStore.markStatus = 'like'
                 } else {
                   await destroyMark({ params })
                   localStore.markStatus = 'dislike'
                 }
-              } catch(e) {
+              } catch (e) {
                 localStore.markError = true
               } finally {
                 localStore.markLoading = false
@@ -80,6 +77,9 @@ function View({ self, router, store, params, Navi }) {
             {loader.item.images.map((image, index) => (<img key={index} src={imageHost + image} style={{ maxWidth: '100%' }} />))}
           </Fragment>}
       </div>
+      <Container style={{ position: 'absolute', left: 5, right: 5, bottom: 5 }}>
+        {loader.item && loader.item.tags.map((tag, index) => <ITag key={index} disabled>{tag}</ITag>)}
+      </Container>
     </div>
   }</Observer>
 }

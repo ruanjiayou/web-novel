@@ -101,9 +101,8 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
     local.offset.y = e.touches[0].clientY - local.origin.y
   }
   const bind = useGesture({
-    onMoveStart: (state) => { console.log(state, 'start') },
-    onMoveEnd: (state) => { console.log(state, 'end') },
-    onPointerDown: (state) => { console.log(state, '?') }
+    onDrag: (e) => { },
+    onDragEnd: e => { console.log(e) }
   })
 
   const onKeyPress = function (e) {
@@ -192,7 +191,8 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
     style={styles.videoBG}
     autoPlay={local.autoplay}
     type='video'
-    poster={local.poster}
+    playsInline
+    poster={resource.auto_cover}
     playsInline={true}
     muted={local.muted}
     src={srcpath}
@@ -268,6 +268,7 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
     return <ReactHlsPlayer
       src={srcpath}
       autoPlay={false}
+      playsInline
       playerRef={hlsRef}
       onLoadedMetadata={e => {
         if (hlsRef.current) {
@@ -425,9 +426,9 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
     </VisualBoxView>
   }
   return <Observer>{() => (
-    <div style={{ width: '100%', position: !local.isVertical && local.isMobile ? 'absolute' : 'relative', height: !local.isVertical && local.isMobile ? '100%' : 211, zIndex: 2 }} ref={ref => fullScreenRef.current = ref}>
+    <div style={{ width: '100%', position: !local.isVertical ? 'absolute' : 'relative', height: !local.isVertical ? '100%' : 211, zIndex: 2 }} ref={ref => fullScreenRef.current = ref}>
       {renderVideoLayer()}
-      {renderControlLayer(child => <Navi title={!local.isVertical && local.isMobile && local.showControl ? resource.title : null} showBack wrapStyle={{ flex: 1, backgroundColor: 'transparent', borderBottom: 'none', width: '100%', height: 35 }}>{child}</Navi>)}
+      {renderControlLayer(child => <Navi title={!local.isVertical && local.showControl ? resource.title : null} showBack wrapStyle={{ flex: 1, backgroundColor: 'transparent', borderBottom: 'none', width: '100%', height: 35 }}>{child}</Navi>)}
       {renderMoreLayer()}
       {!local.showControl ? <div
         // {...bind()}

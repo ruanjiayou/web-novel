@@ -38,8 +38,9 @@ function View({ self, router, store, services, params }) {
     },
     setRecorder(child_id = '', looktime = 0) {
       if (loader.item) {
+        const data = loader.item.toJSON();
         videoRecorder.getValue(params.id).then(() => {
-          videoRecorder.setValue(localStore.id, loader.item.toJSON(), { child_id, time: looktime })
+          videoRecorder.setValue(localStore.id, data, { child_id, time: looktime })
         })
       }
     }
@@ -100,25 +101,29 @@ function View({ self, router, store, services, params }) {
                 }}
               />
               <div style={{ padding: '0 20px', }}>
-                <p style={{ fontWeight: 'bolder', margin: 0, padding: '5px 0' }}>播放列表:</p>
-                <div>{loader.item.children.map(child => (
-                  <EpTag
-                    key={child.path}
-                    onClick={() => {
-                      if (localStorage.child_id !== child.id) {
-                        localStore.child_id = child.id
-                        localStore.looktime = 0
-                        localStore.playpath = lineLoader.getHostByType('video') + child.path;
-                        localStore.setRecorder(localStore.child_id, localStore.looktime)
-                      }
-                    }}
-                    selected={localStore.child_id === child.id}>{child.title || `第${child.nth}集`}</EpTag>
-                ))}
-                </div>
+                <VisualBoxView visible={loader.item.children.length > 1}>
+                  <p style={{ fontWeight: 'bolder', margin: 0, padding: '5px 0' }}>播放列表:</p>
+                  <div>{loader.item.children.map(child => (
+                    <EpTag
+                      key={child.path}
+                      onClick={() => {
+                        if (localStorage.child_id !== child.id) {
+                          localStore.child_id = child.id
+                          localStore.looktime = 0
+                          localStore.playpath = lineLoader.getHostByType('video') + child.path;
+                          localStore.setRecorder(localStore.child_id, localStore.looktime)
+                        }
+                      }}
+                      selected={localStore.child_id === child.id}>{child.title || `第${child.nth}集`}</EpTag>
+                  ))}
+                  </div>
+                </VisualBoxView>
                 <p style={{ marginBottom: 8 }}>内容简介:</p>
                 <div style={{ lineHeight: 1.5, color: '#555', textIndent: 20 }} dangerouslySetInnerHTML={{ __html: loader.item.desc || '暂无' }}></div>
-                <p style={{ margin: '5px 0' }}>标签:</p>
-                <div>{loader.item.tags.map(tag => (<EpTag key={tag} selected={false}>{tag}</EpTag>))}</div>
+                <VisualBoxView visible={loader.item.tags.length > 0}>
+                  <p style={{ margin: '5px 0' }}>标签:</p>
+                  <div>{loader.item.tags.map(tag => (<EpTag key={tag} selected={false}>{tag}</EpTag>))}</div>
+                </VisualBoxView>
               </div>
             </div>
           </div>

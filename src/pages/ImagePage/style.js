@@ -9,3 +9,14 @@ export const ITag = styled.span`
   display: inline-block;
   font-size: 14px;
 `
+
+export const Container = styled.div`
+  display: flex;
+  white-space: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  scrollbar-width: none;
+`

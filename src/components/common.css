@@ -61,6 +61,7 @@ div.dd-common-alignside {
   -webkit-box-orient: vertical;
   line-clamp: 2;
   line-height: 1.3;
+  white-space: initial;
 }
 
 @keyframes spin {
