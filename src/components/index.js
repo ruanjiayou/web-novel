@@ -11,6 +11,7 @@ import UserAreaView from './UserAreaView'
 import VisualBoxView from './VisualBoxView'
 import Status from './Status'
 import Splash from './Splash'
+import Tabs from './Tabs'
 
 export {
   AutoCenterView,
@@ -26,4 +27,5 @@ export {
   VisualBoxView,
   Status,
   Splash,
+  Tabs,
 }
