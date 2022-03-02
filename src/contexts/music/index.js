@@ -90,6 +90,7 @@ function MusicPlayer(props) {
   }, state);
   useEffectOnce(() => {
     window.audioPlayer = controls
+    window.audioRef = ref;
   })
   useEffect(() => {
     // 解决相互引用的问题

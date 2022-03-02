@@ -13,6 +13,12 @@ export default {
     })
     return { items: result.data, ended: result.data.length < 10 }
   },
+  async getRecommendResourceList({ query, params, data }) {
+    const result = await shttp({
+      url: `/v1/public/recommend${stringfyQuery(query)}`,
+    })
+    return { items: result.data }
+  },
   async getResource({ query, params }) {
     const result = await shttp({
       url: `/v1/public/resource/${params.id}`

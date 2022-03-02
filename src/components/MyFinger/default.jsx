@@ -176,8 +176,8 @@
  
          evt.origin = [this.x1, this.y1];
          if (this.multiTouch === false) {
-             if ((this.x2 && Math.abs(this.x1 - this.x2) > 30) ||
-                 (this.y2 && Math.abs(this.y1 - this.y2) > 30)) {
+             if ((this.x2 && Math.abs(this.x1 - this.x2) > 10) ||
+                 (this.y2 && Math.abs(this.y1 - this.y2) > 10)) {
                  evt.direction = this._swipeDirection(this.x1, this.x2, this.y1, this.y2);
                  evt.distance = evt.direction === 'Left' || evt.direction === 'Right' ? Math.abs(this.x1 - this.x2) : Math.abs(this.y1 - this.y2);
                  this.swipeTimeout = setTimeout(() => {
@@ -223,7 +223,7 @@
  
      _swipeDirection (x1, x2, y1, y2) {
        // README: 80 -> 30
-         if (Math.abs(x1 - x2) > 30 || this.end-this.now < 250) {
+         if (Math.abs(x1 - x2) > 30 || Math.abs(y1 - y2) > 30 || this.end - this.now < 250) {
              return Math.abs(x1 - x2) >= Math.abs(y1 - y2) ? (x1 - x2 > 0 ? 'Left' : 'Right') : (y1 - y2 > 0 ? 'Up' : 'Down');
          } else {
              return 'Nochange';

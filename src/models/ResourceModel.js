@@ -1,5 +1,6 @@
 import { types } from 'mobx-state-tree'
 import store from 'store'
+import services from 'services'
 
 const Model = types.model('resource', {
   id: types.string,
@@ -51,6 +52,15 @@ const Model = types.model('resource', {
 }).actions(self => ({
   toggleStatus() {
     self.playing = !self.playing
+  },
+  async setMarked(marked) {
+    self.marked = marked;
+    const data = { id: self.id };
+    if (marked) {
+      await services.createMark({ data })
+    } else {
+      await services.destroyMark({ params: data })
+    }
   }
 })).views(self => ({
   get auto_cover() {

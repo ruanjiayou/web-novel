@@ -31,7 +31,7 @@ export default function ResourceItem({ item, loader, type, ...props }) {
           Item = <ArticleItem item={item} loader={loader} />
           break
         case 'video':
-          Item = <VideoItem item={item} loader={loader} />
+          Item = <VideoItem item={item} loader={loader} {...props} />
           break
           case 'comic':
             Item = <ComicItem item={item} loader={loader} />

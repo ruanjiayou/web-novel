@@ -3,13 +3,14 @@ import { Observer } from 'mobx-react-lite'
 import { useRouterContext } from 'contexts'
 import timeFormat from 'utils/num2time'
 
-export default function ({ item }) {
+export default function ({ item, ...props }) {
   const router = useRouterContext()
+  const onClick = props.onClick ? () => props.onClick(item) : () => { router.pushView('VideoInfo', { id: item.id }) }
   return <Observer>
     {() => {
       return <Fragment>
-        <div className="full-width" style={{ margin: 10 }} onClick={() => { router.pushView('VideoInfo', { id: item.id }) }}>
-          <div className="full-width-fix" style={{ width: 60, height: 80, flexShrink: 0, backgroundColor: '#0094fd', marginRight: 20 }}>
+        <div className="full-width" style={{ margin: 10 }} onClick={onClick}>
+          <div className="full-width-fix" style={{ width: '10rem', height: '6.5rem', flexShrink: 0, backgroundColor: '#0094fd', marginRight: 20 }}>
             <img style={{ width: '100%', height: '100%' }} src={item.auto_cover} alt="" />
           </div>
           <div className="full-width-auto full-height">

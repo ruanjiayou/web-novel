@@ -49,31 +49,34 @@ function View({ self, router, store, params, Navi }) {
   })
   return <Observer>{
     () => <div className="full-height">
-      <Navi title={loader.item ? loader.item.title + ' ' + loader.item.uname : '加载中...'} />
+      <Navi
+        title={loader.item ? loader.item.title + ' ' + loader.item.uname : '加载中...'}
+      >
+        <div onClick={async () => {
+          if (localStore.markLoading) return
+          localStore.markLoading = true
+          try {
+            if (localStore.markStatus === 'dislike') {
+              await createMark({ data: params })
+              localStore.markStatus = 'like'
+            } else {
+              await destroyMark({ params })
+              localStore.markStatus = 'dislike'
+            }
+          } catch (e) {
+            localStore.markError = true
+          } finally {
+            localStore.markLoading = false
+          }
+        }}>
+          {MStatus()}
+        </div>
+      </Navi>
       <div className="full-height-auto">
         {loader.isEmpty ? <AutoCenterView>
           <ActivityIndicator text="加载中..." />
         </AutoCenterView> : <Fragment>
-            <div style={{ position: 'absolute', right: 20, bottom: 50, height: 24, width: 24 }} onClick={async () => {
-              if (localStore.markLoading) return
-              localStore.markLoading = true
-              try {
-                if (localStore.markStatus === 'dislike') {
-                  await createMark({ data: params })
-                  localStore.markStatus = 'like'
-                } else {
-                  await destroyMark({ params })
-                  localStore.markStatus = 'dislike'
-                }
-              } catch (e) {
-                localStore.markError = true
-              } finally {
-                localStore.markLoading = false
-              }
-            }}>
-              {MStatus()}
-            </div>
-            {/* <img src={imageHost + loader.item.poster} style={{ maxWidth: '100%' }} /> */}
+            {loader.item.poster !== loader.item.images[0] && <img src={imageHost + loader.item.poster} style={{ maxWidth: '100%' }} />}
             {loader.item.images.map((image, index) => (<img key={index} src={imageHost + image} style={{ maxWidth: '100%' }} />))}
           </Fragment>}
       </div>

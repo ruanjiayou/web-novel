@@ -3,21 +3,25 @@ import { Observer, useLocalStore } from 'mobx-react-lite'
 import { ActivityIndicator, Icon, Button, Toast, Tag } from 'antd-mobile'
 
 import timespan from 'utils/timespan'
-import { ResourceLoader } from 'loader'
+import { ResourceLoader, RecommendResourceListLoader } from 'loader'
 import { MIconView, AutoCenterView, VisualBoxView, EmptyView } from 'components'
+import ResourceItem from 'business/ResourceItem'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 import Recorder from 'utils/cache'
 import { useEffectOnce } from 'react-use'
 import Player from '../../components/Player'
+import services from '../../services/index'
 import { EpTag } from './style'
 
 const videoRecorder = new Recorder('video')
 const model = createPageModel({
   ResourceLoader,
+  RecommendResourceListLoader,
 })
 
 function View({ self, router, store, services, params }) {
   const loader = self.ResourceLoader
+  const recommendsLoader = self.RecommendResourceListLoader
   const lineLoader = store.lineLoader
   const localStore = useLocalStore(() => ({
     loading: false,
@@ -28,7 +32,7 @@ function View({ self, router, store, services, params }) {
     child_id: '',
     looktime: 0,
     get type() {
-      if (this.playpath.endsWith('.m3u8')) {
+      if (this.playpath.endsWith('.m3u8') || this.playpath.endsWith('.ts')) {
         return 'hls'
       } else if (this.playpath.endsWith('.flv')) {
         return 'flv'
@@ -45,7 +49,21 @@ function View({ self, router, store, services, params }) {
       }
     }
   }))
-  useEffectOnce(() => {
+
+  useEffect(() => {
+    loader.refresh({ params: { id: params.id } }, async (res) => {
+      const query = {};
+      if (res.item.tags) {
+        query.tags = res.item.tags;
+      }
+      query.source_type = res.item.source_type;
+      recommendsLoader.refresh({ query })
+      const child = res.item.children.find(child => child.id === localStore.child_id) || res.item.children[0]
+      if (child) {
+        localStore.child_id = child.id
+        localStore.playpath = lineLoader.getHostByType(child.path.endsWith('m3u8') || child.path.endsWith('ts') ? 'hls' : (child.path.endsWith('flv') ? 'hls' : 'video')) + child.path;
+      }
+    })
     videoRecorder.getValue(params.id).then(result => {
       if (result && result.data && result.option) {
         localStore.child_id = result.option.child_id;
@@ -55,18 +73,7 @@ function View({ self, router, store, services, params }) {
     return (() => {
       loader.clear()
     })
-  })
-  useEffect(() => {
-    if (loader.isEmpty) {
-      loader.refresh({ params: { id: localStore.id } }, async (res) => {
-        const child = res.item.children.find(child => child.id === localStore.child_id) || res.item.children[0]
-        if (child) {
-          localStore.child_id = child.id
-          localStore.playpath = lineLoader.getHostByType(child.path.endsWith('m3u8') ? 'hls' : (child.path.endsWith('flv') ? 'hls' : 'video')) + child.path;
-        }
-      })
-    }
-  })
+  }, [params.id]);
   return <Observer>{
     () => {
       if (loader.isLoading) {
@@ -80,13 +87,14 @@ function View({ self, router, store, services, params }) {
       } else {
         return <Fragment>
           <div className="full-height">
-            <div className="full-height-auto">
+            <div className="full-height-fix">
               <Player
                 router={router}
                 type={localStore.type}
                 resource={loader.item}
                 srcpath={localStore.playpath}
                 looktime={localStore.looktime}
+                next={recommendsLoader.items[0]}
                 playNext={() => {
                   const index = loader.item.children.findIndex(child => child.id === localStore.child_id)
                   if (index + 1 !== loader.item.children.length) {
@@ -100,6 +108,8 @@ function View({ self, router, store, services, params }) {
                   localStore.setRecorder(localStore.child_id, time);
                 }}
               />
+            </div>
+            <div className="full-height-auto">
               <div style={{ padding: '0 20px', }}>
                 <VisualBoxView visible={loader.item.children.length > 1}>
                   <p style={{ fontWeight: 'bolder', margin: 0, padding: '5px 0' }}>播放列表:</p>
@@ -120,11 +130,19 @@ function View({ self, router, store, services, params }) {
                 </VisualBoxView>
                 <p style={{ marginBottom: 8 }}>内容简介:</p>
                 <div style={{ lineHeight: 1.5, color: '#555', textIndent: 20 }} dangerouslySetInnerHTML={{ __html: loader.item.desc || '暂无' }}></div>
+                <div className="dd-common-alignside" style={{ margin: '5px 50px' }}>
+                  <MIconView type="FaHeart" style={{ color: loader.item.marked ? '#e54e36' : '#848484' }} onClick={() => {
+                    loader.item.setMarked(!loader.item.marked)
+                  }} />
+                </div>
                 <VisualBoxView visible={loader.item.tags.length > 0}>
                   <p style={{ margin: '5px 0' }}>标签:</p>
                   <div>{loader.item.tags.map(tag => (<EpTag key={tag} selected={false}>{tag}</EpTag>))}</div>
                 </VisualBoxView>
               </div>
+              {recommendsLoader.items.map(item => (<ResourceItem key={item.id} item={item} onClick={(it) => {
+                router.replaceView('VideoInfo', { id: it.id })
+              }} />))}
             </div>
           </div>
         </Fragment>

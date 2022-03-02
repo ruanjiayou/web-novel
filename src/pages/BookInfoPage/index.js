@@ -114,6 +114,9 @@ function View({ self, router, store, services, params }) {
                   <Button type="ghost" size="small" style={{ minWidth: 82 }} onClick={() => {
                     window.open(`${store.app.baseURL}/v1/public/download/book/${localStore.id}`, '_blank')
                   }}>下载</Button>
+                  <MIconView type="FaHeart" style={{ color: loader.item.marked ? '#e54e36' : '#848484' }} onClick={() => {
+                    loader.item.setMarked(!loader.item.marked)
+                  }} />
                 </div>
                 <p style={{ marginBottom: 8 }}>内容简介:</p>
                 <div style={{ lineHeight: 1.5, color: '#555', textIndent: 20, borderBottom: '1px solid #ccc', minHeight: 120 }} dangerouslySetInnerHTML={{ __html: loader.item.desc }}>

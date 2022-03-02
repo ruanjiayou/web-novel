@@ -11,71 +11,43 @@ import { FullHeight, FullHeightFix, FullHeightAuto } from 'components/common';
 import { useNaviContext, useRouterContext } from 'contexts';
 
 const model = createPageModel({
+  videos: MarkListLoader,
   images: MarkListLoader,
   novels: MarkListLoader,
   articles: MarkListLoader,
-  songs: MarkListLoader,
+  musics: MarkListLoader,
 })
 const tabs = [
-  { title: '图片', },
-  { title: '文章', },
-  { title: '小说', },
-  { title: '音乐', },
+  { title: '视频', type: 'video', loader: 'videos' },
+  { title: '图片', type: 'image', loader: 'images' },
+  { title: '文章', type: 'article', loader: 'articles' },
+  { title: '小说', type: 'novel', loader: 'novels' },
+  { title: '音乐', type: 'music', loader: 'musics' },
 ]
 
 function View({ self }) {
   const Navi = useNaviContext()
   const router = useRouterContext()
   useEffectOnce(() => {
-    self.images.setOption({ type: 'image' })
-    self.articles.setOption({ type: 'article' })
-    self.novels.setOption({ type: 'novel' })
-    self.songs.setOption({ type: 'music' })
-    self.images.refresh({})
+    tabs.forEach(tab => {
+      self[tab.loader].setOption({ query: { type: tab.type } })
+    })
+    self.videos.refresh({})
   })
   const onChange = useCallback((tab, index) => {
-    if (index == 1 && self.articles.isEmpty) {
-      self.articles.refresh({ query: { type: 'article' } })
-    }
-    if (index == 2 && self.novels.isEmpty) {
-      self.novels.refresh({ query: { type: 'novel' } })
-    }
-    if (index == 3 && self.songs.isEmpty) {
-      self.songs.refresh({ query: { type: 'music' } })
-    }
+    self[tab.loader].refresh();
   })
   return <FullHeight>
     <Navi title="收藏" />
     <FullHeightAuto>
       <Observer>{() => {
         return <Tabs tabs={tabs} initialPage={0} onChange={onChange}>
-          <LoaderListView loader={self.images} renderItem={(item, selectionId, index) => <ResourceItem
+          {tabs.map(tab => (<LoaderListView loader={self[tab.loader]} key={tab.type} renderItem={(item, selectionId, index) => <ResourceItem
             key={index}
             item={item}
-            loader={self.images}
+            loader={self[tab.loader]}
             selectionId={selectionId}
-          />}></LoaderListView>
-          <LoaderListView loader={self.articles} renderItem={(item, selectionId, index) => <ResourceItem
-            type=""
-            key={index}
-            item={item}
-            loader={self.articles}
-            selectionId={selectionId}
-          />}></LoaderListView>
-          <LoaderListView loader={self.novels} renderItem={(item, selectionId, index) => <ResourceItem
-            type=""
-            key={index}
-            item={item}
-            loader={self.novels}
-            selectionId={selectionId}
-          />}></LoaderListView>
-          <LoaderListView loader={self.songs} renderItem={(item, selectionId, index) => <ResourceItem
-            type=""
-            key={index}
-            item={item}
-            loader={self.songs}
-            selectionId={selectionId}
-          />}></LoaderListView>
+          />}></LoaderListView>))}
         </Tabs>
       }}</Observer>
     </FullHeightAuto>

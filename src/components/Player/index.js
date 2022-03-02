@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useCallback, useMemo } from 'react'
+import React, { useEffect, useRef, useCallback, useMemo, useState } from 'react'
 import { useVideo, useEffectOnce, } from 'react-use'
 import { useGesture } from 'react-use-gesture'
 import { Observer, useLocalStore } from 'mobx-react-lite'
@@ -11,6 +11,8 @@ import { Toast } from 'antd-mobile'
 import ReactHlsPlayer from 'react-hls-player';
 import { ReactFlvPlayer } from 'react-flv-player'
 import { isPWAorMobile } from '../../utils/utils'
+import MyFinger from '../MyFinger/default'
+import ResourceItem from 'business/ResourceItem';
 
 const styles = {
   videoBG: {
@@ -21,15 +23,23 @@ const styles = {
 }
 // status: ready,waiting,playing,paused,error,ended,
 // 
-
-export default function ({ router, type, store, resource, onRecord, srcpath, looktime, playNext, }) {
+const VIDEO_LIVE_STATUS = {
+  POSTER: 1,
+  LOADING: 2,
+  PLAYING: 3,
+  PAUSED: 4,
+  ENDED: 5,
+  ERRORED: 6,
+  SEEKING: 7,
+}
+export default function ({ router, type, store, resource, onRecord, srcpath, looktime, playNext, next }) {
   const Navi = useNaviContext()
   const fullScreenRef = useRef(null)
   const local = useLocalStore(() => ({
     muted: false,
     paused: true,
-    autoplay: false,
-    showControl: false,
+    autoplay: true,
+    showControl: true,
     showMore: false,
     isWaiting: false,
     isSeeking: false,
@@ -62,9 +72,11 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
     openControl() {
       this.showControl = true
       clearTimeout(this.timer)
-      this.timer = setTimeout(() => {
-        this.showControl = false
-      }, 8000)
+      if (!this.paused) {
+        this.timer = setTimeout(() => {
+          this.showControl = false
+        }, 5000)
+      }
     },
     closeControl() {
       this.showControl = false
@@ -81,7 +93,7 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
   }), [])
   const getHistoryTime = useCallback(async () => {
 
-  }, [])
+  }, []);
   const onLoadedMetadata = (duration) => {
     local.duration = duration
     controls.seek(looktime)
@@ -100,11 +112,20 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
     local.offset.x = e.touches[0].clientX - local.origin.x
     local.offset.y = e.touches[0].clientY - local.origin.y
   }
-  const bind = useGesture({
-    onDrag: (e) => { },
-    onDragEnd: e => { console.log(e) }
-  })
 
+  const setVolume = function (v) {
+    if (hlsRef.current) {
+      hlsRef.current.volume = v;
+    }
+    if (ref.current) {
+      controls.volume(v);
+    }
+    if (flvRef.current) {
+      flvRef.current.volume = v;
+    }
+    local.takePeek();
+  }
+  // 声音和进度控制
   const onKeyPress = function (e) {
     switch (e.keyCode) {
       case 37:
@@ -131,17 +152,14 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
         // ^
         if (hlsRef.current) {
           local.volume = (hlsRef.current.volume + 0.1 > 1 ? 1 : hlsRef.current.volume + 0.1).toFixed(2)
-          hlsRef.current.volume = local.volume
         }
         if (ref.current) {
-          local.volume = (state.volume + 0.1 > 1 ? 1 : state.volume + 0.1).toFixed(2)
-          controls.volume(state.volume)
+          local.volume = (ref.current.volume + 0.1 > 1 ? 1 : ref.current.volume + 0.1).toFixed(2)
         }
         if (flvRef.current) {
           local.volume = (flvRef.current.volume + 0.1 > 1 ? 1 : flvRef.current.volume + 0.1).toFixed(2)
-          flvRef.current.volume = local.volume
         }
-        local.takePeek()
+        setVolume(local.volume)
         break;
       case 40:
         if (hlsRef.current) {
@@ -149,8 +167,8 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
           hlsRef.current.volume = local.volume
         }
         if (ref.current) {
-          local.volume = (state.volume - 0.1 < 0 ? 0 : state.volume - 0.1).toFixed(2)
-          controls.volume(state.volume)
+          local.volume = (ref.current.volume - 0.1 < 0 ? 0 : ref.current.volume - 0.1).toFixed(2)
+          controls.volume(local.volume)
         }
         if (flvRef.current) {
           local.volume = (flvRef.current.volume - 0.1 < 0 ? 1 : flvRef.current.volume - 0.1).toFixed(2)
@@ -161,7 +179,27 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
       default: break;
     }
   }
+
+  /**
+   * 定位视频位置
+   * @param {number} time 
+   */
+  const onSeek = function (time) {
+    time = Math.round(time);
+    if (type === 'mpeg') {
+      if (controls) {
+        controls.seek(time)
+      }
+    } else if (type === 'hls' && hlsRef.current) {
+      hlsRef.current.currentTime = time;
+    } else if (type === 'hlv' && flvRef.current) {
+      flvRef.current.currentTime = time;
+    }
+  }
+  // 播放或暂停
   const onAction = function () {
+    local.isEnded = false;
+    local.isError = false;
     if (type === 'mpeg') {
       local.paused ? controls.play() : controls.pause()
     } else if (type === 'hls' && hlsRef.current) {
@@ -240,6 +278,7 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
     }}
     onEnded={() => {
       local.isEnded = true
+      local.showControl = false
       playNext();
     }}
     onPause={() => {
@@ -334,9 +373,9 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
   const renderControlLayer = function (header) {
     return (
       <FullHeight
-        style={{ position: 'absolute', width: '100%', color: 'white', backgroundColor: local.showControl ? 'rgba(0,0,0,0.6)' : '' }}>
+        style={{ position: 'absolute', width: '100%', color: 'white', }}>
         {/* 顶部菜单 */}
-        <AlignSide style={{ position: 'absolute', left: 0, top: 0, width: '100%', zIndex: 2, }}>
+        <AlignSide style={{ position: 'absolute', left: 0, top: 0, width: '100%', zIndex: 2, background: local.showControl ? 'linear-gradient(-180deg, #333, transparent)' : '' }}>
           {header(local.showControl && !local.fullscreen ? <div>
             <Icon src={require('theme/icon/airplay.svg')} />
             <Icon style={{ width: 16 }} src={require('theme/icon/feedback.svg')} />
@@ -346,25 +385,57 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
             }} src={require('theme/icon/more.svg')} />
           </div> : null)}
         </AlignSide>
-        {local.showVolume && <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', padding: '10px', borderRadius: 10, backgroundColor: 'rgba(0,0,0,0.6)', color: 'white' }}>{local.volume * 100}%</div>}
-        <VisualBoxView visible={local.showControl}>
-          <FullHeightAuto onClick={() => {
-            local.closeControl()
+        {local.showVolume && <div style={{ position: 'absolute', left: '50%', top: '20%', transform: 'translate(-50%,-50%)', padding: '10px', borderRadius: 10, backgroundColor: 'rgba(0,0,0,0.6)', color: 'white' }}>{Math.round(local.volume * 100)}%</div>}
+        <MyFinger
+          onTap={() => {
+            local.dblCount++;
+            if (local.dblTimer) {
+              clearTimeout(local.dblTimer);
+              local.dblTimer = null;
+            }
+            local.dblTimer = setTimeout(function () {
+              if (local.dblCount === 1) {
+                local.showControl ? local.closeControl() : local.openControl();
+              }
+              local.dblCount = 0;
+            }, 300)
+          }}
+          onDoubleTap={() => {
+            onAction();
+          }}
+          onSwipe={(evt) => {
+            if (evt.direction === 'Up' || evt.direction === 'Down') {
+              let height = 0;
+              if (hlsRef.current) {
+                height = hlsRef.current.offsetHeight
+              }
+              if (ref.current) {
+                height = ref.current.offsetHeight
+              }
+              if (flvRef.current) {
+                height = flvRef.current.offsetHeight
+              }
+              if (height) {
+                const delta = (evt.distance * (evt.direction === 'Down' ? -1 : 1) / height);
+                local.volume = parseFloat(local.volume + delta > 1 ? 1 : (local.volume + delta < 0 ? 0 : local.volume + delta));
+                setVolume(local.volume.toFixed(2));
+              }
+
+            } else if (evt.direction === 'Left' || evt.direction === 'Right') {
+              const offset = evt.distance / 5;
+              const time = Math.max(0, Math.round(local.realtime + offset * (evt.direction === 'Left' ? -1 : 1)));
+              onSeek(time);
+            }
           }}>
-            <SwitchView loading={local.isWaiting} holder={
-              <div style={{ position: 'absolute', top: 0, display: 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}><MIconView type="IoLoader" style={{ color: 'white', backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: '50%', padding: '4px 0' }} /></div>
-            }>
-              <AlignCenterXY>
-                <div style={{ position: 'absolute', top: 0, display: 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}><Icon onClick={(e) => {
-                  onAction()
-                  e.preventDefault()
-                  e.stopPropagation()
-                }} src={local.paused ? require('../../theme/icon/play-fill.svg') : require('../../theme/icon/suspended-fill.svg')} /></div>
-              </AlignCenterXY>
-            </SwitchView>
+          <FullHeightAuto
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            {local.isError && <span style={{ color: 'white' }}>播放错误</span>}
           </FullHeightAuto>
+        </MyFinger>
+        <VisualBoxView visible={local.showControl}>
           {/* 底部菜单 */}
-          <FullWidth style={{ paddingBottom: 5, zIndex: 2 }}>
+          <FullWidth style={{ paddingTop: 10, paddingBottom: 5, zIndex: 2, background: 'linear-gradient(0deg, #333, transparent)' }}>
+            {/* 静音 */}
             {/* <FullWidthFix onClick={() => {
               local.muted = !local.muted
               if (flvRef.current) {
@@ -373,28 +444,32 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
             }}>
               <Icon style={{ width: 24, height: 24 }} src={local.muted ? require('../../theme/icon/mute.svg') : require('../../theme/icon/soundsize.svg')} />
             </FullWidthFix> */}
-            {/* <VisualBoxView visible={resource.children.length < 2}>
+            {/* 播放/暂停 */}
+            <VisualBoxView visible={local.showControl}>
+              <Icon onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                onAction()
+              }} src={local.paused ? require('../../theme/icon/play-fill.svg') : require('../../theme/icon/suspended-fill.svg')} />
+            </VisualBoxView>
+            {/* 下一集 */}
+            <VisualBoxView visible={resource.children.length > 1}>
               <FullHeightFix>
                 <Icon onClick={playNext} style={{ width: 16, height: 15, marginLeft: 0 }} src={require('../../theme/icon/next.svg')} />
               </FullHeightFix>
-            </VisualBoxView> */}
+            </VisualBoxView>
+            {/* 进度条 */}
             <FullWidthAuto style={{ backgroundColor: 'grey', margin: '0 5px', borderRadius: 3, overflow: 'hidden' }} onClick={e => {
               const ne = e.nativeEvent;
               let time = local.duration * (ne.layerX / e.currentTarget.offsetWidth)
-              if (type === 'mpeg') {
-                if (controls) {
-                  controls.seek(time)
-                }
-              } else if (type === 'hls' && hlsRef.current) {
-                hlsRef.current.currentTime = time;
-              } else if (type === 'hlv' && flvRef.current) {
-                flvRef.current.currentTime = time;
-              }
+              onSeek(time);
             }}>
               <div style={{ width: local.percent + '%', height: 5, backgroundColor: '#1278ae' }}></div>
             </FullWidthAuto>
+            {/* 时间信息 */}
             <FullWidthFix>{format(Math.ceil(local.realtime))}</FullWidthFix>/
             <FullWidthFix>{format(Math.ceil(local.duration))}</FullWidthFix>
+            {/* 全屏按钮 */}
             <FullWidthFix>
               <Icon onClick={() => {
                 if (!document.fullscreenEnabled) {
@@ -425,48 +500,27 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
     </FullHeight>
     </VisualBoxView>
   }
+  const renderEndedLayer = function () {
+    return <VisualBoxView visible={local.isEnded}>
+      <FullHeight style={{ color: 'white', backgroundColor: 'rgba(0,0,0,0.8)', position: 'absolute', width: '100%' }}>
+        <FullHeightAuto />
+        <AlignCenterXY style={{ flex: 2, height: 'auto', width: '100%' }}>
+          {next && <ResourceItem item={next} onClick={() => { router.replaceView('VideoInfo', { id: next.id }) }} />}
+        </AlignCenterXY>
+        <FullHeightFix>
+          <MIconView type="FaRedo" after="重播" style={{ padding: 10 }} onClick={() => {
+            onAction()
+          }} />
+        </FullHeightFix>
+      </FullHeight>
+    </VisualBoxView>
+  }
   return <Observer>{() => (
     <div style={{ width: '100%', position: !local.isVertical ? 'absolute' : 'relative', height: !local.isVertical ? '100%' : 211, zIndex: 2 }} ref={ref => fullScreenRef.current = ref}>
       {renderVideoLayer()}
       {renderControlLayer(child => <Navi title={!local.isVertical && local.showControl ? resource.title : null} showBack wrapStyle={{ flex: 1, backgroundColor: 'transparent', borderBottom: 'none', width: '100%', height: 35 }}>{child}</Navi>)}
       {renderMoreLayer()}
-      {!local.showControl ? <div
-        // {...bind()}
-        onClick={() => {
-          local.dblCount++;
-          if (local.dblTimer) {
-            clearTimeout(local.dblTimer);
-            local.dblTimer = null;
-          }
-          if (local.dblCount > 1) {
-            onAction();
-          }
-          local.dblTimer = setTimeout(function () {
-            if (local.dblCount === 1) {
-              local.openControl()
-            }
-            local.dblCount = 0;
-          }, 300)
-        }}
-        style={{ position: 'absolute', display: 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
-        {local.isError && <span style={{ color: 'white' }}>播放错误</span>}
-        <SwitchView loading={local.isWaiting} holder={<MIconView type="IoLoader" style={{ color: 'white', backgroundColor: 'rgba(0,0,0,0.5)', borderRadius: '50%', padding: '4px 0' }} />}>
-          {(local.paused ? <Icon onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            if (type === 'mpeg') {
-              controls.play();
-              local.paused = false
-            } else if (type === 'hls' && hlsRef.current) {
-              hlsRef.current.play();
-              local.paused = false
-            } else if (type === 'flv' && flvRef.current) {
-              flvRef.current.play()
-              local.paused = false;
-            }
-          }} src={require('../../theme/icon/play-fill.svg')} /> : null)}
-        </SwitchView>
-      </div> : null}
+      {renderEndedLayer()}
     </div>
   )}</Observer>
 }
