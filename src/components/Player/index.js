@@ -38,7 +38,7 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
   const local = useLocalStore(() => ({
     muted: false,
     paused: true,
-    autoplay: true,
+    autoplay: router.getLastView === 'VideoInfo' ? true : false,
     showControl: true,
     showMore: false,
     isWaiting: false,
@@ -54,19 +54,21 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
     duration: 0,
     percent: 0,
     volume: 1,
-    showVolume: false,
-    volumeTimer: null,
+    showPeek: false,
+    peekTimer: null,
     seekDirection: 'forword',
     timer: null,
     dblTimer: null,
     dblCount: 0,
     origin: { x: 0, y: 0 },
     offset: { x: 0, y: 0 },
-    takePeek() {
-      this.showVolume = true;
-      clearTimeout(this.volumeTimer);
-      this.volumeTimer = setTimeout(() => {
-        this.showVolume = false;
+    peekValue: '',
+    takePeek(value) {
+      this.peekValue = value;
+      this.showPeek = true;
+      clearTimeout(this.peekTimer);
+      this.peekTimer = setTimeout(() => {
+        this.showPeek = false;
       }, 1000)
     },
     openControl() {
@@ -123,7 +125,7 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
     if (flvRef.current) {
       flvRef.current.volume = v;
     }
-    local.takePeek();
+    local.takePeek(Math.round(local.volume * 100) + '%');
   }
   // 声音和进度控制
   const onKeyPress = function (e) {
@@ -164,17 +166,15 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
       case 40:
         if (hlsRef.current) {
           local.volume = (hlsRef.current.volume - 0.1 < 0 ? 0 : hlsRef.current.volume - 0.1).toFixed(2)
-          hlsRef.current.volume = local.volume
         }
         if (ref.current) {
           local.volume = (ref.current.volume - 0.1 < 0 ? 0 : ref.current.volume - 0.1).toFixed(2)
-          controls.volume(local.volume)
         }
         if (flvRef.current) {
           local.volume = (flvRef.current.volume - 0.1 < 0 ? 1 : flvRef.current.volume - 0.1).toFixed(2)
-          flvRef.current.volume = local.volume
         }
-        local.takePeek()
+        setVolume(local.volume)
+        local.takePeek(Math.round(local.volume * 100) + '%')
         break;
       default: break;
     }
@@ -211,6 +211,7 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
   }
   useEffect(() => {
     local.isError = false;
+    local.isReady = true;
     local.closeControl()
   }, [srcpath]);
   useEffectOnce(() => {
@@ -306,7 +307,7 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
   const hlsVideo = useMemo(() => {
     return <ReactHlsPlayer
       src={srcpath}
-      autoPlay={false}
+      autoPlay={local.autoplay}
       playsInline
       playerRef={hlsRef}
       onLoadedMetadata={e => {
@@ -322,6 +323,11 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
       }}
       onSeeked={() => {
         local.isWaiting = false
+      }}
+      onEnded={() => {
+        local.isEnded = true
+        local.showControl = false
+        playNext();
       }}
       onErrorCapture={e => {
         console.log(e)
@@ -349,6 +355,8 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
             flvRef.current = ref.myRef.current
             if (!local.autoplay) {
               flvRef.current.pause()
+            } else {
+              flvRef.current.play()
             }
             flvRef.current.muted = local.muted
             flvRef.current.controls = false
@@ -385,7 +393,7 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
             }} src={require('theme/icon/more.svg')} />
           </div> : null)}
         </AlignSide>
-        {local.showVolume && <div style={{ position: 'absolute', left: '50%', top: '20%', transform: 'translate(-50%,-50%)', padding: '10px', borderRadius: 10, backgroundColor: 'rgba(0,0,0,0.6)', color: 'white' }}>{Math.round(local.volume * 100)}%</div>}
+        {local.showPeek && <div style={{ position: 'absolute', left: '50%', top: '20%', transform: 'translate(-50%,-50%)', padding: '10px', borderRadius: 10, backgroundColor: 'rgba(0,0,0,0.6)', color: 'white' }}>{local.peekValue}</div>}
         <MyFinger
           onTap={() => {
             local.dblCount++;
@@ -422,14 +430,19 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
               }
 
             } else if (evt.direction === 'Left' || evt.direction === 'Right') {
+              if (local.showControl) {
+                local.openControl()
+              }
               const offset = evt.distance / 5;
               const time = Math.max(0, Math.round(local.realtime + offset * (evt.direction === 'Left' ? -1 : 1)));
+              local.takePeek(Math.round(offset) + 's');
               onSeek(time);
             }
           }}>
           <FullHeightAuto
             style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {local.isError && <span style={{ color: 'white' }}>播放错误</span>}
+            {local.isReady && <Icon src={require('theme/icon/play-fill.svg')} onClick={() => { onAction(); local.isReady = false }} />}
           </FullHeightAuto>
         </MyFinger>
         <VisualBoxView visible={local.showControl}>
@@ -449,6 +462,9 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
               <Icon onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
+                if (local.showControl) {
+                  local.openControl()
+                }
                 onAction()
               }} src={local.paused ? require('../../theme/icon/play-fill.svg') : require('../../theme/icon/suspended-fill.svg')} />
             </VisualBoxView>
@@ -459,12 +475,32 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
               </FullHeightFix>
             </VisualBoxView>
             {/* 进度条 */}
-            <FullWidthAuto style={{ backgroundColor: 'grey', margin: '0 5px', borderRadius: 3, overflow: 'hidden' }} onClick={e => {
+            <FullWidthAuto style={{ backgroundColor: 'grey', margin: '0 5px', borderRadius: 3, }} onClick={e => {
+              if (local.showControl) {
+                local.openControl()
+              }
               const ne = e.nativeEvent;
               let time = local.duration * (ne.layerX / e.currentTarget.offsetWidth)
               onSeek(time);
             }}>
-              <div style={{ width: local.percent + '%', height: 5, backgroundColor: '#1278ae' }}></div>
+              <div style={{ width: local.percent + '%', height: 5, backgroundColor: '#d73250', position: 'relative' }}>
+                <MyFinger onTouchEnd={e => {
+                  const pnode = e.currentTarget.parentNode.parentNode;
+                  const distance = e.offset[0]
+                  let time = (distance / pnode.offsetWidth) * local.duration;
+                  if (type === 'mpeg' && ref.current) {
+                    time += ref.current.currentTime;
+                  } else if (type === 'hls' && hlsRef.current) {
+                    time += hlsRef.current.currentTime;
+                  } else if (type === 'flv' && flvRef.current) {
+                    time += flvRef.current.currentTime;
+                  }
+                  time = Math.min(local.duration, Math.max(time, 0))
+                  onSeek(time)
+                }}>
+                  <span style={{ position: 'absolute', top: '50%', right: 0, backgroundColor: 'blue', width: 10, height: 10, borderRadius: 50, marginRight: -5, marginTop: -5 }}></span>
+                </MyFinger>
+              </div>
             </FullWidthAuto>
             {/* 时间信息 */}
             <FullWidthFix>{format(Math.ceil(local.realtime))}</FullWidthFix>/
@@ -516,7 +552,7 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
     </VisualBoxView>
   }
   return <Observer>{() => (
-    <div style={{ width: '100%', position: !local.isVertical ? 'absolute' : 'relative', height: !local.isVertical ? '100%' : 211, zIndex: 2 }} ref={ref => fullScreenRef.current = ref}>
+    <div style={{ width: '100%', position: !local.isVertical ? 'fixed' : 'relative', height: !local.isVertical ? '100vh' : 'calc(100vw * 9 / 16)', zIndex: 2 }} ref={ref => fullScreenRef.current = ref}>
       {renderVideoLayer()}
       {renderControlLayer(child => <Navi title={!local.isVertical && local.showControl ? resource.title : null} showBack wrapStyle={{ flex: 1, backgroundColor: 'transparent', borderBottom: 'none', width: '100%', height: 35 }}>{child}</Navi>)}
       {renderMoreLayer()}

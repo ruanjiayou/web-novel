@@ -6,7 +6,7 @@ import { useStoreContext } from 'contexts'
 export default function UserAreaView({ children, className, style, bar }) {
   const store = useStoreContext();
   return <Observer>{() => (
-    <div className="full-height" style={{ backgroundColor: 'white', overflow: 'hidden' }}>
+    <div className="full-height" style={{ overflow: 'hidden' }}>
       {bar && isPWAorMobile() ? (
         <div style={{ position: 'relative', zIndex: 8888, backgroundColor: store.app.barBGC, height: 'env(safe-area-inset-top)', }}></div>
       ) : null

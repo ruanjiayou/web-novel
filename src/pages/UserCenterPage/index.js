@@ -127,11 +127,6 @@ function View({ self, router, store, }) {
             <img style={{ width: '100%', height: '100%' }} src="/logo.jpg" />
           </PinchZoom> */}
         </WingBlank>
-        <div style={{ height: 400 }}>
-          <Tabs tabs={[{ title: 'test1', key: '1' }, { title: 'test2', key: '2' }]} defaultIndex={0}>
-            {['hellow', 'world'].map((str, index) => <div key={index}>{str}</div>)}
-          </Tabs>
-        </div>
       </div>
     }
   }</Observer >

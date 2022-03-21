@@ -1,20 +1,23 @@
 import React, { Fragment, useCallback, useRef } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import createPageModel from 'page-group-loader-model/BasePageModel'
-import { FullHeight, FullHeightFix, FullHeightAuto, FullWidth, FullWidthAuto } from 'components/common';
+import { FullHeight, FullHeightFix, FullHeightAuto, FullWidth, FullWidthAuto, FullWidthFix, } from 'components/common';
 import { useRouterContext } from 'contexts';
 import { useEffectOnce } from 'react-use';
 import storage from 'utils/storage'
 import { WordItem } from './style'
+import { MIconView } from 'components';
 
 const model = createPageModel({
 })
 
-function View({ self, store }) {
+function View({ self, store, params }) {
   const router = useRouterContext()
   const local = useLocalStore(() => ({
     hotWords: [],
     historyWords: [],
+    search: params.search || '',
+    tag: params.tag || '',
   }))
   const iRef = useRef(null)
   useEffectOnce(() => {
@@ -26,8 +29,15 @@ function View({ self, store }) {
   })
   return <Observer>{() => <FullHeight>
     <FullWidth style={{ height: 50, }}>
-      <FullWidthAuto style={{ marginLeft: 10 }}>
-        <input autoFocus ref={ref => iRef.current = ref} style={{ height: 30, backgroundColor: '#ccc', border: '0 none', width: '100%', boxSizing: 'border-box', padding: '5px 8px', borderRadius: 5, }}
+      <FullWidthFix>
+
+      </FullWidthFix>
+      <FullWidthAuto style={{ marginLeft: 10, position: 'relative', display: 'flex', backgroundColor: '#ccc', alignItems: 'center', border: '0 none', width: '100%', borderRadius: 5, padding: '5px 8px', }}>
+        {local.tag && <div style={{ display: 'flex', alignItems: 'center', height: 20, borderRadius: 10, padding: '0 5px', border: '1px solid #999' }}>{local.tag}<MIconView type="IoIosClose" onClick={e => {
+          local.tag = ''
+          iRef.current && iRef.current.focus();
+        }} /></div>}
+        <input defaultValue={local.search} autoFocus ref={ref => iRef.current = ref} style={{ backgroundColor: '#ccc', height: 30, marginLeft: 10, flex: 1, boxSizing: 'border-box', border: '0 none', borderBottom: '1px solid #999' }}
           onKeyDown={e => {
             if (e.keyCode === 13) {
               const str = iRef.current ? iRef.current.value : '';
@@ -35,7 +45,7 @@ function View({ self, store }) {
                 local.historyWords.push(str);
                 storage.setValue('historyWords', local.historyWords.join(','))
               }
-              router.replaceView('SearchResult', { title: str })
+              router.replaceView('SearchResult', { title: str, tag: local.tag })
             }
           }}
         />

@@ -16,7 +16,7 @@ const Model = types.model('resource', {
   source_type: types.maybeNull(types.string),
   tags: types.array(types.string),
   images: types.array(types.string),
-  status: types.enumeration(['init', 'loading', 'finished']),
+  status: types.enumeration(['init', 'loading', 'finished', 'fail']),
   types: types.array(types.string),
   createdAt: types.string,
   duration: types.optional(types.number, 0),

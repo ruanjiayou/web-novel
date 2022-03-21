@@ -23,6 +23,7 @@ export const Content = styled.div`
   flex: 1;
   display: flex;
   width: 100%;
+  height: 100%;
   overflow: hidden;
 `
 export const ContentWrap = styled.div`
@@ -36,6 +37,7 @@ export const ContentWrap = styled.div`
 
 export const TabItem = styled.div`
   flex-basis: 100%;
+  width: 100%;
   flex-grow: 1;
   flex-shrink: 0;
 `

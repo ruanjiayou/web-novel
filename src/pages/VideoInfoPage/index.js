@@ -137,7 +137,9 @@ function View({ self, router, store, services, params }) {
                 </div>
                 <VisualBoxView visible={loader.item.tags.length > 0}>
                   <p style={{ margin: '5px 0' }}>标签:</p>
-                  <div>{loader.item.tags.map(tag => (<EpTag key={tag} selected={false}>{tag}</EpTag>))}</div>
+                  <div>{loader.item.tags.map(tag => (<EpTag key={tag} selected={false} onClick={e => {
+                    router.pushView('Search', { tag });
+                  }}>{tag}</EpTag>))}</div>
                 </VisualBoxView>
               </div>
               {recommendsLoader.items.map(item => (<ResourceItem key={item.id} item={item} onClick={(it) => {

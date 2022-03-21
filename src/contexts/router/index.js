@@ -104,7 +104,7 @@ export function useProvider(history) {
       },
       back() {
         this.userEvent = true
-        if (route.history.length <= store.app.initHistoryLength) {
+        if (route.history.length === 1) {
           route.history.replace({ pathname: '/novel/home' })
         } else {
           route.history.goBack();

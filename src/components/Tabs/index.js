@@ -6,7 +6,7 @@ import AlloyFinger from 'alloyfinger'
 
 export default function ({ defaultIndex, tabs = [], children, onChange }) {
   const local = useLocalStore(() => ({
-    selectedIndex: defaultIndex || 0,
+    selectedIndex: defaultIndex === -1 ? 0 : defaultIndex || 0,
     actionStarted: false,
     actionStartX: 0,
     actionOffsetX: 0,
@@ -30,6 +30,7 @@ export default function ({ defaultIndex, tabs = [], children, onChange }) {
           local.actionOffsetX = evt.targetTouches[0].clientX - local.actionStartX;
         },
         swipe: (evt) => {
+          evt.preventDefault()
           if (evt.direction === 'Left') {
             if (local.selectedIndex < tabs.length - 1) {
               local.selectedIndex += 1;
@@ -52,7 +53,7 @@ export default function ({ defaultIndex, tabs = [], children, onChange }) {
               return;
             }
             local.selectedIndex = index;
-            onChange && onChange(index);
+            onChange && onChange(tabs[index], index);
           }}>{tab.title}</MenuItem>)}
         </MenuWrap>
         <Content>
@@ -60,8 +61,6 @@ export default function ({ defaultIndex, tabs = [], children, onChange }) {
             {children.map((child, index) => <TabItem key={index}>{child}</TabItem>)}
           </ContentWrap>
         </Content>
-        <div>{contentRef.current ? -contentRef.current.offsetWidth * local.selectedIndex + local.actionOffsetX / 2 + 'px' : (local.selectedIndex * 100) + '%'}</div>
-        <div>{local.actionOffsetX / 2}</div>
       </Tab>
     </Fragment>
   )}</Observer>

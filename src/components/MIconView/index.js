@@ -7,6 +7,7 @@ import {
   IoMdMusicalNote,
   IoIosVolumeLow,
   IoIosVolumeOff,
+  IoIosClose,
 } from 'react-icons/io'
 import {
   FaHome,
@@ -67,7 +68,8 @@ const IOicons = {
   IoMdMusicalNote,
   IoIosVolumeLow,
   IoIosVolumeOff,
-  IoLoader: FiLoader
+  IoLoader: FiLoader,
+  IoIosClose,
 }
 const Faicons = {
   FaHome,
