@@ -13,6 +13,7 @@ import { ReactFlvPlayer } from 'react-flv-player'
 import { isPWAorMobile } from '../../utils/utils'
 import MyFinger from '../MyFinger/default'
 import ResourceItem from 'business/ResourceItem';
+import screenfull from 'screenfull';
 
 const styles = {
   videoBG: {
@@ -32,7 +33,7 @@ const VIDEO_LIVE_STATUS = {
   ERRORED: 6,
   SEEKING: 7,
 }
-export default function ({ router, type, store, resource, onRecord, srcpath, looktime, playNext, next }) {
+export default function ({ router, type, resource, onRecord, srcpath, looktime, playNext, next }) {
   const Navi = useNaviContext()
   const fullScreenRef = useRef(null)
   const local = useLocalStore(() => ({
@@ -508,17 +509,13 @@ export default function ({ router, type, store, resource, onRecord, srcpath, loo
             {/* 全屏按钮 */}
             <FullWidthFix>
               <Icon onClick={() => {
-                if (!document.fullscreenEnabled) {
-                  return
+                if (!screenfull.enabled) {
+                  return Toast.info('此应用不支持全屏', 1, null, false)
                 }
-                if (document.fullscreenElement) {
-                  document.exitFullscreen()
-                  local.fullscreen = false
-                } else if (fullScreenRef.current && fullScreenRef.current.requestFullscreen) {
-                  fullScreenRef.current.requestFullscreen()
-                  local.fullscreen = true
+                if (screenfull.isFullscreen) {
+                  screenfull.exit();
                 } else {
-                  Toast.info('全屏失败', 1, null, false)
+                  screenfull.request(fullScreenRef.current)
                 }
               }} style={{ width: 20, height: 20 }} src={require('theme/icon/fullscreen.svg')} />
             </FullWidthFix>

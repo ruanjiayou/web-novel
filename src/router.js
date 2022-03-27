@@ -50,6 +50,12 @@ function App(props) {
     store.app.setHideMenu(store.app.selectedMenu === 'awhile')
   }, [router.history.location.pathname])
 
+  useEffectOnce(() => {
+    window.addEventListener('orientationchange', (e) => {
+      store.app.setShowBar(Math.abs(window.orientation) === 90 ? false : true)
+    })
+  },[])
+
   const Page = router.getPage()
   return <RouterContext.Provider value={router}>
     <NaviContext.Provider value={navi}>
@@ -77,7 +83,7 @@ function App(props) {
                   key={i}
                   timeout={{ enter: !router.userEvent ? 0 : 300, exit: !router.userEvent ? 0 : 300 }}
                   unmountOnExit={!router.userEvent}
-                  className={router.userEvent ? 'layer-item' : local.action === 'enter' ? 'exit-now' : 'enter-now'}
+                  className={router.userEvent ? 'layer-item' : local.action !== 'enter' ? 'exit-now' : 'enter-now'}
                   onEnter={(node) => {
                     local.action = 'enter'
                     router.userEvent = true

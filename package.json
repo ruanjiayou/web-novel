@@ -62,6 +62,7 @@
     "react-use": "^9.7.1",
     "react-use-gesture": "^9.0.4",
     "rebound": "^0.1.0",
+    "screenfull": "^4.2.1",
     "socket.io-client": "^2.3.1",
     "styled-components": "^5.1.1",
     "workbox-webpack-plugin": "^4.3.1"
