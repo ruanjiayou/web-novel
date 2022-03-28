@@ -17,6 +17,7 @@ import 'antd-mobile/dist/antd-mobile.css'
 import * as serviceWorker from './service-worker'
 import services from 'services'
 import config from 'config'
+import { useEffectOnce } from 'react-use'
 
 // 引入router.顺便做点什么: loading/emptyView什么的
 function App() {
@@ -41,7 +42,16 @@ function App() {
     })
   })
   useEffect(() => {
-    launch()
+
+  })
+  useEffectOnce(() => {
+    launch();
+    window.addEventListener('online', () => {
+      if (local.isError) {
+        local.isError = false;
+        launch();
+      }
+    })
   })
   return <Observer>
     {() => {
@@ -52,7 +62,7 @@ function App() {
           <Button style={{ width: 150 }} type="primary" onClick={() => {
             launch()
             local.isError = false
-          }}>点击重试</Button>
+          }}>{navigator.onLine ? '点击重试' : '您处于离线状态'}</Button>
         </AutoCenterView>
       } else {
         return (

@@ -8,7 +8,7 @@ width: 100%;
 height: 100%;
 background-color: white;
 z-index: 9999;
-background: url('/logo.jpg') white center center no-repeat;
+background: url('/novel/logo.jpg') white center center no-repeat;
 background-size: cover;
 `
 
