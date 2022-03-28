@@ -5,17 +5,18 @@
   "lang": "zh-CN",
   "icons": [
     {
-      "src": "logo.jpg",
+      "src": "/novel/logo.jpg",
       "sizes": "32x32",
       "type": "image/jpg"
     },
     {
-      "src": "logo-144.png",
+      "src": "/novel/logo-144.png",
       "sizes": "144x144",
       "type": "image/png"
     }
   ],
-  "start_url": "/novel/",
+  "start_url": "/novel/home",
+  "id": "/novel/",
   "scope": "/novel/",
   "display": "fullscreen",
   "background_color": "#ffffff",
