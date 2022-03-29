@@ -27,7 +27,7 @@ function View({ self, router, store, params }) {
     {() => (
       <FullHeight>
         <FullWidth style={{ height: 50, backgroundColor: store.app.barBGC }}>
-          <img src="/novel/logo.jpg" alt="" style={{ margin: '0 10px', borderRadius: '50%' }} onClick={e=>{router.replaceView('mine')}}/>
+          <img src="/novel/logo.jpg" alt="" style={{ margin: '0 10px', borderRadius: '50%' }} onClick={e => { router.replaceView('mine') }} />
           <FullHeightAuto style={{ height: 30, backgroundColor: '#ccc', borderRadius: 5, }} onClick={() => { router.pushView('Search') }} />
           <div style={{ color: '#f97a90', margin: '0 5px' }} onClick={() => {
             if (store.app.isLogin) {
