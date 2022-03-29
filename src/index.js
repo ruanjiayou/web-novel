@@ -14,7 +14,7 @@ import './group/group.css'
 import 'antd-mobile/dist/antd-mobile.css'
 // import './transition.css'
 // https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/src/serviceWorker.js
-import * as serviceWorker from './service-worker'
+import * as swManager from './sw-manager'
 import services from 'services'
 import config from 'config'
 import { useEffectOnce } from 'react-use'
@@ -162,4 +162,4 @@ ReactDOM.render(<ErrorBoundary>
 </ErrorBoundary>, document.getElementById('root'))
 
 // serviceWorker.unregister();
-serviceWorker.register()
+swManager.register()
