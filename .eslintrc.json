@@ -12,10 +12,7 @@
   },
   "globals": {},
   "rules": {
-    "quotes": [
-      "error",
-      "single"
-    ],
+    "quotes": "off",
     "no-extra-semi": "error",
     "no-unused-vars": "off",
     "no-restricted-globals": "off"

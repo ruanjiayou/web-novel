@@ -4,10 +4,11 @@ import { NetworkFirst, CacheFirst } from 'workbox-strategies'
 import { CacheableResponsePlugin } from 'workbox-cacheable-response'
 import { ExpirationPlugin } from 'workbox-expiration'
 
-// app-shell
-registerRoute('/api', new NetworkFirst({
-  networkTimeoutSeconds: 4
-}))
+// registerRoute('/v1', new NetworkFirst({
+//   networkTimeoutSeconds: 4
+// }));
+
+// 图片缓存
 registerRoute(/https?:\/\/+(.*)\.(?:png|svg|jpg|gif|webp)$/, new CacheFirst({
   cacheName: 'images',
   fetchOptions: { mode: 'no-cors' },
@@ -22,6 +23,23 @@ registerRoute(/https?:\/\/+(.*)\.(?:png|svg|jpg|gif|webp)$/, new CacheFirst({
       purgeOnQuotaError: false,
     })
   ],
+}));
+
+// 重要的api缓存(离线显示页面)
+const importanceAPI = [
+  '/v1/public/boot',
+  '/v1/public/channels',
+]
+registerRoute(({ request }) => {
+  const u = new URL(request.url);
+  return importanceAPI.includes(u.pathname);
+}, new NetworkFirst({
+  cacheName: 'bootApi',
+  plugins: [
+    new CacheableResponsePlugin({
+      statuses: [200],
+    }),
+  ]
 }))
 
 
