@@ -39,7 +39,7 @@ export default function ({ router, type, resource, onRecord, srcpath, looktime, 
   const local = useLocalStore(() => ({
     muted: false,
     paused: true,
-    autoplay: router.getLastView === 'VideoInfo' ? true : false,
+    autoplay: false,
     showControl: true,
     showMore: false,
     isWaiting: false,
@@ -99,7 +99,11 @@ export default function ({ router, type, resource, onRecord, srcpath, looktime, 
   }, []);
   const onLoadedMetadata = (duration) => {
     local.duration = duration
-    controls.seek(looktime)
+    if (!local.autoplay && local.isReady) {
+      
+    } else {
+      controls.seek(looktime)
+    } 
   }
   const onTimeUpdate = (time) => {
     if (onRecord) {
@@ -308,6 +312,7 @@ export default function ({ router, type, resource, onRecord, srcpath, looktime, 
   const hlsVideo = useMemo(() => {
     return <ReactHlsPlayer
       src={srcpath}
+      poster={resource.auto_cover}
       autoPlay={local.autoplay}
       playsInline
       playerRef={hlsRef}
@@ -431,7 +436,7 @@ export default function ({ router, type, resource, onRecord, srcpath, looktime, 
               }
 
             } else if (evt.direction === 'Left' || evt.direction === 'Right') {
-              if (local.showControl) {
+              if (!local.showControl) {
                 local.openControl()
               }
               const offset = evt.distance / 5;
@@ -481,7 +486,7 @@ export default function ({ router, type, resource, onRecord, srcpath, looktime, 
                 local.openControl()
               }
               const ne = e.nativeEvent;
-              let time = local.duration * (ne.layerX / e.currentTarget.offsetWidth)
+              let time = local.duration * (ne.offsetX / e.currentTarget.offsetWidth)
               onSeek(time);
             }}>
               <div style={{ width: local.percent + '%', height: 5, backgroundColor: '#d73250', position: 'relative' }}>

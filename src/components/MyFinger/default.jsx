@@ -5,10 +5,13 @@
   */
 
 import React, { Component } from 'react';
+import { isPWAorMobile } from '../../utils/utils'
 
 export default class AlloyFinger extends Component {
     constructor(props) {
         super(props);
+
+        this.isMobile = isPWAorMobile()
 
         this.preV = { x: null, y: null };
         this.pinchStartLen = null;
@@ -30,6 +33,21 @@ export default class AlloyFinger extends Component {
         // Disable taps after longTap
         this.afterLongTap = false;
         this.afterLongTapTimeout = null;
+
+        const that = this
+        this.events = this.isMobile ? {
+            onTouchStart: this._handleTouchStart.bind(this),
+            onTouchMove: this._handleTouchMove.bind(this),
+            onTouchCancel: this._handleTouchCancel.bind(this),
+            onTouchEnd: this._handleTouchEnd.bind(this)
+        } : {
+                onClick: function (evt) {
+                    that._emitEvent('onTap', evt);
+                },
+                onDoubleClick: function (evt) {
+                    that._emitEvent('onDoubleTap', evt);
+                },
+            }
     }
 
     getLen(v) {
@@ -111,6 +129,7 @@ export default class AlloyFinger extends Component {
                 this.afterLongTap = false;
             }, 1000);
         }, 750);
+        console.log('handle start?')
     }
 
     _handleTouchMove(evt) {
@@ -233,11 +252,6 @@ export default class AlloyFinger extends Component {
     }
 
     render() {
-        return React.cloneElement(React.Children.only(this.props.children), {
-            onTouchStart: this._handleTouchStart.bind(this),
-            onTouchMove: this._handleTouchMove.bind(this),
-            onTouchCancel: this._handleTouchCancel.bind(this),
-            onTouchEnd: this._handleTouchEnd.bind(this)
-        });
+        return React.cloneElement(React.Children.only(this.props.children), this.events);
     }
 }

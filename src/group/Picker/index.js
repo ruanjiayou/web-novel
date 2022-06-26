@@ -12,7 +12,9 @@ export default function Picker({ self }) {
           <MIconView style={{ fontSize: 12, color: '#888' }} type="FaAngleRight" before="更多" />
         </VisualBoxView>
       </div>
-      <div>
+      <div onScroll={e => {
+        e.nativeEvent.stopImmediatePropagation();
+      }} >
         {self.data.map((d, index) => (<ResourceItem key={d.id} item={d} />))}
       </div>
       <VisualBoxView visible={self.attrs.allowChange === true}>

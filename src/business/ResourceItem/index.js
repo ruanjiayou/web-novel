@@ -9,7 +9,7 @@ import ComicItem from './ComicItem'
 
 export default function ResourceItem({ item, loader, type, ...props }) {
   if (!type) {
-    type = item.source_type
+    type = item.source_type || item.type
   }
   return <Observer>
     {() => {

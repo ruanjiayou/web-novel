@@ -152,4 +152,6 @@ ReactDOM.render(<ErrorBoundary>
 </ErrorBoundary>, document.getElementById('root'))
 
 // serviceWorker.unregister();
-serviceWorker.register()
+if (window.parent === window) {
+  serviceWorker.register()
+}
