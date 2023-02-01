@@ -147,8 +147,8 @@ function Simulator() {
 }
 // 总入口: 将组件挂载到dom上
 ReactDOM.render(<ErrorBoundary>
-  <Helmet title={'demo-' + config.VERSION} />
-  {isPWAorMobile() || document.body.clientWidth <= 480 ? <App /> : <Simulator />}
+  <Helmet title={'学习测试'} />
+  <App />
 </ErrorBoundary>, document.getElementById('root'))
 
 // serviceWorker.unregister();

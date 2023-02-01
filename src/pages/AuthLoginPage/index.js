@@ -7,6 +7,13 @@ import services from 'services'
 import UserLoader from 'loader/UserLoader'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 import { useRouterContext, useStoreContext, useNaviContext } from 'contexts'
+import { IconSNS } from './style'
+import sns_weibo from '../../theme/sns-weibo.svg'
+import sns_weixin from '../../theme/sns-wechat.svg'
+import sns_alipay from '../../theme/sns-alipay.svg'
+import sns_apple from '../../theme/sns-apple.svg'
+import sns_github from '../../theme/sns-github.svg'
+import sns_google from '../../theme/sns-google.svg'
 
 const model = createPageModel({ UserLoader });
 
@@ -91,7 +98,7 @@ function View() {
                   onBlur={value => local.account = value}
                 >
                   用户名
-            </InputItem>
+              </InputItem>
               </List.Item>
               <List.Item>
                 <InputItem
@@ -107,10 +114,21 @@ function View() {
                   }}
                 >
                   密码
-            </InputItem>
+                </InputItem>
               </List.Item>
               <List.Item style={{ display: 'flex' }}>
                 <Button loading={local.isLogin} disabled={local.isLogin || local.isRegister} type="primary" onClick={() => login({ router, local, store, services })}>登录</Button>
+              </List.Item>
+              <List.Item style={{ display: 'flex' }}>
+                其他登录方式
+                <IconSNS src={sns_weibo} onClick={()=>{
+                  window.location.href = 'https://api.weibo.com/oauth2/authorize?client_id=177146223&response_type=code&redirect_uri=https://6vq7631482.imdo.co/api/v1/oauth/sns/weibo/callback'
+                }}/>
+                <IconSNS src={sns_weixin} />
+                <IconSNS src={sns_alipay} />
+                <IconSNS src={sns_apple} />
+                <IconSNS src={sns_github} />
+                <IconSNS src={sns_google} />
               </List.Item>
             </List>
           </div>

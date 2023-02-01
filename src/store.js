@@ -15,7 +15,7 @@ import storage from './utils/storage'
 import { types } from 'mobx-state-tree'
 import { groups } from 'pages'
 import config from './config'
-import { ws } from './utils/ws'
+// import { ws } from './utils/ws'
 
 export const channelLoaders = {}
 export const resourceListLoaders = {}
@@ -83,7 +83,7 @@ const store = Store.create({
 })
 
 window.store = store
-window.ws = ws
+// window.ws = ws
 
-store.app.setBaseURL(config.isDebug ? 'http://localhost:8097' : '')
+store.app.setBaseURL(config.isDebug ? 'http://192.168.0.124/gw/novel' : '/gw/novel')
 export default store

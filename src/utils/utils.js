@@ -5,7 +5,7 @@ export function isPWAorMobile() {
   const isChromeApp = (window.matchMedia('(display-mode: standalone)').matches)
   const isIosApp = window.navigator.standalone === true
   const platformType = browser.getPlatformType()
-  return platformType === 'mobile' || (isChromeApp || isIosApp) ? true : false
+  return platformType === 'mobile' || platformType === 'tablet' || (isChromeApp || isIosApp) ? true : false
 }
 
 export function stringfyQuery(query = {}) {
