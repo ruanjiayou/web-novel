@@ -16,8 +16,8 @@ function View({ self, router, store, params }) {
   })
   return <Observer>
     {() => (
-      <FullHeight style={{ position: 'relative' }}>
-        <AlignCenterXY style={{ width: 40, height: 40, color: 'white', position: 'absolute', left: 'calc(10px + env(safe-area-inset-left))', top: 'calc(10px + env(safe-area-inset-top))', borderRadius: '50%', backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={() => { router.back() }}>
+      <FullHeight style={{ position: 'relative', backgroundImage:'url(/logo.jpg)', backgroundSize: 'cover' }}>
+        <AlignCenterXY style={{ width: 40, height: 40, color: 'white', position: 'absolute', left: 'calc(10px + env(safe-area-inset-left))', top: 'calc(10px + env(safe-area-inset-top))', borderRadius: '50%', backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={() => { router.replaceView('home') }}>
           <MIconView type="FaChevronLeft" />
         </AlignCenterXY>
         <img src="/logo.jpg" style={{ width: '100%', height: '100%' }} />

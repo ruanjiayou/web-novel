@@ -26,7 +26,13 @@ function View({ self, router, store, params }) {
   return <Observer>
     {() => (
       <FullHeight>
-        <FullWidth style={{ height: 50, backgroundColor: store.app.barBGC }}>
+        <FullWidth style={{
+          height: 50, backgroundColor: store.app.barBGC,
+          paddingLeft: 'env(safe-area-inset-left)',
+          paddingRight: 'env(safe-area-inset-right)',
+          paddingTop: 10,
+          paddingBottom: 10,
+        }}>
           <img src="/novel/logo.jpg" alt="" style={{ margin: '0 10px', borderRadius: '50%' }} onClick={e => { router.replaceView('mine') }} />
           <FullHeightAuto style={{ height: 30, backgroundColor: '#ccc', borderRadius: 5, }} onClick={() => { router.pushView('Search') }} />
           <div style={{ color: '#f97a90', margin: '0 5px' }} onClick={() => {
@@ -39,19 +45,24 @@ function View({ self, router, store, params }) {
             <MIconView type="FaStar" size={'md'} style={{ color: '#ccc' }} />
           </div>
         </FullWidth>
-        <Tabs
-          initialPage={channels.findIndex(channel => channel.group_id === store.app.tab)}
-          tabs={channels}
-          distanceToChangeTab={0.5}
-          prerenderingSiblingsNumber
-          onChange={(tab, index) => {
-            store.app.setTab(tab.group_id)
-            router.replaceView('home', { tab: tab.group_id })
-          }}>{
-            channels.map((channel, index) => (
-              <RenderGroups key={index} loader={loaders[channel.group_id]} group={channel.data} />
-            ))
-          }</Tabs>
+        <div style={{
+          paddingLeft: 'env(safe-area-inset-left)',
+          paddingRight: 'env(safe-area-inset-right)',
+        }}>
+          <Tabs
+            initialPage={channels.findIndex(channel => channel.group_id === store.app.tab)}
+            tabs={channels}
+            distanceToChangeTab={0.5}
+            prerenderingSiblingsNumber
+            onChange={(tab, index) => {
+              store.app.setTab(tab.group_id)
+              router.replaceView('home', { tab: tab.group_id })
+            }}>{
+              channels.map((channel, index) => (
+                <RenderGroups key={index} loader={loaders[channel.group_id]} group={channel.data} />
+              ))
+            }</Tabs>
+        </div>
       </FullHeight>
     )}
   </Observer>

@@ -6,12 +6,15 @@ import { useStoreContext } from 'contexts'
 export default function UserAreaView({ children, className, style, bar }) {
   const store = useStoreContext();
   return <Observer>{() => (
-    <div className="full-height" style={{ overflow: 'hidden' }}>
-      {bar && isPWAorMobile() ? (
-        <div style={{ position: 'relative', zIndex: 8888, backgroundColor: store.app.barBGC, height: 'env(safe-area-inset-top)', }}></div>
-      ) : null
-      }
-      <div className="full-height-auto" style={{ minHeight: 0, position: 'relative', display: 'flex', }}>{children}</div>
+    <div className="full-height" style={{ overflow: 'hidden', backgroundColor: store.app.barBGC }}>
+      {!store.app.hideMenu && <div style={{ marginTop: 'env(safe-area-inset-top)' }}></div>}
+      <div className="full-height-auto" style={{
+        minHeight: 0,
+        position: 'relative',
+        backgroundColor: 'white',
+        display: 'flex',
+      }}>{children}</div>
+      {!store.app.hideMenu && <div style={{ backgroundColor: 'white', paddingBottom: 'env(safe-area-inset-bottom)' }}></div>}
     </div >
   )}</Observer>
 }
