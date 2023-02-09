@@ -14,6 +14,7 @@
 
 ## warning
 - keyboardjs rebound 是 react-use 需要的.
+- WorkboxWebpackPlugin将sw-template.js编译为sw-build.js(sw-manager.js里注册service-worker,选择sw-build而不是默认生成的service-worker.js,build的js不能覆盖...)
 
 ## error
 - NotAllowedError 点击等事件里才能调用play()方法

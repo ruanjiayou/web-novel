@@ -47,6 +47,15 @@
       top: 0;
       bottom: 0;
     }
+    #app-update {
+      display: none;
+      position: absolute;
+      right: 20px;
+      bottom: 20px;
+    }
+    #app-update.show {
+      display: block;
+    }
 
     .box-browser {
       width: 414px;
@@ -103,10 +112,11 @@
 
 <body>
   <noscript>请允许执行JavaScript</noscript>
-  <div id="start-loading">正在加载资源...</div>
+  <div id="start-loading">加载资源...</div>
   <div id="box">
     <div id="root" class="full-height"></div>
   </div>
+  <button id="app-update">更新</button>
   <script>
     document.oncontextmenu = function (e) {
       e.preventDefault();

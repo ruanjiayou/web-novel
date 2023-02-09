@@ -1,7 +1,9 @@
 import io from 'socket.io-client';
 
 export const ws = io(process.env.NODE_ENV !== 'production' ? 'http://localhost:8097/' : '/', {
-  path: '/ws'
+  path: '/ws',
+  reconnectionDelay: 10000,
+  reconnectionAttempts: 3
 });
 
 ws.on('connect', (socket) => {
