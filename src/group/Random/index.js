@@ -21,7 +21,7 @@ export default function Random({ self }) {
         {self.data.map((d, index) => (<div key={index} style={{ flex: 1, display: 'flex', flexDirection: 'row', alignItems: 'center', minWidth: '60%', maxWidth: '60%' }}><ResourceItem key={index} item={d} /></div>))}
       </Container>
       <VisualBoxView visible={self.attrs.random === true}>
-        <MIconView style={{ textAlign: 'center', padding: 15, fontSize: 13 }} type="FaRedo" after="换一换" onClick={async () => {
+        <MIconView spin={local.loading} style={{ textAlign: 'center', padding: 15, fontSize: 13 }} type="FaRedo" after="换一换" onClick={async () => {
           try {
             local.loading = true
             const result = await services.getGroupResources({ params: { group_id: self.id } })

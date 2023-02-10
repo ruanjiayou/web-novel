@@ -18,6 +18,10 @@ const getDistance = (a, b) => {
 
 // 根据触摸点计算缩放倍数
 const calculateScale = (startTouches, endTouches, scale) => {
+  // 缩放出现长度只有1
+  if (endTouches.length < 2) {
+    return scale;
+  }
   const startDistance = getDistance(startTouches[0], startTouches[1])
   const endDistance = getDistance(endTouches[0], endTouches[1])
   const newscale = endDistance / startDistance
@@ -30,9 +34,8 @@ const swing = p => {
 }
 // TODO: limit x,y into box
 // TODO: deal scale anti human
-export default ({ children, wrapStyle, style, onUpdate, onDoubleTap, onDragStart, onDragEnd, onGestureEnd }) => {
+export default ({ children, wrapStyle, style, onUpdate, onTap, onDoubleTap, onDragStart, onDragEnd, onGestureEnd }) => {
   const local = useLocalStore(() => ({
-    teststr: '',
     size: { width: 0, height: 0 },
     scale: 1,
     dscale: 1,
@@ -63,6 +66,7 @@ export default ({ children, wrapStyle, style, onUpdate, onDoubleTap, onDragStart
     // 是否处于动画中
     inAnimation: false,
     updatePlaned: false,
+    animateIndex: null,
     // 是否是双击
     isDoubleTap: false,
     // 操作方式: zoom 缩放, drag 拖动
@@ -100,22 +104,16 @@ export default ({ children, wrapStyle, style, onUpdate, onDoubleTap, onDragStart
   // 检测双击事件
   const detectDoubleTap = useCallback(e => {
     let time = Date.now()
-    if (e.changedTouches.length >= 1) {
-      local.lastTouchStart = 0
+    if (local.lastTouchStart === 0) {
+      local.lastTouchStart = time
+      return;
     }
     if (time - local.lastTouchStart < 300) {
       e.preventDefault()
       e.stopPropagation()
-      handleDoubleTap(e)
-      switch (local.interaction) {
-        case 'zoom': end(e); break;
-        case 'drag': end(e); break;
-      }
+      local.isDoubleTap = true
     } else {
       local.isDoubleTap = false
-    }
-    if (e.changedTouches.length === 1) {
-      local.lastTouchStart = time
     }
   })
   // 处理双击事件
@@ -130,14 +128,7 @@ export default ({ children, wrapStyle, style, onUpdate, onDoubleTap, onDragStart
 
   // (缩放/拖动)操作结束
   const end = useCallback(() => {
-    local.teststr = `o1(${local.offsetPoint.x},${local.offsetPoint.y}) 
-    o2(${local.offsetPoint.x + local.offset.x},${local.offsetPoint.y + local.offset.y}) 
-    center(${local.scaleCenter.x},${local.scaleCenter.y}) 
-    size:${local.size.width},${local.size.height}
-    scale:${local.scale * local.dscale}`
     local.hasInteraction = false
-    local.isMove = false
-    local.fingers = 0
     local.offsetPoint.x += local.offset.x
     local.offsetPoint.y += local.offset.y
     local.offset.x = 0
@@ -168,11 +159,11 @@ export default ({ children, wrapStyle, style, onUpdate, onDoubleTap, onDragStart
         }
         framefn(progress)
         update()
-        requestAnimationFrame(renderFrame)
+        local.animateIndex = requestAnimationFrame(renderFrame)
       }
     }
     local.inAnimation = true
-    requestAnimationFrame(renderFrame)
+    local.animateIndex = requestAnimationFrame(renderFrame)
   }, [])
   // 动效更新请求帧
   const update = useCallback(() => {
@@ -186,7 +177,7 @@ export default ({ children, wrapStyle, style, onUpdate, onDoubleTap, onDragStart
       element.current.style.setProperty('transform', transfrom)
     }
     local.updatePlaned = true
-    requestAnimationFrame(() => {
+    local.animateIndex = requestAnimationFrame(() => {
       local.updatePlaned = false;
       updateFrame()
     })
@@ -194,12 +185,13 @@ export default ({ children, wrapStyle, style, onUpdate, onDoubleTap, onDragStart
   // 触摸开始根据触摸点数判断是放大还是拖动并记录坐标
   const onTouchStart = useCallback(e => {
     local.isMove = false
+    local.isDoubleTap = false
     local.fingers = e.touches.length
     local.startTouches = getTouches(e)
     local.offset.x = 0
     local.offset.y = 0
     local.dscale = 1
-    if (local.fingers === 2) {
+    if (local.fingers >= 2) {
       local.interaction = 'zoom'
       let center = getTouchCenter(local.startTouches)
       local.scaleCenter.x = center.x
@@ -223,7 +215,7 @@ export default ({ children, wrapStyle, style, onUpdate, onDoubleTap, onDragStart
     const targetTouches = getTouches(e)
     switch (local.interaction) {
       case 'zoom':
-        if (local.fingers === 2) {
+        if (local.fingers >= 2) {
           local.dscale = calculateScale(local.startTouches, targetTouches, local.scale)
           let trueScale = local.scale * local.dscale
           local.offset.x = local.scaleCenter.x - local.dscale * local.scaleCenter.x - local.offsetPoint.x + local.dscale * local.offsetPoint.x
@@ -241,20 +233,25 @@ export default ({ children, wrapStyle, style, onUpdate, onDoubleTap, onDragStart
     update()
   }, [])
   const onTouchEnd = useCallback(e => {
-    local.fingers = e.touches.length;
-    if (local.isMove && local.fingers === 1) {
-      detectDoubleTap(e)
-      if (local.tapTimer) {
-        clearTimeout(local.tapTimer)
-      }
-      if (local.isDoubleTap) {
-        return
-      }
-      local.tapTimer = setTimeout(() => {
-        if (typeof onGestureEnd === 'function') {
-          onGestureEnd()
+    // e.touches 在start时有，在这里就没了
+    if (!local.isMove) {
+      if (local.fingers === 1) {
+        detectDoubleTap(e)
+        if (local.tapTimer) {
+          clearTimeout(local.tapTimer)
         }
-      }, 300)
+        if (local.isDoubleTap) {
+          handleDoubleTap(e)
+          return
+        }
+        local.tapTimer = setTimeout(() => {
+          local.lastTouchStart = 0;
+          onTap && onTap();
+          if (typeof onGestureEnd === 'function') {
+            onGestureEnd()
+          }
+        }, 300)
+      }
     }
     end(e)
   }, [])
@@ -266,6 +263,8 @@ export default ({ children, wrapStyle, style, onUpdate, onDoubleTap, onDragStart
       local.size.width = rect.width
       local.size.height = rect.height
       return () => {
+        local.inAnimation = false;
+        cancelAnimationFrame(local.animateIndex)
         container.current.removeEventListener('touchmove', onTouchMove)
       }
     }
@@ -287,18 +286,19 @@ export default ({ children, wrapStyle, style, onUpdate, onDoubleTap, onDragStart
   }, [])
   return <Observer>{() => (
     <div
-      onTouchStart={onTouchStart}
-      onTouchMove={onTouchMove}
-      onTouchEnd={onTouchEnd}
-      ref={container}
       style={{ touchAction: 'none', overflow: 'hidden', width: '100%', height: '100%', color: '#fff', ...wrapStyle }}
     >
-      <span style={{ position: 'absolute', left: 10, top: 10, zIndex: 2, color: 'red', backgroundColor: 'rgba(0,0,0,0.4)' }}>
-        {local.teststr}
-      </span>
       <div ref={element} style={{ transformOrigin: '0 0', width: '100%', height: '100%' }}>
         {children}
       </div>
+      <div
+        style={{ touchAction: 'none', position: 'absolute', left: 0, top: 0, bottom: 0, right: 0, zIndex: 2 }}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+        ref={container}
+      ></div>
     </div>
-  )}</Observer>
+  )
+  }</Observer >
 }

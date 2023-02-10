@@ -35,7 +35,7 @@ const swing = p => {
   return -Math.cos(p * Math.PI) / 2 + 0.5
 }
 
-export default ({ children, wrapStyle, style, onUpdate, onDoubleTap, onDragStart, onDragEnd, onGestureEnd }) => {
+export default ({ children, wrapStyle, style, onUpdate, onTap, onDoubleTap, onDragStart, onDragEnd, onGestureEnd }) => {
   const local = useLocalStore(() => ({
     // 是否是本轮第一次移动
     firstMove: false,
@@ -51,6 +51,7 @@ export default ({ children, wrapStyle, style, onUpdate, onDoubleTap, onDragStart
     // 是否处于动画中
     inAnimation: false,
     updatePlaned: false,
+    animateIndex: null,
     // 是否是双击
     isDoubleTap: false,
     // 操作方式: zoom 缩放, drag 拖动
@@ -72,8 +73,9 @@ export default ({ children, wrapStyle, style, onUpdate, onDoubleTap, onDragStart
     // 计算初始偏移量
     computeInitialOffset() {
       let { width, height } = container.current.getBoundingClientRect()
-      local.initialOffset.x = -Math.abs(element.current.offsetWidth * getInitialZoomFactor() - width) / 2
-      local.initialOffset.y = -Math.abs(element.current.offsetHeight * getInitialZoomFactor() - height) / 2
+      const k = getInitialZoomFactor();
+      local.initialOffset.x = -Math.abs(element.current.offsetWidth * k - width) / 2
+      local.initialOffset.y = -Math.abs(element.current.offsetHeight * k - height) / 2
     },
     // 更新偏移坐标
     resetOffset() {
@@ -178,11 +180,11 @@ export default ({ children, wrapStyle, style, onUpdate, onDoubleTap, onDragStart
         }
         framefn(progress)
         update()
-        requestAnimationFrame(renderFrame)
+        local.animateIndex = requestAnimationFrame(renderFrame)
       }
     }
     local.inAnimation = true
-    requestAnimationFrame(renderFrame)
+    local.animateIndex = requestAnimationFrame(renderFrame)
   }, [])
   // 1.使用动效
   const sanitize = useCallback(() => {
@@ -307,7 +309,7 @@ export default ({ children, wrapStyle, style, onUpdate, onDoubleTap, onDragStart
       element.current.style.setProperty('transform', transfrom)
     }
     local.updatePlaned = true
-    requestAnimationFrame(() => {
+    local.animateIndex = requestAnimationFrame(() => {
       local.updatePlaned = false;
       updateFrame()
     })
@@ -382,19 +384,24 @@ export default ({ children, wrapStyle, style, onUpdate, onDoubleTap, onDragStart
   }, [])
   const onTouchEnd = useCallback(e => {
     local.fingers = e.touches.length;
-    if (local.isMove && !local.isMultitouch) {
-      detectDoubleTap(e)
-      if (local.tapTimer) {
-        clearTimeout(local.tapTimer)
-      }
-      if (local.isDoubleTap) {
-        return
-      }
-      local.tapTimer = setTimeout(() => {
-        if (typeof onGestureEnd === 'function') {
-          onGestureEnd()
+    if (local.isMove) {
+      if (!local.isMultitouch) {
+        detectDoubleTap(e)
+        if (local.tapTimer) {
+          clearTimeout(local.tapTimer)
         }
-      }, 300)
+        if (local.isDoubleTap) {
+          return
+        }
+        local.tapTimer = setTimeout(() => {
+          if (typeof onGestureEnd === 'function') {
+            onGestureEnd()
+          }
+        }, 300)
+      }
+    } else {
+      console.log('detect tap')
+      onTap && onTap();
     }
     end(e)
   }, [])
@@ -421,6 +428,8 @@ export default ({ children, wrapStyle, style, onUpdate, onDoubleTap, onDragStart
       local.resetOffset()
     }
     return () => {
+      local.inAnimation = false;
+      cancelAnimationFrame(local.animateIndex)
       window.removeEventListener('resize', onResize)
     }
   }, [])
@@ -435,7 +444,7 @@ export default ({ children, wrapStyle, style, onUpdate, onDoubleTap, onDragStart
       <span style={{ position: 'absolute', left: 10, top: 10, zIndex: 2, color: 'red', backgroundColor: 'rgba(0,0,0,0.4)' }}>
         zoom:{local.zoomFactor} scale:{local.lastScale} center.x:{lastDragPosition.current ? lastDragPosition.current.x : 0} center.y:{lastDragPosition.current ? lastDragPosition.current.y : 0}
       </span>
-      <div ref={element} style={{ transformOrigin: '0 0', width: '100%', height: '100%' }}>
+      <div ref={element} style={{ transformOrigin: '0 0', width: '100%', height: '100%', position: 'relative' }}>
         {children}
       </div>
     </div>

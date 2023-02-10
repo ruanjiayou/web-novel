@@ -163,5 +163,5 @@ ReactDOM.render(<ErrorBoundary>
 
 // serviceWorker.unregister();
 if (window.parent === window) {
-  serviceWorker.register()
+  swManager.register()
 }

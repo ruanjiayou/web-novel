@@ -5,15 +5,16 @@ import { ActivityIndicator, Icon, Tag } from 'antd-mobile'
 import { ResourceLoader } from 'loader'
 import { AutoCenterView, MIconView } from 'components'
 import createPageModel from 'page-group-loader-model/BasePageModel'
-import { ITag, Container } from './style'
+import { ITag, Container, Screen } from './style'
 import services from 'services'
 import { useEffectOnce } from 'react-use'
+import PinchZoom from 'components/PinchZoom/self'
 
 const { createMark, getMark, destroyMark } = services
 const model = createPageModel({
   ResourceLoader,
 })
-
+const RATIO = document.body.clientWidth / document.body.clientHeight;
 function View({ self, router, store, params, Navi }) {
   const loader = ResourceLoader.create()
   let imageHost = store.lineLoader.getHostByType('image')
@@ -23,6 +24,10 @@ function View({ self, router, store, params, Navi }) {
     markStatus: 'dislike', // like/error
     markLoading: false,
     markError: false,
+    full: false,
+    filepath: '',
+    initW: 1,
+    initH: 1,
   }))
   const MStatus = function () {
     if (localStore.markLoading) {
@@ -76,13 +81,30 @@ function View({ self, router, store, params, Navi }) {
         {loader.isEmpty ? <AutoCenterView>
           <ActivityIndicator text="加载中..." />
         </AutoCenterView> : <Fragment>
-            {loader.item.poster !== loader.item.images[0] && <img src={imageHost + loader.item.poster} style={{ maxWidth: '100%' }} />}
-            {loader.item.images.map((image, index) => (<img key={index} src={imageHost + image} style={{ maxWidth: '100%' }} />))}
-          </Fragment>}
+          {loader.item.poster && loader.item.poster !== loader.item.images[0] && <img src={imageHost + loader.item.poster} style={{ maxWidth: '100%' }} />}
+          {loader.item.images.map((image, index) => (<img key={index} src={imageHost + image} style={{ maxWidth: '100%' }} onTouchStart={(e) => {
+            const { width, height } = e.currentTarget || {};
+            const ratio = (width || 0) / (height || 1);
+            // 长图
+            localStore.initW = RATIO > ratio ? width * document.body.clientHeight / height : document.body.clientWidth;
+            // 宽图
+            localStore.initH = RATIO > ratio ? document.body.clientHeight : height * document.body.clientWidth / width;
+            localStore.filepath = imageHost + image;
+            localStore.full = true;
+          }} />))}
+          <Container style={{ margin: 10 }}>
+            {loader.item && loader.item.tags.map((tag, index) => <ITag key={index} disabled>{tag}</ITag>)}
+          </Container>
+        </Fragment>}
       </div>
-      <Container style={{ position: 'absolute', left: 5, right: 5, bottom: 5 }}>
-        {loader.item && loader.item.tags.map((tag, index) => <ITag key={index} disabled>{tag}</ITag>)}
-      </Container>
+      {localStore.full && (
+        <Screen>
+          <PinchZoom onTap={() => {
+            localStore.full = false;
+          }}>
+            <img key={localStore.filepath} style={{ width: localStore.initW, height: localStore.initH, position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }} src={localStore.filepath} />
+          </PinchZoom>
+        </Screen>)}
     </div>
   }</Observer>
 }
