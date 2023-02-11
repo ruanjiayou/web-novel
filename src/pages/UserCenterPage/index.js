@@ -26,7 +26,7 @@ function View({ self, router, store, }) {
           <div className="full-width-fix dd-common-centerXY" style={{ width: 35, height: 35, margin: '10px 0' }}>
             {/* TODO: 测试 */}
             {/* <img src={userLoader.isEmpty ? '' : userLoader.item.avater} /> */}
-            {userLoader.isLoading ? <ActivityIndicator /> : <img src="/novel/logo.jpg" style={{ borderRadius: '50%' }} alt="" />}
+            {userLoader.isLoading ? <ActivityIndicator /> : <img src="/logo.jpg" style={{ borderRadius: '50%' }} alt="" />}
           </div>
           <div className="full-width-auto" style={{ paddingLeft: 10 }}>
             <SwitchView loading={!store.app.isLogin} holder={<Button type="ghost" inline size="small" onClick={() => { router.pushView('login') }}>登录</Button>}>
