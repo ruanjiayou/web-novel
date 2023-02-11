@@ -1,7 +1,11 @@
 import * as bowser from 'bowser'
 
+const browser = bowser.getParser(window.navigator.userAgent)
+
+export function isIOSafariWeb() {
+  return browser.getBrowserName() === 'Safari' && browser.getPlatformType() === 'mobile' && window.navigator.standalone === false
+}
 export function isPWAorMobile() {
-  const browser = bowser.getParser(window.navigator.userAgent)
   const isChromeApp = (window.matchMedia('(display-mode: standalone)').matches)
   const isIosApp = window.navigator.standalone === true
   const platformType = browser.getPlatformType()

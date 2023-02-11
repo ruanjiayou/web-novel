@@ -5,7 +5,7 @@ import { Tabs } from 'antd-mobile'
 
 import { RenderGroups } from 'group'
 import { MIconView } from 'components'
-import { FullHeight, FullWidth, FullHeightAuto, } from 'components/common'
+import { FullHeight, FullWidth, FullHeightAuto, FullHeightFix, } from 'components/common'
 import { channelLoaders } from 'store'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 import showTip from 'utils/showTip';
@@ -26,29 +26,32 @@ function View({ self, router, store, params }) {
   return <Observer>
     {() => (
       <FullHeight>
-        <FullWidth style={{
-          height: 50, backgroundColor: store.app.barBGC,
-          paddingLeft: 'env(safe-area-inset-left)',
-          paddingRight: 'env(safe-area-inset-right)',
-          paddingTop: 10,
-          paddingBottom: 10,
-        }}>
-          <img src="/novel/logo.jpg" alt="" style={{ margin: '0 10px', borderRadius: '50%' }} onClick={e => { router.replaceView('mine') }} />
-          <FullHeightAuto style={{ height: 30, backgroundColor: '#ccc', borderRadius: 5, }} onClick={() => { router.pushView('Search') }} />
-          <div style={{ color: '#f97a90', margin: '0 5px' }} onClick={() => {
-            if (store.app.isLogin) {
-              router.pushView('Marked')
-            } else {
-              showTip(router)
-            }
+        <FullHeightFix>
+          <FullWidth style={{
+            height: 50, backgroundColor: store.app.barBGC,
+            paddingLeft: 'env(safe-area-inset-left)',
+            paddingRight: 'env(safe-area-inset-right)',
+            paddingTop: 10,
+            paddingBottom: 10,
           }}>
-            <MIconView type="FaStar" size={'md'} style={{ color: '#ccc' }} />
-          </div>
-        </FullWidth>
-        <div style={{
+            <img src="/logo.jpg" alt="" style={{ margin: '0 10px', borderRadius: '50%' }} onClick={e => { router.replaceView('mine') }} />
+            <FullHeightAuto style={{ height: 30, backgroundColor: '#ccc', borderRadius: 5, }} onClick={() => { router.pushView('Search') }} />
+            <div style={{ color: '#f97a90', margin: '0 5px' }} onClick={() => {
+              if (store.app.isLogin) {
+                router.pushView('Marked')
+              } else {
+                showTip(router)
+              }
+            }}>
+              <MIconView type="FaStar" size={'md'} style={{ color: '#ccc' }} />
+            </div>
+          </FullWidth>
+        </FullHeightFix>
+        <FullHeightAuto style={{
           paddingLeft: 'env(safe-area-inset-left)',
           paddingRight: 'env(safe-area-inset-right)',
-        }}>
+        }}
+        >
           <Tabs
             initialPage={channels.findIndex(channel => channel.group_id === store.app.tab)}
             tabs={channels}
@@ -62,7 +65,7 @@ function View({ self, router, store, params }) {
                 <RenderGroups key={index} loader={loaders[channel.group_id]} group={channel.data} />
               ))
             }</Tabs>
-        </div>
+        </FullHeightAuto>
       </FullHeight>
     )}
   </Observer>

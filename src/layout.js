@@ -1,13 +1,14 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { TabBar } from 'antd-mobile'
 import { useRouterContext, useStoreContext } from 'contexts'
 import { MIconView } from 'components'
-
+import { isIOSafariWeb } from './utils/utils'
 export default function ({ children }) {
   const router = useRouterContext()
   const store = useStoreContext()
-  return <Observer>{() => <div style={{ width: '100%', height: '100%' }}>
+  const [h] = useState(isIOSafariWeb() ? 80 : 0)
+  return <Observer>{() => <div style={{ position: 'relative',  width: '100%', height: `calc(100vh - ${h}px)` }}>
     <TabBar
       tintColor="#33A3F4"
       unselectedTintColor="#555"
