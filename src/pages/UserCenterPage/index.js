@@ -21,7 +21,7 @@ function View({ self, router, store, }) {
   })
   return <Observer>{
     () => {
-      return <div className="full-height" onTouchStart={e => e.preventDefault()} onTouchMove={e => e.preventDefault()}>
+      return <div className="full-height" style={{ paddingLeft: 'calc(env(safe-area-inset-left) + 10px )', paddingRight: 'calc(env(safe-area-inset-right) + 10px )' }} onTouchStart={e => e.preventDefault()} onTouchMove={e => e.preventDefault()}>
         <div className="full-width" style={{ padding: '0 20px' }}>
           <div className="full-width-fix dd-common-centerXY" style={{ width: 35, height: 35, margin: '10px 0' }}>
             {/* TODO: 测试 */}

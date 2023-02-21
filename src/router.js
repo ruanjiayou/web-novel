@@ -100,7 +100,7 @@ function App(props) {
                     router.userEvent = false
                   }}
                 >
-                  <div key={i} className="page" style={{ width: '100%', height: '100%', position: 'absolute', zIndex: i + 101, backgroundColor: '#ffffff' }}>
+                  <div key={i} className="page" style={{ top: 0, left: 0, width: '100%', height: '100%', position: 'absolute', zIndex: i + 101, backgroundColor: '#ffffff' }}>
                     <Comp params={layer.params} />
                   </div>
                 </CSSTransition>

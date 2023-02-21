@@ -10,7 +10,7 @@ const dataProvider = new ListView.DataSource({
 })
 
 function MyBody(props) {
-  return <div className={`am-list-body ${props.className}`}>{props.children}</div>
+  return <div className={`am-list-body ${props.className || ''}`}>{props.children}</div>
 }
 
 function renderList({ loader, refresh, loadMore, renderItem, onScroll, className, renderEmpty }) {

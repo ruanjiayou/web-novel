@@ -286,18 +286,15 @@ export default ({ children, wrapStyle, style, onUpdate, onTap, onDoubleTap, onDr
   }, [])
   return <Observer>{() => (
     <div
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
+      ref={container}
       style={{ touchAction: 'none', overflow: 'hidden', width: '100%', height: '100%', color: '#fff', ...wrapStyle }}
     >
       <div ref={element} style={{ transformOrigin: '0 0', width: '100%', height: '100%' }}>
         {children}
       </div>
-      <div
-        style={{ touchAction: 'none', position: 'absolute', left: 0, top: 0, bottom: 0, right: 0, zIndex: 2 }}
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={onTouchEnd}
-        ref={container}
-      ></div>
     </div>
   )
   }</Observer >

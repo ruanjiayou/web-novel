@@ -32,7 +32,7 @@ function View({ self, router, Navi, children }) {
   })
   return <Observer>
     {() => (
-      <div className="full-height">
+      <div className="full-height" style={{ paddingLeft: 'calc(env(safe-area-inset-left) + 10px )', paddingRight: 'calc(env(safe-area-inset-right) + 10px )' }}>
         <RenderGroups loader={loader} group={{ name: 'music' }} style={{ maxWidth: '50%' }} />
         {/* <Navi title="歌单列表" router={router}>
           <span style={{ paddingRight: 10 }} onClick={e => { local.showModal = true }}>创建</span>

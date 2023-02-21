@@ -101,6 +101,7 @@ class ErrorBoundary extends React.Component {
     document.getElementById('start-loading').style.display = 'none'
     // document.getElementById('box').className = this.state.isPWAorMobile ? 'box-app' : 'box-browser'
     document.getElementById('box').className = 'box-app'
+    document.getElementById('root').style.display = 'block'
     document.addEventListener('visibilitychange', async (e) => {
       // TODO: 时间过长处理.刷新
       if (document.hidden) {

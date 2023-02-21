@@ -100,10 +100,10 @@ export default function ({ router, type, resource, onRecord, srcpath, looktime, 
   const onLoadedMetadata = (duration) => {
     local.duration = duration
     if (!local.autoplay && local.isReady) {
-      
+
     } else {
       controls.seek(looktime)
-    } 
+    }
   }
   const onTimeUpdate = (time) => {
     if (onRecord) {
@@ -237,7 +237,6 @@ export default function ({ router, type, resource, onRecord, srcpath, looktime, 
     type='video'
     playsInline
     poster={resource.auto_cover}
-    playsInline={true}
     muted={local.muted}
     src={srcpath}
     airplay="allow"
@@ -384,12 +383,13 @@ export default function ({ router, type, resource, onRecord, srcpath, looktime, 
       </div>}
     </div>
   }
+  const padding = 'env(safe-area-inset-top) env(safe-area-inset-left) env(safe-area-inset-right) env(safe-area-inset-bottom)';
   const renderControlLayer = function (header) {
     return (
       <FullHeight
         style={{ position: 'absolute', width: '100%', color: 'white', }}>
         {/* 顶部菜单 */}
-        <AlignSide style={{ position: 'absolute', left: 0, top: 0, width: '100%', zIndex: 2, background: local.showControl ? 'linear-gradient(-180deg, #333, transparent)' : '' }}>
+        <AlignSide style={{ position: 'absolute', left: 0, top: 0, width: '100%', padding: local.isVertical ? 0 : padding, zIndex: 2, background: local.showControl ? 'linear-gradient(-180deg, #333, transparent)' : '' }}>
           {header(local.showControl && !local.fullscreen ? <div>
             <Icon src={require('theme/icon/airplay.svg')} />
             <Icon style={{ width: 16 }} src={require('theme/icon/feedback.svg')} />
@@ -453,7 +453,7 @@ export default function ({ router, type, resource, onRecord, srcpath, looktime, 
         </MyFinger>
         <VisualBoxView visible={local.showControl}>
           {/* 底部菜单 */}
-          <FullWidth style={{ paddingTop: 10, paddingBottom: 5, zIndex: 2, background: 'linear-gradient(0deg, #333, transparent)' }}>
+          <FullWidth style={{ padding: local.isVertical ? 0 : padding, zIndex: 2, background: 'linear-gradient(0deg, #333, transparent)' }}>
             {/* 静音 */}
             {/* <FullWidthFix onClick={() => {
               local.muted = !local.muted
@@ -481,7 +481,7 @@ export default function ({ router, type, resource, onRecord, srcpath, looktime, 
               </FullHeightFix>
             </VisualBoxView>
             {/* 进度条 */}
-            <FullWidthAuto style={{ backgroundColor: 'grey', margin: '0 5px', borderRadius: 3, }} onClick={e => {
+            <FullWidthAuto style={{ backgroundColor: '#b5b5b5', margin: '0 5px', borderRadius: 3, }} onClick={e => {
               if (local.showControl) {
                 local.openControl()
               }
@@ -504,7 +504,7 @@ export default function ({ router, type, resource, onRecord, srcpath, looktime, 
                   time = Math.min(local.duration, Math.max(time, 0))
                   onSeek(time)
                 }}>
-                  <span style={{ position: 'absolute', top: '50%', right: 0, backgroundColor: 'blue', width: 10, height: 10, borderRadius: 50, marginRight: -5, marginTop: -5 }}></span>
+                  <span style={{ position: 'absolute', top: '50%', right: 0, backgroundColor: '#48a6d0', width: 10, height: 10, borderRadius: 50, marginRight: -5, marginTop: -5 }}></span>
                 </MyFinger>
               </div>
             </FullWidthAuto>
@@ -535,7 +535,7 @@ export default function ({ router, type, resource, onRecord, srcpath, looktime, 
         local.showMore = false
       }}>
         more
-    </FullHeight>
+      </FullHeight>
     </VisualBoxView>
   }
   const renderEndedLayer = function () {
@@ -556,7 +556,7 @@ export default function ({ router, type, resource, onRecord, srcpath, looktime, 
   return <Observer>{() => (
     <div style={{ width: '100%', position: !local.isVertical ? 'fixed' : 'relative', height: !local.isVertical ? '100vh' : 'calc(100vw * 9 / 16)', zIndex: 2 }} ref={ref => fullScreenRef.current = ref}>
       {renderVideoLayer()}
-      {renderControlLayer(child => <Navi title={!local.isVertical && local.showControl ? resource.title : null} showBack wrapStyle={{ flex: 1, backgroundColor: 'transparent', borderBottom: 'none', width: '100%', height: 35 }}>{child}</Navi>)}
+      {renderControlLayer(child => <Navi title={!local.isVertical && local.showControl ? resource.title : null} showBack wrapStyle={{ flex: 1, backgroundColor: 'transparent', borderBottom: 'none', width: '100%', padding: local.isVertical ? 0 : padding, height: 35 }}>{child}</Navi>)}
       {renderMoreLayer()}
       {renderEndedLayer()}
     </div>

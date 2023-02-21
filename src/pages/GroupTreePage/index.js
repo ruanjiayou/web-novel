@@ -28,8 +28,8 @@ function View({ self, router, store, params, Navi }) {
       return Blank
     }
     return <div className="full-height">
-      <Navi title={loader.item.title} router={router} />
-      <div className="full-height-auto">
+      <Navi title={loader.item.title} wrapStyle={{ paddingLeft: 'env(safe-area-inset-left)', paddingRight: 'env(safe-area-inset-right' }} router={router} />
+      <div className="full-height-auto" style={{ paddingLeft: 'env(safe-area-inset-left)', paddingRight: 'env(safe-area-inset-right' }}>
         <RenderGroups loader={loader} />
       </div>
     </div>

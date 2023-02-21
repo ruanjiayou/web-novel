@@ -24,7 +24,7 @@ function View({ self, router, store }) {
       return blank
     }
     return <FullHeight>
-      <div style={{ padding: 10, backgroundColor: store.app.barBGC, marginBottom: 10 }}>所有频道</div>
+      <div style={{ paddingTop: 10, paddingBottom: 10, paddingLeft: 'calc(env(safe-area-inset-left) + 10px )', paddingRight: 'calc(env(safe-area-inset-right) + 10px )', backgroundColor: store.app.barBGC, }}>所有频道</div>
       <FullHeightAuto>
         {self.GroupListLoader.items.map(group => (
           <Cell

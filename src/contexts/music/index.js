@@ -110,7 +110,7 @@ function MusicPlayer(props) {
         {/* 全局播放器 */}
         {audio}
         {/* 歌单列表显示controls 其他在loading或play状态显示cover */}
-        <div style={{ position: 'fixed', right: 20, top: state.isPlaying ? local.top : 100, zIndex: 1000 }} onClick={() => {
+        <div style={{ position: 'fixed', right: 20, top: local.top, zIndex: 1000 }} onClick={() => {
           router.pushView('MusicPlayer', { id: music.currentId })
         }}>
           <Dragger cb={sstore => {
