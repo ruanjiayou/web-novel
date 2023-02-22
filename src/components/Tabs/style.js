@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
 export const Tab = styled.div`
-  height: 100%;
   display: flex;
   flex-direction: column;
+  height: 100%;
 `
 export const MenuWrap = styled.div`
   display: flex;
@@ -14,20 +14,32 @@ export const MenuWrap = styled.div`
     display: none;
   }
   scrollbar-width: none;
+  position: relative;
 `
 
 export const MenuItem = styled.div`
-  background-color: ${props => props.selected ? 'blue' : 'wheat'};
+  margin: 10px;
+  font-size: 18px;
+  color: ${props => props.selected ? '#108ee9' : '#666'};
 `
+
+export const Slider = styled.div`
+  height: 3px;
+  width: 10px;
+  background-color: #108ee9;
+  position: absolute;
+  bottom: 0;
+  width: ${(prop) => prop.width + 'px'};
+  transform: translateX(${(prop) => prop.left + 'px'});
+`
+
 export const Content = styled.div`
   flex: 1;
   display: flex;
   width: 100%;
-  height: 100%;
   overflow: hidden;
 `
 export const ContentWrap = styled.div`
-  height: 100%;
   width: 100%;
   position: relative;
   flex-wrap: nowrap;

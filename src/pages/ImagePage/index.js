@@ -83,38 +83,37 @@ function View({ self, router, store, params, Navi }) {
         {loader.isEmpty ? <AutoCenterView>
           <ActivityIndicator text="加载中..." />
         </AutoCenterView> : <Fragment>
-            {loader.item.poster && loader.item.poster !== loader.item.images[0] && <img src={imageHost + loader.item.poster} style={{ maxWidth: '100%' }} />}
-            {loader.item.images.map((image, index) => (<img key={index} src={imageHost + image} style={{ maxWidth: '100%' }} onClick={(e) => {
-              const { width, height } = e.currentTarget || {};
-              const ratio = (width || 0) / (height || 1);
-              // 长图
-              localStore.initW = RATIO > ratio ? width * document.body.clientHeight / height : document.body.clientWidth;
-              // 宽图
-              localStore.initH = RATIO > ratio ? document.body.clientHeight : height * document.body.clientWidth / width;
-              localStore.filepath = imageHost + image;
-              localStore.full = true;
-            }} />))}
-            <Container style={{ margin: 10 }}>
-              {loader.item && loader.item.tags.map((tag, index) => <ITag key={index} disabled>{tag}</ITag>)}
-            </Container>
-          </Fragment>}
+          {loader.item.poster && loader.item.poster !== loader.item.images[0] && <img src={imageHost + loader.item.poster} style={{ maxWidth: '100%' }} />}
+          {loader.item.images.map((image, index) => (<img key={index} src={imageHost + image} style={{ maxWidth: '100%' }} onClick={(e) => {
+            const { width, height } = e.currentTarget || {};
+            const ratio = (width || 0) / (height || 1);
+            // 长图
+            localStore.initW = RATIO > ratio ? width * document.body.clientHeight / height : document.body.clientWidth;
+            // 宽图
+            localStore.initH = RATIO > ratio ? document.body.clientHeight : height * document.body.clientWidth / width;
+            localStore.filepath = imageHost + image;
+            localStore.full = true;
+          }} />))}
+          <Container style={{ margin: 10 }}>
+            {loader.item && loader.item.tags.map((tag, index) => <ITag key={index} disabled>{tag}</ITag>)}
+          </Container>
+        </Fragment>}
       </div>
       {localStore.full && (
         <Screen>
-          {/* <PinchZoom onTap={() => {
+          <PinchZoom onTap={() => {
             localStore.full = false;
           }}>
-            <img key={localStore.filepath} style={{ width: localStore.initW, height: localStore.initH, position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)' }} src={localStore.filepath} />
-          </PinchZoom> */}
+            <img key={localStore.filepath} style={{ width: localStore.initW, height: localStore.initH, position: 'absolute', top: '50vh', left: '50vw', transform: 'translate(-50%,-50%)' }} src={localStore.filepath} />
+          </PinchZoom>
 
-          <PhotoProvider onVisibleChange={(v, i) => {
+          {/* <PhotoProvider onVisibleChange={(v, i) => {
             localStore.full = v
-            console.log(v, i)
           }}>
             <PhotoView src={localStore.filepath}>
               <img src={localStore.filepath} alt="" />
             </PhotoView>
-          </PhotoProvider>
+          </PhotoProvider> */}
         </Screen>
 
       )}

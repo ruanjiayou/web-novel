@@ -3,10 +3,13 @@ import { Observer } from 'mobx-react-lite'
 import { TabBar } from 'antd-mobile'
 import { useRouterContext, useStoreContext } from 'contexts'
 import { MIconView } from 'components'
+import { isIOSafariWeb, isPWAorMobile } from './utils/utils'
+
 export default function ({ children }) {
   const router = useRouterContext()
   const store = useStoreContext()
-  return <Observer>{() => <div style={{ position: 'relative',  width: '100%', height: `100%` }}>
+  const h = isIOSafariWeb() ? '80px' : (isPWAorMobile() ? 'env(safe-area-inset-bottom) - env(safe-area-inset-top)' : '0px')
+  return <Observer>{() => <div style={{ position: 'relative', width: '100%', height: `calc(100% - ${h})`, }}>
     <TabBar
       tintColor="#33A3F4"
       unselectedTintColor="#555"

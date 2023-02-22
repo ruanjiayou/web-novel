@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 import { useEffectOnce } from 'react-use'
 import { Observer, useLocalStore } from 'mobx-react-lite'
-import { Tabs } from 'antd-mobile'
+// import { Tabs } from 'antd-mobile'
 
 import { RenderGroups } from 'group'
-import { MIconView } from 'components'
+import { MIconView, Tabs } from 'components'
 import { FullHeight, FullWidth, FullHeightAuto, FullHeightFix, } from 'components/common'
 import { channelLoaders } from 'store'
 import createPageModel from 'page-group-loader-model/BasePageModel'
@@ -28,7 +28,7 @@ function View({ self, router, store, params }) {
       <FullHeight>
         <FullHeightFix>
           <FullWidth style={{
-            height: 50, 
+            height: 50,
             backgroundColor: store.app.barBGC,
             paddingLeft: 'env(safe-area-inset-left)',
             paddingRight: 'env(safe-area-inset-right)',
@@ -53,7 +53,18 @@ function View({ self, router, store, params }) {
           paddingRight: 'env(safe-area-inset-right)',
         }}
         >
-          <Tabs
+          <Tabs tabs={channels} defaultIndex={0}
+            onChange={(tab, index) => {
+              store.app.setTab(tab.group_id)
+              router.replaceView('home', { tab: tab.group_id })
+            }} >
+            {
+              channels.map((channel, index) => (
+                <RenderGroups key={index} loader={loaders[channel.group_id]} group={channel.data} />
+              ))
+            }
+          </Tabs>
+          {/* <Tabs
             initialPage={channels.findIndex(channel => channel.group_id === store.app.tab)}
             tabs={channels}
             distanceToChangeTab={0.5}
@@ -65,7 +76,7 @@ function View({ self, router, store, params }) {
               channels.map((channel, index) => (
                 <RenderGroups key={index} loader={loaders[channel.group_id]} group={channel.data} />
               ))
-            }</Tabs>
+            }</Tabs> */}
         </FullHeightAuto>
       </FullHeight>
     )}

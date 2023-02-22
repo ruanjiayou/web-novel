@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { VisualBoxView, MIconView } from 'components'
 import ResourceItem from 'business/ResourceItem/index'
@@ -7,8 +7,28 @@ import { Container } from './style'
 
 export default function Random({ self }) {
   const local = useLocalStore(() => ({
-    loading: false
+    loading: false,
+    spin: false,
   }))
+  const change = useCallback(async () => {
+    let ts = Date.now();
+    try {
+      local.loading = true
+      local.spin = true;
+      setTimeout(() => {
+        if (!local.loading) {
+          local.spin = false;
+        }
+      }, 2000);
+      const result = await services.getGroupResources({ params: { group_id: self.id } })
+      self.setData(result.items);
+    } finally {
+      local.loading = false
+      if (Date.now() - ts > 2000) {
+        local.spin = false;
+      }
+    }
+  })
   return <Observer>{() => (
     <div>
       <div className="dd-common-alignside" style={{ borderLeft: '5px solid #ff9999', padding: '10px 0 10px 10px', margin: '10px 0 0 10px', fontSize: 16 }}>
@@ -21,15 +41,7 @@ export default function Random({ self }) {
         {self.data.map((d, index) => (<div key={index} style={{ flex: 1, display: 'flex', flexDirection: 'row', alignItems: 'center', minWidth: '60%', maxWidth: '60%' }}><ResourceItem key={index} item={d} /></div>))}
       </Container>
       <VisualBoxView visible={self.attrs.random === true}>
-        <MIconView spin={local.loading} style={{ textAlign: 'center', padding: 15, fontSize: 13 }} type="FaRedo" after="换一换" onClick={async () => {
-          try {
-            local.loading = true
-            const result = await services.getGroupResources({ params: { group_id: self.id } })
-            self.setData(result.items);
-          } finally {
-            local.loading = false
-          }
-        }} />
+        <MIconView spin={local.spin} style={{ textAlign: 'center', padding: 15, fontSize: 13 }} type="FaRedo" after="换一换" onClick={change} onTouchStart={change} />
       </VisualBoxView>
     </div>
   )}</Observer>
