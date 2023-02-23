@@ -5,12 +5,10 @@ import { ActivityIndicator, Icon, Tag } from 'antd-mobile'
 import { ResourceLoader } from 'loader'
 import { AutoCenterView, MIconView } from 'components'
 import createPageModel from 'page-group-loader-model/BasePageModel'
-import { ITag, Container, Screen } from './style'
+import { ITag, Container } from './style'
 import services from 'services'
 import { useEffectOnce } from 'react-use'
 import PinchZoom from 'components/PinchZoom/self'
-import { PhotoProvider, PhotoView } from 'react-photo-view';
-import 'react-photo-view/dist/react-photo-view.css';
 
 const { createMark, getMark, destroyMark } = services
 const model = createPageModel({
@@ -48,11 +46,13 @@ function View({ self, router, store, params, Navi }) {
     }
   })
   useEffectOnce(() => {
-    getMark({ params }).then(result => {
-      if (result.status === 'success') {
-        localStore.markStatus = 'like'
-      }
-    })
+    if (store.app.isLogin) {
+      getMark({ params }).then(result => {
+        if (result.status === 'success') {
+          localStore.markStatus = 'like'
+        }
+      })
+    }
   })
   return <Observer>{
     () => <div className="full-height">
@@ -99,24 +99,7 @@ function View({ self, router, store, params, Navi }) {
           </Container>
         </Fragment>}
       </div>
-      {localStore.full && (
-        <Screen>
-          <PinchZoom onTap={() => {
-            localStore.full = false;
-          }}>
-            <img key={localStore.filepath} style={{ width: localStore.initW, height: localStore.initH, position: 'absolute', top: '50vh', left: '50vw', transform: 'translate(-50%,-50%)' }} src={localStore.filepath} />
-          </PinchZoom>
-
-          {/* <PhotoProvider onVisibleChange={(v, i) => {
-            localStore.full = v
-          }}>
-            <PhotoView src={localStore.filepath}>
-              <img src={localStore.filepath} alt="" />
-            </PhotoView>
-          </PhotoProvider> */}
-        </Screen>
-
-      )}
+      <PinchZoom visible={localStore.full} onTap={() => { console.log('close!'); localStore.full = false }} onDoubleTap={() => { console.log('double') }} src={localStore.filepath} />
     </div>
   }</Observer>
 }
