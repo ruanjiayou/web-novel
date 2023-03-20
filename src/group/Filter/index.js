@@ -13,10 +13,11 @@ export default function Filter({ self, loader, ...props }) {
     loader: store.resourceListLoaders[loader.item.id] || ResourceListLoader.create(),
     filterHeight: 0,
     showShort: false,
+    query: {},
   }))
   const refresh = useCallback(() => {
-    const query = loader.getQuery()
-    lstore.loader.refresh({ query })
+    lstore.query = loader.getQuery()
+    lstore.loader.refresh({ query: lstore.query })
   })
   useMount(mount => {
     mount && mount()
@@ -47,8 +48,8 @@ export default function Filter({ self, loader, ...props }) {
       <LoaderListView
         loader={lstore.loader}
         loadMore={() => {
-          const query = loader.getQuery()
-          lstore.loader.loadMore({ query })
+          lstore.query = loader.getQuery()
+          lstore.loader.loadMore({ query: lstore.query })
         }}
         onScroll={(e) => {
           if (e.target.scrollTop > lstore.filterHeight * 2 && lstore.filterHeight !== 0) {
