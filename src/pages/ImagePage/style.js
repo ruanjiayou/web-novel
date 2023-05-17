@@ -8,6 +8,7 @@ export const ITag = styled.span`
   margin: 5px 5px 0;
   display: inline-block;
   font-size: 14px;
+  white-space: nowrap;
 `
 
 export const Container = styled.div`

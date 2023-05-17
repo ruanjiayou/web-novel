@@ -60,7 +60,7 @@ export default function Filter({ self, loader, ...props }) {
         }}
         refresh={refresh}
         renderItem={(item, selectionId, index) => <ResourceItem
-          key={index}
+          key={item.id}
           item={item}
           loader={lstore.loader}
           selectionId={selectionId}

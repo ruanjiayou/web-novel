@@ -18,7 +18,7 @@ const Model = types.model('resource', {
   images: types.array(types.string),
   status: types.enumeration(['init', 'loading', 'finished', 'fail']),
   types: types.array(types.string),
-  createdAt: types.string,
+  createdAt: types.optional(types.string, new Date().toLocaleString()),
   duration: types.optional(types.number, 0),
   words: types.optional(types.number, 0),
   comments: types.optional(types.number, 0),
