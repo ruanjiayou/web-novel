@@ -7,7 +7,7 @@
   "scripts": {
     "start": "react-app-rewired start",
     "dev": "react-app-rewired start",
-    "build": "PUBLIC_URL=/novel/ react-app-rewired build && rm -rf ../node-mongo-novel/public/novel/* && cp -rf build/* ../node-mongo-novel/public/novel/",
+    "build": "CI=false PUBLIC_URL=/novel/ react-app-rewired build",
     "build-windows": "set PUBLIC_URL=/novel/&&react-app-rewired build && rm -rf ../node-mongo-novel/public/novel/* && cp -rf build/* ../node-mongo-novel/public/novel/",
     "build-dev": "PUBLC_URL=/novel/ react-app-rewired build",
     "test": "react-app-rewired test",
