@@ -20,53 +20,97 @@ const getDistance = (a, b) => {
 const calculateScale = (startTouches, endTouches, scale) => {
   // 缩放出现长度只有1
   if (endTouches.length < 2) {
-    return scale;
+    return 0;
   }
   const startDistance = getDistance(startTouches[0], startTouches[1])
   const endDistance = getDistance(endTouches[0], endTouches[1])
-  const newscale = endDistance / startDistance
-  const truescalue = newscale * scale
-  return truescalue > 2 ? 2 / scale : (truescalue < 0.5 ? 0.5 / scale : newscale)
+  const dscale = endDistance / startDistance
+  const truescalue = dscale * scale
+  return truescalue > 2 ? 2 / scale : (truescalue < 0.5 ? 0.5 / scale : dscale)
 }
 
 const swing = p => {
   return -Math.cos(p * Math.PI) / 2 + 0.5
 }
 // TODO: limit x,y into box
-// TODO: deal scale anti human
-export default ({ children, wrapStyle, style, onUpdate, onTap, onDoubleTap, onDragStart, onDragEnd, onGestureEnd }) => {
+export default ({ wrapStyle, src, style, visible, onTap, onUpdate, onDoubleTap, onDragStart, onDragEnd }) => {
   const local = useLocalStore(() => ({
-    size: { width: 0, height: 0 },
-    scale: 1,
-    dscale: 1,
-    offsetPoint: { x: 0, y: 0 },
-    offset: { x: 0, y: 0 },
+    box: { width: 0, height: 0 },
+    // 实际缩放系数 = base_scale * curr_scale * incr_scale
+    // 初始化时小图不变(base_scale=最大化显示的倍数,curr_scale=1/base_scale)大图缩小(base_scale=1/radio,curr_scale=1)
+    // 实际缩放系数:  
+    base_scale: 1,
+    curr_scale: 1,
+    incr_scale: 1,
+    // 根据触摸点计算缩放倍数
+    calc_incr_scale: (startTouches, endTouches) => {
+      // 缩放出现长度只有1
+      if (endTouches.length < 2) {
+        return local.incr_scale;
+      }
+      const startDistance = getDistance(startTouches[0], startTouches[1])
+      const endDistance = getDistance(endTouches[0], endTouches[1])
+      const diff = endDistance / startDistance
+      return diff
+    },
+    // 实际偏移量
+    offsetPoint: {
+      x: 0,
+      y: 0
+    },
+    tempOffset: { x: 0, y: 0 },
     limitOffset(x, y) {
-      this.offset.x = x
-      this.offset.y = y
-      // if (this.offset.x < 10) {
-      //   this.offset.x = 10
-      // } else if (this.offset.x > this.size.width - 10) {
-      //   this.offset.x = this.size.width - 10
+      this.tempOffset.x = x
+      this.tempOffset.y = y
+      // if (this.tempOffset.x < 10) {
+      //   this.tempOffset.x = 10
+      // } else if (this.tempOffset.x > this.box.width - 10) {
+      //   this.tempOffset.x = this.box.width - 10
       // } else {
-      //   this.offset.x = x
+      //   this.tempOffset.x = x
       // }
-      // if (this.offset.y < 10) {
-      //   this.offset.y = 10
-      // } else if (this.offset.y > this.size.height - 10) {
-      //   this.offset.y = this.size.height - 10
+      // if (this.tempOffset.y < 10) {
+      //   this.tempOffset.y = 10
+      // } else if (this.tempOffset.y > this.box.height - 10) {
+      //   this.tempOffset.y = this.box.height - 10
       // } else {
-      //   this.offset.y = y
+      //   this.tempOffset.y = y
       // }
     },
+    image: { width: 0, height: 0 },
+    onload: (e) => {
+      const RATIO = document.body.clientWidth / document.body.clientHeight;
+      const { width, height } = e.currentTarget || {};
+      console.log(width, height)
+      local.image.width = width || 0;
+      local.image.height = height || 1;
+      const ratio = (width || 0) / (height || 1);
+      if (width <= document.body.clientWidth) {
+        // 无需缩放
+        local.base_scale = RATIO > ratio ? document.body.clientHeight / height : document.body.clientWidth / width;
+        local.curr_scale = 1
+      } else {
+        // 缩小
+        if (RATIO > ratio) {
+          // 长图
+          e.currentTarget.width = width * document.body.clientHeight / height;
+          e.currentTarget.height = document.body.clientHeight;
 
+          local.base_scale = document.body.clientHeight / height;
+        } else {
+          // 宽图
+          e.currentTarget.width = document.body.clientWidth;
+          e.currentTarget.height = height * document.body.clientWidth / width;
+
+          local.base_scale = document.body.clientWidth / width;
+        }
+        local.curr_scale = 1
+        transform();
+      }
+    },
     dragPoint: { x: 0, y: 0 },
     scaleCenter: { x: 0, y: 0 },
 
-    // 是否处于动画中
-    inAnimation: false,
-    updatePlaned: false,
-    animateIndex: null,
     // 是否是双击
     isDoubleTap: false,
     // 操作方式: zoom 缩放, drag 拖动
@@ -118,88 +162,41 @@ export default ({ children, wrapStyle, style, onUpdate, onTap, onDoubleTap, onDr
   })
   // 处理双击事件
   const handleDoubleTap = useCallback(e => {
-    let updateProgress = progress => {
-      animate(300, updateProgress, swing)
-      if (typeof onDoubleTap === 'function') {
-        onDoubleTap()
-      }
+    // TODO: 还原scale
+    if (typeof onDoubleTap === 'function') {
+      onDoubleTap()
     }
   }, [])
 
   // (缩放/拖动)操作结束
   const end = useCallback(() => {
-    local.hasInteraction = false
-    local.offsetPoint.x += local.offset.x
-    local.offsetPoint.y += local.offset.y
-    local.offset.x = 0
-    local.offset.y = 0
-    local.scale *= local.dscale
-    local.dscale = 1
-    update()
+    local.offsetPoint.x += local.tempOffset.x
+    local.offsetPoint.y += local.tempOffset.y
+    local.tempOffset.x = 0
+    local.tempOffset.y = 0
+    local.curr_scale *= local.incr_scale
+    local.incr_scale = 1
   }, [])
-  const animate = useCallback((duration, framefn, timefn, callback) => {
-    let startTime = Date.now()
-    let renderFrame = () => {
-      if (!local.inAnimation) {
-        return
-      }
-      let frameTime = Date.now() - startTime
-      let progress = frameTime / duration
-      if (frameTime >= duration) {
-        framefn(1)
-        if (callback) {
-          callback()
-        }
-        update()
-        local.inAnimation = false
-        update()
-      } else {
-        if (timefn) {
-          progress = timefn(progress)
-        }
-        framefn(progress)
-        update()
-        local.animateIndex = requestAnimationFrame(renderFrame)
-      }
-    }
-    local.inAnimation = true
-    local.animateIndex = requestAnimationFrame(renderFrame)
-  }, [])
-  // 动效更新请求帧
-  const update = useCallback(() => {
-    if (local.updatePlaned || !element.current || !container.current) return;
-    const trueScale = local.scale * local.dscale
-    const updateFrame = () => {
-      if (onUpdate) {
-        onUpdate(trueScale)
-      }
-      let transfrom = `scale3d(${trueScale}, ${trueScale}, 1) translate3d(${local.offsetPoint.x + local.offset.x}px, ${local.offsetPoint.y + local.offset.y}px,0)`
-      element.current.style.setProperty('transform', transfrom)
-    }
-    local.updatePlaned = true
-    local.animateIndex = requestAnimationFrame(() => {
-      local.updatePlaned = false;
-      updateFrame()
-    })
-  }, [])
+
   // 触摸开始根据触摸点数判断是放大还是拖动并记录坐标
   const onTouchStart = useCallback(e => {
     local.isMove = false
     local.isDoubleTap = false
     local.fingers = e.touches.length
     local.startTouches = getTouches(e)
-    local.offset.x = 0
-    local.offset.y = 0
-    local.dscale = 1
+    // 每次移动临时偏移量
+    local.tempOffset.x = 0
+    local.tempOffset.y = 0
+    local.incr_scale = 1
     if (local.fingers >= 2) {
       local.interaction = 'zoom'
       let center = getTouchCenter(local.startTouches)
+      // 缩放的中心点
       local.scaleCenter.x = center.x
       local.scaleCenter.y = center.y
-      local.inAnimation = false
-      local.hasInteraction = false
     } else if (local.fingers === 1) {
       local.interaction = 'drag'
+      // 起始拖动点
       local.dragPoint.x = local.startTouches[0].x
       local.dragPoint.y = local.startTouches[0].y
     } else {
@@ -216,21 +213,20 @@ export default ({ children, wrapStyle, style, onUpdate, onTap, onDoubleTap, onDr
     switch (local.interaction) {
       case 'zoom':
         if (local.fingers >= 2) {
-          local.dscale = calculateScale(local.startTouches, targetTouches, local.scale)
-          let trueScale = local.scale * local.dscale
-          local.offset.x = local.scaleCenter.x - local.dscale * local.scaleCenter.x - local.offsetPoint.x + local.dscale * local.offsetPoint.x
-          local.offset.y = local.scaleCenter.y - local.dscale * local.scaleCenter.y - local.offsetPoint.y + local.dscale * local.offsetPoint.y
-          //local.limitOffset(local.offsetPoint.x - (trueScale - 1) * (local.scaleCenter.x - local.offsetPoint.x), local.offsetPoint.y - (trueScale - 1) * (local.scaleCenter.y - local.offsetPoint.y))
+          local.incr_scale = local.calc_incr_scale(local.startTouches, targetTouches)
+          local.tempOffset.x = local.scaleCenter.x - local.incr_scale * local.scaleCenter.x - local.offsetPoint.x + local.incr_scale * local.offsetPoint.x
+          local.tempOffset.y = local.scaleCenter.y - local.incr_scale * local.scaleCenter.y - local.offsetPoint.y + local.incr_scale * local.offsetPoint.y
         }
         break;
       case 'drag':
         let touch = getTouches(e)[0]
         if (local.fingers === 1) {
-          local.limitOffset(touch.x - local.dragPoint.x, touch.y - local.dragPoint.y)
+          local.tempOffset.x = touch.x - local.dragPoint.x
+          local.tempOffset.y = touch.y - local.dragPoint.y
         }
         break;
     }
-    update()
+    transform()
   }, [])
   const onTouchEnd = useCallback(e => {
     // e.touches 在start时有，在这里就没了
@@ -241,59 +237,88 @@ export default ({ children, wrapStyle, style, onUpdate, onTap, onDoubleTap, onDr
           clearTimeout(local.tapTimer)
         }
         if (local.isDoubleTap) {
-          handleDoubleTap(e)
+          onDoubleTap(e)
           return
         }
         local.tapTimer = setTimeout(() => {
           local.lastTouchStart = 0;
-          onTap && onTap();
-          if (typeof onGestureEnd === 'function') {
-            onGestureEnd()
-          }
+          onTap && onTap(e);
         }, 300)
       }
     }
     end(e)
   }, [])
+  // 关闭收尾
+  const onClose = useCallback(() => {
+    local.offsetPoint.x = 0;
+    local.offsetPoint.y = 0;
+    local.curr_scale = 1;
+    transform()
+  }, [visible])
+
+  const onResize = useCallback(() => {
+    // local.computeInitialOffset()
+    // local.resetOffset()
+  })
+  // 使用滚轮缩放
+  const onWheel = useCallback((e) => {
+    local.scaleCenter.x = e.clientX
+    local.scaleCenter.y = e.clientY
+    if (e.deltaY > 0) {
+      local.incr_scale += 0.1
+    } else {
+      local.incr_scale -= 0.1
+    }
+    local.tempOffset.x = local.scaleCenter.x - local.incr_scale * local.scaleCenter.x - local.offsetPoint.x + local.incr_scale * local.offsetPoint.x
+    local.tempOffset.y = local.scaleCenter.y - local.incr_scale * local.scaleCenter.y - local.offsetPoint.y + local.incr_scale * local.offsetPoint.y
+    transform()
+  })
+  // 缩放平移
+  const transform = useCallback(() => {
+    if (element.current) {
+      let trueScale = local.curr_scale * local.incr_scale
+      let transfrom = `scale3d(${trueScale}, ${trueScale}, 1) translate3d(${(local.offsetPoint.x + local.tempOffset.x) / trueScale}px, ${(local.offsetPoint.y + local.tempOffset.y) / trueScale}px,0)`
+      element.current.style.setProperty('transform', transfrom)
+    }
+  })
 
   useEffect(() => {
     if (container.current) {
       container.current.addEventListener('touchmove', onTouchMove)
       const rect = container.current.getBoundingClientRect()
-      local.size.width = rect.width
-      local.size.height = rect.height
+      local.box.width = rect.width
+      local.box.height = rect.height
       return () => {
-        local.inAnimation = false;
-        cancelAnimationFrame(local.animateIndex)
         container.current.removeEventListener('touchmove', onTouchMove)
       }
     }
   }, [onTouchMove])
 
-  const onResize = useCallback(() => {
-    // local.computeInitialOffset()
-    // local.resetOffset()
-    update()
-  })
   useEffect(() => {
     if (element.current && container.current) {
       window.addEventListener('resize', onResize)
-      update()
+      const node = document.getElementsByTagName('img')[0];
+      if (node) {
+
+      }
     }
     return () => {
       window.removeEventListener('resize', onResize)
     }
   }, [])
   return <Observer>{() => (
-    <div
-      onTouchStart={onTouchStart}
-      onTouchMove={onTouchMove}
-      onTouchEnd={onTouchEnd}
-      ref={container}
-      style={{ touchAction: 'none', overflow: 'hidden', width: '100%', height: '100%', color: '#fff', ...wrapStyle }}
-    >
-      <div ref={element} style={{ transformOrigin: '0 0', width: '100%', height: '100%' }}>
-        {children}
+    <div style={{ display: visible ? 'block' : 'none', position: 'absolute', left: 0, right: 0, bottom: 0, top: 0, backgroundColor: 'rgba(0,0,0,0.8' }}>
+      <div
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+        ref={container}
+        onWheel={onWheel}
+        style={{ touchAction: 'none', overflow: 'hidden', width: '100%', height: '100%', color: '#fff', ...wrapStyle }}
+      >
+        <div ref={element} style={{ transformOrigin: '0 0', width: '100%', height: '100%' }}>
+          {visible && <img src={src} onLoad={local.onload} style={{ position: 'absolute', top: '50vh', left: '50vw', transform: 'translate(-50%,-50%)' }} />}
+        </div>
       </div>
     </div>
   )
