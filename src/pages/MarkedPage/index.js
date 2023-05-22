@@ -41,7 +41,7 @@ function View({ self }) {
     <Navi title="收藏" />
     <FullHeightAuto>
       <Observer>{() => {
-        return <Tabs tabs={tabs} initialPage={0} onChange={onChange}>
+        return <Tabs tabs={tabs} initialPage={'video'} onChange={onChange}>
           {tabs.map(tab => (<LoaderListView loader={self[tab.loader]} key={tab.type} renderItem={(item, selectionId, index) => <ResourceItem
             key={index}
             item={item}

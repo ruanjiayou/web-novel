@@ -7,13 +7,14 @@ import format from 'utils/num2time'
 import { useNaviContext } from 'contexts'
 import { MIconView, VisualBoxView, SwitchView } from 'components'
 import { FullHeight, FullHeightAuto, FullHeightFix, FullWidth, FullWidthAuto, FullWidthFix, AlignRight, AlignSide, AlignAround, AlignCenterXY } from '../common'
-import { Toast } from 'antd-mobile'
+import { Button, Modal, Toast } from 'antd-mobile'
 import ReactHlsPlayer from 'react-hls-player';
 import { ReactFlvPlayer } from 'react-flv-player'
 import { isPWAorMobile } from '../../utils/utils'
 import MyFinger from '../MyFinger/default'
 import ResourceItem from 'business/ResourceItem';
 import screenfull from 'screenfull';
+import apis from 'services'
 
 const styles = {
   videoBG: {
@@ -42,6 +43,8 @@ export default function ({ router, type, resource, onRecord, srcpath, looktime, 
     autoplay: false,
     showControl: true,
     showMore: false,
+    showFeedback: false,
+    isFeedbacking: false,
     isWaiting: false,
     isSeeking: false,
     isEnded: false,
@@ -392,7 +395,9 @@ export default function ({ router, type, resource, onRecord, srcpath, looktime, 
         <AlignSide style={{ position: 'absolute', left: 0, top: 0, width: '100%', padding: local.isVertical ? 0 : padding, zIndex: 2, background: local.showControl ? 'linear-gradient(-180deg, #333, transparent)' : '' }}>
           {header(local.showControl && !local.fullscreen ? <div>
             <Icon src={require('theme/icon/airplay.svg')} />
-            <Icon style={{ width: 16 }} src={require('theme/icon/feedback.svg')} />
+            <Icon style={{ width: 16 }} src={require('theme/icon/feedback.svg')} onClick={() => {
+              local.showFeedback = true;
+            }} />
             <Icon style={{ width: 18 }} onClick={() => {
               local.closeControl()
               local.showMore = true
@@ -559,6 +564,38 @@ export default function ({ router, type, resource, onRecord, srcpath, looktime, 
       {renderControlLayer(child => <Navi title={!local.isVertical && local.showControl ? resource.title : null} showBack wrapStyle={{ flex: 1, backgroundColor: 'transparent', borderBottom: 'none', width: '100%', padding: local.isVertical ? 0 : padding, height: 35 }}>{child}</Navi>)}
       {renderMoreLayer()}
       {renderEndedLayer()}
+      {local.showFeedback && (
+        <div style={{
+          position: 'absolute',
+          left: 0, top: 0,
+          width: '100%', height: '100vh',
+          display: 'flex', justifyContent: 'center', alignItems: 'center',
+          backgroundColor: 'rgba(0,0,0,0.8)'
+        }}>
+          <div style={{ backgroundColor: 'white', padding: 15 }}>
+            <p>标题: {resource.title}</p>
+            <p>id: {resource.id}</p>
+            <input id="feedback" style={{
+              display: 'block',
+              width: '100%',
+              boxSizing: 'border-box',
+              padding: '3px 5px',
+              marginBottom: '10px',
+            }} />
+            <Button type="primary" size='small' style={{ width: 80, margin: '0 auto' }} loading={local.isFeedbacking} onClick={async () => {
+              const feedback = document.getElementById('feedback').value;
+              const data = {
+                resource_id: resource.id,
+                resource_title: resource.title,
+                content: feedback,
+              }
+              console.log(data);
+              // await apis.createFeedback(data);
+              local.showFeedback = false;
+            }}>确认</Button>
+          </div>
+        </div>
+      )}
     </div>
   )}</Observer>
 }

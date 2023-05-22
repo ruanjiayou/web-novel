@@ -111,6 +111,7 @@ function View({ self, router, store, services, params }) {
             </div>
             <div className="full-height-auto">
               <div style={{ padding: '0 20px', }}>
+                <h2>{loader.item.title}</h2>
                 <VisualBoxView visible={loader.item.children.length > 1}>
                   <p style={{ fontWeight: 'bolder', margin: 0, padding: '5px 0' }}>播放列表:</p>
                   <div>{loader.item.children.map(child => (

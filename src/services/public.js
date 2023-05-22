@@ -144,4 +144,11 @@ export default {
     })
     return { item: result.data }
   },
+  async createFeedback(data) {
+    const result = await shttp({
+      url: `/v1/public/feedback`,
+      data
+    })    
+    return { items: result.data }
+  }
 } 
