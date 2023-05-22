@@ -55,7 +55,7 @@ function View({ self, router, store, params, Navi }) {
     }
   })
   return <Observer>{
-    () => <div className="full-height">
+    () => <div className="full-height" style={{ height: 'calc(100% - env(safe-area-inset-bottom) - env(safe-area-inset-top))' }}>
       <Navi
         title={loader.item ? loader.item.title + ' ' + loader.item.uname : '加载中...'}
       >
@@ -94,11 +94,11 @@ function View({ self, router, store, params, Navi }) {
             localStore.filepath = imageHost + image;
             localStore.full = true;
           }} />))}
-          <Container style={{ margin: 10 }}>
-            {loader.item && loader.item.tags.map((tag, index) => <ITag key={index} disabled>{tag}</ITag>)}
-          </Container>
         </Fragment>}
       </div>
+      <Container style={{ padding: 10 }}>
+        {loader.item && loader.item.tags.map((tag, index) => <ITag key={index} disabled>{tag}</ITag>)}
+      </Container>
       <PinchZoom visible={localStore.full} onTap={() => { console.log('close!'); localStore.full = false }} onDoubleTap={() => { console.log('double') }} src={localStore.filepath} />
     </div>
   }</Observer>

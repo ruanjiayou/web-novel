@@ -545,7 +545,7 @@ export default function ({ router, type, resource, onRecord, srcpath, looktime, 
   }
   const renderEndedLayer = function () {
     return <VisualBoxView visible={local.isEnded}>
-      <FullHeight style={{ color: 'white', backgroundColor: 'rgba(0,0,0,0.8)', position: 'absolute', width: '100%' }}>
+      <FullHeight style={{ color: 'white', backgroundColor: 'rgba(0,0,0,0.8)', position: 'absolute', width: '100%', zIndex: 2 }}>
         <FullHeightAuto />
         <AlignCenterXY style={{ flex: 2, height: 'auto', width: '100%' }}>
           {next && <ResourceItem item={next} onClick={() => { router.replaceView('VideoInfo', { id: next.id }) }} />}
