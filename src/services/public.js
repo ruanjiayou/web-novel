@@ -146,6 +146,7 @@ export default {
   },
   async createFeedback(data) {
     const result = await shttp({
+      method: 'post',
       url: `/v1/public/feedback`,
       data
     })    

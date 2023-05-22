@@ -390,7 +390,7 @@ export default function ({ router, type, resource, onRecord, srcpath, looktime, 
   const renderControlLayer = function (header) {
     return (
       <FullHeight
-        style={{ position: 'absolute', width: '100%', color: 'white', }}>
+        style={{ position: 'absolute', width: '100%', color: 'white', zIndex: 1 }}>
         {/* 顶部菜单 */}
         <AlignSide style={{ position: 'absolute', left: 0, top: 0, width: '100%', padding: local.isVertical ? 0 : padding, zIndex: 2, background: local.showControl ? 'linear-gradient(-180deg, #333, transparent)' : '' }}>
           {header(local.showControl && !local.fullscreen ? <div>
@@ -572,7 +572,7 @@ export default function ({ router, type, resource, onRecord, srcpath, looktime, 
           display: 'flex', justifyContent: 'center', alignItems: 'center',
           backgroundColor: 'rgba(0,0,0,0.8)'
         }}>
-          <div style={{ backgroundColor: 'white', padding: 15 }}>
+          <div style={{ backgroundColor: 'white', padding: 15, margin: 15, zIndex: 2, position: 'relative', }}>
             <p>标题: {resource.title}</p>
             <p>id: {resource.id}</p>
             <input id="feedback" style={{
@@ -582,6 +582,7 @@ export default function ({ router, type, resource, onRecord, srcpath, looktime, 
               padding: '3px 5px',
               marginBottom: '10px',
             }} />
+            <MIconView type="IoMdClose" style={{ position: 'absolute', top: 5, right: 5 }} onClick={() => local.showFeedback = false} />
             <Button type="primary" size='small' style={{ width: 80, margin: '0 auto' }} loading={local.isFeedbacking} onClick={async () => {
               const feedback = document.getElementById('feedback').value;
               const data = {
@@ -589,8 +590,7 @@ export default function ({ router, type, resource, onRecord, srcpath, looktime, 
                 resource_title: resource.title,
                 content: feedback,
               }
-              console.log(data);
-              // await apis.createFeedback(data);
+              await apis.createFeedback(data);
               local.showFeedback = false;
             }}>确认</Button>
           </div>

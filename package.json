@@ -5,6 +5,7 @@
   "main": "index.js",
   "homepage": "/novel/home",
   "scripts": {
+    "postinstall": "patch-package",
     "start": "react-app-rewired start",
     "dev": "react-app-rewired start",
     "build": "CI=false PUBLIC_URL=/novel/ react-app-rewired build",
@@ -86,6 +87,7 @@
     "express": "^4.17.1",
     "mockjs": "^1.0.1-beta3",
     "nodemon": "^1.19.3",
+    "patch-package": "^7.0.0",
     "webpack-bundle-analyzer": "^3.6.0",
     "workbox-cli": "^6.5.2"
   },

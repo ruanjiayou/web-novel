@@ -28,14 +28,17 @@ const tabs = [
 function View({ self }) {
   const Navi = useNaviContext()
   const router = useRouterContext()
+  self.videos.setOption({ query: { type: 'video' } })
+  self.images.setOption({ query: { type: 'image' } })
   useEffectOnce(() => {
     tabs.forEach(tab => {
       self[tab.loader].setOption({ query: { type: tab.type } })
     })
-    self.videos.refresh({})
   })
   const onChange = useCallback((tab, index) => {
-    self[tab.loader].refresh();
+    if (self[tab.loader].isEmpty) {
+      self[tab.loader].refresh();
+    }
   })
   return <FullHeight>
     <Navi title="收藏" />
