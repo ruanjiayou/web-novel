@@ -592,6 +592,7 @@ export default function ({ router, type, resource, onRecord, srcpath, looktime, 
               }
               await apis.createFeedback(data);
               local.showFeedback = false;
+              Toast.info('问题已反馈', 1, null, false)
             }}>确认</Button>
           </div>
         </div>
