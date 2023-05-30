@@ -14,7 +14,7 @@ const GetPullToRefreshlData = ({ refresh, loader, renderItem, loadMore }) => {
   }))
   return (
     <Observer>{() => (
-      <div style={{ overflowY: 'auto', backgroundColor: '#f58585', position: 'relative' }} onScroll={e => {
+      <div style={{ overflowY: 'auto', position: 'relative' }} onScroll={e => {
         const scrollTop = e.currentTarget.scrollTop;
         const offset = e.currentTarget.scrollHeight - e.currentTarget.offsetHeight - scrollTop
         if (scrollTop < 0 && local.backedToTop && !local.showFinished) {
