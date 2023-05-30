@@ -15,7 +15,7 @@ export default function Filter({ self, loader, ...props }) {
     showShort: false,
     query: {},
   }))
-  const refresh = useCallback(() => {
+  const refresh = useCallback(async () => {
     lstore.query = loader.getQuery()
     lstore.loader.refresh({ query: lstore.query })
   })
