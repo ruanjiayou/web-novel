@@ -52,7 +52,7 @@ export default function ({ defaultIndex, tabs = [], children, onChange }) {
             local.actionStarted = false;
             return;
           }
-          local.actionOffsetX = evt.targetTouches[0].clientX - local.actionStartX;
+          local.actionOffsetX += evt.deltaX / 2;
         },
         swipe: (evt) => {
           evt.preventDefault()

@@ -109,7 +109,7 @@ export default function Filter({ self, loader, ...props }) {
             selectionId={selectionId}
           />}
         />
-        <div ref={ref => eleRef.current = ref} style={{ textAlign: 'center', padding: 5 }}>{lstore.loader.isLoading ? '正在加载更多数据...' : (lstore.loader.isEnded ? '已全部加载完毕' : <span>点击加载更多</span>)}</div>
+        <div ref={ref => eleRef.current = ref} style={{ textAlign: 'center', padding: 15 }}>{lstore.loader.isLoading ? '正在加载更多数据...' : (lstore.loader.isEnded ? '已全部加载完毕' : <span>点击加载更多</span>)}</div>
       </PullToRefresh>
     </div>
   )}</Observer>
