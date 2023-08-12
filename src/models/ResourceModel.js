@@ -6,7 +6,7 @@ const Model = types.model('resource', {
   id: types.string,
   uid: types.maybeNull(types.string),
   uname: types.maybeNull(types.string),
-  country: types.optional(types.string, 'China'),
+  country: types.maybeNull(types.string, 'China'),
   title: types.string,
   poster: types.optional(types.string, ''),
   thumbnail: types.optional(types.string, ''),

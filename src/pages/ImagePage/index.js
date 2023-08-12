@@ -40,12 +40,10 @@ function View({ self, router, store, params, Navi }) {
       return <MIconView type="FaHeart" style={{ color: 'red' }} />
     }
   }
-  useEffect(() => {
+  useEffectOnce(() => {
     if (loader.isEmpty) {
       loader.refresh({ params: { id: localStore.id } })
     }
-  })
-  useEffectOnce(() => {
     if (store.app.isLogin) {
       getMark({ params }).then(result => {
         if (result.status === 'success') {
@@ -54,6 +52,7 @@ function View({ self, router, store, params, Navi }) {
       })
     }
   })
+  console.log(loader.isEmpty)
   return <Observer>{
     () => <div className="full-height" style={{ height: 'calc(100% - env(safe-area-inset-bottom) - env(safe-area-inset-top))' }}>
       <Navi

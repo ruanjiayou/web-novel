@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect, useCallback, useRef } from 'react'
 import { useMount } from 'react-use'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import FilterRow from '../FitlerRow'
@@ -6,19 +6,52 @@ import { LoaderListView, MIconView } from 'components'
 import ResourceItem from 'business/ResourceItem'
 import { useStoreContext } from 'contexts'
 import ResourceListLoader from 'loader/ResourceListLoader'
+import { PullToRefresh } from 'antd-mobile'
+
+const statusRecord = {
+  pulling: '用力拉',
+  canRelease: '松开吧',
+  refreshing: '玩命加载中...',
+  complete: '好啦',
+}
+
+function isInViewPort(el) {
+  if (!el) {
+    return false;
+  }
+  const viewPortHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
+  const top = el.getBoundingClientRect() && el.getBoundingClientRect().top
+  return top <= viewPortHeight - 10
+}
+
+function throttleDelayExecution(fn, delay) {
+  let last = Date.now(); // 使用时间戳实现
+  return function () {
+    let now = Date.now();
+    if (now - last >= delay) {
+      fn.apply(this, arguments);
+      last = now;
+    }
+  }
+}
 
 export default function Filter({ self, loader, ...props }) {
   const store = useStoreContext()
+  const eleRef = useRef(null);
   const lstore = useLocalStore(() => ({
     loader: store.resourceListLoaders[loader.item.id] || ResourceListLoader.create(),
     filterHeight: 0,
     showShort: false,
     query: {},
-  }))
+  }));
   const refresh = useCallback(async () => {
-    lstore.query = loader.getQuery()
-    lstore.loader.refresh({ query: lstore.query })
+    lstore.query = loader.getQuery();
+    lstore.loader.refresh({ query: lstore.query });
   })
+  const loadMore = useCallback(async () => {
+    lstore.query = loader.getQuery()
+    lstore.loader.loadMore({ query: lstore.query })
+  });
   useMount(mount => {
     mount && mount()
     if (!store.resourceListLoaders[loader.item.id]) {
@@ -45,27 +78,39 @@ export default function Filter({ self, loader, ...props }) {
       }}>
         {self.children.map(child => (<FilterRow self={child} key={child.id} onQueryChange={refresh} />))}
       </div>
-      <LoaderListView
-        loader={lstore.loader}
-        loadMore={() => {
-          lstore.query = loader.getQuery()
-          lstore.loader.loadMore({ query: lstore.query })
-        }}
-        onScroll={(e) => {
-          if (e.target.scrollTop > lstore.filterHeight * 2 && lstore.filterHeight !== 0) {
-            lstore.showShort = true
-          } else {
-            lstore.showShort = false
+      <PullToRefresh
+        style={{ flex: 1, overflow: 'auto' }}
+        onScroll={() => {
+          const isReachBottom = isInViewPort(eleRef.current);
+          if (!lstore.loader.isEnded && isReachBottom) {
+            !lstore.loader.isLoading && loadMore()
           }
         }}
-        refresh={refresh}
-        renderItem={(item, selectionId, index) => <ResourceItem
-          key={item.id}
-          item={item}
+        onRefresh={refresh}
+        // renderText={status => {
+        //   return <div>{statusRecord[status]}</div>
+        // }}
+      >
+        <LoaderListView
           loader={lstore.loader}
-          selectionId={selectionId}
-        />}
-      />
+          loadMore={loadMore}
+          onScroll={(e) => {
+            if (e.target.scrollTop > lstore.filterHeight * 2 && lstore.filterHeight !== 0) {
+              lstore.showShort = true
+            } else {
+              lstore.showShort = false
+            }
+          }}
+          refresh={refresh}
+          renderItem={(item, selectionId, index) => <ResourceItem
+            key={item.id}
+            item={item}
+            loader={lstore.loader}
+            selectionId={selectionId}
+          />}
+        />
+        <div ref={ref => eleRef.current = ref} style={{ textAlign: 'center', padding: 5 }}>{lstore.loader.isLoading ? '正在加载更多数据...' : (lstore.loader.isEnded ? '已全部加载完毕' : <span>点击加载更多</span>)}</div>
+      </PullToRefresh>
     </div>
   )}</Observer>
 }

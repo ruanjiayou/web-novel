@@ -60,7 +60,6 @@ const GetPullToRefreshlData = ({ refresh, loader, renderItem, loadMore }) => {
           justifyContent: 'center'
         }}>正在刷新</div> : <div style={{ top: 0, position: 'relative', textAlign: 'center', left: 0, display: 'flex', flexDirection: 'column', justifyItems: 'flex-start', height: local.showFinished ? 30 : local.topHeight, overflow: 'hidden' }}>{local.showFinished ? '已完成' : '刷新↓'}</div>}
         {loader.items.map((item, index) => <div key={index}>{renderItem(item, loader.name, index)}</div>)}
-        <div style={{ textAlign: 'center', padding: 5 }}>{loader.isLoading ? '正在加载更多数据...' : '已全部加载完毕'}</div>
       </div>
     )}</Observer>
   );
