@@ -4,6 +4,7 @@ import { VisualBoxView, MIconView } from 'components'
 import ResourceItem from 'business/ResourceItem/index'
 import services from '../../services/index'
 import { Container } from './style'
+import event from '../../utils/events'
 
 export default function Random({ self }) {
   const local = useLocalStore(() => ({
@@ -37,7 +38,9 @@ export default function Random({ self }) {
           <MIconView style={{ fontSize: 12, color: '#888' }} type="FaAngleRight" before="更多" />
         </VisualBoxView>
       </div>
-      <Container onTouchStart={(e) => { e.stopPropagation(); e.preventDefault(); }}>
+      <Container onTouchStart={(e) => {
+        event.emit('swipeStart')
+      }}>
         {self.data.map((d, index) => (<div key={index} style={{ flex: 1, display: 'flex', flexDirection: 'row', alignItems: 'center', minWidth: '60%', maxWidth: '60%' }}><ResourceItem key={index} item={d} /></div>))}
       </Container>
       <VisualBoxView visible={self.attrs.random === true}>

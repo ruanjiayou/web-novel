@@ -3,6 +3,7 @@ import { useEffectOnce } from 'react-use'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { Tab, MenuWrap, MenuItem, TabItem, ContentWrap, Content, Slider } from './style'
 import AlloyFinger from 'alloyfinger'
+import event from '../../utils/events'
 
 export default function ({ defaultIndex, tabs = [], children, onChange }) {
   const local = useLocalStore(() => ({
@@ -39,6 +40,9 @@ export default function ({ defaultIndex, tabs = [], children, onChange }) {
           local.actionOffsetX = 0;
         },
         touchMove: function (evt) {
+          if (!local.actionStarted) {
+            return;
+          }
           if (local.direction === '' && (evt.deltaX || evt.deltaY)) {
             local.direction = Math.abs(evt.deltaX) > Math.abs(evt.deltaY) ? 'h' : 'v';
           }
@@ -65,6 +69,9 @@ export default function ({ defaultIndex, tabs = [], children, onChange }) {
             resizeSlider();
           }
         }
+      });
+      event.on('swipeStart', () => {
+        local.actionStarted = false;
       });
     }
   }, [contentRef.current])
