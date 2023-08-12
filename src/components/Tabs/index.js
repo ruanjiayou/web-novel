@@ -47,8 +47,10 @@ export default function ({ defaultIndex, tabs = [], children, onChange }) {
             local.direction = Math.abs(evt.deltaX) > Math.abs(evt.deltaY) ? 'h' : 'v';
           }
           if (local.direction === 'v') {
-            evt.preventDefault();
-            evt.stopPropagation();
+            // evt.preventDefault();
+            // evt.stopPropagation();
+            local.actionStarted = false;
+            return;
           }
           local.actionOffsetX = evt.targetTouches[0].clientX - local.actionStartX;
         },
