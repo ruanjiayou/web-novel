@@ -6,7 +6,7 @@ import services from '../services'
 const shttp = axios.create({
   baseURL: '',
   withCredentials: false,
-  timeout: 5000
+  timeout: 20000
 })
 
 shttp.interceptors.request.use(

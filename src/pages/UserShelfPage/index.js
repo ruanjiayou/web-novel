@@ -25,7 +25,7 @@ function View({ self, router, store, Navi }) {
   })
   return <Observer>{
     () => {
-      return <Fragment>
+      return <div className='full-height' style={{ height: 'calc(100% - env(safe-area-inset-bottom) - env(safe-area-inset-top))' }}>
         <Navi title="书架" />
         <LoaderListView
           loader={loader}
@@ -43,9 +43,9 @@ function View({ self, router, store, Navi }) {
             />
           )}
         />
-      </Fragment>
+      </div>
     }
-  }</Observer>
+  }</Observer >
 }
 
 export default {

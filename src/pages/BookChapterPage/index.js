@@ -40,7 +40,7 @@ function View({ self, router, params }) {
   })
   return <Observer>
     {() => {
-      return <FullHeight>
+      return <FullHeight style={{ height: 'calc(100% - env(safe-area-inset-bottom) - env(safe-area-inset-top))', position: 'relative' }}>
         {/* 顶部导航动态 */}
         <FullHeightFix className="dd-common-alignside" style={{ backgroundColor: '#eee', height: 45, padding: '0 15px' }}>
           <MIconView type="FaChevronLeft" onClick={() => { router.back() }} />

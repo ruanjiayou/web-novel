@@ -35,11 +35,11 @@ function throttleDelayExecution(fn, delay) {
   }
 }
 
-export default function Filter({ self, loader, ...props }) {
+export default function Filter({ self, loader, resourcesLoader, ...props }) {
   const store = useStoreContext()
   const eleRef = useRef(null);
   const lstore = useLocalStore(() => ({
-    loader: store.resourceListLoaders[loader.item.id] || ResourceListLoader.create(),
+    loader: resourcesLoader || ResourceListLoader.create(),
     filterHeight: 0,
     showShort: false,
     query: {},
@@ -87,9 +87,9 @@ export default function Filter({ self, loader, ...props }) {
           }
         }}
         onRefresh={refresh}
-        // renderText={status => {
-        //   return <div>{statusRecord[status]}</div>
-        // }}
+      // renderText={status => {
+      //   return <div>{statusRecord[status]}</div>
+      // }}
       >
         <LoaderListView
           loader={lstore.loader}

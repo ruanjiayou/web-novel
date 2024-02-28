@@ -100,6 +100,7 @@ function createItemsLoader(model, fn, customs = {}) {
           self.page = self.page - 1
         }
       } catch (err) {
+        console.log(err)
         if (Config.isDebug && Config.console) {
           console.log(err, 'loader')
         }
@@ -201,6 +202,7 @@ function createItemLoader(model, fn, customs = {}) {
           self.error = { code: 1, message: '没有数据' }
         }
       } catch (err) {
+        console.log(err)
         if (Config.isDebug && Config.console) {
           console.log(err, 'loader')
         }

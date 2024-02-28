@@ -9,7 +9,7 @@ export default function ({ children }) {
   const router = useRouterContext()
   const store = useStoreContext()
   const h = isIOSafariWeb() ? '80px' : (isPWAorMobile() ? 'env(safe-area-inset-bottom) - env(safe-area-inset-top)' : '0px')
-  return <Observer>{() => <div style={{ position: 'relative', width: '100%', height: `calc(100% - ${h})`, }}>
+  return <Observer>{() => <div key={store.app.selectedMenu} style={{ position: 'relative', width: '100%', height: `calc(100% - ${store.app.selectedMenu === 'awhile' ? '0px' : h})`, }}>
     <TabBar
       tintColor="#33A3F4"
       unselectedTintColor="#555"

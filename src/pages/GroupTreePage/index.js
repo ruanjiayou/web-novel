@@ -12,9 +12,10 @@ const model = createPageModel({
   ResourceListLoader,
 })
 
-function View({ self, router, store, params, Navi }) {
+function View({ self, router, store, params, Navi, loader: nnn }) {
   const local = useLocalStore(() => ({
-    loader: GroupTreeLoader.create()
+    loader: GroupTreeLoader.create(),
+    resourcesLoader: ResourceListLoader.create(),
   }))
   const loader = local.loader
   useEffectOnce(() => {
@@ -30,7 +31,7 @@ function View({ self, router, store, params, Navi }) {
     return <div className="full-height">
       <Navi title={loader.item.title} wrapStyle={{ paddingLeft: 'env(safe-area-inset-left)', paddingRight: 'env(safe-area-inset-right' }} router={router} />
       <div className="full-height-auto" style={{ paddingLeft: 'env(safe-area-inset-left)', paddingRight: 'env(safe-area-inset-right' }}>
-        <RenderGroups loader={loader} />
+        <RenderGroups loader={loader} resourcesLoader={local.resourcesLoader}/>
       </div>
     </div>
   }}</Observer>

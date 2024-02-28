@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 
-const GetPullToRefreshlData = ({ refresh, loader, renderItem, loadMore }) => {
+const GetPullToRefreshlData = ({ refresh, loader, renderItem, loadMore, style }) => {
   useEffect(() => {
     refresh ? refresh() : loader.refresh();
   }, []);
@@ -14,7 +14,7 @@ const GetPullToRefreshlData = ({ refresh, loader, renderItem, loadMore }) => {
   }))
   return (
     <Observer>{() => (
-      <div style={{ overflowY: 'auto', position: 'relative' }} onScroll={e => {
+      <div style={{ overflowY: 'auto', position: 'relative', ...style }} onScroll={e => {
         const scrollTop = e.currentTarget.scrollTop;
         const offset = e.currentTarget.scrollHeight - e.currentTarget.offsetHeight - scrollTop
         if (scrollTop < 0 && local.backedToTop && !local.showFinished) {
@@ -44,7 +44,9 @@ const GetPullToRefreshlData = ({ refresh, loader, renderItem, loadMore }) => {
         }
         if (offset <= -10 && !loader.isLoading && !local.touchedBottom) {
           local.touchedBottom = true
-          loadMore ? loadMore() : loader.loadMore();
+          if (!loader.isEnded) {
+            loadMore ? loadMore() : loader.loadMore();
+          }
         } else if (offset >= 0) {
           local.touchedBottom = false
         }

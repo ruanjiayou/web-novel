@@ -86,7 +86,7 @@ function View({ self, router, store, services, params }) {
         })
       } else {
         return <Fragment>
-          <div className="full-height">
+          <div className="full-height" style={{ height: 'calc(100% - env(safe-area-inset-bottom) - env(safe-area-inset-top))' }}>
             <div className="full-height-fix">
               <Player
                 router={router}

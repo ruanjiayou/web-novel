@@ -15,7 +15,15 @@ const Model = types.model('resource', {
   // url: types.string,
   source_type: types.maybeNull(types.string),
   tags: types.array(types.string),
-  images: types.array(types.string),
+  images: types.array(types.union(types.string, types.model({
+    path: types.string,
+    id: types.string,
+    nth: types.number,
+    more: types.model({
+      width: types.number,
+      height: types.number,
+    })
+  }))),
   status: types.enumeration(['init', 'loading', 'finished', 'fail']),
   types: types.array(types.string),
   createdAt: types.optional(types.string, new Date().toLocaleString()),

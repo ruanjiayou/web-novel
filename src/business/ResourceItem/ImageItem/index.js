@@ -61,7 +61,7 @@ export default function ({ item }) {
             }}>
               {MStatus()}
             </div>
-            <div style={{ position: 'absolute', top: 4, right: 4, zIndex: 2, color: 'white', backgroundColor: 'rgba(0,0,0,0.3)', borderRadius: '50%', padding: '3px 5px' }}>{item.images ? item.images.length + 1 : 1}</div>
+            <div style={{ position: 'absolute', top: 4, right: 4, zIndex: 2, color: 'white', minWidth: 25, textAlign: 'center', backgroundColor: 'rgba(0,0,0,0.3)', borderRadius: '50px', padding: '5px 0' }}>{item.images ? item.images.length + 1 : 1}</div>
           </FullWidthFix>
           <div style={{ flex: 1, }}>
             <div className="line2">{item.title}</div>
