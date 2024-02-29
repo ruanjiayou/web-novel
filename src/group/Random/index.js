@@ -41,10 +41,10 @@ export default function Random({ self }) {
       <Container onTouchStart={(e) => {
         event.emit('swipeStart')
       }}>
-        {self.data.map((d, index) => (<div key={index} style={{ flex: 1, display: 'flex', flexDirection: 'row', alignItems: 'center', minWidth: '60%', maxWidth: '60%' }}><ResourceItem key={index} item={d} /></div>))}
+        {self.data.map((d, index) => (<div key={index} style={{ flex: 1, display: 'flex', flexDirection: 'row', alignItems: 'center', minWidth: (100 / (self.attrs.columns + 1) + 12) + '%' }}><ResourceItem key={index} display={3} item={d} /></div>))}
       </Container>
       <VisualBoxView visible={self.attrs.random === true}>
-        <MIconView spin={local.spin} style={{ textAlign: 'center', padding: 15, fontSize: 13 }} type="FaRedo" after="换一换" onClick={change} onTouchStart={change} />
+        <MIconView spin={local.spin} style={{ textAlign: 'center', padding: 15, fontSize: 13 }} type="FaRedo" after="换一换" onClick={change} />
       </VisualBoxView>
     </div>
   )}</Observer>

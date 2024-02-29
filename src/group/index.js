@@ -61,7 +61,7 @@ export function RenderGroups({ loader, group, params, ...props }) {
       return <AutoCenterView>{emptyView}</AutoCenterView>
     } else {
       // overflow: auto 影响tabs
-      return <div style={{ height: '100%', }}>
+      return <div style={{ height: '100%', overflow: 'auto' }}>
         <AutoView self={loader.item} loader={loader} {...props} />
       </div>
     }

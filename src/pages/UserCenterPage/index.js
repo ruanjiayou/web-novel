@@ -22,11 +22,11 @@ function View({ self, router, store, }) {
   return <Observer>{
     () => {
       return <div className="full-height" style={{ paddingLeft: 'calc(env(safe-area-inset-left) + 10px )', paddingRight: 'calc(env(safe-area-inset-right) + 10px )' }} onTouchStart={e => e.preventDefault()} onTouchMove={e => e.preventDefault()}>
-        <div className="full-width" style={{ padding: '0 20px' }}>
-          <div className="full-width-fix dd-common-centerXY" style={{ width: 35, height: 35, margin: '10px 0' }}>
+        <div className="full-width full-height-fix">
+          <div className="full-width-fix dd-common-centerXY" style={{ width: 50, height: 50, margin: '15px 0' }}>
             {/* TODO: 测试 */}
             {/* <img src={userLoader.isEmpty ? '' : userLoader.item.avater} /> */}
-            {userLoader.isLoading ? <ActivityIndicator /> : <img src="/logo.jpg" style={{ borderRadius: '50%' }} alt="" />}
+            {userLoader.isLoading ? <ActivityIndicator /> : <img src="/logo.jpg" style={{ borderRadius: '50%', width: '100%', height: '100%' }} alt="" />}
           </div>
           <div className="full-width-auto" style={{ paddingLeft: 10 }}>
             <SwitchView loading={!store.app.isLogin} holder={<Button type="ghost" inline size="small" onClick={() => { router.pushView('login') }}>登录</Button>}>
@@ -41,9 +41,9 @@ function View({ self, router, store, }) {
             <div className="full-width-fix" onClick={() => router.pushView('UserSetting')}><MIconView type="FaAngleRight" /></div>
           </VisualBoxView>
         </div>
-        <WingBlank>
+        <WingBlank className='full-height-auto' style={{ paddingBottom: 10 }}>
           <Card style={{ minHeight: 40, paddingBottom: 0 }}>
-            <div className="dd-common-alignside" style={{ padding: '10px 40px', }}>
+            <div className="dd-common-alignside" style={{ padding: '20px 40px', }}>
               <div style={{ color: '#f97a90' }} onClick={() => {
                 if (store.app.isLogin) {
                   router.pushView('Marked')
@@ -69,8 +69,8 @@ function View({ self, router, store, }) {
             </div>
           </Card>
           <WhiteSpace />
-          <Card style={{ minHeight: 40, padding: '5px 0' }}>
-            <div className="dd-common-alignside" style={{ margin: '5px 50px' }}>
+          <Card style={{ minHeight: 40, padding: '10px 0' }}>
+            <div className="dd-common-alignside" style={{ margin: '10px 30px' }}>
               <div onClick={() => {
                 router.pushView('BookSearch')
               }}>
@@ -104,7 +104,7 @@ function View({ self, router, store, }) {
                 <MIconView type="MdApps" />书架
               </div>
             </div>
-            <div className="dd-common-alignside" style={{ margin: '5px 50px' }}>
+            <div className="dd-common-alignside" style={{ margin: '10px 30px' }}>
               <div onClick={() => {
                 router.pushView('GroupTree', { name: 'article' })
               }} style={{ color: '#258df1' }}>

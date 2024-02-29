@@ -7,8 +7,9 @@ import { MIconView } from 'components'
 import { TagsRow } from './style'
 import services from 'services'
 import showTip from 'utils/showTip'
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
-export default function ({ item }) {
+export default function ({ item, display = 1 }) {
   const router = useRouterContext()
   const store = useStoreContext()
   const local = useLocalStore(() => ({
@@ -32,11 +33,17 @@ export default function ({ item }) {
   return <Observer>
     {() => {
       return <Fragment>
-        <FullWidth style={{ backgroundColor: '#eee', position: 'relative', flex: 1, width: '100%' }} onClick={() => {
+        <div className={display === 3 ? 'full-height-auto' : 'full-width'} style={{ backgroundColor: '#eee', position: 'relative', flex: 1, width: '100%' }} onClick={() => {
           router.pushView('Image', { id: item.id })
         }}>
-          <FullWidthFix style={{ width: 60, height: 80, margin: 5, position: 'relative', overflow: 'hidden', flexShrink: 0 }}>
-            <img style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', height: '100%', minWidth: '100%' }} src={item.auto_cover} alt="" />
+          <div className={display === 3 ? 'full-height' : 'full-width-fix'} style={display === 3 ? { width: 100, height: 150, margin: '5px auto', position: 'relative', overflow: 'hidden', flexShrink: 0 } : { width: 60, height: 80, margin: 5, position: 'relative', overflow: 'hidden', flexShrink: 0 }}>
+            {/* <img style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', height: '100%', minWidth: '100%' }} src={item.auto_cover} alt="" /> */}
+            <LazyLoadImage
+              alt={''}
+              height={'100%'}
+              src={item.auto_cover}
+              style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', height: '100%', minWidth: '100%' }}
+            />
             <div style={{ position: 'absolute', right: 0, bottom: 0, height: 24, width: 24 }} onClick={async (e) => {
               e.stopPropagation()
               e.preventDefault()
@@ -62,10 +69,10 @@ export default function ({ item }) {
               {MStatus()}
             </div>
             <div style={{ position: 'absolute', top: 4, right: 4, zIndex: 2, color: 'white', minWidth: 25, textAlign: 'center', backgroundColor: 'rgba(0,0,0,0.3)', borderRadius: '50px', padding: '5px 0' }}>{item.images ? item.images.length + 1 : 1}</div>
-          </FullWidthFix>
-          <div style={{ flex: 1, }}>
-            <div className="line2">{item.title}</div>
-            <div style={{ margin: '5px 0', whiteSpace: 'nowrap', overflow: 'hidden' }}>by {item.uname}</div>
+          </div>
+          <div style={display === 3 ? { width: '100%', overflow: 'hidden' } : { flex: 1 }}>
+            <div className="line2" style={{ minHeight: '2.5rem', padding: '0 1rem' }}>{item.title}</div>
+            {display !== 3 && <div style={{ margin: '5px 0' }} className='txt-omit'>by {item.uname}</div>}
             {/* <TagsRow onTouchStart={e => {
               // e.stopPropagation()
               // e.preventDefault()
@@ -73,7 +80,7 @@ export default function ({ item }) {
               {item.tags.map((tag, index) => <Tag key={index}>{tag}</Tag>)}
             </TagsRow> */}
           </div>
-        </FullWidth>
+        </div>
       </Fragment>
     }}</Observer >
 }

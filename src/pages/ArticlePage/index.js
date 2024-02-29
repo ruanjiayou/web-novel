@@ -51,14 +51,14 @@ function View({ self, router, store, params = {} }) {
             >
               {loader.isEmpty ? emptyView : <div dangerouslySetInnerHTML={{ __html: loader.item.content }}>{ }</div>}
             </div>
-            <div className="dd-common-alignside" style={{ padding: '8px 0', color: 'grey' }}>
+            {/* <div className="dd-common-alignside" style={{ padding: '8px', color: 'grey' }}>
               <div className="dd-common-alignside">
                 <span>{localStore.percent}%</span>
               </div>
               <div className="dd-common-alignside">
                 <span style={{ marginRight: 10 }}>{new Date().getHours()}:{new Date().getMinutes()}</span>
               </div>
-            </div>
+            </div> */}
           </Fragment>}
         </UserAreaView>
       </Fragment>

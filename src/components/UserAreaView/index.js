@@ -4,7 +4,7 @@ import { isPWAorMobile } from 'utils/utils'
 import { useStoreContext } from 'contexts'
 import { FullHeight, FullHeightAuto, FullHeightFix } from 'components/common';
 
-export default function UserAreaView({ children, top = 'env(safe-area-inset-top)', bottom = 'env(safe-area-inset-bottom)', bgcTop, bgcBot, bgc = 'white', }) {
+export default function UserAreaView({ children, top = 'env(safe-area-inset-top)', bottom = 'env(safe-area-inset-bottom)', bgcTop, bgcBot, bgc = '#eee', }) {
   const store = useStoreContext();
   return <Observer>{() => (
     <FullHeight style={{
