@@ -2,7 +2,7 @@ import React from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { InputItem, List, Button, Toast, Modal } from 'antd-mobile'
 
-import { MIconView } from 'components'
+import { MIconView, UserAreaView } from 'components'
 import services from 'services'
 import UserLoader from 'loader/UserLoader'
 import createPageModel from 'page-group-loader-model/BasePageModel'
@@ -72,7 +72,7 @@ function View() {
   }))
   return <Observer>
     {() => (
-      <div className="full-height">
+      <UserAreaView>
         <Navi title="账号登录" router={router} />
         <div className="full-height-auto">
           <div className="dd-common-centerXY" style={{ position: 'relative' }}>
@@ -98,7 +98,7 @@ function View() {
                   onBlur={value => local.account = value}
                 >
                   用户名
-              </InputItem>
+                </InputItem>
               </List.Item>
               <List.Item>
                 <InputItem
@@ -121,9 +121,9 @@ function View() {
               </List.Item>
               <List.Item style={{ display: 'flex' }}>
                 其他登录方式
-                <IconSNS src={sns_weibo} onClick={()=>{
+                <IconSNS src={sns_weibo} onClick={() => {
                   window.location.href = 'https://api.weibo.com/oauth2/authorize?client_id=177146223&response_type=code&redirect_uri=https://6vq7631482.imdo.co/api/v1/oauth/sns/weibo/callback'
-                }}/>
+                }} />
                 <IconSNS src={sns_weixin} />
                 <IconSNS src={sns_alipay} />
                 <IconSNS src={sns_apple} />
@@ -133,7 +133,7 @@ function View() {
             </List>
           </div>
         </div>
-      </div>
+      </UserAreaView>
     )}
   </Observer>
 }
