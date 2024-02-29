@@ -21,6 +21,7 @@ export default function ({ children }) {
       hidden={store.app.hideMenu}
     >
       {store.app.tabs.map(menu => {
+        const Comp = router.getPage(menu.name)
         return <TabBar.Item
           title={menu.big ? '' : menu.title}
           key={menu.name}
@@ -35,7 +36,7 @@ export default function ({ children }) {
             router.replaceView(menu.name, menu.name === 'home' ? { tab: store.app.tab } : {})
           }}
         >
-          {children}
+          <Comp/>
         </TabBar.Item>
       })}
     </TabBar>

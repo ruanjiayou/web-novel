@@ -4,7 +4,7 @@ import { ActivityIndicator, Icon, Button, Toast, Tag } from 'antd-mobile'
 
 import timespan from 'utils/timespan'
 import { ResourceLoader, RecommendResourceListLoader } from 'loader'
-import { MIconView, AutoCenterView, VisualBoxView, EmptyView } from 'components'
+import { MIconView, AutoCenterView, VisualBoxView, EmptyView, UserAreaView } from 'components'
 import ResourceItem from 'business/ResourceItem'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 import Recorder from 'utils/cache'
@@ -51,6 +51,7 @@ function View({ self, router, store, services, params }) {
   }))
 
   useEffect(() => {
+    store.app.setBarBGC('black')
     loader.refresh({ params: { id: params.id } }, async (res) => {
       const query = {};
       if (res.item.tags) {
@@ -86,7 +87,7 @@ function View({ self, router, store, services, params }) {
         })
       } else {
         return <Fragment>
-          <div className="full-height" style={{ height: 'calc(100% - env(safe-area-inset-bottom) - env(safe-area-inset-top))' }}>
+          <UserAreaView >
             <div className="full-height-fix">
               <Player
                 router={router}
@@ -147,7 +148,7 @@ function View({ self, router, store, services, params }) {
                 router.replaceView('VideoInfo', { id: it.id })
               }} />))}
             </div>
-          </div>
+          </UserAreaView>
         </Fragment>
       }
     }

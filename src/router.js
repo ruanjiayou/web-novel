@@ -73,9 +73,8 @@ function App(props) {
             <MusicPlayer />
             <Debug />
             <Speaker />
-            <Layout>
-              <Page />
-            </Layout>
+            {/* layout就是 tabbar, 最基础的页面结构 */}
+            <Layout/>
             <TransitionGroup component={null}>
               {local.layers.map((layer, i) => {
                 const Comp = router.getPage(layer.view)
