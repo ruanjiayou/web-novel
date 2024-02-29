@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useEffectOnce } from 'react-use'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 
-import { MIconView, } from 'components'
+import { MIconView, UserAreaView, } from 'components'
 import { FullHeight, AlignCenterXY, } from 'components/common'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 import showTip from 'utils/showTip';
@@ -16,11 +16,13 @@ function View({ self, router, store, params }) {
   })
   return <Observer>
     {() => (
-      <FullHeight style={{ position: 'relative', backgroundImage:'url(/logo.jpg)', backgroundSize: 'cover' }}>
-        <AlignCenterXY style={{ width: 40, height: 40, color: 'white', position: 'absolute', left: 'calc(10px + env(safe-area-inset-left))', top: 'calc(10px + env(safe-area-inset-top))', borderRadius: '50%', backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={() => { router.replaceView('home') }}>
+      <FullHeight style={{ position: 'relative', backgroundImage: 'url(/logo.jpg)', backgroundSize: 'cover', backgroundPosition: '50% 50%' }}>
+        <AlignCenterXY style={{ width: 40, height: 40, color: 'white', zIndex: 2, position: 'absolute', left: 'calc(10px + env(safe-area-inset-left))', top: 'calc(10px + env(safe-area-inset-top))', borderRadius: '50%', backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={() => { router.replaceView('home') }}>
           <MIconView type="FaChevronLeft" />
         </AlignCenterXY>
-        <img src="/logo.jpg" style={{ width: '100%', height: '100%' }} />
+        <UserAreaView bgc='#00000052'>
+
+        </UserAreaView>
       </FullHeight>
     )}
   </Observer>

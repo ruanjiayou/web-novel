@@ -5,7 +5,7 @@ import { Observer, useLocalStore } from 'mobx-react-lite'
 
 import { BookShelfLoader } from 'loader'
 import RecordBookItem from 'business/ResourceItem/RecordBookItem'
-import { LoaderListView, AutoCenterView } from 'components'
+import { LoaderListView, AutoCenterView, UserAreaView } from 'components'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 
 const model = createPageModel({
@@ -25,7 +25,7 @@ function View({ self, router, store, Navi }) {
   })
   return <Observer>{
     () => {
-      return <div className='full-height' style={{ height: 'calc(100% - env(safe-area-inset-bottom) - env(safe-area-inset-top))' }}>
+      return <UserAreaView>
         <Navi title="书架" />
         <LoaderListView
           loader={loader}
@@ -43,7 +43,7 @@ function View({ self, router, store, Navi }) {
             />
           )}
         />
-      </div>
+      </UserAreaView>
     }
   }</Observer >
 }

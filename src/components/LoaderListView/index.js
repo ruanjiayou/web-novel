@@ -3,7 +3,9 @@ import { Observer, useLocalStore } from 'mobx-react-lite'
 
 const GetPullToRefreshlData = ({ refresh, loader, renderItem, loadMore, style }) => {
   useEffect(() => {
-    refresh ? refresh() : loader.refresh();
+    if (loader.isEmpty) {
+      refresh ? refresh() : loader.refresh();
+    }
   }, []);
   const local = useLocalStore(() => ({
     touchedBottom: false,

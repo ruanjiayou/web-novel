@@ -10,7 +10,7 @@ function Navi(prop) {
   const router = useRouterContext()
   const store = useStoreContext()
   return (
-    <AlignSide style={{ height: 45, backgroundColor: store.app.barBGC, borderBottom: '1px solid #eee', ...prop.wrapStyle }}>
+    <AlignSide style={{ height: 45, backgroundColor: store.app.barBGC, color: 'white', borderBottom: '1px solid #eee', ...prop.wrapStyle }}>
       <AlignCenterXY onClick={() => { router.back() }}>
         <div style={{ display: prop.showBack === false ? 'none' : 'flex' }}>
           <MIconView type="FaChevronLeft" />

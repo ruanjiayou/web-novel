@@ -5,6 +5,7 @@ import { RenderGroups } from 'group'
 import { ResourceListLoader, GroupTreeLoader } from 'loader'
 import { FullHeight, FullHeightAuto, FullHeightFix } from 'components/common'
 import createPageModel from 'page-group-loader-model/BasePageModel'
+import { UserAreaView } from 'components/index.js'
 
 const model = createPageModel({
   ResourceListLoader,
@@ -19,14 +20,12 @@ function View({ self, router, Navi }) {
     }
   })
   return <Observer>{
-    () => <FullHeight>
-      <FullHeightFix>
-        <Navi title="全部" router={router} />
-      </FullHeightFix>
+    () => <UserAreaView>
+      <Navi title="全部" router={router} />
       <FullHeightAuto>
         <RenderGroups loader={loader} />
       </FullHeightAuto>
-    </FullHeight>}
+    </UserAreaView>}
   </Observer>
 }
 

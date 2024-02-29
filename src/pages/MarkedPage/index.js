@@ -3,7 +3,7 @@ import { Observer, useLocalStore } from 'mobx-react-lite'
 import { Tabs } from 'antd-mobile'
 import { MarkListLoader } from 'loader'
 import renderBlank from 'components/EmptyView';
-import { LoaderListView } from 'components';
+import { LoaderListView, UserAreaView } from 'components';
 import ResourceItem from 'business/ResourceItem'
 import { useEffectOnce } from 'react-use';
 import createPageModel from 'page-group-loader-model/BasePageModel'
@@ -40,23 +40,21 @@ function View({ self }) {
       self[tab.loader].refresh();
     }
   })
-  return <FullHeight>
-    <Navi title="收藏" />
-    <FullHeightAuto>
-      <Observer>{() => {
-        return <div style={{ height: 'calc(100% - env(safe-area-inset-bottom) - env(safe-area-inset-top))' }}>
-          <Tabs tabs={tabs} initialPage={'video'} onChange={onChange} animated={false}>
-            {tabs.map(tab => (<LoaderListView loader={self[tab.loader]} style={{ height: '100%' }} key={tab.type} renderItem={(item, selectionId, index) => <ResourceItem
-              key={index}
-              item={item}
-              loader={self[tab.loader]}
-              selectionId={selectionId}
-            />}></LoaderListView>))}
-          </Tabs>
-        </div>
-      }}</Observer>
-    </FullHeightAuto>
-  </FullHeight>
+  return <UserAreaView>
+    <FullHeight>
+      <Navi title="收藏" />
+      <FullHeightAuto>
+        <Observer>{() => <Tabs tabs={tabs} initialPage={'video'} onChange={onChange} animated={false}>
+          {tabs.map(tab => (<LoaderListView loader={self[tab.loader]} style={{ height: '100%' }} key={tab.type} renderItem={(item, selectionId, index) => <ResourceItem
+            key={index}
+            item={item}
+            loader={self[tab.loader]}
+            selectionId={selectionId}
+          />}></LoaderListView>))}
+        </Tabs>}</Observer>
+      </FullHeightAuto>
+    </FullHeight>
+  </UserAreaView>
 }
 
 

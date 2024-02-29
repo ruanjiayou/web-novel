@@ -9,7 +9,7 @@ import SongItem from 'business/SongItem'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 import { createItemLoader, createItemsLoader } from 'page-group-loader-model/BaseLoaderModel'
 import { FullHeight, FullHeightAuto, FullHeightFix, FullWidthFix, FullWidth } from 'components/common'
-import { LoaderListView, AutoCenterView } from 'components'
+import { LoaderListView, AutoCenterView, UserAreaView } from 'components'
 import Recorder from 'utils/cache'
 
 const musicRecorder = new Recorder('music')
@@ -50,7 +50,7 @@ function View({ self, router, Navi, params }) {
   }, [params.id]);
   return <Observer>
     {() => (
-      <FullHeight>
+      <UserAreaView>
         <Navi title="播放列表" router={router} />
         <FullHeightAuto>
           <LoaderListView
@@ -83,7 +83,7 @@ function View({ self, router, Navi, params }) {
           />
         </FullHeightAuto>
         <FullWidth id="mop"></FullWidth>
-      </FullHeight>
+      </UserAreaView>
     )}
   </Observer>
 

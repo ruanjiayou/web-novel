@@ -4,7 +4,7 @@ import { ActivityIndicator, Progress } from 'antd-mobile'
 
 import { ResourceLoader } from 'loader'
 import createPageModel from 'page-group-loader-model/BasePageModel'
-import { EmptyView, AutoCenterView, VisualBoxView, MIconView } from 'components'
+import { EmptyView, AutoCenterView, VisualBoxView, MIconView, UserAreaView } from 'components'
 import { FullWidth, FullHeightFix } from 'components/common'
 import { useEffectOnce } from 'react-use'
 
@@ -28,8 +28,7 @@ function View({ self, router, store, params = {} }) {
     {() => {
       return <Fragment>
         {/* 内部文字 */}
-        <div className="full-height" >
-
+        <UserAreaView>
           <FullWidth className="full-height-fix" style={{ padding: '8px 0', color: 'grey' }}>
             <FullHeightFix>
               <MIconView type="FaChevronLeft" onClick={() => { router.back() }} />
@@ -50,7 +49,7 @@ function View({ self, router, store, params = {} }) {
                 // console.log(e)
               }}
             >
-              {loader.isEmpty ? emptyView : <div dangerouslySetInnerHTML={{ __html: loader.item.content }}>{}</div>}
+              {loader.isEmpty ? emptyView : <div dangerouslySetInnerHTML={{ __html: loader.item.content }}>{ }</div>}
             </div>
             <div className="dd-common-alignside" style={{ padding: '8px 0', color: 'grey' }}>
               <div className="dd-common-alignside">
@@ -61,7 +60,7 @@ function View({ self, router, store, params = {} }) {
               </div>
             </div>
           </Fragment>}
-        </div>
+        </UserAreaView>
       </Fragment>
     }}
   </Observer>

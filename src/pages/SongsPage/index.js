@@ -2,7 +2,7 @@ import React from 'react'
 import { useEffectOnce } from 'react-use'
 import { Observer } from 'mobx-react-lite'
 
-import { LoaderListView } from 'components'
+import { LoaderListView, UserAreaView } from 'components'
 import SongItem from 'business/SongItem'
 import { SongSheetLoader, ResourceListLoader } from 'loader'
 import createPageModel from 'page-group-loader-model/BasePageModel'
@@ -25,7 +25,7 @@ function View({ self, router, Navi, children }) {
   })
   return <Observer>
     {() => (
-      <div className="full-height">
+      <UserAreaView>
         <Navi title="全部歌曲" router={router} />
         <div className="full-height-auto">
           <LoaderListView
@@ -41,7 +41,7 @@ function View({ self, router, Navi, children }) {
             )}
           />
         </div>
-      </div>
+      </UserAreaView>
     )}
   </Observer>
 }

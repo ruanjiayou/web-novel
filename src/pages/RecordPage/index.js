@@ -4,7 +4,7 @@ import { SwipeAction } from 'antd-mobile'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 
 import RecordBookItem from 'business/ResourceItem/RecordBookItem'
-import { LoaderListView, AutoCenterView } from 'components'
+import { LoaderListView, AutoCenterView, UserAreaView } from 'components'
 import Recorder from 'utils/cache'
 
 import ResourceModel from 'models/ResourceModel'
@@ -38,8 +38,8 @@ function View({ self, router, store, Navi }) {
 
   return <Observer>{
     () => {
-      return <Fragment>
-        <Navi title="记录" />
+      return <UserAreaView>
+        <Navi title="记录"/>
         <LoaderListView
           loader={loader}
           renderEmpty={(
@@ -70,7 +70,7 @@ function View({ self, router, store, Navi }) {
             </SwipeAction>
           )}
         />
-      </Fragment>
+      </UserAreaView>
     }
   }</Observer>
 }

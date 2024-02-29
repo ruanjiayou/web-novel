@@ -1,15 +1,18 @@
-import React from 'react'
-import { Observer } from 'mobx-react-lite'
+import React, { useEffect } from 'react'
+import { Observer, useLocalStore } from 'mobx-react-lite'
 import { TabBar } from 'antd-mobile'
 import { useRouterContext, useStoreContext } from 'contexts'
-import { MIconView } from 'components'
+import { MIconView, UserAreaView } from 'components'
 import { isIOSafariWeb, isPWAorMobile } from './utils/utils'
 
 export default function ({ children }) {
   const router = useRouterContext()
   const store = useStoreContext()
-  const h = isIOSafariWeb() ? '80px' : (isPWAorMobile() ? 'env(safe-area-inset-bottom) - env(safe-area-inset-top)' : '0px')
-  return <Observer>{() => <div key={store.app.selectedMenu} style={{ position: 'relative', width: '100%', height: `calc(100% - ${store.app.selectedMenu === 'awhile' ? '0px' : h})`, }}>
+  const h = isIOSafariWeb() ? '80px' : (isPWAorMobile() ? 'env(safe-area-inset-top) - env(safe-area-inset-bottom)' : '0px')
+  return <Observer>{() => <UserAreaView
+    top={store.app.selectedMenu === 'awhile' ? '0' : 'env(safe-area-inset-top)'}
+    bottom={store.app.selectedMenu === 'awhile' ? '0' : 'env(safe-area-inset-bottom)'}
+  >
     <TabBar
       tintColor="#33A3F4"
       unselectedTintColor="#555"
@@ -36,5 +39,5 @@ export default function ({ children }) {
         </TabBar.Item>
       })}
     </TabBar>
-  </div>}</Observer>
+  </UserAreaView>}</Observer>
 }

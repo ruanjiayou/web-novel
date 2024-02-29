@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback, useRef } from 'react'
-import { useMount } from 'react-use'
+import { useEffectOnce, useMount } from 'react-use'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import FilterRow from '../FitlerRow'
 import { LoaderListView, MIconView } from 'components'
@@ -35,15 +35,18 @@ function throttleDelayExecution(fn, delay) {
   }
 }
 
-export default function Filter({ self, loader, resourcesLoader, ...props }) {
+export default function Filter({ self, loader, ...props }) {
   const store = useStoreContext()
   const eleRef = useRef(null);
   const lstore = useLocalStore(() => ({
-    loader: resourcesLoader || ResourceListLoader.create(),
+    loader: store.resourceListLoaders[loader.item.id] || ResourceListLoader.create(),
     filterHeight: 0,
     showShort: false,
     query: {},
   }));
+  if (store.resourceListLoaders[loader.item.id]) {
+    store.resourceListLoaders[loader.item.id] = lstore.loader;
+  }
   const refresh = useCallback(async () => {
     lstore.query = loader.getQuery();
     lstore.loader.refresh({ query: lstore.query });
@@ -52,15 +55,11 @@ export default function Filter({ self, loader, resourcesLoader, ...props }) {
     lstore.query = loader.getQuery()
     lstore.loader.loadMore({ query: lstore.query })
   });
-  useMount(mount => {
-    mount && mount()
-    if (!store.resourceListLoaders[loader.item.id]) {
-      store.resourceListLoaders[loader.item.id] = lstore.loader
-    }
+  useEffect(() => {
     if (lstore.loader.state === 'init') {
       refresh()
     }
-  }, [])
+  })
   return <Observer>{() => (
     <div className="full-height" style={{ position: 'relative' }}>
       {lstore.showShort && <div onClick={() => {

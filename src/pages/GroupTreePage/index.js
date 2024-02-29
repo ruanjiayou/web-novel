@@ -5,7 +5,7 @@ import { RenderGroups } from 'group'
 import { GroupTreeLoader, ResourceListLoader } from 'loader'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 import { useEffectOnce } from 'react-use'
-import { EmptyView } from 'components'
+import { EmptyView, UserAreaView } from 'components'
 
 const model = createPageModel({
   GroupTreeLoader,
@@ -15,7 +15,6 @@ const model = createPageModel({
 function View({ self, router, store, params, Navi, loader: nnn }) {
   const local = useLocalStore(() => ({
     loader: GroupTreeLoader.create(),
-    resourcesLoader: ResourceListLoader.create(),
   }))
   const loader = local.loader
   useEffectOnce(() => {
@@ -28,12 +27,12 @@ function View({ self, router, store, params, Navi, loader: nnn }) {
     if (Blank) {
       return Blank
     }
-    return <div className="full-height">
+    return <UserAreaView>
       <Navi title={loader.item.title} wrapStyle={{ paddingLeft: 'env(safe-area-inset-left)', paddingRight: 'env(safe-area-inset-right' }} router={router} />
       <div className="full-height-auto" style={{ paddingLeft: 'env(safe-area-inset-left)', paddingRight: 'env(safe-area-inset-right' }}>
-        <RenderGroups loader={loader} resourcesLoader={local.resourcesLoader}/>
+        <RenderGroups loader={loader} resourcesLoader={store.resourceListLoaders[loader.item.id]} />
       </div>
-    </div>
+    </UserAreaView>
   }}</Observer>
 }
 

@@ -46,7 +46,7 @@ const Context = React.createContext(null)
  * let router = useRouterContext();
  * router.goto(...);
  */
-const memGetViewModel = mem(function (view, group_name) {
+const memGetViewModel = mem(function (view) {
   const View = store.viewModels.get(view)
   return View ? View : store.viewModels.get('404')
 })

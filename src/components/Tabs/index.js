@@ -1,4 +1,4 @@
-import React, { useEffect, Fragment, useRef, useCallback } from 'react'
+import React, { useEffect, Fragment, useRef, useCallback, useMemo } from 'react'
 import { useEffectOnce } from 'react-use'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { Tab, MenuWrap, MenuItem, TabItem, ContentWrap, Content, Slider } from './style'
@@ -24,7 +24,7 @@ export default function ({ defaultIndex, tabs = [], children, onChange }) {
       local.width = node.offsetWidth;
     }
   })
-  useEffect(() => {
+  useEffectOnce(() => {
     if (contentRef.current) {
       const instance = new AlloyFinger(contentRef.current, {
         touchStart: (evt) => {
@@ -69,6 +69,7 @@ export default function ({ defaultIndex, tabs = [], children, onChange }) {
               }
             }
             resizeSlider();
+            onChange && onChange(tabs[local.selectedIndex], local.selectedIndex);
           }
         }
       });

@@ -37,13 +37,13 @@ function App(props) {
       store.app.setBarBGC('rgb(150 159 169)')
     }
     if (store.app.selectedMenu === 'awhile') {
-      store.app.setBarBGC('black')
+      store.app.setBarBGC('transparent')
     }
     if (store.app.selectedMenu === 'music') {
       store.app.setBarBGC('plum')
     }
     if (store.app.selectedMenu === 'mine') {
-      store.app.setBarBGC('rgb(249, 122, 144)')
+      store.app.setBarBGC('#f97a90')
     }
     // 沉浸式
     store.app.setShowBar(store.app.selectedMenu !== 'awhile')

@@ -67,9 +67,7 @@ function App() {
       } else {
         return (
           <StoreContext.Provider value={store}>
-            <UserAreaView bar={store.app.showBar}>
-              <RouterRoot></RouterRoot>
-            </UserAreaView>
+            <RouterRoot></RouterRoot>
           </StoreContext.Provider>
         )
       }

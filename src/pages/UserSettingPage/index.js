@@ -4,16 +4,16 @@ import { List, Button } from 'antd-mobile'
 
 import MIconView from 'components/MIconView'
 import createPageModel from 'page-group-loader-model/BasePageModel'
+import { UserAreaView } from 'components/index.js'
 
 const model = createPageModel({});
 
 function View({ self, router, store, Navi }) {
   return <Observer>{
     () => {
-      return <div className="full-height">
-
+      return <UserAreaView>
         <Navi title="设置" router={router} />
-        <div>
+        <div className='full-height-auto'>
           <List renderHeader={() => '设置'}>
             <List.Item>
               <div className="dd-common-alignside">
@@ -26,7 +26,7 @@ function View({ self, router, store, Navi }) {
             <Button type="primary" onClick={() => { store.app.setAccessToken(''); router.pushView('login') }}>退出</Button>
           </div>
         </div>
-      </div>
+      </UserAreaView>
     }
   }</Observer >
 }

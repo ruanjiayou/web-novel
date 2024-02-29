@@ -15,6 +15,9 @@ const model = createPageModel({})
 function View({ self, router, store, params }) {
   const channels = store.app.channels
   const loaders = channelLoaders
+  const local = useLocalStore(() => ({
+    index: channels.findIndex(ch => ch.group_id === store.app.tab),
+  }))
   useEffectOnce(() => {
     if (params.tab) {
       store.app.setTab(params.tab)
@@ -53,7 +56,7 @@ function View({ self, router, store, params }) {
           paddingRight: 'env(safe-area-inset-right)',
         }}
         >
-          <Tabs tabs={channels} defaultIndex={0}
+          <Tabs tabs={channels} defaultIndex={local.index}
             onChange={(tab, index) => {
               store.app.setTab(tab.group_id)
               router.replaceView('home', { tab: tab.group_id })
@@ -64,19 +67,6 @@ function View({ self, router, store, params }) {
               ))
             }
           </Tabs>
-          {/* <Tabs
-            initialPage={channels.findIndex(channel => channel.group_id === store.app.tab)}
-            tabs={channels}
-            distanceToChangeTab={0.5}
-            prerenderingSiblingsNumber
-            onChange={(tab, index) => {
-              store.app.setTab(tab.group_id)
-              router.replaceView('home', { tab: tab.group_id })
-            }}>{
-              channels.map((channel, index) => (
-                <RenderGroups key={index} loader={loaders[channel.group_id]} group={channel.data} />
-              ))
-            }</Tabs> */}
         </FullHeightAuto>
       </FullHeight>
     )}

@@ -4,7 +4,7 @@ import { ActivityIndicator, Icon, Button, Toast } from 'antd-mobile'
 
 import timespan from 'utils/timespan'
 import { ResourceLoader } from 'loader'
-import { MIconView, AutoCenterView, VisualBoxView, EmptyView } from 'components'
+import { MIconView, AutoCenterView, VisualBoxView, EmptyView, UserAreaView } from 'components'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 import Recorder from 'utils/cache'
 import { useEffectOnce } from 'react-use'
@@ -67,7 +67,7 @@ function View({ self, router, store, services, params }) {
         })
       } else {
         return <Fragment>
-          <div className="full-height">
+          <UserAreaView>
             <div className="dd-common-alignside" style={{ position: 'absolute', width: '100%', boxSizing: 'border-box', height: 45, padding: '0 15px' }}>
               <MIconView type="FaChevronLeft" onClick={() => { router.back() }} />
               <div>
@@ -129,7 +129,7 @@ function View({ self, router, store, services, params }) {
               </div>
               <p>TODO:作者 名称 头像 几部作品</p>
             </div>
-          </div>
+          </UserAreaView>
         </Fragment>
       }
     }
