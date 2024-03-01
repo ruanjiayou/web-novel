@@ -132,6 +132,7 @@ function createItemsLoader(model, fn, customs = {}) {
         self.items.push(item)
       },
       async refresh(option) {
+        self.error = null;
         return await request(option, 'refresh')
       },
       async loadMore(option) {
@@ -223,6 +224,7 @@ function createItemLoader(model, fn, customs = {}) {
         self.item = null
       },
       async refresh(option, cb) {
+        self.error = null;
         return await request(option, 'refresh', cb)
       }
     }

@@ -40,9 +40,9 @@ function View({ self }) {
       self[tab.loader].refresh();
     }
   })
-  return <UserAreaView>
+  return <UserAreaView bgcTop={'#f97a90'} bgcBot={'#eee'}>
     <FullHeight>
-      <Navi title="收藏" />
+      <Navi title="收藏" wrapStyle={{ backgroundColor: '#f97a90' }} />
       <FullHeightAuto>
         <Observer>{() => <Tabs tabs={tabs} initialPage={'video'} onChange={onChange} animated={false}>
           {tabs.map(tab => (<LoaderListView loader={self[tab.loader]} style={{ height: '100%' }} key={tab.type} renderItem={(item, selectionId, index) => <ResourceItem

@@ -5,7 +5,7 @@ import { ActivityIndicator, Progress } from 'antd-mobile'
 import { ChapterLoader } from 'loader'
 import Recorder from 'utils/cache'
 import createPageModel from 'page-group-loader-model/BasePageModel'
-import { EmptyView, AutoCenterView, VisualBoxView, MIconView } from 'components'
+import { EmptyView, AutoCenterView, VisualBoxView, MIconView, UserAreaView } from 'components'
 import { FullHeight, FullHeightAuto, FullHeightFix } from 'components/common'
 
 const bookRecorder = new Recorder('book')
@@ -40,7 +40,7 @@ function View({ self, router, params }) {
   })
   return <Observer>
     {() => {
-      return <FullHeight style={{ height: 'calc(100% - env(safe-area-inset-bottom) - env(safe-area-inset-top))', position: 'relative' }}>
+      return <UserAreaView>
         {/* 顶部导航动态 */}
         <FullHeightFix className="dd-common-alignside" style={{ backgroundColor: '#eee', height: 45, padding: '0 15px' }}>
           <MIconView type="FaChevronLeft" onClick={() => { router.back() }} />
@@ -127,7 +127,7 @@ function View({ self, router, params }) {
             </div>
           </div>
         </VisualBoxView>
-      </FullHeight>
+      </UserAreaView>
     }}
   </Observer>
 }

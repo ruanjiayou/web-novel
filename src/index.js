@@ -6,7 +6,7 @@ import { Observer, useLocalStore } from 'mobx-react-lite'
 import { ActivityIndicator, Button } from 'antd-mobile'
 import RouterRoot from './router'
 import globalStore from './store'
-import { isPWAorMobile } from './utils/utils'
+import { isPWAorMobile, isIOSafariWeb } from './utils/utils'
 import { createStoreProvider } from 'contexts'
 import { AutoCenterView, UserAreaView, Splash } from 'components'
 import './components/common.css'
@@ -98,6 +98,9 @@ class ErrorBoundary extends React.Component {
   componentDidMount() {
     document.getElementById('start-loading').style.display = 'none'
     // document.getElementById('box').className = this.state.isPWAorMobile ? 'box-app' : 'box-browser'
+    if(isIOSafariWeb()) {
+      document.getElementById('root').style.height = 'calc(100vh - 80px)'  
+    }
     document.getElementById('box').className = 'box-app'
     document.getElementById('root').style.display = 'block'
     document.addEventListener('visibilitychange', async (e) => {

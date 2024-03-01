@@ -67,20 +67,29 @@ function View({ self, router, store, services, params }) {
         })
       } else {
         return <Fragment>
-          <UserAreaView>
-            <div className="dd-common-alignside" style={{ position: 'absolute', width: '100%', boxSizing: 'border-box', height: 45, padding: '0 15px' }}>
-              <MIconView type="FaChevronLeft" onClick={() => { router.back() }} />
+          <UserAreaView top='0'>
+            <div className="dd-common-alignside" style={{ position: 'absolute', width: '100%', boxSizing: 'border-box', height: 45, marginTop: 'env(safe-area-inset-top)', padding: '0 15px', zIndex: 1 }}>
+              <MIconView type="FaChevronLeft" color='white' onClick={() => { router.back() }} />
               <div>
                 <VisualBoxView visible={localStore.shouldFix}>
                   <div>{loader.item.title}</div>
                   <div>{loader.item.uname} · {loader.item.type}</div>
                 </VisualBoxView>
               </div>
-              <MIconView type="FaEllipsisH" />
+              <MIconView type="FaEllipsisH" color='white' />
             </div>
             <div className="full-height-auto">
-              <div style={{ padding: '20px 0 10px 0', textAlign: 'center', backgroundColor: '#bfbaba', color: 'white' }}>
-                <img src={loader.item.auto_cover} alt="" width={100} height={120} />
+              <div style={{
+                position: 'relative',
+                padding: '20px 0 10px 0',
+                paddingTop: 'env(safe-area-inset-top)',
+                textAlign: 'center',
+                backgroundColor: '#bfbaba',
+                color: 'white',
+                overflow: 'hidden',
+              }}>
+                <img src={loader.item.auto_cover} alt="" style={{ width: '100%', position: 'absolute', left: 0, top: 0, filter: 'blur(8px)' }} />
+                <img src={loader.item.auto_cover} alt="" width={100} height={120} style={{ marginTop: 50, position: 'relative' }} />
                 <div style={{ fontSize: 20, padding: 5 }}>{loader.item.title}</div>
                 <div>{loader.item.uname} · {loader.item.type}</div>
               </div>

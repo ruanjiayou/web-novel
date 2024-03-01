@@ -12,6 +12,7 @@ import VisualBoxView from './VisualBoxView'
 import Status from './Status'
 import Splash from './Splash'
 import Tabs from './Tabs'
+import PullRefreshLoadMore from './PullRefreshLoadMore'
 
 export {
   AutoCenterView,
@@ -28,4 +29,5 @@ export {
   Status,
   Splash,
   Tabs,
+  PullRefreshLoadMore,
 }

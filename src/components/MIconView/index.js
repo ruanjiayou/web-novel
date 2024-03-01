@@ -138,9 +138,9 @@ const Mdicons = {
 //   </svg>)
 // }
 
-export default function ({ type, className = '', inline = false, size = 'sm', style = {}, after = '', before = '', spin, ...restProps }) {
+export default function ({ type, className = '', inline = false, size = 'sm', style = {}, after = '', before = '', color = '', spin, ...restProps }) {
   const Icon = type.startsWith('Fa') ? Faicons[type] : (type.startsWith('Md') ? Mdicons[type] : IOicons[type])
   return <div style={{ display: inline ? 'inline-block' : 'flex', fontSize: size === 'md' ? '1.5rem' : (size === 'bg' ? '2rem' : '1.1rem'), alignItems: 'center', justifyContent: 'center', ...style, }} className={`${className}`} {...restProps}>
-    {before}<Icon className={spin ? 'spin' : ''} style={{ margin: '0 4px', }} />{after}
+    {before}<Icon className={spin ? 'spin' : ''} style={{ margin: '0 4px', color }} />{after}
   </div>
 }

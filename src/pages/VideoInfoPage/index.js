@@ -51,7 +51,6 @@ function View({ self, router, store, services, params }) {
   }))
 
   useEffect(() => {
-    store.app.setBarBGC('black')
     loader.refresh({ params: { id: params.id } }, async (res) => {
       const query = {};
       if (res.item.tags) {
@@ -87,7 +86,7 @@ function View({ self, router, store, services, params }) {
         })
       } else {
         return <Fragment>
-          <UserAreaView >
+          <UserAreaView bgcTop={'black'}>
             <div className="full-height-fix">
               <Player
                 router={router}

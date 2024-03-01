@@ -32,7 +32,6 @@ function View({ self, router, store, params }) {
         <FullHeightFix>
           <FullWidth style={{
             height: 50,
-            backgroundColor: store.app.barBGC,
             paddingLeft: 'env(safe-area-inset-left)',
             paddingRight: 'env(safe-area-inset-right)',
             paddingTop: 10,

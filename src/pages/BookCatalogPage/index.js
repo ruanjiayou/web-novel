@@ -2,7 +2,7 @@ import React, { Fragment, useEffect } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 
 import { BookCatalogLoader } from 'loader/index'
-import { MIconView, LoaderListView } from 'components'
+import { MIconView, LoaderListView, UserAreaView } from 'components'
 import ChapterItemView from 'business/ChapterItemView'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 import { useEffectOnce } from 'react-use'
@@ -27,7 +27,7 @@ function View({ self, router, params, }) {
   return <Observer>{
     () => {
       return <Fragment>
-        <div className="full-height">
+        <UserAreaView>
           <div className="dd-common-alignside" style={{ height: 45, padding: '0 15px' }}>
             <MIconView type="FaChevronLeft" onClick={() => { router.back() }} />
             <div className="dd-common-alignside">
@@ -61,7 +61,7 @@ function View({ self, router, params, }) {
               )}
             />
           </div>
-        </div>
+        </UserAreaView>
       </Fragment>
     }
   }</Observer>

@@ -7,6 +7,7 @@ export const Cell = styled.div`
   line-height: 30px;
   align-items: center;
   display: flex;
+  margin-top: 10px;
   flex-direction: column;
 `
 

@@ -9,8 +9,6 @@ const Model = types.model({
   initHistoryLength: types.optional(types.number, 1),
   booting: types.optional(types.boolean, true),
   forceLogin: types.optional(types.boolean, false),
-  // 默认tabBar
-  selectedMenu: types.optional(types.string, 'home'),
   // 底部tabBars菜单
   tabs: types.optional(types.array(TabModel), []),
   // 首页tabs
@@ -27,8 +25,9 @@ const Model = types.model({
   account: types.optional(types.string, ''),
   accessToken: types.optional(types.string, ''),
   refreshToken: types.optional(types.string, ''),
-  showBar: types.optional(types.boolean, true),
-  barBGC: types.optional(types.string, 'black'),
+
+  orientation: types.optional(types.number, 0),
+
   hideMenu: types.optional(types.boolean, false),
   // 音乐播放器相关
   showMusic: false,
@@ -52,15 +51,9 @@ const Model = types.model({
 })).actions(self => {
   // navBar
   return {
-    setShowBar(shown) {
-      self.showBar = shown;
+    setOrientation(o) {
+      self.orientation = o;
     },
-    setBarBGC(color) {
-      self.barBGC = color;
-    },
-    setHideMenu(hide) {
-      self.hideMenu = hide;
-    }
   }
 }).actions(self => {
   // locker相关操作
@@ -139,9 +132,6 @@ const Model = types.model({
     self.showSpeaker = !self.showSpeaker
   },
 })).actions(self => ({
-  setMenu(name) {
-    self.selectedMenu = name
-  },
   setTab(name) {
     self.tab = name
   },
