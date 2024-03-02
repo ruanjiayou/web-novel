@@ -51,8 +51,8 @@ const Model = types.model('musicPlayer', {
   },
   // 当前播放音频资源文件路径
   get currentUrl() {
-    if (self.item && self.item.materials) {
-      const mt = self.item.materials.find(item => item.type === 'audio')
+    if (self.item && self.item.audios) {
+      const mt = self.item.audios.find(item => item.type === 'audio')
       return store.lineLoader.getHostByType('image') + (mt ? mt.path : '');
     } else {
       return '';
@@ -90,7 +90,6 @@ const Model = types.model('musicPlayer', {
       self.state = 'playing'
     },
     play(item) {
-      console.log('musicPlay')
       if (item.toJSON) {
         self.item = getSnapshot(item);
       } else {

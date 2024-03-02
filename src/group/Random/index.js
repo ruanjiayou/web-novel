@@ -32,7 +32,7 @@ export default function Random({ self }) {
   })
   return <Observer>{() => (
     <div>
-      <div className="dd-common-alignside" style={{ borderLeft: '5px solid #ff9999', padding: '10px 0 10px 10px', margin: '10px 0 0 10px', fontSize: 16 }}>
+      <div className="dd-common-alignside" style={{ borderLeft: '5px solid #ff9999', padding: '10px 0 10px 10px', marginLeft: 10, fontSize: 16 }}>
         <span>{self.title}</span>
         <VisualBoxView visible={self.more.channel_id !== ''}>
           <MIconView style={{ fontSize: 12, color: '#888' }} type="FaAngleRight" before="更多" />
@@ -41,10 +41,10 @@ export default function Random({ self }) {
       <Container onTouchStart={(e) => {
         event.emit('swipeStart')
       }}>
-        {self.data.map((d, index) => (<div key={index} style={{ flex: 1, display: 'flex', flexDirection: 'row', alignItems: 'center', minWidth: (100 / (self.attrs.columns + 1) + 12) + '%' }}><ResourceItem key={index} display={3} item={d} /></div>))}
+        {self.data.map((d, index) => (<div key={index} style={{ flex: 1, display: 'flex', flexDirection: 'row', alignItems: 'center', marginRight: 8 }}><ResourceItem key={index} display={3} item={d} /></div>))}
       </Container>
       <VisualBoxView visible={self.attrs.random === true}>
-        <MIconView spin={local.spin} style={{ textAlign: 'center', padding: 15, fontSize: 13 }} type="FaRedo" after="换一换" onClick={change} />
+        <MIconView spin={local.spin} style={{ textAlign: 'center', paddingBottom: 15, fontSize: 13 }} type="FaRedo" after="换一换" onClick={change} />
       </VisualBoxView>
     </div>
   )}</Observer>

@@ -17,12 +17,12 @@ const Model = types.model('resource', {
   tags: types.array(types.string),
   images: types.array(types.union(types.string, types.model({
     path: types.string,
-    id: types.string,
-    nth: types.number,
-    more: types.model({
-      width: types.number,
-      height: types.number,
-    })
+    id: types.optional(types.string, ''),
+    nth: types.optional(types.number, 1),
+    more: types.maybe(types.model({
+      width: types.maybe(types.number),
+      height: types.maybe(types.number),
+    }))
   }))),
   status: types.enumeration(['init', 'loading', 'finished', 'fail']),
   types: types.array(types.string),
@@ -44,7 +44,7 @@ const Model = types.model('resource', {
   last_seen_title: types.optional(types.string, ''),
   last_progress: types.optional(types.number, 0),
   playing: types.optional(types.boolean, false),
-  materials: types.array(types.model({
+  audios: types.array(types.model({
     id: types.string,
     type: types.string,
     path: types.string,
