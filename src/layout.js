@@ -39,6 +39,7 @@ export default function ({ children }) {
 
   return <Observer>{() => <UserAreaView
     bgcTop={local.safeTopBGC}
+    bgcBot={'#fff'}
     top={local.selectedMenu === 'awhile' ? 0 : 'env(safe-area-inset-top)'}
     bottom={local.selectedMenu === 'awhile' ? 0 : 'env(safe-area-inset-bottom)'}
   >

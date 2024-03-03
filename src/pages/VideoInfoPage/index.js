@@ -143,9 +143,13 @@ function View({ self, router, store, services, params }) {
                   }}>{tag}</EpTag>))}</div>
                 </VisualBoxView>
               </div>
-              {recommendsLoader.items.map(item => (<ResourceItem key={item.id} item={item} onClick={(it) => {
-                router.replaceView('VideoInfo', { id: it.id })
-              }} />))}
+              {recommendsLoader.items.map(item => (
+                <div key={item.id} style={{ margin: 10 }}>
+                  <ResourceItem item={item} onClick={(it) => {
+                    router.replaceView('VideoInfo', { id: it.id })
+                  }} />
+                </div>
+              ))}
             </div>
           </UserAreaView>
         </Fragment>

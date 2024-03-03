@@ -17,7 +17,7 @@ export default function UserAreaView({ children, top = 'env(safe-area-inset-top)
       // paddingBottom: 0,
       ...style,
     }}>
-      <FullHeightFix style={{ height: top, backgroundColor: bgcTop }}></FullHeightFix>
+      <FullHeightFix style={{ height: top, backgroundColor: bgcTop || store.app.config.mainColor }}></FullHeightFix>
       <FullHeightAuto
         style={{
           position: 'relative',
@@ -28,7 +28,7 @@ export default function UserAreaView({ children, top = 'env(safe-area-inset-top)
           {children}
         </FullHeight>
       </FullHeightAuto>
-      <FullHeightFix style={{ height: bottom, backgroundColor: bgcBot }}></FullHeightFix>
+      <FullHeightFix style={{ height: bottom, backgroundColor: bgcBot || store.app.config.mainBGC }}></FullHeightFix>
     </FullHeight>
   )}</Observer>
 }

@@ -6,7 +6,7 @@ import { useRouterContext } from 'contexts';
 import { useEffectOnce } from 'react-use';
 import storage from 'utils/storage'
 import { WordItem } from './style'
-import { MIconView } from 'components';
+import { MIconView, UserAreaView } from 'components';
 
 const model = createPageModel({
 })
@@ -27,7 +27,7 @@ function View({ self, store, params }) {
 
     }
   })
-  return <Observer>{() => <FullHeight>
+  return <Observer>{() => <UserAreaView>
     <FullWidth style={{ height: 50, }}>
       <FullWidthFix>
 
@@ -60,7 +60,7 @@ function View({ self, store, params }) {
         {local.historyWords.map(word => (<WordItem key={word} onClick={() => { router.replaceView('SearchResult', { title: word }) }}>{word}</WordItem>))}
       </div>
     </FullHeightAuto>
-  </FullHeight>}</Observer>
+  </UserAreaView>}</Observer>
 }
 
 

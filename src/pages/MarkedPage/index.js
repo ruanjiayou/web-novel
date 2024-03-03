@@ -45,7 +45,7 @@ function View({ self }) {
       <Navi title="收藏" wrapStyle={{ backgroundColor: '#f97a90' }} />
       <FullHeightAuto>
         <Observer>{() => <Tabs tabs={tabs} initialPage={'video'} onChange={onChange} animated={false}>
-          {tabs.map(tab => (<LoaderListView loader={self[tab.loader]} style={{ height: '100%' }} key={tab.type} renderItem={(item, selectionId, index) => <ResourceItem
+          {tabs.map(tab => (<LoaderListView loader={self[tab.loader]} style={{ height: '100%' }} itemWrapStyle={{ margin: 10 }} key={tab.type} renderItem={(item, selectionId, index) => <ResourceItem
             key={index}
             item={item}
             loader={self[tab.loader]}

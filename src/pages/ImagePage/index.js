@@ -54,9 +54,10 @@ function View({ self, router, store, params, Navi }) {
   })
   console.log(loader.isEmpty)
   return <Observer>{
-    () => <UserAreaView  >
+    () => <UserAreaView bgcTop={'pink'}>
       <div className="full-height">
         <Navi
+          wrapStyle={{ backgroundColor: 'pink' }}
           title={loader.item ? loader.item.title + ' ' + loader.item.uname : '加载中...'}
         >
           <div onClick={async () => {

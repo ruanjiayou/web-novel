@@ -43,6 +43,8 @@ const Model = types.model({
     lockerLength: types.optional(types.number, 6),
     lockerSeconds: types.optional(types.number, 1000 * 60 * 30),
     lockerPin: types.optional(types.string, '789654'),
+    mainColor: '#108ee9',
+    mainBGC: '#eee',
   }, {}),
 }).views(self => ({
   get isLogin() {

@@ -3,7 +3,7 @@ import { Observer, useLocalStore } from 'mobx-react-lite'
 import renderEmptyView from 'components/EmptyView'
 import AutoCenterView from 'components/AutoCenterView'
 
-const GetPullToRefreshlData = ({ refresh, loader, renderItem, loadMore, style }) => {
+const GetPullToRefreshlData = ({ refresh, loader, renderItem, loadMore, style, itemWrapStyle }) => {
   const emptyView = renderEmptyView(loader)
   useEffect(() => {
     if (loader.isEmpty) {
@@ -69,7 +69,7 @@ const GetPullToRefreshlData = ({ refresh, loader, renderItem, loadMore, style })
             alignContent: 'center',
             justifyContent: 'center'
           }}>正在刷新</div> : <div style={{ top: 0, position: 'relative', textAlign: 'center', left: 0, display: 'flex', flexDirection: 'column', justifyItems: 'flex-start', height: local.showFinished ? 30 : local.topHeight, overflow: 'hidden' }}>{local.showFinished ? '已完成' : '刷新↓'}</div>}
-          {loader.items.map((item, index) => <div key={index}>{renderItem(item, loader.name, index)}</div>)}
+          {loader.items.map((item, index) => <div key={index} style={itemWrapStyle}>{renderItem(item, loader.name, index)}</div>)}
         </div>
       }
     }}</Observer>

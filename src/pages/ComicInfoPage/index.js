@@ -4,11 +4,12 @@ import { ActivityIndicator, Icon, Button, Toast } from 'antd-mobile'
 
 import timespan from 'utils/timespan'
 import { GalleryListLoader, ResourceLoader } from 'loader'
-import { MIconView, AutoCenterView, VisualBoxView, EmptyView } from 'components'
+import { MIconView, AutoCenterView, VisualBoxView, EmptyView, UserAreaView } from 'components'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 import Recorder from 'utils/cache'
 import { useEffectOnce } from 'react-use'
 import GalleryItem from 'business/GalleryItemView'
+import { useNaviContext } from 'contexts'
 
 const comicRecorder = new Recorder('comic')
 const model = createPageModel({
@@ -18,6 +19,7 @@ const model = createPageModel({
 
 function View({ self, router, store, services, params }) {
   const loader = self.ResourceLoader
+  const Navi = useNaviContext();
   const galleries = self.GalleryListLoader
   const localStore = useLocalStore(() => ({
     loading: false,
@@ -69,7 +71,7 @@ function View({ self, router, store, services, params }) {
         })
       } else {
         return <Fragment>
-          <div className="full-height">
+          <UserAreaView bgcTop={'black'}>
             <div className="dd-common-alignside" style={{ position: 'absolute', width: '100%', boxSizing: 'border-box', height: 45, padding: '0 15px' }}>
               <MIconView type="FaChevronLeft" onClick={() => { router.back() }} />
               <div>
@@ -86,7 +88,7 @@ function View({ self, router, store, services, params }) {
                 <div style={{ fontSize: 20, padding: 5 }}>{loader.item.title}</div>
                 <div>{loader.item.uname} · {loader.item.type}</div>
               </div>
-              <div style={{ padding: '0 20px', borderBottom: '1px solid #ccc', backgroundColor: 'snow' }}>
+              <div style={{ padding: '0 20px', backgroundColor: 'snow' }}>
                 <div className="dd-common-alignside" style={{ height: 50 }}>
                   <div className="dd-common-centerXY" style={{ flex: 1 }}>
                     {Math.round(loader.item.words / 10000)}万字
@@ -125,7 +127,7 @@ function View({ self, router, store, services, params }) {
                 {galleries.items.map(item => (<GalleryItem router={router} key={item.id} item={item} />))}
               </div>
             </div>
-          </div>
+          </UserAreaView>
         </Fragment>
       }
     }

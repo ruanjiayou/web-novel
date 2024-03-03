@@ -28,8 +28,8 @@ function View({ self, router, store, params, Navi, loader: nnn }) {
       return Blank
     }
     return <UserAreaView>
-      <Navi title={loader.item.title} wrapStyle={{ paddingLeft: 'env(safe-area-inset-left)', paddingRight: 'env(safe-area-inset-right' }} router={router} />
-      <div className="full-height-auto" style={{ paddingLeft: 'env(safe-area-inset-left)', paddingRight: 'env(safe-area-inset-right' }}>
+      <Navi title={loader.item.title} router={router} />
+      <div className="full-height-auto">
         <RenderGroups loader={loader} resourcesLoader={store.resourceListLoaders[loader.item.id]} />
       </div>
     </UserAreaView>

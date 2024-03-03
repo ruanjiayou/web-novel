@@ -3,7 +3,7 @@ import { Observer, useLocalStore } from 'mobx-react-lite'
 import { useEffectOnce } from 'react-use'
 
 import { GalleryLoader } from 'loader'
-import { AutoCenterView, EmptyView } from 'components'
+import { AutoCenterView, EmptyView, UserAreaView } from 'components'
 import { FullHeight, FullHeightAuto, FullHeightFix } from 'components/common'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 
@@ -26,8 +26,8 @@ function View({ self, store, router, params, Navi, }) {
     if (blank) {
       return blank
     }
-    return <FullHeight>
-      <Navi title={self.GalleryLoader.item.title} router={router} />
+    return <UserAreaView bgcTop={'black'} bgcBot={'black'}>
+      <Navi title={self.GalleryLoader.item.title} router={router} wrapStyle={{backgroundColor: 'black'}} />
       <FullHeightAuto style={{ fontSize: 0 }}>
         {self.GalleryLoader.item.images.map(image => (
           <img src={imageHost + image} key={image} style={{ width: '100%' }} />
@@ -37,7 +37,7 @@ function View({ self, store, router, params, Navi, }) {
       <FullHeightFix>
         {self.GalleryLoader.item.next && <div style={{ textAlign: 'center', padding: '6px 0' }} onClick={() => { router.replaceView('ComicGallery', { bid: self.GalleryLoader.item.next.bid, id: self.GalleryLoader.item.next.id }) }}>{self.GalleryLoader.item.next.title}</div>}
       </FullHeightFix>
-    </FullHeight>
+    </UserAreaView>
   }}</Observer>
 }
 

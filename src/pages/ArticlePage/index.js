@@ -29,7 +29,7 @@ function View({ self, router, store, params = {} }) {
       return <Fragment>
         {/* 内部文字 */}
         <UserAreaView>
-          <FullWidth className="full-height-fix" style={{ padding: '8px 0', color: 'grey' }}>
+          <FullWidth className="full-height-fix" style={{ padding: '8px 0', color: 'white', backgroundColor: store.app.config.mainColor }}>
             <FullHeightFix>
               <MIconView type="FaChevronLeft" onClick={() => { router.back() }} />
             </FullHeightFix>
