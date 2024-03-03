@@ -34,7 +34,7 @@ const VIDEO_LIVE_STATUS = {
   ERRORED: 6,
   SEEKING: 7,
 }
-export default function ({ router, type, resource, onRecord, srcpath, looktime, playNext, next }) {
+export default function ({ router, type, resource, onRecord, onTimeUpdate, srcpath, looktime, playNext, next }) {
   const Navi = useNaviContext()
   const fullScreenRef = useRef(null)
   const local = useLocalStore(() => ({
@@ -108,11 +108,9 @@ export default function ({ router, type, resource, onRecord, srcpath, looktime, 
       controls.seek(looktime)
     }
   }
-  const onTimeUpdate = (time) => {
-    if (onRecord) {
-      onRecord(time)
-    }
+  const timeUpdate = (time) => {
     local.realtime = time
+    onTimeUpdate(time);
     if (!local.isSeeking) {
       local.seektime = time
     }
@@ -275,7 +273,7 @@ export default function ({ router, type, resource, onRecord, srcpath, looktime, 
       // despirate
     }}
     onTimeUpdate={(e) => {
-      onTimeUpdate(state.time, state.duration)
+      timeUpdate(state.time, state.duration)
     }}
     onWaiting={() => {
       local.isWaiting = true
@@ -324,7 +322,7 @@ export default function ({ router, type, resource, onRecord, srcpath, looktime, 
         }
       }}
       onTimeUpdate={(e) => {
-        onTimeUpdate(hlsRef.current.currentTime)
+        timeUpdate(hlsRef.current.currentTime)
       }}
       onSeeking={() => {
         local.isWaiting = true

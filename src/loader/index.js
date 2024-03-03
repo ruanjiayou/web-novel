@@ -16,6 +16,7 @@ import MarkListLoader from './MarkListLoader'
 import GalleryListLoader from './GalleryListLoader'
 import GalleryLoader from './GalleryLoader'
 import RecommendResourceListLoader from './RecommendResourceListLoader'
+import HistoryListLoader from './HistoryListLoader'
 
 export {
   BookShelfLoader,
@@ -36,4 +37,5 @@ export {
   GalleryListLoader,
   GalleryLoader,
   RecommendResourceListLoader,
+  HistoryListLoader,
 }

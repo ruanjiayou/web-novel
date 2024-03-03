@@ -8,7 +8,7 @@ import { MIconView, AutoCenterView, VisualBoxView, EmptyView, UserAreaView } fro
 import ResourceItem from 'business/ResourceItem'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 import Recorder from 'utils/cache'
-import { useEffectOnce } from 'react-use'
+import { useEffectOnce, useUnmount } from 'react-use'
 import Player from '../../components/Player'
 import services from '../../services/index'
 import { EpTag } from './style'
@@ -31,6 +31,7 @@ function View({ self, router, store, services, params }) {
     playpath: '',
     child_id: '',
     looktime: 0,
+    watched: 0,
     get type() {
       if (this.playpath.endsWith('.m3u8') || this.playpath.endsWith('.ts')) {
         return 'hls'
@@ -47,11 +48,22 @@ function View({ self, router, store, services, params }) {
           videoRecorder.setValue(localStore.id, data, { child_id, time: looktime })
         })
       }
+    },
+    updateHistory(time) {
+      // localStore.setRecorder(localStore.child_id, time);
+      services.createHistory({
+        resource_id: loader.item.id,
+        resource_type: loader.item.source_type,
+        media_id: localStore.child_id,
+        media_type: 'video',
+        watched: Math.floor(time),
+        total: loader.item.words,
+      });
     }
   }))
 
   useEffect(() => {
-    loader.refresh({ params: { id: params.id } }, async (res) => {
+    params.id && loader.refresh({ params: { id: params.id } }, async (res) => {
       const query = {};
       if (res.item.tags) {
         query.tags = res.item.tags;
@@ -70,10 +82,13 @@ function View({ self, router, store, services, params }) {
         localStore.looktime = result.option.time;
       }
     })
-    return (() => {
-      loader.clear()
-    })
   }, [params.id]);
+  useEffectOnce(() => {
+    return () => {
+      localStore.updateHistory(localStore.watched);
+      loader.clear()
+    }
+  })
   return <Observer>{
     () => {
       if (loader.isLoading) {
@@ -104,8 +119,12 @@ function View({ self, router, store, services, params }) {
                     localStore.playpath = lineLoader.getHostByType('video') + loader.item.children[index + 1].path;
                   }
                 }}
-                onRecord={async (time) => {
-                  localStore.setRecorder(localStore.child_id, time);
+                onRecord={(time) => {
+                  // localStore.updateHistory(time)
+                  localStore.looktime = time
+                }}
+                onTimeUpdate={time => {
+                  localStore.watched = time;
                 }}
               />
             </div>

@@ -149,7 +149,14 @@ export default {
       method: 'post',
       url: `/v1/public/feedback`,
       data
-    })    
+    })
     return { items: result.data }
+  },
+  async createHistory(data) {
+    return shttp({
+      url: '/v1/public/history',
+      method: 'POST',
+      data,
+    })
   }
 } 

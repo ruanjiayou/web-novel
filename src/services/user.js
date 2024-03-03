@@ -1,5 +1,6 @@
 import shttp from 'utils/shttp'
 import { stringfyQuery } from 'utils/utils'
+import { stringify } from 'qs'
 
 export default {
   login({ query, params, data }) {
@@ -175,6 +176,20 @@ export default {
       url: `/v1/user/sheet/${params.id}/batch`,
       method: 'DELETE',
       data,
+    })
+  },
+  async getHistoryList({ query, data }) {
+    const resp = await shttp({
+      url: `/v1/user/history?${stringify(query)}`,
+      method: 'GET',
+      data,
+    });
+    return { items: resp.data, ended: resp.data.length < 20 }
+  },
+  async destroyHistory({ query, params }) {
+    return shttp({
+      url: `/v1/user/history/${params.id}`,
+      method: 'DELETE',
     })
   },
 }
