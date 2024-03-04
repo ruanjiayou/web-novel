@@ -10,6 +10,7 @@ const MarkModel = types.model('HistoryModel', {
   media_type: types.string,
   total: types.number,
   watched: types.number,
+  device: types.optional(types.string, ''),
   user_id: types.string,
   created_at: types.optional(types.string, new Date().toLocaleString()),
   detail: ResourceModel,

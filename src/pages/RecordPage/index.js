@@ -11,6 +11,7 @@ import ResourceModel from 'models/ResourceModel'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 import { HistoryListLoader } from 'loader'
 import services from 'services'
+import HistoryVideoItem from 'business/ResourceItem/VideoItem/HistoryVideoItem.js'
 
 const model = createPageModel({
   historyListLoader: HistoryListLoader
@@ -63,7 +64,7 @@ function View({ self, router, store, Navi, params }) {
             itemWrapStyle={{ margin: 10 }}
             renderItem={(item, sectionId, index) => (
               <SwipeAction
-                key={item.id}
+                key={item.resource_id}
                 right={[{
                   text: '删除',
                   onPress: (e) => {
@@ -75,11 +76,11 @@ function View({ self, router, store, Navi, params }) {
                   style: { backgroundColor: 'red', color: 'white' }
                 }]}
               >
-                <ResourceItem
+                {item.resource_type === 'video' ? <HistoryVideoItem item={item.detail} created_at={item.created_at} watched={item.watched} device={item.device} router={router} /> : <ResourceItem
                   item={item.detail}
                   router={router}
                   sectionId={sectionId}
-                />
+                />}
               </SwipeAction>
             )}
           />
