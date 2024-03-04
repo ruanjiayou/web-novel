@@ -16,7 +16,7 @@ const Model = types.model('resource', {
   source_type: types.maybeNull(types.string),
   tags: types.array(types.string),
   images: types.array(types.union(types.string, types.model({
-    path: types.string,
+    path: types.optional(types.string, ''),
     id: types.optional(types.string, ''),
     nth: types.optional(types.number, 1),
     more: types.maybe(types.model({

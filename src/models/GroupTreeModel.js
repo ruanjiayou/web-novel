@@ -20,6 +20,7 @@ const GroupModel = types.model('Group', {
     timeout: types.maybeNull(types.number),
     columns: types.maybeNull(types.number),
     // showCount: types.maybeNull(types.number),
+    allowRefresh: types.optional(types.boolean, false),
   }),
   params: types.frozen(null, {}),
   more: types.model({

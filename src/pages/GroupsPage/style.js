@@ -2,11 +2,10 @@ import styled from 'styled-components'
 
 export const Cell = styled.div`
   width: 33%;
-  float: left;
   text-align: center;
   line-height: 30px;
   align-items: center;
-  display: flex;
+  display: inline-block;
   margin-top: 10px;
   flex-direction: column;
 `

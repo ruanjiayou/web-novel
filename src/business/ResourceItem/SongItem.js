@@ -16,7 +16,7 @@ export default function ({ item, mode = 'add', loader, ...props }) {
   return <Observer>
     {() => (
       <Fragment>
-        <div className="dd-common-alignside" style={{ padding: '10px  10px 5px 10px', backgroundColor: item.id === music.currentId ? 'grey' : '', borderBottom: '1px solid #eee' }} {...props} >
+        <div className="dd-common-alignside" style={{ backgroundColor: item.id === music.currentId ? 'grey' : '', borderBottom: '1px solid #eee' }} {...props} >
           <MIconView type={music.currentId === item.id ? 'FaPause' : 'FaPlay'} />
           <div style={{ flex: 1 }} onClick={async (e) => {
             if (music.currentId === item.id) return;
@@ -24,7 +24,7 @@ export default function ({ item, mode = 'add', loader, ...props }) {
             e.preventDefault()
             e.stopPropagation()
             const old = await musicRecorder.getValue(data.id)
-            if(!old) {
+            if (!old) {
               musicRecorder.setValue(data.id, data, { id: '' })
             }
             music.loadHistory()

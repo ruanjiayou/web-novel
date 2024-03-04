@@ -16,7 +16,6 @@ export default function ({ item, mode = 'add', loader, ...props }) {
     {() => (
       <Fragment>
         <div className="dd-common-alignside" style={{
-          padding: '10px  10px 5px 10px',
           backgroundColor: item.id === music.currentId ? '#eaf1f7' : '',
           borderBottom: '1px solid #eee',
           borderLeft: item.id === music.currentId ? '2px solid #0094fd' : 'none',

@@ -8,6 +8,7 @@ import { TagsRow } from './style'
 import services from 'services'
 import showTip from 'utils/showTip'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import NoImage from 'theme/icon/image-v.svg'
 
 export default function ({ item, display = 1 }) {
   const router = useRouterContext()
@@ -33,10 +34,10 @@ export default function ({ item, display = 1 }) {
   return <Observer>
     {() => {
       return <Fragment>
-        <div className={display === 3 ? 'full-height-auto' : 'full-width'} style={{ backgroundColor: '#eee', position: 'relative', flex: 1, width: '100%' }} onClick={() => {
+        <div className={display === 3 ? 'full-height-auto' : 'full-width'} style={{ position: 'relative', flex: 1, width: '100%' }} onClick={() => {
           router.pushView('Image', { id: item.id })
         }}>
-          <div className={display === 3 ? 'full-height' : 'full-width-fix'} style={display === 3 ? { width: 100, height: 150, margin: '5px auto', position: 'relative', overflow: 'hidden', flexShrink: 0 } : { width: 60, height: 80, margin: 5, position: 'relative', overflow: 'hidden', flexShrink: 0 }}>
+          <div className={display === 3 ? 'full-height' : 'full-width-fix'} style={display === 3 ? { backgroundImage: `url(${NoImage})`, backgroundPosition: 'center center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat', width: 100, height: 150, position: 'relative', overflow: 'hidden', flexShrink: 0 } : { width: 60, height: 80, position: 'relative', overflow: 'hidden', flexShrink: 0 }}>
             {/* <img style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', height: '100%', minWidth: '100%' }} src={item.auto_cover} alt="" /> */}
             <LazyLoadImage
               alt={''}

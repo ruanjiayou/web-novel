@@ -3,6 +3,7 @@ import { Observer } from 'mobx-react-lite'
 import { useRouterContext } from 'contexts'
 import timeFormat from 'utils/num2time'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import NoImage from 'theme/icon/image.svg'
 
 export default function ({ item, display = 1, ...props }) {
   const router = useRouterContext()
@@ -11,7 +12,7 @@ export default function ({ item, display = 1, ...props }) {
     {() => {
       return <Fragment>
         <div className={display === 3 ? 'full-height' : 'full-width'} style={{ overflow: 'hidden', fontSize: '1rem', alignItems: 'flex-start' }} onClick={onClick}>
-          <div style={{ width: '10rem', height: '6rem', flexShrink: 0, backgroundColor: '#0094fd', backgroundSize: 'cover' }}>
+          <div style={{ width: '10rem', height: '6rem', flexShrink: 0, backgroundImage: `url(${NoImage})`, backgroundSize: 'cover', backgroundRepeat: 'no-repeat', backgroundPosition: 'center center' }}>
             {/* <img style={{ width: '100%', height: '100%', }} src={item.auto_cover} alt="" /> */}
             <LazyLoadImage
               alt={''}

@@ -101,7 +101,7 @@ export default function Filter({ self, loader, ...props }) {
             }
           }}
           refresh={refresh}
-          itemWrapStyle={{ marginBottom: 10 }}
+          itemWrapStyle={{ margin: 10 }}
           renderItem={(item, selectionId, index) => <ResourceItem
             key={item.id}
             item={item}

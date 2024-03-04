@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { } from 'react'
 import { useMount } from 'react-use'
 import { Observer } from 'mobx-react-lite'
 import renderEmptyView from 'components/EmptyView'
@@ -11,6 +11,7 @@ import TreeNode from './TreeNode'
 import Tab from './Tab'
 import TabPane from './TabPane'
 import Random from './Random'
+import { PullToRefresh } from 'antd-mobile'
 
 const views = {
   'filter': Filter,
@@ -26,6 +27,15 @@ const views = {
       return this[name]
     }
   }
+}
+
+function isInViewPort(el) {
+  if (!el) {
+    return false;
+  }
+  const viewPortHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
+  const top = el.getBoundingClientRect() && el.getBoundingClientRect().top
+  return top <= viewPortHeight - 10
 }
 
 export function AutoView({ self, ...props }) {
@@ -62,7 +72,12 @@ export function RenderGroups({ loader, group, params, ...props }) {
     } else {
       // overflow: auto 影响tabs
       return <div style={{ height: '100%', overflow: 'auto' }}>
-        <AutoView self={loader.item} loader={loader} {...props} />
+        {loader.item.attrs.allowRefresh ? <PullToRefresh
+          style={{ height: '100%', overflow: 'auto' }}
+          onRefresh={() => loader.refresh({ params: { name: group.name } })}
+        >
+          <AutoView self={loader.item} loader={loader} {...props} />
+        </PullToRefresh> : <AutoView self={loader.item} loader={loader} {...props} />}
       </div>
     }
   }}</Observer>

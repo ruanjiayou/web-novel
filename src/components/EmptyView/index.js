@@ -8,7 +8,13 @@ export default function renderBlank(loader, renderEmpty, refresh) {
     if (loader.state === 'pending') {
       return <div style={style}><ActivityIndicator text="加载中..." /></div>
     } else if (loader.error) {
-      return <div>
+      return <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignitems: 'center',
+        justifyContent: 'center',
+        height: '100%',
+      }}>
         出错啦!
         <div className="txt-omit">{loader.error.message}</div>
         <span onClick={() => refresh ? refresh() : loader.refresh()}>重新加载</span>

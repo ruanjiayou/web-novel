@@ -2,14 +2,15 @@ import React, { Fragment } from 'react'
 import { Observer } from 'mobx-react-lite'
 import { useRouterContext } from 'contexts'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import NoImage from 'theme/icon/image-v.svg'
 
 export default function ({ item }) {
   const router = useRouterContext()
   return <Observer>
     {() => {
       return <Fragment>
-        <div className="full-width" style={{ margin: 10 }} onClick={() => { router.pushView('ComicInfo', { id: item.id, }) }}>
-          <div className="full-width-fix" style={{ width: 60, height: 80, flexShrink: 0, backgroundColor: '#0094fd', marginRight: 20 }}>
+        <div className="full-width" onClick={() => { router.pushView('ComicInfo', { id: item.id, }) }}>
+          <div className="full-width-fix" style={{ width: 60, height: 80, flexShrink: 0, marginRight: 20, backgroundImage: `url(${NoImage})`, backgroundPosition: 'center center', backgroundSize: 'cover', backgroundRepeat: 'no-repeat' }}>
             {/* <img style={{ width: '100%', height: '100%' }} src={item.auto_cover} alt="" /> */}
             <LazyLoadImage
               alt={''}

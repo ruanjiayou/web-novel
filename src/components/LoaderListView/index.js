@@ -19,7 +19,7 @@ const GetPullToRefreshlData = ({ refresh, loader, renderItem, loadMore, style, i
   }))
   return (
     <Observer>{() => {
-      if (loader.isEmpty) {
+      if (loader.isEmpty && !loader.isLoading) {
         return <AutoCenterView>{emptyView}</AutoCenterView>
       } else {
         return <div style={{ overflowY: 'auto', position: 'relative', ...style }} onScroll={e => {

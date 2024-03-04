@@ -7,6 +7,7 @@ import { AutoCenterView, EmptyView } from 'components'
 import { FullHeight, FullHeightAuto, FullHeightFix } from 'components/common'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 import { Cell, ChannelImage } from './style'
+import { ActivityIndicator, PullToRefresh } from 'antd-mobile'
 
 const model = createPageModel({
   GroupListLoader,
@@ -26,17 +27,21 @@ function View({ self, router, store }) {
     return <FullHeight>
       <div style={{ paddingTop: 10, paddingBottom: 10, paddingLeft: 'calc(env(safe-area-inset-left) + 10px )', paddingRight: 'calc(env(safe-area-inset-right) + 10px )' }}>所有频道</div>
       <FullHeightAuto>
-        {self.GroupListLoader.items.map(group => (
-          <Cell
-            key={group.id}
-            onClick={() => {
-              router.pushView('GroupTree', { name: group.data.name })
-            }}>
-            <ChannelImage src={group.lineCover} alt="" />
-            <div>{group.title}</div>
-          </Cell>
-        ))
-        }
+        <PullToRefresh
+          style={{ height: '100%', overflow: 'auto' }}
+          onRefresh={self.GroupListLoader.refresh}
+        >
+          {self.GroupListLoader.items.map(group => (
+            <Cell
+              key={group.id}
+              onClick={() => {
+                router.pushView('GroupTree', { name: group.data.name })
+              }}>
+              <ChannelImage src={group.lineCover} alt="" />
+              <div>{group.title}</div>
+            </Cell>
+          ))}
+        </PullToRefresh>
       </FullHeightAuto>
     </FullHeight>
   }}</Observer>

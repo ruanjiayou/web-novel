@@ -28,16 +28,16 @@ export default function ({ item, more, loader, ...props }) {
     {() => (
       <Fragment>
         <div className="dd-common-alignside" style={{
-          padding: '10px  10px 5px 10px',
           backgroundColor: local.isPlay ? '#eaf1f7' : '',
           borderBottom: '1px solid #eee',
           borderLeft: local.isPlay ? '2px solid #0094fd' : 'none',
+          alignItems: 'stretch',
         }}
           {...props} >
           <CoverWrap>
             <Cover src={item.auto_cover} />
           </CoverWrap>
-          <div style={{ flex: 1, color: local.isPlay ? '#33a3f4' : '' }} onClick={async (e) => {
+          <div style={{ flex: 1, padding: '0 10px', color: local.isPlay ? '#33a3f4' : '', display: 'flex', flexDirection: 'column', justifyContent: 'space-around' }} onClick={async (e) => {
             if (local.isPlay) return;
             const data = item.toJSON()
             e.preventDefault()
@@ -54,7 +54,7 @@ export default function ({ item, more, loader, ...props }) {
               router.replaceView('MusicPlayer', { id: data.id })
             }
           }}>
-            {item.title}
+            <div>{item.title}</div>
           </div>
           <div className="dd-common-alignside">
             <VisualBoxView visible={more}>
