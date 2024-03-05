@@ -13,8 +13,6 @@
   "globals": {},
   "rules": {
     "quotes": "off",
-    "no-extra-semi": "error",
-    "no-unused-vars": "off",
-    "no-restricted-globals": "off"
+    "no-extra-semi": "error"
   }
 }

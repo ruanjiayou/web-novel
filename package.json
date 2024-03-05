@@ -87,11 +87,24 @@
     "@babel/plugin-proposal-decorators": "^7.4.4",
     "babel-plugin-import": "^1.12.1",
     "express": "^4.17.1",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
     "mockjs": "^1.0.1-beta3",
     "nodemon": "^1.19.3",
     "patch-package": "^7.0.0",
     "webpack-bundle-analyzer": "^3.6.0",
     "workbox-cli": "^6.5.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js}": [
+      "prettier --write",
+      "git add"
+    ]
   },
   "keywords": [
     "pwa",
