@@ -27,7 +27,7 @@ function View({ self, router, store, params, Navi, loader: nnn }) {
     if (Blank) {
       return Blank
     }
-    return <UserAreaView>
+    return <UserAreaView bottom='0'>
       <Navi title={loader.item.title} router={router} />
       <div className="full-height-auto">
         <RenderGroups loader={loader} resourcesLoader={store.resourceListLoaders[loader.item.id]} />

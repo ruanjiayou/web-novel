@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react'
 import { Observer } from 'mobx-react-lite'
 import { useRouterContext } from 'contexts'
-import timeFormat from 'utils/num2time'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import NoImage from 'theme/icon/image.svg'
 import { FaLaptop } from 'react-icons/fa'
@@ -10,10 +9,10 @@ import num2time from 'utils/num2time';
 import format from 'date-fns/format';
 
 const Icon = {
-  mobile: <IoMdPhonePortrait />,
-  pad: <IoMdTabletLandscape />,
-  pc: <FaLaptop />,
-  watch: <IoMdWatch />,
+  smartphone: <IoMdPhonePortrait />,
+  tablet: <IoMdTabletLandscape />,
+  desktop: <FaLaptop />,
+  wearable: <IoMdWatch />,
   tv: <IoIosTv />,
 }
 export default function ({ item, display = 1, ...props }) {

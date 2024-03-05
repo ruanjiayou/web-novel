@@ -2,7 +2,7 @@ import React, { useEffect, useCallback, useRef } from 'react'
 import { useEffectOnce, useMount } from 'react-use'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import FilterRow from '../FitlerRow'
-import { LoaderListView, MIconView } from 'components'
+import { LoaderListView, MIconView, PullRefreshLoadMore } from 'components'
 import ResourceItem from 'business/ResourceItem'
 import { useStoreContext } from 'contexts'
 import ResourceListLoader from 'loader/ResourceListLoader'
@@ -109,7 +109,7 @@ export default function Filter({ self, loader, ...props }) {
             selectionId={selectionId}
           />}
         />
-        <div ref={ref => eleRef.current = ref} style={{ textAlign: 'center', padding: 15 }}>{lstore.loader.isLoading ? '正在加载更多数据...' : (lstore.loader.isEnded ? '已全部加载完毕' : <span>点击加载更多</span>)}</div>
+        <div ref={ref => eleRef.current = ref} style={{ textAlign: 'center', padding: 15, paddingBottom: 'env(safe-area-inset-bottom)' }}>{lstore.loader.isLoading ? '正在加载更多数据...' : (lstore.loader.isEnded ? '已全部加载完毕' : <span>点击加载更多</span>)}</div>
       </PullToRefresh>
     </div>
   )}</Observer>

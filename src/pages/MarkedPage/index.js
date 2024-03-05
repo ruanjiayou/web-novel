@@ -40,17 +40,19 @@ function View({ self }) {
       self[tab.loader].refresh();
     }
   })
-  return <UserAreaView bgcTop={'#f97a90'} bgcBot={'#eee'}>
+  return <UserAreaView bgcTop={'#f97a90'} bottom='0'>
     <FullHeight>
       <Navi title="收藏" wrapStyle={{ backgroundColor: '#f97a90' }} />
       <FullHeightAuto>
         <Observer>{() => <Tabs tabs={tabs} initialPage={'video'} onChange={onChange} animated={false}>
           {tabs.map(tab => (<LoaderListView loader={self[tab.loader]} style={{ height: '100%' }} itemWrapStyle={{ margin: 10 }} key={tab.type} renderItem={(item, selectionId, index) => <ResourceItem
             key={index}
-            item={item}
+            item={item.detail}
             loader={self[tab.loader]}
             selectionId={selectionId}
-          />}></LoaderListView>))}
+          />}>
+            <div style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}></div>
+          </LoaderListView>))}
         </Tabs>}</Observer>
       </FullHeightAuto>
     </FullHeight>

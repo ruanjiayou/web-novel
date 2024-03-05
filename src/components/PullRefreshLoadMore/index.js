@@ -1,78 +1,45 @@
-import React, { useEffect } from 'react'
-import { Observer, useLocalStore } from 'mobx-react-lite'
-import renderEmptyView from 'components/EmptyView'
-import AutoCenterView from 'components/AutoCenterView'
+import React, { useCallback, useRef } from 'react'
+import { Observer } from 'mobx-react-lite'
+import { PullToRefresh } from 'antd-mobile'
 
-const GetPullToRefreshlData = ({ children, isEmpty, isLoading, isEnded, emptyView, refresh, loadMore, style }) => {
-  useEffect(() => {
-    if (isEmpty) {
-      refresh();
+function isInViewPort(el) {
+  if (!el) {
+    return false;
+  }
+  const viewPortHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight
+  const top = el.getBoundingClientRect() && el.getBoundingClientRect().top
+  return top <= viewPortHeight - 10
+}
+
+function RefreshAndLoadMore({ isLoading, isEnded, isEmpty, refresh, loadMore, children }) {
+  const eleRef = useRef(null);
+  const onLoadMore = useCallback(async () => {
+    if (isLoading || isEnded) {
+      return;
     }
-  }, []);
-  const local = useLocalStore(() => ({
-    touchedBottom: false,
-    backedToTop: true,
-    trigerTopLimit: false,
-    showFinished: false,
-    topHeight: 0,
-  }))
-  return (
-    <Observer>{() => {
-      if (isEmpty) {
-        return <AutoCenterView>{emptyView}</AutoCenterView>
-      } else {
-        return <div style={{ overflowY: 'auto', position: 'relative', ...style }} onScroll={e => {
-          const scrollTop = e.currentTarget.scrollTop;
-          const offset = e.currentTarget.scrollHeight - e.currentTarget.offsetHeight - scrollTop
-          if (scrollTop < 0 && local.backedToTop && !local.showFinished) {
-            local.topHeight = (0 - scrollTop) / 2
-            if (local.topHeight > 30) {
-              local.backedToTop = false;
-              local.topHeight = 0
-              local.trigerTopLimit = true
-              const willRefresh = refresh;
-              const ts = Date.now();
-              willRefresh().then(() => {
-                local.topHeight = 0
-                local.showFinished = true
-                if (Date.now() - ts > 500) {
-                  local.trigerTopLimit = false
-                } else {
-                  setTimeout(() => {
-                    local.trigerTopLimit = false
-                  }, 300)
-                }
-
-              })
-            }
-          } else if (scrollTop >= 0) {
-            local.showFinished = false
-            local.backedToTop = true;
+    loadMore();
+  })
+  return <Observer>{() => (
+    <div className='full-height-auto' style={{ display: 'flex', flexDirection: 'column', position: 'relative' }}>
+      <PullToRefresh
+        style={{ flex: 1, overflow: 'auto' }}
+        onScroll={() => {
+          const isReachBottom = isInViewPort(eleRef.current);
+          if (isReachBottom) {
+            onLoadMore()
           }
-          if (offset <= -10 && !isLoading && !local.touchedBottom) {
-            local.touchedBottom = true
-            if (!isEnded) {
-              loadMore();
-            }
-          } else if (offset >= 0) {
-            local.touchedBottom = false
-          }
-        }}>
-          {local.trigerTopLimit ? <div style={{
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            width: '100%',
-            height: 30,
-            display: 'flex',
-            alignContent: 'center',
-            justifyContent: 'center'
-          }}>正在刷新</div> : <div style={{ top: 0, position: 'relative', textAlign: 'center', left: 0, display: 'flex', flexDirection: 'column', justifyItems: 'flex-start', height: local.showFinished ? 30 : local.topHeight, overflow: 'hidden' }}>{local.showFinished ? '已完成' : '刷新↓'}</div>}
-          {children}
+        }}
+        onRefresh={refresh}
+      >
+        {children}
+        <div ref={ref => eleRef.current = ref} style={{ textAlign: 'center', padding: 15, paddingBottom: 'env(safe-area-inset-bottom)' }}>
+          {isLoading && !isEmpty && '正在加载...'}
+          {!isLoading && isEnded && '加载完毕'}
+          {!isLoading && !isEnded && <span onClick={() => onLoadMore()}>点击加载更多</span>}
         </div>
-      }
-    }}</Observer>
-  );
-};
+      </PullToRefresh>
+    </div>
+  )}</Observer>
+}
 
-export default GetPullToRefreshlData;
+export default RefreshAndLoadMore;

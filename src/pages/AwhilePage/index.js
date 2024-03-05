@@ -20,7 +20,7 @@ function View({ self, router, store, params }) {
         <AlignCenterXY style={{ width: 40, height: 40, color: 'white', zIndex: 2, position: 'absolute', left: 'calc(10px + env(safe-area-inset-left))', top: 'calc(10px + env(safe-area-inset-top))', borderRadius: '50%', backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={() => { router.replaceView('home') }}>
           <MIconView type="FaChevronLeft" />
         </AlignCenterXY>
-        <UserAreaView bgc='#00000052'>
+        <UserAreaView bgc='#00000052' bgcTop={'transparent'} bgcBot={'transparent'}>
 
         </UserAreaView>
       </FullHeight>

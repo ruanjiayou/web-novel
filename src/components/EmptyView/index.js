@@ -1,7 +1,7 @@
 import React from 'react'
 import { ActivityIndicator } from 'antd-mobile'
 
-const style = { display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center' }
+const style = { display: 'flex', minHeight: '50vh', alignItems: 'center', justifyContent: 'center' }
 
 export default function renderBlank(loader, renderEmpty, refresh) {
   if (loader.isEmpty || loader.isError) {

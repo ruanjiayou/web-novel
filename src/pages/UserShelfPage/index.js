@@ -1,11 +1,11 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { useEffectOnce } from 'react-use'
-import { Button } from 'antd-mobile'
 import { Observer, useLocalStore } from 'mobx-react-lite'
+import renderEmptyView from 'components/EmptyView'
 
 import { BookShelfLoader } from 'loader'
 import RecordBookItem from 'business/ResourceItem/RecordBookItem'
-import { LoaderListView, AutoCenterView, UserAreaView } from 'components'
+import { UserAreaView, PullRefreshLoadMore } from 'components'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 
 const model = createPageModel({
@@ -16,7 +16,6 @@ function View({ self, router, store, Navi }) {
   const loader = self.BookShelfLoader
   const localStore = useLocalStore(() => ({
     loading: false,
-
   }))
   useEffectOnce(() => {
     if (loader.isEmpty) {
@@ -25,24 +24,22 @@ function View({ self, router, store, Navi }) {
   })
   return <Observer>{
     () => {
-      return <UserAreaView>
+      return <UserAreaView bottom='0'>
         <Navi title="书架" />
-        <LoaderListView
-          loader={loader}
-          renderEmpty={(
-            <AutoCenterView>
-              <Button type="primary" inline onClick={() => { router.pushView('login') }}>登录</Button>
-            </AutoCenterView>
-          )}
-          renderItem={(item, sectionId, index) => (
-            <RecordBookItem
-              item={item}
-              router={router}
-              sectionId={sectionId}
-              toggleLoading={() => localStore.loading = !localStore.loading}
-            />
-          )}
-        />
+        <PullRefreshLoadMore
+          isLoading={loader.isLoading}
+          isEnded={loader.isEnded}
+          isEmpty={loader.isEmpty}
+          refresh={loader.refresh}
+          loadMore={loader.loadMore}
+        >
+          {loader.isEmpty && renderEmptyView(loader)}
+          {loader.items.map(item => <RecordBookItem
+            item={item}
+            router={router}
+            key={item.id}
+          />)}
+        </PullRefreshLoadMore>
       </UserAreaView>
     }
   }</Observer >

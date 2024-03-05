@@ -73,7 +73,7 @@ export default function ({ item, display = 1 }) {
           </div>
           <div style={display === 3 ? { width: '100%', overflow: 'hidden' } : { flex: 1 }}>
             <div className="line2" style={{ minHeight: '2.4rem', padding: '0 5px' }}>{item.title}</div>
-            {display !== 3 && <div style={{ margin: '5px 0' }} className='txt-omit'>by {item.uname}</div>}
+            {display !== 3 && <div style={{ margin: 5 }} className='txt-omit'>by {item.uname}</div>}
             {/* <TagsRow onTouchStart={e => {
               // e.stopPropagation()
               // e.preventDefault()

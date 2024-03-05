@@ -1,16 +1,14 @@
-import React, { Fragment, useEffect, useCallback } from 'react'
+import React, { Fragment, useEffect } from 'react'
 import { Observer, useLocalStore } from 'mobx-react-lite'
-import { ActivityIndicator, Icon, Button, Toast, Tag } from 'antd-mobile'
+import { ActivityIndicator } from 'antd-mobile'
 
-import timespan from 'utils/timespan'
 import { ResourceLoader, RecommendResourceListLoader } from 'loader'
 import { MIconView, AutoCenterView, VisualBoxView, EmptyView, UserAreaView } from 'components'
 import ResourceItem from 'business/ResourceItem'
 import createPageModel from 'page-group-loader-model/BasePageModel'
 import Recorder from 'utils/cache'
-import { useEffectOnce, useUnmount } from 'react-use'
+import { useEffectOnce } from 'react-use'
 import Player from '../../components/Player'
-import services from '../../services/index'
 import { EpTag } from './style'
 
 const videoRecorder = new Recorder('video')
