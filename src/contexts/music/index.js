@@ -1,14 +1,12 @@
-import React, { useContext, useRef, useEffect, useCallback, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useAudio, useEffectOnce } from 'react-use'
-import { Popover, Slider } from 'antd-mobile'
-import events from 'utils/events'
 import store from '../../store'
 import storage from 'utils/storage'
 import { useRouterContext } from 'contexts'
 import { ResourceLoader } from 'loader'
 import { Observer, useLocalStore } from 'mobx-react-lite'
 import { MIconView, Dragger } from 'components'
-import { FullWidth, FullWidthAuto, FullWidthFix, AlignCenterXY, AlignSide } from 'components/common'
+import { FullWidthFix, AlignCenterXY, AlignSide } from 'components/common'
 import num2time from 'utils/num2time'
 
 // 上下文context.避免react多级一直传props
@@ -19,7 +17,7 @@ function MusicPlayer(props) {
   const music = store.music
   const [playUrl, setPlayUrl] = useState('')
   const [audio, state, controls, ref] = useAudio(<audio id="music-player"
-    autoPlay={true}
+    autoPlay={ true }
     src={playUrl}
     controls="controls"
     preload="true"
