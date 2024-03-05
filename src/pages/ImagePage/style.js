@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 export const ITag = styled.span`
   background-color: rgba(0, 0, 0, 0.7);
@@ -9,7 +9,7 @@ export const ITag = styled.span`
   display: inline-block;
   font-size: 14px;
   white-space: nowrap;
-`
+`;
 
 export const Container = styled.div`
   display: flex;
@@ -19,4 +19,4 @@ export const Container = styled.div`
     display: none;
   }
   scrollbar-width: none;
-`
+`;

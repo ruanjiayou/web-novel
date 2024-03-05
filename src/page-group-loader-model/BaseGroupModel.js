@@ -1,4 +1,4 @@
-import createView from './base'
+import createView from './base';
 
 const BaseGroupModel = createView({
   id: types.string,
@@ -13,9 +13,9 @@ const BaseGroupModel = createView({
   }),
   nth: types.number,
   children: types.array(types.late(() => BaseGroupModel)),
-})
+});
 
-// BaseGroupModel 就是 GroupModel Group 
+// BaseGroupModel 就是 GroupModel Group
 export default function createGroupModel(props) {
   return BaseGroupModel.props(props);
-};
+}

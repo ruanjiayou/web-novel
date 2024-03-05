@@ -1,41 +1,42 @@
-import services from 'services/index'
-import { createItemLoader } from 'page-group-loader-model/BaseLoaderModel'
-import GroupTreeModel from 'models/GroupTreeModel'
+import services from 'services/index';
+import { createItemLoader } from 'page-group-loader-model/BaseLoaderModel';
+import GroupTreeModel from 'models/GroupTreeModel';
 
 function collect(group, query) {
   if (!group) {
-    return query
+    return query;
   }
   if (group.view === '') {
-    group.children.forEach(child => {
-      collect(child, query)
-    })
+    group.children.forEach((child) => {
+      collect(child, query);
+    });
   }
   if (group.view === 'filter') {
-    query.id.push(group.id)
-    group.children.forEach(child => {
-      collect(child, query)
-    })
+    query.id.push(group.id);
+    group.children.forEach((child) => {
+      collect(child, query);
+    });
   }
   if (group.view === 'filter-row') {
     // query.id.push(group.id)
-    group.children.forEach(child => {
+    group.children.forEach((child) => {
       if (child.attrs.selected) {
-        query.id.push(child.id)
+        query.id.push(child.id);
       }
-    })
+    });
   }
-  return query
+  return query;
 }
 export default createItemLoader(
   GroupTreeModel,
   async (params) => {
-    return services.getGroupTree(params)
+    return services.getGroupTree(params);
   },
   {
     getQuery() {
-      const query = { id: [] }
-      collect(this.item, query)
-      return query
-    }
-  })
+      const query = { id: [] };
+      collect(this.item, query);
+      return query;
+    },
+  },
+);

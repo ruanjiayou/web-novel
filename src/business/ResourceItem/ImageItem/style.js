@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 export const TagsRow = styled.div`
   white-space: nowrap;

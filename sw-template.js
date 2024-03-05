@@ -1,47 +1,49 @@
 import { precacheAndRoute, matchPrecache } from 'workbox-precaching';
-import { registerRoute, setCatchHandler } from 'workbox-routing'
-import { NetworkFirst, CacheFirst } from 'workbox-strategies'
-import { CacheableResponsePlugin } from 'workbox-cacheable-response'
-import { ExpirationPlugin } from 'workbox-expiration'
+import { registerRoute, setCatchHandler } from 'workbox-routing';
+import { NetworkFirst, CacheFirst } from 'workbox-strategies';
+import { CacheableResponsePlugin } from 'workbox-cacheable-response';
+import { ExpirationPlugin } from 'workbox-expiration';
 
 // registerRoute('/v1', new NetworkFirst({
 //   networkTimeoutSeconds: 4
 // }));
 
 // 图片缓存
-registerRoute(/https?:\/\/+(.*)\.(?:png|svg|jpg|gif|webp)$/, new CacheFirst({
-  cacheName: 'images',
-  fetchOptions: { mode: 'no-cors' },
-  plugins: [
-    new CacheableResponsePlugin({
-      statuses: [200],
-      headers: { 'X-Cacheable': 'true' }
-    }),
-    new ExpirationPlugin({
-      maxEntries: 300,
-      maxAgeSeconds: 30 * 24 * 60 * 60,
-      purgeOnQuotaError: false,
-    })
-  ],
-}));
+registerRoute(
+  /https?:\/\/+(.*)\.(?:png|svg|jpg|gif|webp)$/,
+  new CacheFirst({
+    cacheName: 'images',
+    fetchOptions: { mode: 'no-cors' },
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [200],
+        headers: { 'X-Cacheable': 'true' },
+      }),
+      new ExpirationPlugin({
+        maxEntries: 300,
+        maxAgeSeconds: 30 * 24 * 60 * 60,
+        purgeOnQuotaError: false,
+      }),
+    ],
+  }),
+);
 
 // 重要的api缓存(离线显示页面)
-const importanceAPI = [
-  '/v1/public/boot',
-  '/v1/public/channels',
-]
-registerRoute(({ request }) => {
-  const u = new URL(request.url);
-  return importanceAPI.includes(u.pathname);
-}, new NetworkFirst({
-  cacheName: 'bootApi',
-  plugins: [
-    new CacheableResponsePlugin({
-      statuses: [200],
-    }),
-  ]
-}))
-
+const importanceAPI = ['/v1/public/boot', '/v1/public/channels'];
+registerRoute(
+  ({ request }) => {
+    const u = new URL(request.url);
+    return importanceAPI.includes(u.pathname);
+  },
+  new NetworkFirst({
+    cacheName: 'bootApi',
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [200],
+      }),
+    ],
+  }),
+);
 
 // 预缓存
 precacheAndRoute(self.__WB_MANIFEST);

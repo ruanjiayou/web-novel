@@ -1,40 +1,45 @@
-import React, { useRef } from 'react'
-import { useEffectOnce } from 'react-use'
-import { Observer, useLocalStore } from 'mobx-react-lite'
-import { Modal, InputItem, List, Button } from 'antd-mobile'
+import React, { useRef } from 'react';
+import { useEffectOnce } from 'react-use';
+import { Observer, useLocalStore } from 'mobx-react-lite';
+import { Modal, InputItem, List, Button } from 'antd-mobile';
 
-import { RenderGroups } from 'group'
-import { SheetListLoader, GroupTreeLoader } from 'loader'
-import { LoaderListView, MIconView } from 'components'
-import createPageModel from 'page-group-loader-model/BasePageModel'
+import { RenderGroups } from 'group';
+import { SheetListLoader, GroupTreeLoader } from 'loader';
+import { LoaderListView, MIconView } from 'components';
+import createPageModel from 'page-group-loader-model/BasePageModel';
 import services from 'services';
 
 const model = createPageModel({
   SheetListLoader,
   GroupTreeLoader,
-})
+});
 
 function View({ self, router, Navi, children }) {
-  const loader = self.GroupTreeLoader
-  const refTitle = useRef(null)
-  const refDesc = useRef(null)
+  const loader = self.GroupTreeLoader;
+  const refTitle = useRef(null);
+  const refDesc = useRef(null);
   const local = useLocalStore(() => ({
     loading: false,
     showModal: false,
     closeModal() {
-      this.showModal = false
+      this.showModal = false;
     },
-  }))
+  }));
   useEffectOnce(() => {
     if (loader.isEmpty) {
-      loader.refresh({})
+      loader.refresh({});
     }
-  })
-  return <Observer>
-    {() => (
-      <div className='full-height'>
-        <RenderGroups loader={loader} group={{ name: 'music' }} style={{ maxWidth: '50%' }} />
-        {/* <Navi title="歌单列表" router={router}>
+  });
+  return (
+    <Observer>
+      {() => (
+        <div className="full-height">
+          <RenderGroups
+            loader={loader}
+            group={{ name: 'music' }}
+            style={{ maxWidth: '50%' }}
+          />
+          {/* <Navi title="歌单列表" router={router}>
           <span style={{ paddingRight: 10 }} onClick={e => { local.showModal = true }}>创建</span>
         </Navi>
         <div className="full-height-auto">
@@ -77,10 +82,10 @@ function View({ self, router, Navi, children }) {
             </List.Item>
           </List>
         </Modal> */}
-      </div>
-    )}
-  </Observer>
-
+        </div>
+      )}
+    </Observer>
+  );
 }
 
 export default {
@@ -89,4 +94,4 @@ export default {
   },
   View,
   model,
-}
+};

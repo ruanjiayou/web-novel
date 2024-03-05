@@ -1,8 +1,8 @@
-import React, { Fragment, useEffect } from 'react'
-import { Observer, useLocalStore } from 'mobx-react-lite'
+import React, { Fragment, useEffect } from 'react';
+import { Observer, useLocalStore } from 'mobx-react-lite';
 
-import { CategoryLoader } from 'loader'
-import createPageModel from 'page-group-loader-model/BasePageModel'
+import { CategoryLoader } from 'loader';
+import createPageModel from 'page-group-loader-model/BasePageModel';
 
 const model = createPageModel({
   CategoryLoader,
@@ -24,55 +24,100 @@ const styles = {
     float: 'left',
     padding: '10px',
     boxSizing: 'border-box',
-  }
-}
+  },
+};
 
 function SubCate({ self, cates, router }) {
   if (cates) {
-    return cates.children.map(cate => <div key={cate.id} className="full-width" style={styles.subCate}>
-      <img src={cate.poster} alt="" style={{ width: 60, height: 70, backgroundColor: '#bbb' }} />
-      <div className="dd-common-centerXY" style={{ flexDirection: 'column', alignItems: 'start', paddingLeft: 10, }}>
-        <div style={{ fontSize: '1.2em', color: 'black', fontWeight: 'bold', paddingBottom: 5 }}>{cate.title}</div>
-        <div>{cate.count}部</div>
+    return cates.children.map((cate) => (
+      <div key={cate.id} className="full-width" style={styles.subCate}>
+        <img
+          src={cate.poster}
+          alt=""
+          style={{ width: 60, height: 70, backgroundColor: '#bbb' }}
+        />
+        <div
+          className="dd-common-centerXY"
+          style={{
+            flexDirection: 'column',
+            alignItems: 'start',
+            paddingLeft: 10,
+          }}
+        >
+          <div
+            style={{
+              fontSize: '1.2em',
+              color: 'black',
+              fontWeight: 'bold',
+              paddingBottom: 5,
+            }}
+          >
+            {cate.title}
+          </div>
+          <div>{cate.count}部</div>
+        </div>
       </div>
-    </div>)
+    ));
   } else {
-    return null
+    return null;
   }
 }
 function View({ self, router, store, Navi }) {
-  const loader = self.CategoryLoader
+  const loader = self.CategoryLoader;
   const localStore = useLocalStore(() => ({
     selectIndex: 0,
     count: 0,
-  }))
+  }));
   useEffect(() => {
     if (loader.isEmpty) {
-      loader.refresh()
+      loader.refresh();
     }
-  })
-  return <Observer>{() => (
-    <Fragment>
-      <Navi title="分类" router={router}>
-        <div style={{ flex: 1, textAlign: 'right' }} onClick={() => router.pushView('BookSearch', {})}>全部作品</div>
-      </Navi>
-      <div className="full-height-auto" style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
-        <div style={{ borderRight: '1px solid #ccc', minWidth: 80 }}>
-          {loader.items.map((item, index) => <div
-            key={item.id}
-            style={{ ...styles.bigCate, ...(index === localStore.selectIndex ? styles.choosed : {}) }}
-            onClick={() => localStore.selectIndex = index}
+  });
+  return (
+    <Observer>
+      {() => (
+        <Fragment>
+          <Navi title="分类" router={router}>
+            <div
+              style={{ flex: 1, textAlign: 'right' }}
+              onClick={() => router.pushView('BookSearch', {})}
+            >
+              全部作品
+            </div>
+          </Navi>
+          <div
+            className="full-height-auto"
+            style={{ display: 'flex', flexDirection: 'row', flex: 1 }}
           >
-            {item.title}
-          </div>)}
-        </div>
-        <div style={{ flex: 1, height: '100%', overflow: 'auto' }} className="smooth">
-          <div style={{ padding: 20 }}>总共{localStore.count}部</div>
-          <SubCate router={router} cates={loader.items[localStore.selectIndex]} />
-        </div>
-      </div>
-    </Fragment>
-  )}</Observer>
+            <div style={{ borderRight: '1px solid #ccc', minWidth: 80 }}>
+              {loader.items.map((item, index) => (
+                <div
+                  key={item.id}
+                  style={{
+                    ...styles.bigCate,
+                    ...(index === localStore.selectIndex ? styles.choosed : {}),
+                  }}
+                  onClick={() => (localStore.selectIndex = index)}
+                >
+                  {item.title}
+                </div>
+              ))}
+            </div>
+            <div
+              style={{ flex: 1, height: '100%', overflow: 'auto' }}
+              className="smooth"
+            >
+              <div style={{ padding: 20 }}>总共{localStore.count}部</div>
+              <SubCate
+                router={router}
+                cates={loader.items[localStore.selectIndex]}
+              />
+            </div>
+          </div>
+        </Fragment>
+      )}
+    </Observer>
+  );
 }
 
 export default {
@@ -81,4 +126,4 @@ export default {
   },
   View,
   model,
-}
+};

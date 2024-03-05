@@ -1,9 +1,9 @@
 {
-    "workbench.colorTheme": "Visual Studio Dark",
-    //显示行号
-    "editor.lineNumbers": "on",
-    "git.autofetch": true,
-    "editor.tabSize": 2,
-    "scm.diffDecorationsGutterWidth": 2,
-    "editor.guides.indentation": true
+  "workbench.colorTheme": "Visual Studio Dark",
+  //显示行号
+  "editor.lineNumbers": "on",
+  "git.autofetch": true,
+  "editor.tabSize": 2,
+  "scm.diffDecorationsGutterWidth": 2,
+  "editor.guides.indentation": true
 }

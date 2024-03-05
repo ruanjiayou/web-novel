@@ -3,8 +3,5 @@
     "rootDir": "src",
     "baseUrl": "src"
   },
-  "include": [
-    "src",
-    "sw-template.js"
-  ]
+  "include": ["src", "sw-template.js"]
 }

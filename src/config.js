@@ -1,6 +1,6 @@
 export default {
   get isDebug() {
-    return process.env.NODE_ENV !== 'production'
+    return process.env.NODE_ENV !== 'production';
   },
   console: false,
   VERSION: '0.1.0',
@@ -10,12 +10,12 @@ export default {
     },
     development: {
       host: '',
-    }
+    },
   },
   cache: {
     book: {},
     catalog: {},
     chapter: {},
     tree: {},
-  }
-}
+  },
+};

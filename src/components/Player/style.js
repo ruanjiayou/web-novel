@@ -4,7 +4,7 @@ export const Icon = styled.img`
   width: 32px;
   height: 32px;
   margin: 0 5px;
-`
+`;
 
 export const FlvWrap = styled.div`
   width: 100%;
@@ -13,4 +13,4 @@ export const FlvWrap = styled.div`
     width: 100%;
     height: 100%;
   }
-`
+`;

@@ -1,9 +1,23 @@
-import React, { useEffect, Fragment, useRef, useCallback, useMemo } from 'react'
-import { useEffectOnce } from 'react-use'
-import { Observer, useLocalStore } from 'mobx-react-lite'
-import { Tab, MenuWrap, MenuItem, TabItem, ContentWrap, Content, Slider } from './style'
-import AlloyFinger from 'alloyfinger'
-import event from '../../utils/events'
+import React, {
+  useEffect,
+  Fragment,
+  useRef,
+  useCallback,
+  useMemo,
+} from 'react';
+import { useEffectOnce } from 'react-use';
+import { Observer, useLocalStore } from 'mobx-react-lite';
+import {
+  Tab,
+  MenuWrap,
+  MenuItem,
+  TabItem,
+  ContentWrap,
+  Content,
+  Slider,
+} from './style';
+import AlloyFinger from 'alloyfinger';
+import event from '../../utils/events';
 
 export default function ({ defaultIndex, tabs = [], children, onChange }) {
   const local = useLocalStore(() => ({
@@ -15,15 +29,16 @@ export default function ({ defaultIndex, tabs = [], children, onChange }) {
     left: 0,
     width: 36,
   }));
-  const contentRef = useRef(null)
-  const wrapRef = useRef(null)
+  const contentRef = useRef(null);
+  const wrapRef = useRef(null);
   const resizeSlider = useCallback(() => {
     if (wrapRef.current) {
-      const node = wrapRef.current.getElementsByTagName('div')[local.selectedIndex];
+      const node =
+        wrapRef.current.getElementsByTagName('div')[local.selectedIndex];
       local.left = node.offsetLeft + local.actionOffsetX;
       local.width = node.offsetWidth;
     }
-  })
+  });
   useEffectOnce(() => {
     if (contentRef.current) {
       const instance = new AlloyFinger(contentRef.current, {
@@ -32,7 +47,7 @@ export default function ({ defaultIndex, tabs = [], children, onChange }) {
           local.actionStarted = true;
           local.actionStartX = evt.targetTouches[0].clientX;
           local.actionOffsetX = 0;
-          local.direction = ''
+          local.direction = '';
         },
         touchEnd: (evt) => {
           local.actionStarted = false;
@@ -44,7 +59,8 @@ export default function ({ defaultIndex, tabs = [], children, onChange }) {
             return;
           }
           if (local.direction === '' && (evt.deltaX || evt.deltaY)) {
-            local.direction = Math.abs(evt.deltaX) > Math.abs(evt.deltaY) ? 'h' : 'v';
+            local.direction =
+              Math.abs(evt.deltaX) > Math.abs(evt.deltaY) ? 'h' : 'v';
           }
           if (local.direction === 'v') {
             // evt.preventDefault();
@@ -55,8 +71,8 @@ export default function ({ defaultIndex, tabs = [], children, onChange }) {
           local.actionOffsetX += evt.deltaX / 2;
         },
         swipe: (evt) => {
-          evt.preventDefault()
-          local.actionOffsetX = 0
+          evt.preventDefault();
+          local.actionOffsetX = 0;
           if (local.direction === 'h') {
             local.direction = '';
             if (evt.direction === 'Left') {
@@ -69,38 +85,62 @@ export default function ({ defaultIndex, tabs = [], children, onChange }) {
               }
             }
             resizeSlider();
-            onChange && onChange(tabs[local.selectedIndex], local.selectedIndex);
+            onChange &&
+              onChange(tabs[local.selectedIndex], local.selectedIndex);
           }
-        }
+        },
       });
       event.on('swipeStart', () => {
         local.actionStarted = false;
       });
     }
-  }, [contentRef.current])
+  }, [contentRef.current]);
   useEffect(() => {
-    resizeSlider()
-  }, [wrapRef.current])
-  return <Observer>{() => (
-    <Fragment>
-      <Tab>
-        <MenuWrap ref={ref => wrapRef.current = ref}>
-          {tabs.map((tab, index) => <MenuItem key={index} selected={local.selectedIndex === index} onClick={() => {
-            if (index === local.selectedIndex) {
-              return;
-            }
-            local.selectedIndex = index;
-            resizeSlider();
-            onChange && onChange(tabs[index], index);
-          }}>{tab.title}</MenuItem>)}
-          <Slider left={local.left - local.actionOffsetX / 10} width={local.width} />
-        </MenuWrap>
-        <Content>
-          <ContentWrap ref={ref => contentRef.current = ref} style={{ transform: `translateX(${contentRef.current ? -contentRef.current.offsetWidth * local.selectedIndex + (local.direction === 'h' ? local.actionOffsetX : 0) / 2 + 'px' : (local.selectedIndex * 100) + '%'})` }} selectedIndex={local.selectedIndex}>
-            {children.map((child, index) => <TabItem key={index}>{child}</TabItem>)}
-          </ContentWrap>
-        </Content>
-      </Tab>
-    </Fragment>
-  )}</Observer>
+    resizeSlider();
+  }, [wrapRef.current]);
+  return (
+    <Observer>
+      {() => (
+        <Fragment>
+          <Tab>
+            <MenuWrap ref={(ref) => (wrapRef.current = ref)}>
+              {tabs.map((tab, index) => (
+                <MenuItem
+                  key={index}
+                  selected={local.selectedIndex === index}
+                  onClick={() => {
+                    if (index === local.selectedIndex) {
+                      return;
+                    }
+                    local.selectedIndex = index;
+                    resizeSlider();
+                    onChange && onChange(tabs[index], index);
+                  }}
+                >
+                  {tab.title}
+                </MenuItem>
+              ))}
+              <Slider
+                left={local.left - local.actionOffsetX / 10}
+                width={local.width}
+              />
+            </MenuWrap>
+            <Content>
+              <ContentWrap
+                ref={(ref) => (contentRef.current = ref)}
+                style={{
+                  transform: `translateX(${contentRef.current ? -contentRef.current.offsetWidth * local.selectedIndex + (local.direction === 'h' ? local.actionOffsetX : 0) / 2 + 'px' : local.selectedIndex * 100 + '%'})`,
+                }}
+                selectedIndex={local.selectedIndex}
+              >
+                {children.map((child, index) => (
+                  <TabItem key={index}>{child}</TabItem>
+                ))}
+              </ContentWrap>
+            </Content>
+          </Tab>
+        </Fragment>
+      )}
+    </Observer>
+  );
 }

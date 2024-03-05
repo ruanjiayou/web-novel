@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import {
   IoIosSync,
   IoIosPlay,
@@ -9,7 +9,7 @@ import {
   IoIosVolumeOff,
   IoIosClose,
   IoMdClose,
-} from 'react-icons/io'
+} from 'react-icons/io';
 import {
   FaHome,
   FaTasks,
@@ -49,7 +49,7 @@ import {
   FaListUl,
   FaHeart,
   FaPlayCircle,
-} from 'react-icons/fa'
+} from 'react-icons/fa';
 import {
   MdRepeatOne,
   MdShuffle,
@@ -57,9 +57,9 @@ import {
   MdApps,
   MdRepeat,
   MdSkipNext,
-} from 'react-icons/md'
-import { FiLoader } from 'react-icons/fi'
-import './index.css'
+} from 'react-icons/md';
+import { FiLoader } from 'react-icons/fi';
+import './index.css';
 
 const IOicons = {
   IoIosSync,
@@ -72,7 +72,7 @@ const IOicons = {
   IoLoader: FiLoader,
   IoIosClose,
   IoMdClose,
-}
+};
 const Faicons = {
   FaHome,
   FaTasks,
@@ -112,7 +112,7 @@ const Faicons = {
   FaListUl,
   FaHeart,
   FaPlayCircle,
-}
+};
 const Mdicons = {
   MdRepeatOne,
   MdShuffle,
@@ -120,7 +120,7 @@ const Mdicons = {
   MdRepeat,
   MdApps,
   MdSkipNext,
-}
+};
 // https://react-icons.netlify.com/#/icons/fa
 
 // const types = {
@@ -138,9 +138,38 @@ const Mdicons = {
 //   </svg>)
 // }
 
-export default function ({ type, className = '', inline = false, size = 'sm', style = {}, after = '', before = '', color = '', spin, ...restProps }) {
-  const Icon = type.startsWith('Fa') ? Faicons[type] : (type.startsWith('Md') ? Mdicons[type] : IOicons[type])
-  return <div style={{ display: inline ? 'inline-block' : 'flex', fontSize: size === 'md' ? '1.5rem' : (size === 'bg' ? '2rem' : '1.1rem'), alignItems: 'center', justifyContent: 'center', ...style, }} className={`${className}`} {...restProps}>
-    {before}<Icon className={spin ? 'spin' : ''} style={{ margin: '0 4px', color }} />{after}
-  </div>
+export default function ({
+  type,
+  className = '',
+  inline = false,
+  size = 'sm',
+  style = {},
+  after = '',
+  before = '',
+  color = '',
+  spin,
+  ...restProps
+}) {
+  const Icon = type.startsWith('Fa')
+    ? Faicons[type]
+    : type.startsWith('Md')
+      ? Mdicons[type]
+      : IOicons[type];
+  return (
+    <div
+      style={{
+        display: inline ? 'inline-block' : 'flex',
+        fontSize: size === 'md' ? '1.5rem' : size === 'bg' ? '2rem' : '1.1rem',
+        alignItems: 'center',
+        justifyContent: 'center',
+        ...style,
+      }}
+      className={`${className}`}
+      {...restProps}
+    >
+      {before}
+      <Icon className={spin ? 'spin' : ''} style={{ margin: '0 4px', color }} />
+      {after}
+    </div>
+  );
 }

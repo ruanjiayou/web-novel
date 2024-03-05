@@ -1,15 +1,14 @@
-import { types } from 'mobx-state-tree'
+import { types } from 'mobx-state-tree';
 
-const TabModel = types.model('Line', {
-  name: types.string,
-  icon: types.string,
-  path: types.string,
-  title: types.string,
-  hideMenu: types.optional(types.boolean, false),
-}).views(self => ({
+const TabModel = types
+  .model('Line', {
+    name: types.string,
+    icon: types.string,
+    path: types.string,
+    title: types.string,
+    hideMenu: types.optional(types.boolean, false),
+  })
+  .views((self) => ({}))
+  .actions((self) => ({}));
 
-})).actions(self => ({
-
-}))
-
-export default TabModel
+export default TabModel;

@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 export const CoverWrap = styled.div`
   width: 45px;
@@ -8,7 +8,7 @@ export const CoverWrap = styled.div`
   margin: 0 5px;
   border-radius: 5px;
   overflow: hidden;
-`
+`;
 export const Cover = styled.img`
   width: 45px;
-`
+`;

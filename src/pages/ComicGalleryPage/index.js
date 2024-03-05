@@ -1,44 +1,69 @@
-import React, { useEffect } from 'react'
-import { Observer, useLocalStore } from 'mobx-react-lite'
-import { useEffectOnce } from 'react-use'
+import React, { useEffect } from 'react';
+import { Observer, useLocalStore } from 'mobx-react-lite';
+import { useEffectOnce } from 'react-use';
 
-import { GalleryLoader } from 'loader'
-import { AutoCenterView, EmptyView, UserAreaView } from 'components'
-import { FullHeight, FullHeightAuto, FullHeightFix } from 'components/common'
-import createPageModel from 'page-group-loader-model/BasePageModel'
+import { GalleryLoader } from 'loader';
+import { AutoCenterView, EmptyView, UserAreaView } from 'components';
+import { FullHeight, FullHeightAuto, FullHeightFix } from 'components/common';
+import createPageModel from 'page-group-loader-model/BasePageModel';
 
 const model = createPageModel({
   GalleryLoader,
-})
+});
 
-function View({ self, store, router, params, Navi, }) {
-  let imageHost = store.lineLoader.getHostByType('image')
+function View({ self, store, router, params, Navi }) {
+  let imageHost = store.lineLoader.getHostByType('image');
   useEffect(() => {
     if (params.id) {
-      self.GalleryLoader.refresh({ params })
+      self.GalleryLoader.refresh({ params });
     }
     return () => {
-      self.GalleryLoader.clear()
-    }
-  }, [params.id])
-  return <Observer>{() => {
-    const blank = EmptyView(self.GalleryLoader)
-    if (blank) {
-      return blank
-    }
-    return <UserAreaView bgcTop={'black'} bgcBot={'black'}>
-      <Navi title={self.GalleryLoader.item.title} router={router} wrapStyle={{backgroundColor: 'black'}} />
-      <FullHeightAuto style={{ fontSize: 0 }}>
-        {self.GalleryLoader.item.images.map(image => (
-          <img src={imageHost + image} key={image} style={{ width: '100%' }} />
-        ))
+      self.GalleryLoader.clear();
+    };
+  }, [params.id]);
+  return (
+    <Observer>
+      {() => {
+        const blank = EmptyView(self.GalleryLoader);
+        if (blank) {
+          return blank;
         }
-      </FullHeightAuto>
-      <FullHeightFix>
-        {self.GalleryLoader.item.next && <div style={{ textAlign: 'center', padding: '6px 0' }} onClick={() => { router.replaceView('ComicGallery', { bid: self.GalleryLoader.item.next.bid, id: self.GalleryLoader.item.next.id }) }}>{self.GalleryLoader.item.next.title}</div>}
-      </FullHeightFix>
-    </UserAreaView>
-  }}</Observer>
+        return (
+          <UserAreaView bgcTop={'black'} bgcBot={'black'}>
+            <Navi
+              title={self.GalleryLoader.item.title}
+              router={router}
+              wrapStyle={{ backgroundColor: 'black' }}
+            />
+            <FullHeightAuto style={{ fontSize: 0 }}>
+              {self.GalleryLoader.item.images.map((image) => (
+                <img
+                  src={imageHost + image}
+                  key={image}
+                  style={{ width: '100%' }}
+                />
+              ))}
+            </FullHeightAuto>
+            <FullHeightFix>
+              {self.GalleryLoader.item.next && (
+                <div
+                  style={{ textAlign: 'center', padding: '6px 0' }}
+                  onClick={() => {
+                    router.replaceView('ComicGallery', {
+                      bid: self.GalleryLoader.item.next.bid,
+                      id: self.GalleryLoader.item.next.id,
+                    });
+                  }}
+                >
+                  {self.GalleryLoader.item.next.title}
+                </div>
+              )}
+            </FullHeightFix>
+          </UserAreaView>
+        );
+      }}
+    </Observer>
+  );
 }
 
 export default {
@@ -47,4 +72,4 @@ export default {
   },
   View,
   model,
-}
+};

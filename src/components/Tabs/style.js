@@ -4,7 +4,7 @@ export const Tab = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-`
+`;
 export const MenuWrap = styled.div`
   display: flex;
   white-space: nowrap;
@@ -15,13 +15,13 @@ export const MenuWrap = styled.div`
   }
   scrollbar-width: none;
   position: relative;
-`
+`;
 
 export const MenuItem = styled.div`
   margin: 10px;
   font-size: 18px;
-  color: ${props => props.selected ? '#108ee9' : '#666'};
-`
+  color: ${(props) => (props.selected ? '#108ee9' : '#666')};
+`;
 
 export const Slider = styled.div`
   height: 3px;
@@ -31,26 +31,25 @@ export const Slider = styled.div`
   bottom: 0;
   width: ${(prop) => prop.width + 'px'};
   transform: translateX(${(prop) => prop.left + 'px'});
-`
+`;
 
 export const Content = styled.div`
   flex: 1;
   display: flex;
   width: 100%;
   overflow: hidden;
-`
+`;
 export const ContentWrap = styled.div`
   width: 100%;
   position: relative;
   flex-wrap: nowrap;
   display: flex;
   transition: all 300ms;
-`
+`;
 
 export const TabItem = styled.div`
   flex-basis: 100%;
   width: 100%;
   flex-grow: 1;
   flex-shrink: 0;
-`
-
+`;

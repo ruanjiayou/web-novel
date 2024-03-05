@@ -1,155 +1,158 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="demo,学习测试" />
+    <title>学习测试</title>
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
+    <!-- 兼容iOS: pwa显示桌面图标 -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="apple-touch-startup-image" href="%PUBLIC_URL%/logo-144.png" />
+    <link rel="apple-touch-icon" size="180xx180" href="%PUBLIC_URL%/logo.jpg" />
+    <style>
+      html,
+      body,
+      #root {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100vh;
+        overscroll-behavior: none;
+        position: relative;
+        background-color: white;
+      }
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, viewport-fit=cover">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="demo,学习测试">
-  <title>学习测试</title>
-  <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-  <!-- 兼容iOS: pwa显示桌面图标 -->
-  <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-  <link rel="apple-touch-startup-image" href="%PUBLIC_URL%/logo-144.png" />
-  <link rel="apple-touch-icon" size="180xx180" href="%PUBLIC_URL%/logo.jpg" />
-  <style>
-    html,
-    body,
-    #root {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100vh;
-      overscroll-behavior: none;
-      position: relative;
-      background-color: white;
-    }
+      body {
+        display: flex;
+        height: 100%;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
 
-    body {
-      display: flex;
-      height: 100%;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-    }
+      .content img {
+        width: 100%;
+      }
 
-    .content img {
-      width: 100%
-    }
+      #root {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        display: none;
+      }
 
-    #root {
-      position: fixed;
-      top: 0;
-      bottom: 0;
-      display: none;
-    }
+      #app-update {
+        display: none;
+        position: absolute;
+        right: 20px;
+        bottom: 20px;
+      }
 
-    #app-update {
-      display: none;
-      position: absolute;
-      right: 20px;
-      bottom: 20px;
-    }
+      #app-update.show {
+        display: block;
+      }
 
-    #app-update.show {
-      display: block;
-    }
+      .box-browser {
+        width: 414px;
+        height: 736px;
+        border: 1px solid #ccc;
+        max-width: 100%;
+        box-sizing: border-box;
+      }
 
-    .box-browser {
-      width: 414px;
-      height: 736px;
-      border: 1px solid #ccc;
-      max-width: 100%;
-      box-sizing: border-box;
-    }
+      .box-app {
+        width: 100%;
+        height: 100%;
+      }
 
-    .box-app {
-      width: 100%;
-      height: 100%;
-    }
+      .scroll-smooth {
+        -webkit-overflow-scrolling: touch;
+      }
 
-    .scroll-smooth {
-      -webkit-overflow-scrolling: touch;
-    }
+      .scroll-smooth::-webkit-scrollbar {
+        display: none;
+      }
 
-    .scroll-smooth::-webkit-scrollbar {
-      display: none;
-    }
+      .layer-item.enter {
+        transform: translateX(100%);
+      }
 
-    .layer-item.enter {
-      transform: translateX(100%);
-    }
+      .layer-item.enter-active {
+        transform: translateX(0);
+        transition: all 300ms;
+      }
 
-    .layer-item.enter-active {
-      transform: translateX(0);
-      transition: all 300ms;
-    }
+      .layer-item.exit {
+        transform: translateX(0);
+      }
 
-    .layer-item.exit {
-      transform: translateX(0);
-    }
+      .layer-item.exit-active {
+        transform: translateX(100%);
+        transition: all 300ms;
+      }
 
-    .layer-item.exit-active {
-      transform: translateX(100%);
-      transition: all 300ms;
-    }
+      .enter-now {
+        transform: translateX(0);
+      }
 
-    .enter-now {
-      transform: translateX(0);
-    }
-
-    .exit-now {
-      transform: translateX(100%);
-    }
-  </style>
-  <!-- <link rel="stylesheet" href="%PUBLIC_URL%/pace.css" />
+      .exit-now {
+        transform: translateX(100%);
+      }
+    </style>
+    <!-- <link rel="stylesheet" href="%PUBLIC_URL%/pace.css" />
   <script data-pace-options='{ "ajax": false, "restartOnPushState": false }' src="%PUBLIC_URL%/pace.min.js"></script> -->
-  <!-- <script src="//cdn.jsdelivr.net/npm/eruda"></script>
+    <!-- <script src="//cdn.jsdelivr.net/npm/eruda"></script>
   <script>eruda.init();</script> -->
-</head>
+  </head>
 
-<body>
-  <noscript>请允许执行JavaScript</noscript>
-  <div id="start-loading">加载资源...</div>
-  <div id="box">
-    <div id="root" class="full-height"></div>
-  </div>
-  <button id="app-update">更新</button>
-  <script>
-    document.oncontextmenu = function (e) {
-      e.preventDefault();
-    }
-    // document.body.addEventListener('touchmove', function (e) {
-    //   var can = canScroll(e.target, "smooth")
-    //   if (!can) {
-    //     e.preventDefault();
-    //     //阻止默认的处理方式(阻止下拉滑动的效果)
-    //   }
-    // }, { passive: false, capture: true });
-    // function canScroll(element, parentClass) {
-    //   var ele = element;
-    //   while (ele.nodeName !== 'BODY') {
-    //     if (ele.className.split(' ').indexOf(parentClass) !== -1) {
-    //       if (ele.scrollTop === 0) {
-    //         ele.scrollTop = 1;
-    //       }
-    //       var height = ele.scrollHeight - ele.offsetHeight;
-    //       if (ele.scrollTop == height) {
-    //         ele.scrollTop = height - 1
-    //       }
-    //       return true;
-    //     }
-    //     ele = ele.parentNode;
-    //   }
-    //   return false;
-    // }
-  </script>
-</body>
-
+  <body>
+    <noscript>请允许执行JavaScript</noscript>
+    <div id="start-loading">加载资源...</div>
+    <div id="box">
+      <div id="root" class="full-height"></div>
+    </div>
+    <button id="app-update">更新</button>
+    <script>
+      document.oncontextmenu = function (e) {
+        e.preventDefault();
+      };
+      // document.body.addEventListener('touchmove', function (e) {
+      //   var can = canScroll(e.target, "smooth")
+      //   if (!can) {
+      //     e.preventDefault();
+      //     //阻止默认的处理方式(阻止下拉滑动的效果)
+      //   }
+      // }, { passive: false, capture: true });
+      // function canScroll(element, parentClass) {
+      //   var ele = element;
+      //   while (ele.nodeName !== 'BODY') {
+      //     if (ele.className.split(' ').indexOf(parentClass) !== -1) {
+      //       if (ele.scrollTop === 0) {
+      //         ele.scrollTop = 1;
+      //       }
+      //       var height = ele.scrollHeight - ele.offsetHeight;
+      //       if (ele.scrollTop == height) {
+      //         ele.scrollTop = height - 1
+      //       }
+      //       return true;
+      //     }
+      //     ele = ele.parentNode;
+      //   }
+      //   return false;
+      // }
+    </script>
+  </body>
 </html>

@@ -1,4 +1,4 @@
-import { types } from 'mobx-state-tree'
+import { types } from 'mobx-state-tree';
 
 const Model = types.model({
   id: types.string,
@@ -6,7 +6,7 @@ const Model = types.model({
   title: types.optional(types.string, ''),
   publishedAt: types.maybe(types.string),
   images: types.array(types.string),
-  next: types.maybeNull(types.late(() => Model))
-})
+  next: types.maybeNull(types.late(() => Model)),
+});
 
-export default Model
+export default Model;

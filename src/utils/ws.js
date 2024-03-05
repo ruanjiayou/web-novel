@@ -1,10 +1,13 @@
 import io from 'socket.io-client';
 
-export const ws = io(process.env.NODE_ENV !== 'production' ? 'http://localhost:8097/' : '/', {
-  path: '/ws',
-  reconnectionDelay: 10000,
-  reconnectionAttempts: 3
-});
+export const ws = io(
+  process.env.NODE_ENV !== 'production' ? 'http://localhost:8097/' : '/',
+  {
+    path: '/ws',
+    reconnectionDelay: 10000,
+    reconnectionAttempts: 3,
+  },
+);
 
 ws.on('connect', (socket) => {
   console.log('connected');
@@ -15,7 +18,7 @@ ws.on('connect', (socket) => {
       }
     });
   }
-  ws.emit('message', '2049')
+  ws.emit('message', '2049');
 });
 
 ws.on('disconnect', () => {
@@ -23,9 +26,9 @@ ws.on('disconnect', () => {
 });
 ws.on('message', (data) => {
   const key = `${data.module}-${data.name}`;
-  console.log(key, data.data)
-})
+  console.log(key, data.data);
+});
 
 ws.on('open', () => {
   console.log('open');
-})
+});

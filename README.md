@@ -1,4 +1,5 @@
 # PWA-novel
+
 2019-9-28 00:26:09 clone自password
 
 - 修改push.sh pass为novel
@@ -13,14 +14,17 @@
 - npm start
 
 ## warning
+
 - keyboardjs rebound 是 react-use 需要的.
 - WorkboxWebpackPlugin将sw-template.js编译为sw-build.js(sw-manager.js里注册service-worker,选择sw-build而不是默认生成的service-worker.js,build的js不能覆盖...)
 
 ## error
+
 - NotAllowedError 点击等事件里才能调用play()方法
 - NotSupportError event.on() 里不能直接调用paly() 用定时器
 
 ## TODO: bug与优化
+
 - ~~cache~~
 - ~~fullscreen (video player)~~
 - ads

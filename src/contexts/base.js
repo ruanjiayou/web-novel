@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState } from 'react';
 // useState 可以监控变化 不然可以不用.就router的上下文用到
 // 1.创建上下文对象
 // const Context = React.createContext(null)
@@ -33,7 +33,7 @@ const [Comp, Context] = createProvider()
 </Context.Provider>
  */
 
- /**
+/**
   * 使用上下文的值
 import { getContextValue } from '../contexts/xxx'
 const Comp = useContext(context)
