@@ -83,6 +83,8 @@ export function RenderGroups({ loader, group, params, ...props }) {
             <div style={{ height: '100%', overflow: 'auto' }}>
               {loader.item.attrs.allowRefresh ? (
                 <PullToRefresh
+                  distanceToRefresh={60}
+                  damping={500}
                   style={{ height: '100%', overflow: 'auto' }}
                   onRefresh={() =>
                     loader.refresh({ params: { name: group.name } })

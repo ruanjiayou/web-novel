@@ -13,6 +13,7 @@
   "globals": {},
   "rules": {
     "quotes": "off",
-    "no-extra-semi": "error"
+    "no-extra-semi": "error",
+    "no-unused-vars": "off"
   }
 }

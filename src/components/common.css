@@ -95,5 +95,5 @@ div.am-tabs-horizontal .am-tabs-pane-wrap-inactive {
 }
 /* 下拉刷新不被挡住 */
 .am-pull-to-refresh-content-wrapper {
-  min-height: 90%;
+  min-height: 100%;
 }

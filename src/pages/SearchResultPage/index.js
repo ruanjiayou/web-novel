@@ -3,7 +3,7 @@ import { Observer, useLocalStore } from 'mobx-react-lite';
 import { Tabs } from 'antd-mobile';
 import { ResourceListLoader } from 'loader';
 import renderBlank from 'components/EmptyView';
-import { LoaderListView, MIconView } from 'components';
+import { LoaderListView, MIconView, UserAreaView } from 'components';
 import ResourceItem from 'business/ResourceItem';
 import { useEffectOnce } from 'react-use';
 import createPageModel from 'page-group-loader-model/BasePageModel';
@@ -39,7 +39,7 @@ function View({ self, params }) {
   return (
     <Observer>
       {() => (
-        <FullHeight>
+        <UserAreaView>
           <FullWidth style={{ height: 50, marginLeft: 10 }}>
             <FullWidthFix>
               <MIconView
@@ -129,12 +129,13 @@ function View({ self, params }) {
           <FullHeightAuto>
             <LoaderListView
               loader={loader}
+              itemWrapStyle={{ margin: 10 }}
               renderItem={(item) => (
                 <ResourceItem key={item.id} item={item} loader={loader} />
               )}
             />
           </FullHeightAuto>
-        </FullHeight>
+        </UserAreaView>
       )}
     </Observer>
   );
