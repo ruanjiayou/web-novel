@@ -9,6 +9,7 @@ import { ITag, Container } from './style';
 import services from 'services';
 import { useEffectOnce } from 'react-use';
 import PinchZoom from 'components/PinchZoom/self';
+import { IoIosShareAlt } from 'react-icons/io'
 
 const { createMark, getMark, destroyMark } = services;
 const model = createPageModel({
@@ -37,7 +38,7 @@ function View({ self, router, store, params, Navi }) {
     } else if (localStore.markStatus === 'dislike') {
       return <MIconView type="FaHeart" style={{ color: 'white' }} />;
     } else {
-      return <MIconView type="FaHeart" style={{ color: 'red' }} />;
+      return <MIconView type="FaHeart" style={{ color: '#fb8e8e' }} />;
     }
   };
   useEffectOnce(() => {
@@ -66,26 +67,8 @@ function View({ self, router, store, params, Navi }) {
                   : '加载中...'
               }
             >
-              <div
-                onClick={async () => {
-                  if (localStore.markLoading) return;
-                  localStore.markLoading = true;
-                  try {
-                    if (localStore.markStatus === 'dislike') {
-                      await createMark({ data: params });
-                      localStore.markStatus = 'like';
-                    } else {
-                      await destroyMark({ params });
-                      localStore.markStatus = 'dislike';
-                    }
-                  } catch (e) {
-                    localStore.markError = true;
-                  } finally {
-                    localStore.markLoading = false;
-                  }
-                }}
-              >
-                {MStatus()}
+              <div style={{ marginRight: 10 }}>
+                <IoIosShareAlt size={24} />
               </div>
             </Navi>
             <div className="full-height-auto">
@@ -95,18 +78,18 @@ function View({ self, router, store, params, Navi }) {
                 </AutoCenterView>
               ) : (
                 <Fragment>
-                  {loader.item.poster &&
+                  {/* {loader.item.poster &&
                     loader.item.poster !== loader.item.images[0] && (
                       <img
                         src={imageHost + loader.item.poster}
                         style={{ maxWidth: '100%' }}
                       />
-                    )}
+                    )} */}
                   {loader.item.images.map((image, index) => (
                     <img
                       key={index}
                       src={imageHost + image}
-                      style={{ maxWidth: '100%' }}
+                      style={{ width: '100%' }}
                       onClick={(e) => {
                         const { width, height } = e.currentTarget || {};
                         const ratio = (width || 0) / (height || 1);
@@ -127,6 +110,28 @@ function View({ self, router, store, params, Navi }) {
                   ))}
                 </Fragment>
               )}
+            </div>
+            <div
+              style={{ backgroundColor: '#ddd', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', width: 40, height: 40, position: 'fixed', right: 'calc(env(safe-area-inset-right) + 10px)', bottom: 'calc(env(safe-area-inset-bottom) + 60px)' }}
+              onClick={async () => {
+                if (localStore.markLoading) return;
+                localStore.markLoading = true;
+                try {
+                  if (localStore.markStatus === 'dislike') {
+                    await createMark({ data: params });
+                    localStore.markStatus = 'like';
+                  } else {
+                    await destroyMark({ params });
+                    localStore.markStatus = 'dislike';
+                  }
+                } catch (e) {
+                  localStore.markError = true;
+                } finally {
+                  localStore.markLoading = false;
+                }
+              }}
+            >
+              {MStatus()}
             </div>
             <Container style={{ padding: 10 }}>
               {loader.item &&

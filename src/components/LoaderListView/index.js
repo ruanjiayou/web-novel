@@ -11,10 +11,11 @@ const GetPullToRefreshlData = ({
   loadMore,
   style,
   itemWrapStyle,
+  auto = true,
 }) => {
   const emptyView = renderEmptyView(loader);
   useEffect(() => {
-    if (loader.isEmpty) {
+    if (loader.isEmpty && auto) {
       refresh ? refresh() : loader.refresh();
     }
   }, []);

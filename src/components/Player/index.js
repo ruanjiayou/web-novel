@@ -432,7 +432,7 @@ export default function ({
         }}
       >
         {type === 'hls' ? hlsVideo : type === 'flv' ? flvVideo : video}
-        {!local.showControl && (
+        {/* {!local.showControl && (
           <div
             style={{
               position: 'absolute',
@@ -452,7 +452,7 @@ export default function ({
               }}
             ></div>
           </div>
-        )}
+        )} */}
       </div>
     );
   };

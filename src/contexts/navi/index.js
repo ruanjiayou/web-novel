@@ -15,7 +15,8 @@ function Navi(prop) {
         height: 45,
         color: 'white',
         backgroundColor: store.app.config.mainColor,
-        borderBottom: '1px solid #eee',
+        paddingLeft: 'env(safe-area-inset-left)',
+        paddingRight: 'env(safe-area-inset-right)',
         ...prop.wrapStyle,
       }}
     >

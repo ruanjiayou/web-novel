@@ -36,8 +36,8 @@ export default function ({ item }) {
                 />
               </div>
               <div className="full-width-auto full-height">
-                <div className="dd-common-alignside">
-                  <div style={{ fontSize: '1.2rem' }}>{item.title}</div>
+                <div className="line2" style={{ fontSize: '1.2rem' }}>
+                  {item.title}
                 </div>
                 <div
                   style={{ padding: '4px 0', color: 'rgb(146, 145, 145)' }}

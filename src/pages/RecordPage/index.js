@@ -46,7 +46,7 @@ function View({ self, router, store, Navi, params }) {
     <Observer>
       {() => {
         return (
-          <UserAreaView>
+          <UserAreaView bottom='0'>
             <Navi title="记录" />
 
             <PullToRefresh
@@ -85,7 +85,7 @@ function View({ self, router, store, Navi, params }) {
                       },
                     ]}
                   >
-                    {item.resource_type === 'video' ? (
+                    {['video', 'movie', 'animation'].includes(item.resource_type) ? (
                       <HistoryVideoItem
                         item={item.detail}
                         created_at={item.created_at}
@@ -116,6 +116,7 @@ function View({ self, router, store, Navi, params }) {
                 )}
               </div>
             </PullToRefresh>
+            <div style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}></div>
           </UserAreaView>
         );
       }}

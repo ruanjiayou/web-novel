@@ -36,7 +36,7 @@ function View({ self, router, store, params = {} }) {
         return (
           <Fragment>
             {/* 内部文字 */}
-            <UserAreaView>
+            <UserAreaView bottom='0'>
               <FullWidth
                 className="full-height-fix"
                 style={{
@@ -71,6 +71,7 @@ function View({ self, router, store, params = {} }) {
                       fontSize: 14,
                       boxSizing: 'border-box',
                       padding: '0 5px',
+                      paddingBottom: 'env(safe-area-inset-bottom)',
                     }}
                     onScroll={function (e) {
                       // console.log(e)

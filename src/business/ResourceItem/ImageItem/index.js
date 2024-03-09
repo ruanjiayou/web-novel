@@ -48,23 +48,23 @@ export default function ({ item, display = 1 }) {
                 style={
                   display === 3
                     ? {
-                        backgroundImage: `url(${NoImage})`,
-                        backgroundPosition: 'center center',
-                        backgroundSize: 'cover',
-                        backgroundRepeat: 'no-repeat',
-                        width: 100,
-                        height: 150,
-                        position: 'relative',
-                        overflow: 'hidden',
-                        flexShrink: 0,
-                      }
+                      backgroundImage: `url(${NoImage})`,
+                      backgroundPosition: 'center center',
+                      backgroundSize: 'cover',
+                      backgroundRepeat: 'no-repeat',
+                      width: 100,
+                      height: 150,
+                      position: 'relative',
+                      overflow: 'hidden',
+                      flexShrink: 0,
+                    }
                     : {
-                        width: 60,
-                        height: 80,
-                        position: 'relative',
-                        overflow: 'hidden',
-                        flexShrink: 0,
-                      }
+                      width: 60,
+                      height: 80,
+                      position: 'relative',
+                      overflow: 'hidden',
+                      flexShrink: 0,
+                    }
                 }
               >
                 {/* <img style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', height: '100%', minWidth: '100%' }} src={item.auto_cover} alt="" /> */}
@@ -128,7 +128,7 @@ export default function ({ item, display = 1 }) {
                     padding: '5px 0',
                   }}
                 >
-                  {item.images ? item.images.length + 1 : 1}
+                  {item.chapters}
                 </div>
               </div>
               <div

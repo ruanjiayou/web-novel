@@ -56,6 +56,26 @@ export default function ResourceItem({
               />
             );
             break;
+            case 'animation':
+              Item = (
+                <VideoItem
+                  item={item}
+                  display={display}
+                  loader={loader}
+                  {...props}
+                />
+              );
+              break;
+              case 'movie':
+                Item = (
+                  <VideoItem
+                    item={item}
+                    display={display}
+                    loader={loader}
+                    {...props}
+                  />
+                );
+                break;
           case 'comic':
             Item = <ComicItem item={item} loader={loader} />;
             break;

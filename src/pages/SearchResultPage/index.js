@@ -27,15 +27,15 @@ function View({ self, params }) {
   const loader = self.resources;
   const iRef = useRef(null);
   const local = useLocalStore(() => ({
-    search: params.search || '',
+    search: params.title || '',
     tag: params.tag || '',
   }));
-  useEffect(() => {
-    if (loader.isEmpty) {
-      loader.setOption({ query: { title: params.title, tag: local.tag } });
-      loader.refresh({});
-    }
-  }, [params.title]);
+  useEffectOnce(() => {
+    loader.setOption({ query: { title: params.title, tag: local.tag } });
+    loader.refresh({
+      query: { title: local.search },
+    });
+  }, [])
   return (
     <Observer>
       {() => (
@@ -83,9 +83,9 @@ function View({ self, params }) {
                 </div>
               )}
               <input
-                defaultValue={params.search}
+                defaultValue={params.title}
                 autoFocus
-                ref={(ref) => (iRef.current = ref)}
+                ref={(ref) => { iRef.current = ref; }}
                 style={{
                   backgroundColor: '#ccc',
                   height: 30,
@@ -129,6 +129,7 @@ function View({ self, params }) {
           <FullHeightAuto>
             <LoaderListView
               loader={loader}
+              auto={false}
               itemWrapStyle={{ margin: 10 }}
               renderItem={(item) => (
                 <ResourceItem key={item.id} item={item} loader={loader} />

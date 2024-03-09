@@ -10,8 +10,8 @@ export default function ({ item, display = 1, ...props }) {
   const onClick = props.onClick
     ? () => props.onClick(item)
     : () => {
-        router.pushView('VideoInfo', { id: item.id });
-      };
+      router.pushView('VideoInfo', { id: item.id });
+    };
   return (
     <Observer>
       {() => {
@@ -49,7 +49,7 @@ export default function ({ item, display = 1, ...props }) {
                 className="full-width-auto full-height"
                 style={{ padding: '0 5px', fontSize: '0.8rem' }}
               >
-                <div className="dd-common-alignside">
+                <div>
                   <div
                     className="line2"
                     style={{
