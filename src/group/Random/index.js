@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { Observer, useLocalStore } from 'mobx-react-lite';
 import { VisualBoxView, MIconView } from 'components';
 import ResourceItem from 'business/ResourceItem/index';
@@ -11,6 +11,7 @@ export default function Random({ self }) {
     loading: false,
     spin: false,
   }));
+  const wrapRef = useRef(null)
   const change = useCallback(async () => {
     let ts = Date.now();
     try {
@@ -24,6 +25,9 @@ export default function Random({ self }) {
       const result = await services.getGroupResources({
         params: { group_id: self.id },
       });
+      if (wrapRef.current) {
+        wrapRef.current.scrollLeft = 0;
+      }
       self.setData(result.items);
     } finally {
       local.loading = false;
@@ -55,6 +59,7 @@ export default function Random({ self }) {
             </VisualBoxView>
           </div>
           <Container
+            ref={ref => wrapRef.current = ref}
             onTouchStart={(e) => {
               event.emit('swipeStart');
             }}

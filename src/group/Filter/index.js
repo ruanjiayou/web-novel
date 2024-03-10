@@ -161,10 +161,10 @@ export default function Filter({ self, loader, ...props }) {
             >
               {lstore.loader.isLoading ? (
                 '正在加载更多数据...'
-              ) : lstore.loader.isEnded ? (
+              ) : lstore.loader.isEnded && !lstore.loader.isEmpty? (
                 '已全部加载完毕'
               ) : (
-                <span>点击加载更多</span>
+                null
               )}
             </div>
           </PullToRefresh>

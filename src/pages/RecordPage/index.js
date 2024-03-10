@@ -46,9 +46,8 @@ function View({ self, router, store, Navi, params }) {
     <Observer>
       {() => {
         return (
-          <UserAreaView bottom="0">
+          <UserAreaView bottom="0" bgcBot={'transparent'}>
             <Navi title="记录" />
-
             <PullToRefresh
               style={{ flex: 1, overflow: 'auto' }}
               onScroll={() => {
@@ -117,8 +116,8 @@ function View({ self, router, store, Navi, params }) {
                   <span>点击加载更多</span>
                 )}
               </div>
+              <div style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}></div>
             </PullToRefresh>
-            <div style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}></div>
           </UserAreaView>
         );
       }}
