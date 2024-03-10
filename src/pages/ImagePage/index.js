@@ -9,7 +9,7 @@ import { ITag, Container } from './style';
 import services from 'services';
 import { useEffectOnce } from 'react-use';
 import PinchZoom from 'components/PinchZoom/self';
-import { IoIosShareAlt } from 'react-icons/io'
+import { IoIosShareAlt } from 'react-icons/io';
 
 const { createMark, getMark, destroyMark } = services;
 const model = createPageModel({
@@ -112,7 +112,18 @@ function View({ self, router, store, params, Navi }) {
               )}
             </div>
             <div
-              style={{ backgroundColor: '#ddd', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', width: 40, height: 40, position: 'fixed', right: 'calc(env(safe-area-inset-right) + 10px)', bottom: 'calc(env(safe-area-inset-bottom) + 60px)' }}
+              style={{
+                backgroundColor: '#ddd',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 40,
+                height: 40,
+                position: 'fixed',
+                right: 'calc(env(safe-area-inset-right) + 10px)',
+                bottom: 'calc(env(safe-area-inset-bottom) + 60px)',
+              }}
               onClick={async () => {
                 if (localStore.markLoading) return;
                 localStore.markLoading = true;

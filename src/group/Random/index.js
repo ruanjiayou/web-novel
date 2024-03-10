@@ -77,7 +77,12 @@ export default function Random({ self }) {
           <VisualBoxView visible={self.attrs.random === true}>
             <MIconView
               spin={local.spin}
-              style={{ textAlign: 'center', paddingTop: 10, paddingBottom: 20, fontSize: 13 }}
+              style={{
+                textAlign: 'center',
+                paddingTop: 10,
+                paddingBottom: 20,
+                fontSize: 13,
+              }}
               type="FaRedo"
               after="换一换"
               onClick={change}

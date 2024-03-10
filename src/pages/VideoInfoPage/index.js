@@ -122,7 +122,7 @@ function View({ self, router, store, services, params }) {
         } else {
           return (
             <Fragment>
-              <UserAreaView bgcTop={'black'} bottom='0'>
+              <UserAreaView bgcTop={'black'} bottom="0">
                 <div className="full-height-fix">
                   <Player
                     router={router}

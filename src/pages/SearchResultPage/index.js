@@ -35,7 +35,7 @@ function View({ self, params }) {
     loader.refresh({
       query: { title: local.search },
     });
-  }, [])
+  }, []);
   return (
     <Observer>
       {() => (
@@ -85,7 +85,9 @@ function View({ self, params }) {
               <input
                 defaultValue={params.title}
                 autoFocus
-                ref={(ref) => { iRef.current = ref; }}
+                ref={(ref) => {
+                  iRef.current = ref;
+                }}
                 style={{
                   backgroundColor: '#ccc',
                   height: 30,

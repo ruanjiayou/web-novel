@@ -36,7 +36,7 @@ function View({ self, router, store, params = {} }) {
         return (
           <Fragment>
             {/* 内部文字 */}
-            <UserAreaView bottom='0'>
+            <UserAreaView bottom="0">
               <FullWidth
                 className="full-height-fix"
                 style={{
