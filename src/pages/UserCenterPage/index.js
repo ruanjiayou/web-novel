@@ -115,7 +115,11 @@ function View({ self, router, store }) {
                   </div>
                   <div
                     onClick={() => {
-                      router.pushView('Record');
+                      if (store.app.isLogin) {
+                        router.pushView('Record');
+                      } else {
+                        showTip(router);
+                      }
                     }}
                   >
                     <MIconView type="FaHistory" style={{ color: '#14b2f7' }} />

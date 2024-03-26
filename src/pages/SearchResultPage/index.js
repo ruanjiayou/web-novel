@@ -1,6 +1,6 @@
 import React, { Fragment, useCallback, useRef, useEffect } from 'react';
 import { Observer, useLocalStore } from 'mobx-react-lite';
-import { Tabs } from 'antd-mobile';
+import { ActivityIndicator, Tabs } from 'antd-mobile';
 import { ResourceListLoader } from 'loader';
 import renderBlank from 'components/EmptyView';
 import { LoaderListView, MIconView, UserAreaView } from 'components';
@@ -39,7 +39,7 @@ function View({ self, params }) {
   return (
     <Observer>
       {() => (
-        <UserAreaView>
+        <UserAreaView bottom='0'>
           <FullWidth style={{ height: 50, marginLeft: 10 }}>
             <FullWidthFix>
               <MIconView
@@ -95,7 +95,6 @@ function View({ self, params }) {
                   flex: 1,
                   boxSizing: 'border-box',
                   border: '0 none',
-                  borderBottom: '1px solid #999',
                 }}
                 onKeyDown={(e) => {
                   if (e.keyCode === 13) {
@@ -120,15 +119,19 @@ function View({ self, params }) {
             <div
               style={{ color: '#ccc', margin: '0 5px' }}
               onClick={() => {
+                if (loader.isLoading) {
+                  return;
+                }
                 loader.refresh({
                   query: { title: iRef.current ? iRef.current.value : '' },
                 });
               }}
             >
-              搜索
+              {loader.isLoading ? <ActivityIndicator /> : "搜索"}
             </div>
           </FullWidth>
           <FullHeightAuto>
+            {/* TODO: loading */}
             <LoaderListView
               loader={loader}
               auto={false}
@@ -136,7 +139,9 @@ function View({ self, params }) {
               renderItem={(item) => (
                 <ResourceItem key={item.id} item={item} loader={loader} />
               )}
-            />
+            >
+              <div style={{ height: 'env(safe-area-inset-bottom)' }}></div>
+            </LoaderListView>
           </FullHeightAuto>
         </UserAreaView>
       )}
