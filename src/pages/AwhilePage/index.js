@@ -36,7 +36,7 @@ function View({ self, router, store, params }) {
               backgroundColor: 'rgba(0,0,0,0.5)',
             }}
             onClick={() => {
-              router.replaceView('home');
+              router.back();
             }}
           >
             <MIconView type="FaChevronLeft" />

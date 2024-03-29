@@ -5,8 +5,16 @@ import { useStoreContext } from 'contexts/store';
 import { useRouterContext } from 'contexts';
 import services from 'services';
 import Recorder from 'utils/cache';
+import styled from 'styled-components';
 
 const musicRecorder = new Recorder('music');
+const Wrap = styled.div`
+  background-color: ${(prop => prop.isPlay ? '#eaf1f7' : '')};
+  color: ${(prop => prop.isPlay ? '#33a3f4' : '')};
+  border-bottom: 1px solid #eee;
+  border-left: 2px solid ${prop => prop.isPlay ? '#0094fd' : 'transparent'};
+  padding: 5px 0 5px 5px;
+`
 
 export default function ({ item, mode = 'add', loader, ...props }) {
   const router = useRouterContext();
@@ -16,20 +24,14 @@ export default function ({ item, mode = 'add', loader, ...props }) {
     <Observer>
       {() => (
         <Fragment>
-          <div
+          <Wrap
+            isPlay={item.id === music.currentId}
             className="dd-common-alignside"
-            style={{
-              backgroundColor: item.id === music.currentId ? '#eaf1f7' : '',
-              borderBottom: '1px solid #eee',
-              borderLeft:
-                item.id === music.currentId ? '2px solid #0094fd' : 'none',
-            }}
-            {...props}
+            // {...props}
           >
             <div
               style={{
                 flex: 1,
-                color: music.currentId === item.id ? '#33a3f4' : '',
               }}
               onClick={async (e) => {
                 if (music.currentId === item.id) return;
@@ -64,12 +66,12 @@ export default function ({ item, mode = 'add', loader, ...props }) {
                         data: { list: [item.id] },
                       });
                       loader.item.removeById(item.id);
-                    } catch (e) {}
+                    } catch (e) { }
                   }}
                 />
               </VisualBoxView>
             </div>
-          </div>
+          </Wrap>
         </Fragment>
       )}
     </Observer>
