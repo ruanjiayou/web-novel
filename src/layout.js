@@ -79,6 +79,7 @@ export default function ({ children }) {
                     if (menu.name === local.selectedMenu) {
                       return;
                     }
+                    store.app.setLastSelectMenu(local.selectedMenu)
                     local.selectedMenu = menu.name;
                     router.replaceView(menu.name, {});
                   }}

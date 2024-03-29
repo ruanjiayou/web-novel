@@ -11,7 +11,7 @@ const model = createPageModel({});
 
 function View({ self, router, store, params }) {
   const local = useLocalStore(() => ({}));
-  useEffectOnce(() => {});
+  useEffectOnce(() => { });
   return (
     <Observer>
       {() => (
@@ -36,7 +36,7 @@ function View({ self, router, store, params }) {
               backgroundColor: 'rgba(0,0,0,0.5)',
             }}
             onClick={() => {
-              router.back();
+              router.replaceView(store.app.lastSelectMenu, {});
             }}
           >
             <MIconView type="FaChevronLeft" />

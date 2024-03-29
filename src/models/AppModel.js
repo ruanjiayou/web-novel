@@ -12,6 +12,7 @@ const Model = types
     forceLogin: types.optional(types.boolean, false),
     // 底部tabBars菜单
     tabs: types.optional(types.array(TabModel), []),
+    lastSelectMenu: types.optional(types.string, ''),
     // 首页tabs
     channels: types.optional(types.array(Channel), []),
     // 当前tab
@@ -152,6 +153,9 @@ const Model = types
     },
     setChannels(channels) {
       self.channels = channels;
+    },
+    setLastSelectMenu(menu) {
+      self.lastSelectMenu = menu
     },
   }));
 
