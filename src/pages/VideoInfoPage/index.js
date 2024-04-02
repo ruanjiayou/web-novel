@@ -15,7 +15,9 @@ import createPageModel from 'page-group-loader-model/BasePageModel';
 import Recorder from 'utils/cache';
 import { useEffectOnce } from 'react-use';
 import Player from '../../components/Player';
+import Player2 from '../../components/Player2';
 import { EpTag } from './style';
+import apis from '../../services/index'
 
 const videoRecorder = new Recorder('video');
 const model = createPageModel({
@@ -31,7 +33,7 @@ function View({ self, router, store, services, params }) {
     loading: false,
     firstLoading: false,
     shouldFix: true,
-    id: params.id,
+    id: '',
     playpath: '',
     child_id: '',
     looktime: 0,
@@ -48,7 +50,7 @@ function View({ self, router, store, services, params }) {
     setRecorder(child_id = '', looktime = 0) {
       if (loader.item) {
         const data = loader.item.toJSON();
-        videoRecorder.getValue(params.id).then(() => {
+        videoRecorder.getValue(localStore.id).then(() => {
           videoRecorder.setValue(localStore.id, data, {
             child_id,
             time: looktime,
@@ -68,10 +70,13 @@ function View({ self, router, store, services, params }) {
       });
     },
   }));
-
   useEffect(() => {
-    params.id &&
-      loader.refresh({ params: { id: params.id } }, async (res) => {
+    if (localStore.id && store.app.isLogin && localStore.watched) {
+      localStore.updateHistory(localStore.watched);
+    }
+    localStore.id = params.id
+    localStore.id &&
+      loader.refresh({ params: { id: localStore.id } }, async (res) => {
         const query = {};
         if (res.item.tags) {
           query.tags = res.item.tags;
@@ -93,16 +98,23 @@ function View({ self, router, store, services, params }) {
             ) + child.path;
         }
       });
-    videoRecorder.getValue(params.id).then((result) => {
-      if (result && result.data && result.option) {
-        localStore.child_id = result.option.child_id;
-        localStore.looktime = result.option.time;
+    store.app.isLogin && localStore.id && apis.getHistoryDetail({ params: { id: params.id } }).then(resp => {
+      if (resp.code === 0) {
+        localStore.looktime = resp.data.watched;
       }
-    });
+    }, [params.id])
+    // videoRecorder.getValue(localStore.id).then((result) => {
+    //   if (result && result.data && result.option) {
+    //     localStore.child_id = result.option.child_id;
+    //     localStore.looktime = result.option.time;
+    //   }
+    // });
   }, [params.id]);
   useEffectOnce(() => {
     return () => {
-      localStore.updateHistory(localStore.watched);
+      // if (store.app.isLogin) {
+      //   localStore.updateHistory(localStore.watched);
+      // }
       loader.clear();
     };
   });
@@ -124,7 +136,7 @@ function View({ self, router, store, services, params }) {
             <Fragment>
               <UserAreaView bgcTop={'black'} bottom="0">
                 <div className="full-height-fix">
-                  <Player
+                  {/* <Player
                     router={router}
                     type={localStore.type}
                     resource={loader.item}
@@ -153,6 +165,14 @@ function View({ self, router, store, services, params }) {
                       localStore.looktime = time;
                     }}
                     onTimeUpdate={(time) => {
+                      localStore.watched = time;
+                    }}
+                  /> */}
+                  <Player2
+                    resource={loader.item}
+                    srcpath={localStore.playpath}
+                    looktime={localStore.looktime}
+                    onTimeUpdate={time => {
                       localStore.watched = time;
                     }}
                   />

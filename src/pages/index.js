@@ -26,7 +26,6 @@ import Marked from './MarkedPage';
 import Search from './SearchPage';
 import SearchResult from './SearchResultPage';
 import VideoInfoPage from './VideoInfoPage';
-import VideoPlayerPage from './VideoPlayerPage';
 import AwhilePage from './AwhilePage';
 import ComicInfoPage from './ComicInfoPage';
 import ComicGalleryPage from './ComicGalleryPage';
@@ -59,7 +58,6 @@ const pages = [
   Search,
   SearchResult,
   VideoInfoPage,
-  VideoPlayerPage,
   AwhilePage,
   ComicInfoPage,
   ComicGalleryPage,

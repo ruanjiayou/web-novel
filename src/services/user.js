@@ -192,4 +192,10 @@ export default {
       method: 'DELETE',
     });
   },
+  async getHistoryDetail({ params }) {
+    return shttp({
+      url: `/v1/user/history/${params.id}`,
+      method: 'GET'
+    })
+  }
 };

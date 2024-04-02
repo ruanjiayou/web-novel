@@ -137,7 +137,6 @@ export default class AlloyFinger extends Component {
         this.afterLongTap = false;
       }, 1000);
     }, 750);
-    console.log('handle start?');
   }
 
   _handleTouchMove(evt) {
