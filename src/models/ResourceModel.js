@@ -91,7 +91,7 @@ const Model = types
     get auto_cover() {
       const poster =
         self.poster || self.thumbnail
-          ? self.thumbnail || self.post
+          ? self.thumbnail || self.poster
           : '/images/poster/nocover.jpg';
       return store.lineLoader.getHostByType('image') + poster;
     },
