@@ -44,7 +44,7 @@ function App() {
         throw '启动失败';
       });
   });
-  useEffect(() => {});
+  useEffect(() => { });
   useEffectOnce(() => {
     launch();
     window.addEventListener('online', () => {
@@ -109,7 +109,7 @@ class ErrorBoundary extends React.Component {
     document.getElementById('start-loading').style.display = 'none';
     // document.getElementById('box').className = this.state.isPWAorMobile ? 'box-app' : 'box-browser'
     if (isIOSafariWeb()) {
-     // document.getElementById('root').style.height = 'calc(100vh - 80px)';
+      document.getElementById('root').style.height = 'calc(100vh - 80px)';
     }
     document.getElementById('box').className = 'box-app';
     document.getElementById('root').style.display = 'block';
@@ -120,7 +120,7 @@ class ErrorBoundary extends React.Component {
       } else if (globalStore.app.config.isLockerOpen === false) {
         globalStore.app.setLocked(
           Date.now() - globalStore.app.leaveTS >
-            globalStore.app.config.lockerSeconds,
+          globalStore.app.config.lockerSeconds,
         );
       }
     });
