@@ -77,6 +77,7 @@ export default function Player({
     showRecover: false,
     bottomHeight: 0,
     // 手势显示：进度和声音改变
+    showPeek: false,
     peekValue: '',
     takePeek(value) {
       this.peekValue = value;
@@ -119,11 +120,11 @@ export default function Player({
           }
         }}
         onReady={(e) => {
-          console.log(e, 'onready')
+          // console.log(e, 'onready')
           local.duration = e.getDuration();
         }}
         onStart={(e) => {
-          console.log(e, 'onstart')
+          // console.log(e, 'onstart')
           if (looktime) {
             local.showRecover = true;
             setTimeout(() => {
@@ -135,7 +136,7 @@ export default function Player({
           // console.log(e, 'onended')
         }}
         onError={(e) => {
-          console.log(e, 'onerror')
+          console.log(e.message, typeof e.message, 'onerror')
         }}
         onPlay={(e) => {
           // console.log(e, 'onplayer')
@@ -160,25 +161,9 @@ export default function Player({
           onTimeUpdate && onTimeUpdate(local.realtime)
         }}
         onSeek={(time) => {
-          console.log(time, 'onseeek', local.duration)
+          // console.log(time, 'onseeek', local.duration)
         }}
       />
-      {local.showPeek && (
-        <div
-          style={{
-            position: 'absolute',
-            left: '50%',
-            top: '20%',
-            transform: 'translate(-50%,-50%)',
-            padding: '10px',
-            borderRadius: 10,
-            backgroundColor: 'rgba(0,0,0,0.6)',
-            color: 'white',
-          }}
-        >
-          {local.peekValue}
-        </div>
-      )}
       <MyFinger
         onTap={() => {
           const temp = local.playing;
@@ -211,7 +196,7 @@ export default function Player({
               // setVolume(local.volume.toFixed(2));
             }
           } else if (evt.direction === 'Left' || evt.direction === 'Right') {
-            const offset = evt.distance / 5;
+            const offset = evt.distance / 10;
             const time = Math.max(
               0,
               Math.round(
@@ -258,6 +243,23 @@ export default function Player({
           />}
         </div>
       </MyFinger>
+      {local.showPeek && (
+        <div
+          style={{
+            position: 'absolute',
+            left: '50%',
+            top: '20%',
+            transform: 'translate(-50%,-50%)',
+            padding: 7,
+            borderRadius: 5,
+            backgroundColor: 'rgba(0,0,0,0.6)',
+            color: 'white',
+            zIndex: 12,
+          }}
+        >
+          {local.peekValue}
+        </div>
+      )}
       {local.showRecover && <div style={{
         position: 'absolute',
         backgroundColor: '#0004',
@@ -270,6 +272,7 @@ export default function Player({
       }} onClick={() => {
         local.player.seekTo(looktime);
         local.showRecover = false;
+        local.showControl = false
       }}>恢复到 {format(looktime)}</div>}
       {local.showControl && <BottomWrap ref={ref => botRef.current = ref}>
         <ProgressWrap className='progress' onClickCapture={e => {
