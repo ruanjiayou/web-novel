@@ -5,6 +5,7 @@ import { useLocalStore, Observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 import format from 'utils/num2time';
 import MyFinger from '../MyFinger/default';
+import VisualBoxView from 'components/VisualBoxView'
 
 export const Icon = styled.img`
   width: 32px;
@@ -54,6 +55,7 @@ const VIDEO_STATUS = {
 export default function Player({
   resource,
   srcpath,
+  subtitles,
   looktime,
   onTimeUpdate,
 }) {
@@ -64,6 +66,7 @@ export default function Player({
   const local = useLocalStore(() => ({
     volume: 100,
     muted: false,
+    controls: true,
     playing: false,
     player: null,
     status: VIDEO_STATUS.CANPLAY,
@@ -109,11 +112,12 @@ export default function Player({
         width={'100%'}
         height={'100%'}
         pip={false}
-        controls={false}
+        controls={true}
         playsinline={true}
         wrapper={'div'}
         config={{
           file: {
+            tracks: subtitles.map((s, i) => ({ kind: 'subtitles', src: store.app.baseURL + s.path, srcLang: s.lang, default: i === 0 })),
             attributes: {
               poster: resource.auto_cover
             }
@@ -164,85 +168,87 @@ export default function Player({
           // console.log(time, 'onseeek', local.duration)
         }}
       />
-      <MyFinger
-        onTap={() => {
-          const temp = local.playing;
-          setTimeout(() => {
-            if (local.playing === false && temp === true) {
+      <VisualBoxView visible={!local.controls}>
+        <MyFinger
+          onTap={() => {
+            const temp = local.playing;
+            setTimeout(() => {
+              if (local.playing === false && temp === true) {
 
-            } else {
-              local.showControl = !local.showControl
-            }
+              } else {
+                local.showControl = !local.showControl
+              }
 
-          }, 10)
-        }}
-        onDoubleTap={() => {
-          console.log('double')
-          // local.playing = !local.playing
-        }}
-        onSwipe={(evt) => {
-          if (evt.direction === 'Up' || evt.direction === 'Down') {
-            let height = 0;
-            if (height) {
-              const delta =
-                (evt.distance * (evt.direction === 'Down' ? -1 : 1)) / height;
-              local.volume = parseFloat(
-                local.volume + delta > 1
-                  ? 1
-                  : local.volume + delta < 0
-                    ? 0
-                    : local.volume + delta,
+            }, 10)
+          }}
+          onDoubleTap={() => {
+            console.log('double')
+            // local.playing = !local.playing
+          }}
+          onSwipe={(evt) => {
+            if (evt.direction === 'Up' || evt.direction === 'Down') {
+              let height = 0;
+              if (height) {
+                const delta =
+                  (evt.distance * (evt.direction === 'Down' ? -1 : 1)) / height;
+                local.volume = parseFloat(
+                  local.volume + delta > 1
+                    ? 1
+                    : local.volume + delta < 0
+                      ? 0
+                      : local.volume + delta,
+                );
+                // setVolume(local.volume.toFixed(2));
+              }
+            } else if (evt.direction === 'Left' || evt.direction === 'Right') {
+              const offset = evt.distance / 10;
+              const time = Math.max(
+                0,
+                Math.round(
+                  local.realtime + offset * (evt.direction === 'Left' ? -1 : 1),
+                ),
               );
-              // setVolume(local.volume.toFixed(2));
+              local.player.seekTo(time)
+              local.takePeek(offset + 's')
             }
-          } else if (evt.direction === 'Left' || evt.direction === 'Right') {
-            const offset = evt.distance / 10;
-            const time = Math.max(
-              0,
-              Math.round(
-                local.realtime + offset * (evt.direction === 'Left' ? -1 : 1),
-              ),
-            );
-            local.player.seekTo(time)
-            local.takePeek(offset + 's')
-          }
-        }}
-      >
-        <div style={{
-          zIndex: 3,
-          position: 'absolute',
-          left: 0,
-          top: 0,
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          touchAction: 'manipulation',
-        }}
+          }}
         >
-          {/* 播放中,已暂停,缓冲中 */}
-          {local.showControl && local.status === VIDEO_STATUS.CANPLAY && <Icon
-            src={require('theme/icon/play-fill.svg')}
-            onClick={e => {
-              e.preventDefault()
-              e.stopPropagation();
-              local.playing = true;
-            }}
-          />}
-          {local.showControl && local.status === VIDEO_STATUS.PLAYING && <Icon
-            onClick={e => {
-              e.preventDefault();
-              e.stopPropagation();
-              local.playing = false;
-              local.status = VIDEO_STATUS.CANPLAY;
-            }}
-            src={require('../../theme/icon/suspended-fill.svg')}
-          />}
-          {local.status === VIDEO_STATUS.BUFFERING && <Icon className='spin-slow' src={require('../../theme/icon/loading.svg')}
-          />}
-        </div>
-      </MyFinger>
+          <div style={{
+            zIndex: 3,
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            touchAction: 'manipulation',
+          }}
+          >
+            {/* 播放中,已暂停,缓冲中 */}
+            {local.showControl && local.status === VIDEO_STATUS.CANPLAY && <Icon
+              src={require('theme/icon/play-fill.svg')}
+              onClick={e => {
+                e.preventDefault()
+                e.stopPropagation();
+                local.playing = true;
+              }}
+            />}
+            {local.showControl && local.status === VIDEO_STATUS.PLAYING && <Icon
+              onClick={e => {
+                e.preventDefault();
+                e.stopPropagation();
+                local.playing = false;
+                local.status = VIDEO_STATUS.CANPLAY;
+              }}
+              src={require('../../theme/icon/suspended-fill.svg')}
+            />}
+            {local.status === VIDEO_STATUS.BUFFERING && <Icon className='spin-slow' src={require('../../theme/icon/loading.svg')}
+            />}
+          </div>
+        </MyFinger>
+      </VisualBoxView>
       {local.showPeek && (
         <div
           style={{

@@ -35,6 +35,7 @@ function View({ self, router, store, services, params }) {
     shouldFix: true,
     id: '',
     playpath: '',
+    subtitles: [],
     child_id: '',
     looktime: 0,
     watched: 0,
@@ -96,6 +97,7 @@ function View({ self, router, store, services, params }) {
                   ? 'hls'
                   : 'video',
             ) + child.path;
+          localStore.subtitles = child.subtitles || [];
         }
       });
     store.app.isLogin && localStore.id && apis.getHistoryDetail({ params: { id: params.id } }).then(resp => {
@@ -171,6 +173,7 @@ function View({ self, router, store, services, params }) {
                   <Player2
                     resource={loader.item}
                     srcpath={localStore.playpath}
+                    subtitles={localStore.subtitles}
                     looktime={localStore.looktime}
                     onTimeUpdate={time => {
                       localStore.watched = time;
@@ -216,7 +219,13 @@ function View({ self, router, store, services, params }) {
                     </VisualBoxView>
                     <p style={{ marginBottom: 8 }}>内容简介:</p>
                     <div
-                      style={{ lineHeight: 1.5, color: '#555', textIndent: 20 }}
+                      className='line2'
+                      style={{ lineHeight: 1.5, color: '#555', textIndent: 20, wordBreak: 'break-all' }}
+                      onClickCapture={e => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        e.currentTarget.className = e.currentTarget.className === '' ? 'line2' : '';
+                      }}
                       dangerouslySetInnerHTML={{
                         __html: loader.item.desc || '暂无',
                       }}
