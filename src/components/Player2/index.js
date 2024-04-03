@@ -66,9 +66,10 @@ export default function Player({
   const local = useLocalStore(() => ({
     volume: 100,
     muted: false,
-    controls: true,
+    controls: false,
     playing: false,
     player: null,
+    playsinline: true,
     status: VIDEO_STATUS.CANPLAY,
     duration: 0,
     realtime: 0,
@@ -324,7 +325,7 @@ export default function Player({
           />
         </ProgressWrap>
         <span>{format(local.realtime)}/{format(local.duration)}</span>
-        <img src={require('theme/icon/fullscreen.svg')} alt="" style={{ width: 20, height: 20, margin: '0 5px' }} />
+        <img src={require('theme/icon/fullscreen.svg')} alt="" style={{ width: 20, height: 20, margin: '0 5px' }} onClick={() => local.playsinline = !local.playsinline} />
       </BottomWrap>}
     </div>
   )}
