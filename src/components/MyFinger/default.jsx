@@ -11,7 +11,7 @@ export default class AlloyFinger extends Component {
   constructor(props) {
     super(props);
 
-    this.isMobile = isPWAorMobile();
+    this.isMobile = isPWAorMobile() && !navigator.userAgent.includes("WebView");
 
     this.preV = { x: null, y: null };
     this.pinchStartLen = null;

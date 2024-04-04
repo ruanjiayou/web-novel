@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useRef } from 'react'
 import ReactPlayer from 'react-player'
-import { useStoreContext, useRouterContext } from 'contexts';
+import { useStoreContext, useRouterContext, useNaviContext } from 'contexts';
 import { useLocalStore, Observer } from 'mobx-react-lite';
 import styled from 'styled-components';
 import format from 'utils/num2time';
@@ -63,6 +63,7 @@ export default function Player({
   // DONE: 初始化进度，更新进度，快进，buffering，ios全屏：playinline，
   const store = useStoreContext();
   const router = useRouterContext();
+  const Navi = useNaviContext()
   const local = useLocalStore(() => ({
     volume: 100,
     muted: false,
@@ -113,8 +114,8 @@ export default function Player({
         width={'100%'}
         height={'100%'}
         pip={false}
-        controls={true}
-        playsinline={true}
+        controls={local.controls}
+        playsinline={local.playsinline}
         wrapper={'div'}
         config={{
           file: {
@@ -250,6 +251,19 @@ export default function Player({
           </div>
         </MyFinger>
       </VisualBoxView>
+      {local.showControl && (
+        <div style={{ position: "absolute", left: 0, top: 0, width: "100%", height: 45, zIndex: 12 }}>
+          <Navi
+            showBack
+            wrapStyle={{
+              flex: 1,
+              backgroundColor: 'transparent',
+              borderBottom: 'none',
+              width: '100%',
+              height: 35,
+            }}></Navi>
+        </div>
+      )}
       {local.showPeek && (
         <div
           style={{
