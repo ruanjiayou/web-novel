@@ -231,6 +231,11 @@ export default function Player({
             {/* 播放中,已暂停,缓冲中 */}
             {local.showControl && local.status === VIDEO_STATUS.CANPLAY && <Icon
               src={require('theme/icon/play-fill.svg')}
+              onTouchStart={(e) => {
+                e.preventDefault()
+                e.stopPropagation();
+                local.playing = true;
+              }}
               onClick={e => {
                 e.preventDefault()
                 e.stopPropagation();
@@ -238,6 +243,12 @@ export default function Player({
               }}
             />}
             {local.showControl && local.status === VIDEO_STATUS.PLAYING && <Icon
+              onTouchStart={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                local.playing = false;
+                local.status = VIDEO_STATUS.CANPLAY;
+              }}
               onClick={e => {
                 e.preventDefault();
                 e.stopPropagation();
