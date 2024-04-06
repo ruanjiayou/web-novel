@@ -18,6 +18,7 @@ import Player from '../../components/Player';
 import Player2 from '../../components/Player2';
 import { EpTag } from './style';
 import apis from '../../services/index'
+import showTip from 'utils/showTip';
 
 const videoRecorder = new Recorder('video');
 const model = createPageModel({
@@ -240,6 +241,9 @@ function View({ self, router, store, services, params }) {
                           color: loader.item.marked ? '#e54e36' : '#848484',
                         }}
                         onClick={() => {
+                          if (!store.app.isLogin) {
+                            return showTip(router)
+                          }
                           loader.item.setMarked(!loader.item.marked);
                         }}
                       />

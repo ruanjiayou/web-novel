@@ -1,7 +1,15 @@
+img {
+  -webkit-touch-callout: none;
+  /* 禁用长按图片放大效果 */
+  /* pointer-events: none; */
+  /* 禁用图片的交互事件，包括保存图片的选项 */
+}
+
 .respect-gray {
   -webkit-filter: grayscale(100%);
   filter: progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);
 }
+
 /* 1.水平垂直居中 */
 .dd-common-centerXY {
   height: 100%;
@@ -68,10 +76,12 @@ div.dd-common-alignside {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
+
 .spin {
   animation: spin 4s infinite linear;
 }
@@ -97,6 +107,7 @@ div.am-tabs-horizontal .am-tabs-pane-wrap-inactive {
 .list-view-section-body {
   overflow: hidden;
 }
+
 /* 下拉刷新不被挡住 */
 .am-pull-to-refresh-content-wrapper {
   min-height: 100%;

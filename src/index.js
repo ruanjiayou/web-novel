@@ -108,9 +108,6 @@ class ErrorBoundary extends React.Component {
   componentDidMount() {
     document.getElementById('start-loading').style.display = 'none';
     // document.getElementById('box').className = this.state.isPWAorMobile ? 'box-app' : 'box-browser'
-    if (isIOSafariWeb()) {
-      // document.getElementById('root').style.height = 'calc(100vh - 80px)';
-    }
     document.getElementById('box').className = 'box-app';
     document.getElementById('root').style.display = 'block';
     document.addEventListener('visibilitychange', async (e) => {

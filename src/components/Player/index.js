@@ -783,7 +783,7 @@ export default function ({
           style={{
             width: '100%',
             position: !local.isVertical ? 'fixed' : 'relative',
-            height: !local.isVertical ? '100vh' : 'calc(100vw * 9 / 16)',
+            height: !local.isVertical ? '100dvh' : 'calc(100vw * 9 / 16)',
             zIndex: 2,
           }}
           ref={(ref) => (fullScreenRef.current = ref)}
@@ -816,7 +816,7 @@ export default function ({
                 left: 0,
                 top: 0,
                 width: '100%',
-                height: '100vh',
+                height: '100dvh',
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',

@@ -71,6 +71,7 @@ export default function Player({
     playing: false,
     player: null,
     playsinline: true,
+    fullscreen: false,
     status: VIDEO_STATUS.CANPLAY,
     duration: 0,
     realtime: 0,
@@ -78,6 +79,7 @@ export default function Player({
     displayPercent: 0,
     showControl: true,
     isDrag: false,
+    error: '',
     // 恢复进度显示
     showRecover: false,
     bottomHeight: 0,
@@ -103,12 +105,11 @@ export default function Player({
     }
   }, [resource.id])
   return <Observer>{() => (
-    <div style={{ position: 'relative', paddingTop: '56.25%' }}>
+    <div style={{ position: 'relative', paddingTop: '56.25%', backgroundColor: 'black' }}>
       <ReactPlayer
         style={{ position: 'absolute', left: 0, top: 0, zIndex: 2 }}
         url={srcpath}
         ref={ref => local.player = ref}
-        // playIcon={<div style={{ backgroundColor: 'white' }}>?play?</div>}
         loop={false}
         playing={local.playing}
         width={'100%'}
@@ -140,15 +141,21 @@ export default function Player({
         }}
         onEnded={(e) => {
           // console.log(e, 'onended')
+          local.status = VIDEO_STATUS.CANPLAY
         }}
         onError={(e) => {
           console.log(e.message, typeof e.message, 'onerror')
+          local.error = e.message;
         }}
         onPlay={(e) => {
-          // console.log(e, 'onplayer')
+          console.log(e, 'onplay')
+          local.playing = true;
+          local.status = VIDEO_STATUS.PLAYING
         }}
         onPause={(e) => {
-          // console.log(e, 'onpause')
+          console.log(e, 'onpause')
+          local.playing = false
+          local.status = VIDEO_STATUS.CANPLAY
         }}
         onBuffer={(e) => {
           local.status = VIDEO_STATUS.BUFFERING;
@@ -178,14 +185,16 @@ export default function Player({
               if (local.playing === false && temp === true) {
 
               } else {
+                console.log('tap?')
                 local.showControl = !local.showControl
               }
 
-            }, 10)
+            }, 100)
           }}
           onDoubleTap={() => {
             console.log('double')
-            // local.playing = !local.playing
+            local.playing = !local.playing
+            local.status = local.playing ? VIDEO_STATUS.PLAYING : VIDEO_STATUS.CANPLAY
           }}
           onSwipe={(evt) => {
             if (evt.direction === 'Up' || evt.direction === 'Down') {
@@ -231,19 +240,21 @@ export default function Player({
             {/* 播放中,已暂停,缓冲中 */}
             {local.showControl && local.status === VIDEO_STATUS.CANPLAY && <Icon
               src={require('theme/icon/play-fill.svg')}
-              onTouchStart={(e) => {
+              onTouchEndCapture={(e) => {
                 e.preventDefault()
                 e.stopPropagation();
                 local.playing = true;
+                local.showControl = false;
               }}
               onClick={e => {
                 e.preventDefault()
                 e.stopPropagation();
                 local.playing = true;
+                local.showControl = false;
               }}
             />}
             {local.showControl && local.status === VIDEO_STATUS.PLAYING && <Icon
-              onTouchStart={(e) => {
+              onTouchEndCapture={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 local.playing = false;
@@ -263,7 +274,7 @@ export default function Player({
         </MyFinger>
       </VisualBoxView>
       {local.showControl && (
-        <div style={{ position: "absolute", left: 0, top: 0, width: "100%", height: 45, zIndex: 12 }}>
+        <div style={{ position: "absolute", left: 0, top: 0, width: "100%", height: 45, zIndex: 12, background: 'linear-gradient(0deg, rgb(217 215 215 / 0%), rgb(83 81 81 / 67%))' }}>
           <Navi
             showBack
             wrapStyle={{
@@ -271,7 +282,6 @@ export default function Player({
               backgroundColor: 'transparent',
               borderBottom: 'none',
               width: '100%',
-              height: 35,
             }}></Navi>
         </div>
       )}
@@ -306,6 +316,17 @@ export default function Player({
         local.showRecover = false;
         local.showControl = false
       }}>恢复到 {format(looktime)}</div>}
+      {local.error && <div style={{
+        position: 'absolute',
+        backgroundColor: '#0004',
+        color: 'red',
+        padding: '4px 5px',
+        borderRadius: 5,
+        zIndex: 12,
+        bottom: '20%',
+        width: '100%',
+        textAlign: 'center',
+      }}>{local.error}</div>}
       {local.showControl && <BottomWrap ref={ref => botRef.current = ref}>
         <ProgressWrap className='progress' onClickCapture={e => {
           e.stopPropagation();
@@ -313,6 +334,7 @@ export default function Player({
           const parentRect = e.currentTarget.getBoundingClientRect();
           const offsetX = e.clientX - parentRect.left;
           const time = local.duration * (offsetX / e.currentTarget.offsetWidth)
+          local.realtime = time;
           local.player.seekTo(time, 'seconds')
         }}>
           <div style={{ position: 'absolute', left: 0, width: (local.duration ? 100 * local.buffertime / local.duration : 0) + '%', zIndex: 9, height: '100%', backgroundColor: '#eee' }}></div>
@@ -336,7 +358,6 @@ export default function Player({
                 offsetX = parentRect.width;
               }
               local.displayPercent = 100 * offsetX / parentRect.width + '%';
-              console.log(local.displayPercent, local.isDrag)
             }}
             onTouchEnd={e => {
               e.preventDefault();
@@ -350,7 +371,10 @@ export default function Player({
           />
         </ProgressWrap>
         <span>{format(local.realtime)}/{format(local.duration)}</span>
-        <img src={require('theme/icon/fullscreen.svg')} alt="" style={{ width: 20, height: 20, margin: '0 5px' }} onClick={() => local.playsinline = !local.playsinline} />
+        <img src={local.fullscreen ? require('theme/icon/quit-fullscreen.svg') : require('theme/icon/fullscreen.svg')} alt="" style={{ width: 20, height: 20, margin: '0 5px' }} onClick={() => {
+          local.fullscreen = !local.fullscreen;
+          local.playsinline = !local.fullscreen
+        }} />
       </BottomWrap>}
     </div>
   )}
