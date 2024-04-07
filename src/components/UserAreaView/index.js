@@ -21,7 +21,7 @@ export default function UserAreaView({
           style={{
             position: 'relative',
             width: '100%',
-            height: '100%',
+            height: '100dvh',
             boxSizing: 'border-box',
             // height: 'calc(100% - env(safe-area-inset-bottom))',
             // paddingTop: store.app.hideMenu ? 0 : 'env(safe-area-inset-top)',

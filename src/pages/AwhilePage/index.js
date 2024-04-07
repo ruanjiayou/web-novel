@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useEffectOnce } from 'react-use';
 import { Observer, useLocalStore } from 'mobx-react-lite';
 
@@ -6,12 +6,28 @@ import { MIconView, UserAreaView } from 'components';
 import { FullHeight, AlignCenterXY } from 'components/common';
 import createPageModel from 'page-group-loader-model/BasePageModel';
 import showTip from 'utils/showTip';
+import { RecommendResourceListLoader } from 'loader'
+import Player from 'components/Player2';
 
-const model = createPageModel({});
+const model = createPageModel({
+  shorts: RecommendResourceListLoader
+});
 
 function View({ self, router, store, params }) {
-  const local = useLocalStore(() => ({}));
-  useEffectOnce(() => { });
+  const local = useLocalStore(() => ({
+    loader: RecommendResourceListLoader.create(),
+    height: 100,
+    top: 0,
+  }));
+  const containRef = useRef(null);
+  useEffect(() => {
+    if (containRef.current) {
+      local.height = containRef.current.offsetHeight;
+    }
+  }, [containRef.current])
+  useEffectOnce(() => {
+    local.loader.refresh({ params: { source_type: 'video' } });
+  });
   return (
     <Observer>
       {() => (
@@ -45,7 +61,15 @@ function View({ self, router, store, params }) {
             bgc="#00000052"
             bgcTop={'transparent'}
             bgcBot={'transparent'}
-          ></UserAreaView>
+          >
+            <div ref={ref => containRef.current = ref} style={{ width: '100%', height: '100%', overflow: 'hidden', position: 'relative', transform: `translate(0,${local.top}px)` }}>
+              {local.loader.items.map((doc, i) => (
+                <div key={doc.id} style={{ width: '100%', height: '100%', position: 'absolute', top: (i * local.height) + 'px' }}>
+                  {doc.title}
+                </div>
+              ))}
+            </div>
+          </UserAreaView>
         </FullHeight>
       )}
     </Observer>

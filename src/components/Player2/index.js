@@ -371,7 +371,7 @@ export default function Player({
           />
         </ProgressWrap>
         <span>{format(local.realtime)}/{format(local.duration)}</span>
-        <img src={local.fullscreen ? require('theme/icon/quit-fullscreen.svg') : require('theme/icon/fullscreen.svg')} alt="" style={{ width: 20, height: 20, margin: '0 5px' }} onClick={() => {
+        <img src={local.playsinline ? require('theme/icon/fullscreen.svg') : require('theme/icon/quit-fullscreen.svg')} alt="" style={{ width: 20, height: 20, margin: '0 5px' }} onClick={() => {
           local.fullscreen = !local.fullscreen;
           local.playsinline = !local.fullscreen
         }} />
