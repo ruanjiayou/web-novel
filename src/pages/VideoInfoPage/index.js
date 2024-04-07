@@ -14,7 +14,6 @@ import ResourceItem from 'business/ResourceItem';
 import createPageModel from 'page-group-loader-model/BasePageModel';
 import Recorder from 'utils/cache';
 import { useEffectOnce } from 'react-use';
-import Player from '../../components/Player';
 import Player2 from '../../components/Player2';
 import { EpTag } from './style';
 import apis from '../../services/index'

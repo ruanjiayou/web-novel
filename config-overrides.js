@@ -2,6 +2,7 @@ const {
   override,
   fixBabelImports,
   addWebpackPlugin,
+  disableEsLint,
 } = require('customize-cra');
 const analyzer = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
@@ -18,5 +19,6 @@ module.exports = override(
       swDest: 'sw-build.js',
     }),
   ),
-  // addWebpackPlugin(new analyzer())
+  disableEsLint(),
+  // addWebpackPlugin(new analyzer()),
 );
