@@ -114,7 +114,7 @@ export function useProvider(history) {
         }
       },
       pushView(view, params = {}, state) {
-        this.userEvent = true;
+        this.userEvent = false;
         if (view.startsWith('/')) {
           history.push({
             pathname: view,
@@ -133,7 +133,7 @@ export function useProvider(history) {
         }
       },
       replaceView(view, params = {}, state) {
-        this.userEvent = true;
+        this.userEvent = false;
         if (view.startsWith('/')) {
           history.replace({
             pathname: view,

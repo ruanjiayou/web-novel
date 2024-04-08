@@ -25,10 +25,12 @@
         margin: 0;
         padding: 0;
         width: 100%;
-        height: 100dvh;
         overscroll-behavior: none;
         position: relative;
         background-color: white;
+      }
+      html {
+        height: 100vh;
       }
 
       body {
@@ -41,6 +43,7 @@
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
+        overflow: hidden;
       }
 
       .content img {
@@ -52,6 +55,7 @@
         top: 0;
         bottom: 0;
         display: none;
+        height: 100%;
       }
 
       #app-update {

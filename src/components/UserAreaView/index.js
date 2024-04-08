@@ -1,6 +1,6 @@
 import React from 'react';
 import { Observer } from 'mobx-react-lite';
-import { isPWAorMobile } from 'utils/utils';
+import { isIOSafariWeb } from 'utils/utils';
 import { useStoreContext } from 'contexts';
 import { FullHeight, FullHeightAuto, FullHeightFix } from 'components/common';
 
@@ -21,7 +21,7 @@ export default function UserAreaView({
           style={{
             position: 'relative',
             width: '100%',
-            height: '100dvh',
+            height: '100%',
             boxSizing: 'border-box',
             // height: 'calc(100% - env(safe-area-inset-bottom))',
             // paddingTop: store.app.hideMenu ? 0 : 'env(safe-area-inset-top)',
