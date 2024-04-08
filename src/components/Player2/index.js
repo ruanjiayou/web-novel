@@ -68,10 +68,12 @@ export default function Player({
     volume: 100,
     muted: false,
     controls: false,
-    playing: false,
-    player: null,
     playsinline: true,
     fullscreen: false,
+    autoplay: false,
+
+    playing: false,
+    player: null,
     status: VIDEO_STATUS.CANPLAY,
     duration: 0,
     realtime: 0,
@@ -122,7 +124,7 @@ export default function Player({
           file: {
             tracks: subtitles.map((s, i) => ({ kind: 'subtitles', src: store.app.baseURL + s.path, srcLang: s.lang, default: i === 0 })),
             attributes: {
-              poster: resource.auto_cover
+              poster: resource.auto_cover,
             }
           }
         }}
