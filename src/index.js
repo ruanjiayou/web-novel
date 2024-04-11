@@ -35,6 +35,7 @@ function App() {
           throw res.message;
         } else {
           store.ready(res.data);
+          store.app.setBoot(false);
         }
       })
       .catch((e) => {

@@ -19,12 +19,15 @@ function View({ self, router, store, params }) {
     height: 100,
     top: 0,
   }));
+  const lineLoader = store.lineLoader;
   const containRef = useRef(null);
   useEffect(() => {
     if (containRef.current) {
-      local.height = containRef.current.offsetHeight;
+      const { height } = containRef.current.getBoundingClientRect();
+      local.height = height;
+      console.log(containRef.current, local.height)
     }
-  }, [containRef.current])
+  }, [containRef])
   useEffectOnce(() => {
     local.loader.refresh({ params: { source_type: 'video' } });
   });
@@ -57,19 +60,23 @@ function View({ self, router, store, params }) {
           >
             <MIconView type="FaChevronLeft" />
           </AlignCenterXY>
-          <UserAreaView
-            bgc="#00000052"
-            bgcTop={'transparent'}
-            bgcBot={'transparent'}
-          >
-            <div ref={ref => containRef.current = ref} style={{ width: '100%', height: '100%', overflow: 'hidden', position: 'relative', transform: `translate(0,${local.top}px)` }}>
-              {local.loader.items.map((doc, i) => (
-                <div key={doc.id} style={{ width: '100%', height: '100%', position: 'absolute', top: (i * local.height) + 'px' }}>
-                  {doc.title}
-                </div>
-              ))}
-            </div>
-          </UserAreaView>
+          <div ref={ref => containRef.current = ref} style={{
+            position: 'absolute',
+            left: 'env(safe-area-inset-left)',
+            right: 'env(safe-area-inset-right)',
+            top: 'env(safe-area-inset-top)',
+            bottom: 'env(safe-area-inset-bottom)',
+            overflow: 'hidden',
+            height: 'calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom))',
+            transform: `translate(0,${local.top}px)`,
+            backgroundColor: 'rgba(0,0,0,0.5)',
+          }}>
+            {local.loader.items.map((doc, i) => (
+              <div key={doc.id} style={{ width: '100%', height: '100%', position: 'absolute', top: (i * local.height) + 'px' }}>
+                <div>{doc.title}</div>
+              </div>
+            ))}
+          </div>
         </FullHeight>
       )}
     </Observer>

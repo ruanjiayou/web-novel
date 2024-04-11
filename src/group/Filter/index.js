@@ -115,6 +115,7 @@ export default function Filter({ self, loader, ...props }) {
             ))}
           </div>
           <PullToRefresh
+            className='hide-bar'
             style={{ flex: 1, overflow: 'auto' }}
             onScroll={() => {
               const isReachBottom = isInViewPort(eleRef.current);
@@ -123,9 +124,9 @@ export default function Filter({ self, loader, ...props }) {
               }
             }}
             onRefresh={refresh}
-            // renderText={status => {
-            //   return <div>{statusRecord[status]}</div>
-            // }}
+          // renderText={status => {
+          //   return <div>{statusRecord[status]}</div>
+          // }}
           >
             <LoaderListView
               loader={lstore.loader}
@@ -161,7 +162,7 @@ export default function Filter({ self, loader, ...props }) {
             >
               {lstore.loader.isLoading ? (
                 '正在加载更多数据...'
-              ) : lstore.loader.isEnded && !lstore.loader.isEmpty? (
+              ) : lstore.loader.isEnded && !lstore.loader.isEmpty ? (
                 '已全部加载完毕'
               ) : (
                 null

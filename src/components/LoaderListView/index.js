@@ -34,6 +34,7 @@ const GetPullToRefreshlData = ({
         } else {
           return (
             <div
+              className='hide-bar'
               style={{ overflowY: 'auto', position: 'relative', ...style }}
               onScroll={(e) => {
                 const scrollTop = e.currentTarget.scrollTop;
