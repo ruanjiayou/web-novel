@@ -29,7 +29,7 @@ registerRoute(
 );
 
 // 重要的api缓存(离线显示页面)
-const importanceAPI = ['/v1/public/boot', '/v1/public/channels'];
+const importanceAPI = ['/v1/public/boot', '/v1/public/channels', '/v1/public/group-tree/book-recommend'];
 registerRoute(
   ({ request }) => {
     const u = new URL(request.url);

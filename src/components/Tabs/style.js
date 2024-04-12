@@ -28,6 +28,7 @@ export const Slider = styled.div`
   width: 10px;
   background-color: #108ee9;
   position: absolute;
+  left: 0;
   bottom: 0;
   width: ${(prop) => prop.width + 'px'};
   transform: translateX(${(prop) => prop.left + 'px'});
@@ -44,7 +45,7 @@ export const ContentWrap = styled.div`
   position: relative;
   flex-wrap: nowrap;
   display: flex;
-  transition: all 300ms;
+  transition: all 80ms ease;
 `;
 
 export const TabItem = styled.div`

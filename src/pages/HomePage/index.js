@@ -60,7 +60,19 @@ function View({ self, router, store, params }) {
                 }}
               />
               <div
-                style={{ color: '#f97a90', margin: '0 5px' }}
+                style={{ margin: 5 }}
+                onClick={() => {
+                  if (store.app.isLogin) {
+                    router.pushView('Record');
+                  } else {
+                    showTip(router);
+                  }
+                }}
+              >
+                <MIconView type="FaHistory" style={{ color: '#14b2f7' }} />
+              </div>
+              <div
+                style={{ marginRight: 5 }}
                 onClick={() => {
                   if (store.app.isLogin) {
                     router.pushView('Marked');
@@ -72,7 +84,7 @@ function View({ self, router, store, params }) {
                 <MIconView
                   type="FaStar"
                   size={'md'}
-                  style={{ color: '#ccc' }}
+                  style={{ color: '#f97a90' }}
                 />
               </div>
             </FullWidth>
@@ -85,6 +97,7 @@ function View({ self, router, store, params }) {
           >
             <Tabs
               tabs={channels}
+              align='center'
               defaultIndex={local.index}
               onChange={(tab, index) => {
                 store.app.setTab(tab.group_id);

@@ -19,7 +19,7 @@ import {
 import AlloyFinger from 'alloyfinger';
 import event from '../../utils/events';
 
-export default function ({ defaultIndex, tabs = [], children, onChange }) {
+export default function ({ defaultIndex, tabs = [], align = 'start', children, onChange }) {
   const local = useLocalStore(() => ({
     selectedIndex: defaultIndex === -1 ? 0 : defaultIndex || 0,
     actionStarted: false,
@@ -68,7 +68,7 @@ export default function ({ defaultIndex, tabs = [], children, onChange }) {
             local.actionStarted = false;
             return;
           }
-          local.actionOffsetX += evt.deltaX / 2;
+          local.actionOffsetX += evt.deltaX;
         },
         swipe: (evt) => {
           evt.preventDefault();
@@ -103,7 +103,7 @@ export default function ({ defaultIndex, tabs = [], children, onChange }) {
       {() => (
         <Fragment>
           <Tab>
-            <MenuWrap ref={(ref) => (wrapRef.current = ref)}>
+            <MenuWrap style={{ justifyContent: align }} ref={(ref) => (wrapRef.current = ref)}>
               {tabs.map((tab, index) => (
                 <MenuItem
                   key={index}
@@ -125,9 +125,9 @@ export default function ({ defaultIndex, tabs = [], children, onChange }) {
                 width={local.width}
               />
             </MenuWrap>
-            <Content>
+            <Content
+              ref={(ref) => (contentRef.current = ref)}>
               <ContentWrap
-                ref={(ref) => (contentRef.current = ref)}
                 style={{
                   transform: `translateX(${contentRef.current ? -contentRef.current.offsetWidth * local.selectedIndex + (local.direction === 'h' ? local.actionOffsetX : 0) / 2 + 'px' : local.selectedIndex * 100 + '%'})`,
                 }}

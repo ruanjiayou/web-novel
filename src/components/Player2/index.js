@@ -46,7 +46,24 @@ export const Handler = styled.div`
   background-color: #2bb7ff;
   z-index: 11;
 `
-
+export const Tip = styled.span`
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -30px);
+  background-color: #00000080;
+  border-radius: 5px;
+  padding: 3px 5px;
+  &::after {
+    position: absolute;
+    left: 50%;
+    bottom: -6px;
+    transform: translateX(-50%);
+    content: '';
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 6px solid  #00000080;
+  }
+`
 const VIDEO_STATUS = {
   CANPLAY: 'CANPLAY',
   PLAYING: 'PLAYING',
@@ -65,6 +82,7 @@ export default function Player({
   const store = useStoreContext();
   const router = useRouterContext();
   const Navi = useNaviContext()
+  const containRef = useRef(null)
   const local = useLocalStore(() => ({
     volume: 100,
     muted: false,
@@ -79,6 +97,7 @@ export default function Player({
     duration: 0,
     realtime: 0,
     buffertime: 0,
+    dragtime: 0,
     displayPercent: 0,
     showControl: true,
     isDrag: false,
@@ -108,7 +127,7 @@ export default function Player({
     }
   }, [resource.id])
   return <Observer>{() => (
-    <div style={local.fullscreen ? {
+    <div ref={ref => containRef.current = ref} style={local.fullscreen ? {
       position: 'absolute',
       width: '100%',
       height: '100%',
@@ -205,7 +224,7 @@ export default function Player({
           }}
         />
         {local.showControl && (
-          <div style={{ position: "absolute", left: 0, top: 0, width: "100%", height: 45, lineHeight: '45px', zIndex: 12, background: 'linear-gradient(0deg, rgb(217 215 215 / 0%), rgb(83 81 81 / 67%))' }}>
+          <div style={{ position: "absolute", left: 0, top: 0, width: "100%", height: 45, lineHeight: '45px', zIndex: 12, background: 'linear-gradient(180deg,#00000080,#fdfdfd00)' }}>
             <MIconView inline color='white' type="FaChevronLeft" onClick={() => { router.back() }} />
           </div>
         )}
@@ -358,15 +377,16 @@ export default function Player({
             local.realtime = time;
             local.player.seekTo(time, 'seconds')
           }}>
-            <div style={{ position: 'absolute', left: 0, top: 3, width: '100%', height: 4, backgroundColor:'#fff4' }}></div>
-            <div style={{ position: 'absolute', left: 0, top: 3,width: (local.duration ? 100 * local.buffertime / local.duration : 0) + '%', zIndex: 9, height: 4, backgroundColor: '#eee' }}></div>
-            <div style={{ position: 'absolute', left: 0, top: 3,width: local.isDrag ? local.displayPercent : (local.duration ? 100 * local.realtime / local.duration : 0) + '%', zIndex: 10, height: 4, backgroundColor: '#1196db' }}></div>
+            <div style={{ position: 'absolute', left: 0, top: 3, width: '100%', height: 4, backgroundColor: '#fff4' }}></div>
+            <div style={{ position: 'absolute', left: 0, top: 3, width: (local.duration ? 100 * local.buffertime / local.duration : 0) + '%', zIndex: 9, height: 4, backgroundColor: '#eee' }}></div>
+            <div style={{ position: 'absolute', left: 0, top: 3, width: local.isDrag ? local.displayPercent : (local.duration ? 100 * local.realtime / local.duration : 0) + '%', zIndex: 10, height: 4, backgroundColor: '#1196db' }}></div>
 
             <Handler
               style={{ left: local.isDrag ? local.displayPercent : (local.duration ? 100 * local.realtime / local.duration : 0) + '%' }}
               onTouchStart={e => {
                 e.preventDefault();
                 e.stopPropagation();
+                local.dragtime = local.realtime;
                 local.displayPercent = 100 * local.realtime / local.duration + '%';
                 local.isDrag = true;
               }}
@@ -379,22 +399,36 @@ export default function Player({
                 if (offsetX > parentRect.width) {
                   offsetX = parentRect.width;
                 }
+                local.dragtime = Math.round(offsetX / parentRect.width * local.duration)
                 local.displayPercent = 100 * offsetX / parentRect.width + '%';
               }}
               onTouchEnd={e => {
                 e.preventDefault();
                 e.stopPropagation();
-                const time = parseFloat(local.displayPercent) * local.duration / 100
+                const time = local.dragtime
                 local.player.seekTo(time)
                 local.realtime = time;
                 local.isDrag = false;
                 local.displayPercent = 0;
+                local.dragtime = 0;
               }}
-            />
+            >
+              {local.isDrag && <Tip>{format(local.dragtime)}</Tip>}
+            </Handler>
           </ProgressWrap>
           <span>{format(local.realtime)}/{format(local.duration)}</span>
           <img src={local.fullscreen ? require('theme/icon/quit-fullscreen.svg') : require('theme/icon/fullscreen.svg')} alt="" style={{ width: 20, height: 20, margin: '0 5px' }} onClick={() => {
             local.fullscreen = !local.fullscreen;
+            // if (!containRef.current) {
+            //   return;
+            // }
+            // if (containRef.current.requestFullscreen) {
+            //   return containRef.current.requestFullscreen();
+            // } else if (containRef.current.webkitRequestFullscreen) {
+            //   return containRef.current.webkitRequestFullscreen();
+            // } else if (containRef.current.mozRequestFullScreen) {
+            //   return containRef.current.mozRequestFullScreen();
+            // }
           }} />
         </BottomWrap>}
       </div>
