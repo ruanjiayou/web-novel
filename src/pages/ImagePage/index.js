@@ -1,13 +1,12 @@
 import React, { Fragment, useEffect, useCallback } from 'react';
 import { Observer, useLocalStore } from 'mobx-react-lite';
-import { ActivityIndicator, Icon, Tag } from 'antd-mobile';
+import { ActivityIndicator } from 'antd-mobile';
 
 import { ResourceLoader } from 'loader';
 import { AutoCenterView, MIconView, UserAreaView } from 'components';
 import createPageModel from 'page-group-loader-model/BasePageModel';
 import { ITag, Container } from './style';
 import services from 'services';
-import { useEffectOnce } from 'react-use';
 import PinchZoom from 'components/PinchZoom/self';
 import { IoIosShareAlt } from 'react-icons/io';
 
@@ -17,7 +16,7 @@ const model = createPageModel({
 });
 const RATIO = document.body.clientWidth / document.body.clientHeight;
 function View({ self, router, store, params, Navi }) {
-  const loader = ResourceLoader.create();
+  const loader = self.ResourceLoader;
   let imageHost = store.lineLoader.getHostByType('image');
   const localStore = useLocalStore(() => ({
     loading: false,
@@ -41,7 +40,7 @@ function View({ self, router, store, params, Navi }) {
       return <MIconView type="FaHeart" style={{ color: '#fb8e8e' }} />;
     }
   };
-  useEffectOnce(() => {
+  useEffect(() => {
     if (loader.isEmpty) {
       loader.refresh({ params: { id: localStore.id } });
     }
@@ -52,8 +51,10 @@ function View({ self, router, store, params, Navi }) {
         }
       });
     }
-  });
-  console.log(loader.isEmpty);
+    return () => {
+      loader.clear();
+    }
+  }, [localStore.id]);
   return (
     <Observer>
       {() => (

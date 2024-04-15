@@ -132,6 +132,7 @@ function createItemsLoader(model, fn, customs = {}) {
       return {
         clear() {
           self.page = 1;
+          self.state = 'init';
           self.items = [];
         },
         toggleSort() {
@@ -249,6 +250,7 @@ function createItemLoader(model, fn, customs = {}) {
       return {
         clear() {
           self.item = null;
+          self.state = 'init';
         },
         async refresh(option, cb) {
           self.error = null;
