@@ -33,6 +33,7 @@ const Model = types
     hideMenu: types.optional(types.boolean, false),
     // 音乐播放器相关
     showMusic: false,
+    env: types.enumeration(["test", "development", "production"]),
     // 调试
     showDebug: types.optional(types.boolean, false),
     leaveTS: types.optional(types.number, Date.now() - 60 * 6),
@@ -136,6 +137,11 @@ const Model = types
   .actions((self) => ({
     toggleDebug() {
       self.showDebug = !self.showDebug;
+      storage.setValue('show-debug', self.showDebug);
+    },
+    setENV(env) {
+      self.env = env
+      storage.setValue('env', self.env);
     },
     toggleMusic() {
       self.showMusic = !self.showMusic;

@@ -1,7 +1,7 @@
 import services from '../services/index';
 import LineModel from '../models/LineModel';
 import { createItemsLoader } from 'page-group-loader-model/BaseLoaderModel';
-import Config from 'config';
+import store from '../store';
 
 export default createItemsLoader(
   LineModel,
@@ -11,12 +11,14 @@ export default createItemsLoader(
   {
     getHostByType(type) {
       let host = '';
-      type = Config.isDebug ? 'dev-' + type : type;
+      let env = store.app.env;
+      type = `${env}-${type}`;
       this.items.forEach((item) => {
         if (item.type === type) {
           host = item.host;
         }
       });
+      console.log(type, env, host)
       return host;
     },
   },

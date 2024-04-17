@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Observer } from 'mobx-react-lite';
-import { Switch } from 'antd-mobile';
+import { Radio, Switch } from 'antd-mobile';
 
 import createPageModel from 'page-group-loader-model/BasePageModel';
 import { UserAreaView } from 'components/index.js';
@@ -23,6 +23,31 @@ function View({ self, router, store, Navi }) {
                 checked={store.app.config.isLockerOpen}
                 onChange={(checked) => store.app.setLocker(checked)}
               />
+            </div>
+            <div
+              className="dd-common-alignside"
+              style={{ padding: '15px 20px', backgroundColor: 'white' }}
+            >
+              环境
+              <div className="dd-common-alignside">
+                <Radio name='env' checked={store.app.env === 'test'} onChange={e => {
+                  store.app.setENV('test')
+                }}>
+                  测试
+                </Radio>
+                &nbsp;&nbsp;
+                <Radio name='env' checked={store.app.env === 'development'} onChange={e => {
+                  store.app.setENV('development')
+                }}>
+                  开发
+                </Radio>
+                &nbsp;&nbsp;
+                <Radio name='env' checked={store.app.env === 'production'} onChange={e => {
+                  store.app.setENV('production')
+                }}>
+                  正式
+                </Radio>
+              </div>
             </div>
             <div
               className="dd-common-alignside"

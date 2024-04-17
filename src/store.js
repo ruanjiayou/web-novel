@@ -56,6 +56,14 @@ const Store = types
       const mode = storage.getValue('music-mode') || 'circle';
       self.music.setMode(mode);
 
+      const showDebug = storage.getValue('show-debug');
+      if (!!showDebug !== self.app.showDebug) {
+        self.app.toggleDebug()
+      }
+      const env = storage.getValue('env');
+      if (["test", 'development', 'production'].includes(env)) {
+        self.app.setENV(env);
+      }
       self.app.setAccessToken(storage.getValue(self.app.accessTokenName) || '');
       self.app.setRefreshToken(
         storage.getValue(self.app.refreshTokenName) || '',
@@ -76,6 +84,7 @@ const store = Store.create({
   ts: Date.now(),
   app: {
     baseURL: '',
+    env: 'production',
     config: {},
   },
   music: {},
