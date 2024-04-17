@@ -18,7 +18,6 @@ export default createItemsLoader(
           host = item.host;
         }
       });
-      console.log(type, env, host)
       return host;
     },
   },
