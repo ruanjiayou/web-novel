@@ -37,7 +37,7 @@ function View({ self, router, store, params }) {
         <FullHeight
           style={{
             position: 'relative',
-            backgroundImage: 'url(/logo.jpg)',
+            backgroundImage: 'url(/novel/logo.jpg)',
             backgroundSize: 'cover',
             backgroundPosition: '50% 50%',
           }}

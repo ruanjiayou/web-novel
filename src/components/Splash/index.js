@@ -35,7 +35,7 @@ export default function Splash({
           }}
         >
           <img
-            src="/logo.jpg"
+            src="/novel/logo.jpg"
             style={{
               position: 'absolute',
               left: '50%',

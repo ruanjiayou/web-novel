@@ -46,7 +46,7 @@ function View({ self, router, store, params }) {
               }}
             >
               <img
-                src="/logo.jpg"
+                src="/novel/logo.jpg"
                 alt=""
                 style={{ margin: '0 10px', borderRadius: '50%' }}
                 onClick={(e) => {

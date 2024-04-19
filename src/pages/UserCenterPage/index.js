@@ -49,7 +49,7 @@ function View({ self, router, store }) {
                   <ActivityIndicator />
                 ) : (
                   <img
-                    src="/logo.jpg"
+                    src="/novel/logo.jpg"
                     style={{
                       borderRadius: '50%',
                       width: '100%',
@@ -226,7 +226,7 @@ function View({ self, router, store }) {
                 </div>
               </Card>
               {/* <PinchZoom wrapStyle={{ width: '100%', height: 250, position: 'relative' }}>
-            <img style={{ width: '100%', height: '100%' }} src="/logo.jpg" />
+            <img style={{ width: '100%', height: '100%' }} src="/novel/logo.jpg" />
           </PinchZoom> */}
             </WingBlank>
           </div>
