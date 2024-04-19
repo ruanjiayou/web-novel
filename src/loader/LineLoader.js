@@ -10,15 +10,14 @@ export default createItemsLoader(
   },
   {
     getHostByType(type) {
-      let host = '';
-      let env = store.app.env;
-      type = `${env}-${type}`;
+      const env = store.app.env;
+      let url = '';
       this.items.forEach((item) => {
-        if (item.type === type) {
-          host = item.host;
+        if (item.type === type && item.env === env) {
+          url = item.url;
         }
       });
-      return host;
+      return url;
     },
   },
 );
