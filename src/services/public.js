@@ -1,8 +1,18 @@
 import shttp from 'utils/shttp';
 import { stringfyQuery, sleep } from 'utils/utils';
+import store from '../store'
 
 export default {
   async getBoot() {
+    const url = await Promise.race(['https://u67631x482.vicp.fun/gw/novel', 'https://jiayou.com', 'http://192.168.0.124/gw/novel'].map(async (url) => {
+      const resp = await fetch(url, { method: 'head', mode: 'no-cors' })
+      return url;
+    }))
+    if (url) {
+      store.app.setBaseURL(url);
+      console.log('set race url:', url)
+      shttp.defaults.baseURL = url;
+    }
     return shttp({
       url: '/v1/public/boot',
     });
@@ -87,7 +97,7 @@ export default {
     }
     return { items: resp.data };
   },
-  async getChannel({}) {
+  async getChannel({ }) {
     const result = await shttp({
       url: '/v1/public/channels',
     });
