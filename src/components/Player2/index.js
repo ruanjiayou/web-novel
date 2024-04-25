@@ -35,7 +35,7 @@ export const ProgressWrap = styled.div`
   border-radius: 5px;
   flex: 1;
   position: relative;
-  margin: 0 10px;
+  margin: 0 10px 2px 10px;
 `
 export const Handler = styled.div`
   width: 16px;
@@ -226,7 +226,13 @@ export default function Player({
         />
         {local.showControl && (
           <div style={{ position: "absolute", left: 0, top: 0, width: "100%", height: 45, lineHeight: '45px', zIndex: 12, background: 'linear-gradient(180deg,#00000080,#fdfdfd00)' }}>
-            <MIconView inline color='white' type="FaChevronLeft" onClick={() => { router.back() }} />
+            <MIconView inline color='white' type="FaChevronLeft" onClick={() => {
+              if (local.fullscreen) {
+                local.fullscreen = false
+              } else {
+                router.back()
+              }
+            }} />
           </div>
         )}
         <VisualBoxView visible={!local.controls}>

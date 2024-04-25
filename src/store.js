@@ -97,6 +97,6 @@ window.store = store;
 // window.ws = ws
 
 store.app.setBaseURL(
-  config.isDebug ? 'http://192.168.0.124/gw/novel' : '/gw/novel',
+  'https://u67631x482.vicp.fun/gw/novel'
 );
 export default store;
