@@ -197,6 +197,7 @@ export default function Player({
             console.log(e, 'onplay')
             local.playing = true;
             local.status = VIDEO_STATUS.PLAYING
+            local.error = ''
           }}
           onPause={(e) => {
             console.log(e, 'onpause')
@@ -249,10 +250,10 @@ export default function Player({
             }}
             onSwipe={(evt) => {
               if (evt.direction === 'Up' || evt.direction === 'Down') {
-                let height = 0;
+                let height = containRef.current ? containRef.current.offsetHeight : 0;
                 if (height) {
                   const delta =
-                    (evt.distance * (evt.direction === 'Down' ? -1 : 1)) / height;
+                    (1.2 * evt.distance * (evt.direction === 'Down' ? -1 : 1)) / height;
                   local.volume = parseFloat(
                     local.volume + delta > 1
                       ? 1
@@ -260,10 +261,12 @@ export default function Player({
                         ? 0
                         : local.volume + delta,
                   );
-                  // setVolume(local.volume.toFixed(2));
+                  if (window.setVolume) {
+                    window.setVolume(parseFloat(local.volume.toFixed(2)));
+                  }
                 }
               } else if (evt.direction === 'Left' || evt.direction === 'Right') {
-                const offset = evt.distance / 10;
+                const offset = (evt.distance / 10).toFixed(0);
                 const time = Math.max(
                   0,
                   Math.round(
@@ -288,37 +291,6 @@ export default function Player({
               touchAction: 'manipulation',
             }}
             >
-              {/* 播放中,已暂停,缓冲中 */}
-              {local.showControl && local.status === VIDEO_STATUS.CANPLAY && <Icon
-                src={require('theme/icon/play-fill.svg')}
-                onTouchEndCapture={(e) => {
-                  e.preventDefault()
-                  e.stopPropagation();
-                  local.playing = true;
-                  local.showControl = false;
-                }}
-                onClick={e => {
-                  e.preventDefault()
-                  e.stopPropagation();
-                  local.playing = true;
-                  local.showControl = false;
-                }}
-              />}
-              {local.showControl && local.status === VIDEO_STATUS.PLAYING && <Icon
-                onTouchEndCapture={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  local.playing = false;
-                  local.status = VIDEO_STATUS.CANPLAY;
-                }}
-                onClick={e => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  local.playing = false;
-                  local.status = VIDEO_STATUS.CANPLAY;
-                }}
-                src={require('../../theme/icon/suspended-fill.svg')}
-              />}
               {local.status === VIDEO_STATUS.BUFFERING && <Icon className='spin-slow' src={require('../../theme/icon/loading.svg')}
               />}
             </div>
@@ -366,8 +338,51 @@ export default function Player({
           bottom: '20%',
           width: '100%',
           textAlign: 'center',
+          boxSizing: 'border-box'
         }}>{local.error}</div>}
         {local.showControl && <BottomWrap ref={ref => botRef.current = ref}>
+          {/* 播放中,已暂停,缓冲中 */}
+          {local.playing ? <Icon
+            style={{ width: 24, height: 24, margin: 0 }}
+            onTouchEndCapture={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (local.status === VIDEO_STATUS.BUFFERING) {
+                return;
+              }
+              local.playing = false;
+              local.status = VIDEO_STATUS.CANPLAY;
+            }}
+            onClick={e => {
+              e.preventDefault();
+              e.stopPropagation();
+              if (local.status === VIDEO_STATUS.BUFFERING) {
+                return;
+              }
+              local.playing = false;
+              local.status = VIDEO_STATUS.CANPLAY;
+            }}
+            src={require('../../theme/icon/suspended-fill.svg')}
+          /> : <Icon
+            style={{ width: 24, height: 24, margin: 0 }}
+            src={require('theme/icon/play-fill.svg')}
+            onTouchEndCapture={(e) => {
+              e.preventDefault()
+              e.stopPropagation();
+              if (local.status === VIDEO_STATUS.BUFFERING) {
+                return;
+              }
+              local.playing = true;
+            }}
+            onClick={e => {
+              e.preventDefault()
+              e.stopPropagation();
+              if (local.status === VIDEO_STATUS.BUFFERING) {
+                return;
+              }
+              local.playing = true;
+            }}
+          />}
           <ProgressWrap className='progress' onClickCapture={e => {
             e.stopPropagation();
             e.preventDefault();

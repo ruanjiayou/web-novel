@@ -4,10 +4,27 @@ import store from '../store'
 
 export default {
   async getBoot() {
-    const url = await Promise.race(['https://u67631x482.vicp.fun/gw/novel', 'https://jiayou.com', 'http://192.168.0.124/gw/novel'].map(async (url) => {
-      const resp = await fetch(url, { method: 'head', mode: 'no-cors' })
-      return url;
-    }))
+    const hosts = ['https://u67631x482.vicp.fun', 'https://jiayou.com', 'http://192.168.0.124', 'http://ios.nat300.top'];
+    const url = await new Promise((resolve, reject) => {
+      let resolved = false, finished = 0;
+      hosts.forEach((url) => {
+        fetch(url, { method: 'get', mode: 'cors' }).then(resp => {
+          finished++;
+          if (!resolved) {
+            resolved = true;
+            return resolve(url + '/gw/novel');
+          }
+          if (finished === hosts.length) {
+            resolve('')
+          }
+        }).catch(err => {
+          finished++;
+          if (finished === hosts.length) {
+            resolve('');
+          }
+        })
+      })
+    })
     if (url) {
       store.app.setBaseURL(url);
       console.log('set race url:', url)
