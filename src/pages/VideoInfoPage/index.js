@@ -118,6 +118,7 @@ function View({ self, router, store, services, params }) {
       //   localStore.updateHistory(localStore.watched);
       // }
       loader.clear();
+      recommendsLoader.clear();
     };
   });
   return (

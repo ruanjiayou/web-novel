@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import format from 'utils/num2time';
 import MyFinger from '../MyFinger/default';
 import VisualBoxView from 'components/VisualBoxView'
+import storage from 'utils/storage.js';
 
 export const Icon = styled.img`
   width: 32px;
@@ -84,8 +85,8 @@ export default function Player({
   const Navi = useNaviContext()
   const containRef = useRef(null)
   const local = useLocalStore(() => ({
-    volume: 100,
-    muted: false,
+    volume: parseInt(storage.getValue('volume')) || 100,
+    muted: storage.getValue('muted') ? true : false,
     controls: false,
     playsinline: true,
     fullscreen: window.orientation === 0 ? false : true,

@@ -80,10 +80,11 @@ const Store = types
     },
   }));
 
+const baseURL = storage.getValue('baseURL');
 const store = Store.create({
   ts: Date.now(),
   app: {
-    baseURL: '',
+    baseURL: baseURL || '',
     env: 'production',
     config: {},
   },
@@ -96,7 +97,4 @@ const store = Store.create({
 window.store = store;
 // window.ws = ws
 
-store.app.setBaseURL(
-  'https://u67631x482.vicp.fun/gw/novel'
-);
 export default store;
