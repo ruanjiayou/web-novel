@@ -85,7 +85,7 @@ export default function Player({
   const Navi = useNaviContext()
   const containRef = useRef(null)
   const local = useLocalStore(() => ({
-    volume: parseInt(storage.getValue('volume')) || 100,
+    volume: window.volume || parseInt(storage.getValue('volume')) || 30,
     muted: storage.getValue('muted') ? true : false,
     controls: false,
     playsinline: true,
