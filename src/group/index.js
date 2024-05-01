@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useMount } from 'react-use';
 import { Observer } from 'mobx-react-lite';
 import renderEmptyView from 'components/EmptyView';
@@ -12,6 +12,7 @@ import Tab from './Tab';
 import TabPane from './TabPane';
 import Random from './Random';
 import { PullToRefresh } from 'antd-mobile';
+import store from '../store'
 
 const views = {
   filter: Filter,
@@ -68,10 +69,12 @@ export function RenderGroups({ loader, group, params, ...props }) {
   const emptyView = renderEmptyView(loader);
   useMount((mount) => {
     mount && mount();
-    if (loader.state === 'init' && group) {
+  }, []);
+  useEffect(() => {
+    if (loader.state === 'init' && group.id === store.app.tab) {
       loader.refresh({ params: { name: group.name } });
     }
-  }, []);
+  }, [store.app.tab])
   return (
     <Observer>
       {() => {

@@ -77,6 +77,7 @@ export default function Player({
   subtitles,
   looktime,
   onTimeUpdate,
+  type,
 }) {
   // TODO: 项目启动拉取用户配置，muted,takePeek,drag,showPanel,进度恢复
   // DONE: 初始化进度，更新进度，快进，buffering，ios全屏：playinline，
@@ -167,18 +168,22 @@ export default function Player({
           wrapper={'div'}
           config={{
             file: {
+              forceHLS: type === 'hls',
               tracks: subtitles.map((s, i) => ({ kind: 'subtitles', src: store.app.baseURL + s.path, srcLang: s.lang, default: i === 0 })),
               attributes: {
                 poster: resource.auto_cover,
               }
             }
           }}
+          onDuration={(duration) => {
+            local.duration = duration
+          }}
           onReady={(e) => {
             // console.log(e, 'onready')
-            local.duration = e.getDuration();
+            // local.duration = e.getDuration() || 0;
           }}
           onStart={(e) => {
-            // console.log(e, 'onstart')
+            console.log(e, 'onstart')
             if (looktime) {
               local.showRecover = true;
               setTimeout(() => {

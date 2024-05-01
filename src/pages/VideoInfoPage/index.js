@@ -90,13 +90,7 @@ function View({ self, router, store, services, params }) {
         if (child) {
           localStore.child_id = child.id;
           localStore.playpath =
-            lineLoader.getHostByType(
-              child.path.endsWith('m3u8') || child.path.endsWith('ts')
-                ? 'hls'
-                : child.path.endsWith('flv')
-                  ? 'hls'
-                  : 'video',
-            ) + child.path;
+            lineLoader.getHostByType('video') + child.path;
           localStore.subtitles = child.subtitles || [];
         }
       });
@@ -176,6 +170,7 @@ function View({ self, router, store, services, params }) {
                     srcpath={localStore.playpath}
                     subtitles={localStore.subtitles}
                     looktime={localStore.looktime}
+                    type={localStore.type}
                     onTimeUpdate={time => {
                       localStore.watched = time;
                     }}

@@ -34,6 +34,7 @@ function View({ self }) {
     tabs.forEach((tab) => {
       self[tab.loader].setOption({ query: { type: tab.type } });
     });
+    self.videos.refresh()
   });
   const onChange = useCallback((tab, index) => {
     if (self[tab.loader].isEmpty) {
@@ -51,10 +52,11 @@ function View({ self }) {
                 tabs={tabs}
                 initialPage={'video'}
                 onChange={onChange}
-                animated={false}
+                animated={true}
               >
                 {tabs.map((tab) => (
                   <LoaderListView
+                    auto={false}
                     loader={self[tab.loader]}
                     style={{ height: '100%' }}
                     itemWrapStyle={{ margin: 10 }}

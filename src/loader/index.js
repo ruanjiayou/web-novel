@@ -17,6 +17,7 @@ import GalleryListLoader from './GalleryListLoader';
 import GalleryLoader from './GalleryLoader';
 import RecommendResourceListLoader from './RecommendResourceListLoader';
 import HistoryListLoader from './HistoryListLoader';
+import SearchLoader from './SearchLoader';
 
 export {
   BookShelfLoader,
@@ -38,4 +39,5 @@ export {
   GalleryLoader,
   RecommendResourceListLoader,
   HistoryListLoader,
+  SearchLoader,
 };

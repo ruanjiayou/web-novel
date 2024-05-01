@@ -1,7 +1,7 @@
 import React, { Fragment, useCallback, useRef, useEffect } from 'react';
 import { Observer, useLocalStore } from 'mobx-react-lite';
 import { ActivityIndicator, Tabs } from 'antd-mobile';
-import { ResourceListLoader } from 'loader';
+import { SearchLoader } from 'loader';
 import renderBlank from 'components/EmptyView';
 import { LoaderListView, MIconView, UserAreaView } from 'components';
 import ResourceItem from 'business/ResourceItem';
@@ -19,7 +19,7 @@ import { useNaviContext, useRouterContext } from 'contexts';
 import storage from 'utils/storage';
 
 const model = createPageModel({
-  resources: ResourceListLoader,
+  resources: SearchLoader,
 });
 
 function View({ self, params }) {
@@ -31,9 +31,9 @@ function View({ self, params }) {
     tag: params.tag || '',
   }));
   useEffectOnce(() => {
-    loader.setOption({ query: { title: params.title, tag: local.tag } });
+    loader.setOption({ query: { q: params.title, tag: local.tag } });
     loader.refresh({
-      query: { title: local.search },
+      query: { key: 'q', value: local.search },
     });
   }, []);
   return (
@@ -84,7 +84,7 @@ function View({ self, params }) {
               )}
               <input
                 defaultValue={params.title}
-                autoFocus
+                autoFocus={false}
                 ref={(ref) => {
                   iRef.current = ref;
                 }}
@@ -123,7 +123,7 @@ function View({ self, params }) {
                   return;
                 }
                 loader.refresh({
-                  query: { title: iRef.current ? iRef.current.value : '' },
+                  query: { q: iRef.current ? iRef.current.value : '' },
                 });
               }}
             >

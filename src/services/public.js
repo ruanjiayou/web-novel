@@ -7,6 +7,9 @@ export default {
     const hosts = ['http://ios.nat300.top', 'https://u67631x482.vicp.fun', 'https://jiayou.com', 'http://192.168.0.124'];
     const url = await new Promise((resolve, reject) => {
       let resolved = false, finished = 0;
+      if (window.location.hostname === '192.168.0.124') {
+        return resolve('http://192.168.0.124/gw/novel')
+      }
       hosts.forEach((url) => {
         fetch(url, { method: 'get', mode: 'cors' }).then(resp => {
           finished++;
@@ -39,6 +42,12 @@ export default {
   async getResourceList({ query, params, data }) {
     const result = await shttp({
       url: `/v1/public/resources${stringfyQuery(query)}`,
+    });
+    return { items: result.data, ended: result.data.length < 10 };
+  },
+  async getSearchList({ query }) {
+    const result = await shttp({
+      url: `/v1/search/${stringfyQuery(query)}`,
     });
     return { items: result.data, ended: result.data.length < 10 };
   },
