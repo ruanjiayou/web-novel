@@ -4,11 +4,11 @@ import store from '../store'
 
 export default {
   async getBoot() {
-    const hosts = ['http://ios.nat300.top', 'https://u67631x482.vicp.fun', 'https://jiayou.com', 'http://192.168.0.124'];
+    const hosts = ['http://ios.nat300.top', 'https://u67631x482.vicp.fun', 'https://jiayou.com', 'https://192.168.0.124'];
     const url = await new Promise((resolve, reject) => {
       let resolved = false, finished = 0;
       if (window.location.hostname === '192.168.0.124') {
-        return resolve('http://192.168.0.124/gw/novel')
+        return resolve('https://192.168.0.124/gw/novel')
       }
       hosts.forEach((url) => {
         fetch(url, { method: 'get', mode: 'cors' }).then(resp => {

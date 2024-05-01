@@ -74,7 +74,6 @@ function View({ self, router, store, Navi, params }) {
               >
                 {tabs.map((tab) => {
                   const loader = self[tab.loader]
-                  console.log(tab)
                   return <PullToRefresh
                     style={{ flex: 1, overflow: 'auto' }}
                     onScroll={() => {
