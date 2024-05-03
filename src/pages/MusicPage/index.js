@@ -23,6 +23,7 @@ function View({ self, router, Navi, children }) {
     },
   }));
   useEffectOnce(() => {
+    loader.setOption({ params: { name: 'music' } })
     if (loader.isEmpty) {
       loader.refresh({});
     }

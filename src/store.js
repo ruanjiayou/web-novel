@@ -85,7 +85,7 @@ const store = Store.create({
   ts: Date.now(),
   app: {
     baseURL: baseURL || '',
-    env: 'production',
+    env: 'test',
     config: {},
   },
   music: {},

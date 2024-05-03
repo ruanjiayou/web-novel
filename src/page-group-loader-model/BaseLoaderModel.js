@@ -198,6 +198,9 @@ function createItemLoader(model, fn, customs = {}) {
       setData(data) {
         self.item = data;
       },
+      setOption(option = {}) {
+        self.option = option;
+      },
     }))
     .actions((self) => {
       // 自定义方法

@@ -107,7 +107,7 @@ export default {
     }
     return { items, ended: true };
   },
-  async getGroupTree({ query, params, data }) {
+  async getGroupTree({ query, params = {}, data }) {
     const result = await shttp({
       url: `/v1/public/group-tree/${params.name}`,
     });

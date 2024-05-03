@@ -25,7 +25,6 @@ function View({ self, router, store, params }) {
     if (containRef.current) {
       const { height } = containRef.current.getBoundingClientRect();
       local.height = height;
-      console.log(containRef.current, local.height)
     }
   }, [containRef])
   useEffectOnce(() => {
