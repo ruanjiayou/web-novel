@@ -134,3 +134,6 @@
 - ~~同一个资源类型的不同展示分为不同的组件,通过 display 来分发,不然写法太乱了~~
 - ~~转场动画的逻辑bug(必定重现:进入视频,replaceView,手势退出)~~
 - ~~Safari网页和webview里高度不一致的问题~~
+- ~~搜索结果分类，改用search接口而不是resource-list~~
+- ~~react-player播放hls失败的问题~~
+- ~~tabs列表设置初始化不自动请求，手动控制~~

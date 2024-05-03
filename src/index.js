@@ -135,6 +135,7 @@ class ErrorBoundary extends React.Component {
             程序崩溃了,
             <div
               onClick={() => {
+                localStorage.clear()
                 this.setState({ isLoading: true }, async () => {
                   // TODO: 域名检测 const result = await checkHost();
                   this.setState({ isLoading: false });
