@@ -73,7 +73,7 @@ export function RenderGroups({ loader, group, params, ...props }) {
   useEffect(() => {
     if (loader.state === 'init' && group.id === store.app.tab) {
       loader.refresh({ params: { name: group.name } });
-    } else if (!group.id) {
+    } else if (group && !group.id) {
       loader.refresh({ params: { name: group.name } })
     }
   }, [store.app.tab])
