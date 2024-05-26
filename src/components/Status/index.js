@@ -7,6 +7,7 @@ const style = {
   flexDirection: 'row',
   justifyContent: 'center',
   alignItems: 'center',
+  color: 'black'
 };
 
 export default function ({ loader, renderBlank, render }) {
@@ -21,6 +22,7 @@ export default function ({ loader, renderBlank, render }) {
             return (
               <div style={style}>
                 出错啦!
+                {loader.error && loader.error.message}
                 <span
                   onClick={() => {
                     loader.refresh();

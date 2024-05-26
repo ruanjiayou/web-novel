@@ -18,6 +18,7 @@ import Player2 from '../../components/Player2';
 import { EpTag } from './style';
 import apis from '../../services/index'
 import showTip from 'utils/showTip';
+import Clipboard from 'react-clipboard.js';
 
 const videoRecorder = new Recorder('video');
 const model = createPageModel({
@@ -178,7 +179,9 @@ function View({ self, router, store, services, params }) {
                 </div>
                 <div className="full-height-auto">
                   <div style={{ padding: '0 20px' }}>
-                    <h2>{loader.item.title}</h2>
+                    <Clipboard data-clipboard-text={loader.item.id} component={'a'}>
+                      <h2>{loader.item.title}</h2>
+                    </Clipboard>
                     <VisualBoxView visible={loader.item.children.length > 1}>
                       <p
                         style={{
