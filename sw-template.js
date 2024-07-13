@@ -1,6 +1,6 @@
 import { precacheAndRoute, matchPrecache } from 'workbox-precaching';
 import { registerRoute, setCatchHandler } from 'workbox-routing';
-import { NetworkFirst, CacheFirst } from 'workbox-strategies';
+import { NetworkFirst, CacheFirst, StaleWhileRevalidate } from 'workbox-strategies';
 import { CacheableResponsePlugin } from 'workbox-cacheable-response';
 import { ExpirationPlugin } from 'workbox-expiration';
 
@@ -22,7 +22,7 @@ registerRoute(
       new ExpirationPlugin({
         maxEntries: 300,
         maxAgeSeconds: 30 * 24 * 60 * 60,
-        purgeOnQuotaError: false,
+        purgeOnQuotaError: true,
       }),
     ],
   }),
@@ -48,21 +48,31 @@ registerRoute(
 // 预缓存
 precacheAndRoute(self.__WB_MANIFEST);
 
-// Cache page navigations (html) with a Network First strategy
+// 缓存页面
 registerRoute(
-  // Check to see if the request is a navigation to a new page
-  ({ request }) => request.mode === 'navigate',
-  // Use a Network First caching strategy
-  new NetworkFirst({
-    // Put all cached files in a cache named 'pages'
+  ({ request }) => request.destination === 'document',
+  new StaleWhileRevalidate({
     cacheName: 'pages',
     plugins: [
-      // Ensure that only requests that result in a 200 status are cached
-      new CacheableResponsePlugin({
-        statuses: [200],
-      }),
-    ],
-  }),
+      new CacheableResponsePlugin({ statuses: [200] }),
+      new ExpirationPlugin({
+        maxEntries: 100,
+        maxAgeSeconds: 7 * 24 * 60 * 60,
+        purgeOnQuotaError: false
+      })
+    ]
+  })
+);
+
+// 可以添加更多的缓存策略，例如缓存 CSS、JavaScript 或图片等
+registerRoute(
+  ({ request }) => request.destination === 'style',
+  new CacheFirst()
+);
+
+registerRoute(
+  ({ request }) => request.destination === 'script',
+  new CacheFirst()
 );
 
 // Catch routing errors, like if the user is offline

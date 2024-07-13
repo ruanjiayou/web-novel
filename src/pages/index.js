@@ -29,6 +29,7 @@ import VideoInfoPage from './VideoInfoPage';
 import AwhilePage from './AwhilePage';
 import ComicInfoPage from './ComicInfoPage';
 import ComicGalleryPage from './ComicGalleryPage';
+import PostPage from './PostPage';
 
 const pages = [
   NotFound,
@@ -61,6 +62,7 @@ const pages = [
   AwhilePage,
   ComicInfoPage,
   ComicGalleryPage,
+  PostPage,
 ];
 
 const groups = {};

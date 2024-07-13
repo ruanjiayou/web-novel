@@ -31,9 +31,9 @@ function View({ self, params }) {
     tag: params.tag || '',
   }));
   useEffectOnce(() => {
-    loader.setOption({ query: { q: params.title, tag: local.tag } });
+    // loader.setOption({ query: { q: params.title, tag: local.tag } });
     loader.refresh({
-      query: { key: 'q', value: local.search },
+      query: { key: 'q', value: local.search, tag: local.tag },
     });
   }, []);
   return (
@@ -108,9 +108,9 @@ function View({ self, params }) {
                           .join(','),
                       );
                     }
-                    router.replaceView('SearchResult', {
-                      title: str,
-                      tag: local.tag,
+                    local.search = str;
+                    loader.refresh({
+                      query: { key: 'q', value: local.search, tag: local.tag },
                     });
                   }
                 }}
@@ -123,7 +123,7 @@ function View({ self, params }) {
                   return;
                 }
                 loader.refresh({
-                  query: { q: iRef.current ? iRef.current.value : '' },
+                  query: { key: 'q', value: local.search, tag: local.tag },
                 });
               }}
             >

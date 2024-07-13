@@ -4,7 +4,7 @@ import store from '../store'
 
 export default {
   async getBoot() {
-    const hosts = ['http://ios.nat300.top', 'https://u67631x482.vicp.fun', 'https://jiayou.com', 'https://192.168.0.124'];
+    const hosts = ['https://u67631x482.vicp.fun', 'http://192.168.0.124'];
     const url = await new Promise((resolve, reject) => {
       let resolved = false, finished = 0;
       if (window.location.hostname === '192.168.0.124') {
