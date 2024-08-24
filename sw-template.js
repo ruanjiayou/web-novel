@@ -29,21 +29,21 @@ registerRoute(
 );
 
 // // 重要的api缓存(离线显示页面)
-// const importanceAPI = ['/v1/public/boot', '/v1/public/channels', '/v1/public/group-tree/book-recommend'];
-// registerRoute(
-//   ({ request }) => {
-//     const u = new URL(request.url);
-//     return importanceAPI.includes(u.pathname);
-//   },
-//   new NetworkFirst({
-//     cacheName: 'bootApi',
-//     plugins: [
-//       new CacheableResponsePlugin({
-//         statuses: [200],
-//       }),
-//     ],
-//   }),
-// );
+const importanceAPI = ['/v1/public/boot', '/v1/public/channels', '/v1/public/group-tree/book-recommend'];
+registerRoute(
+  ({ request }) => {
+    const u = new URL(request.url);
+    return importanceAPI.includes(u.pathname);
+  },
+  new NetworkFirst({
+    cacheName: 'bootApi',
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [200],
+      }),
+    ],
+  }),
+);
 
 // 预缓存
 precacheAndRoute(self.__WB_MANIFEST);
