@@ -84,8 +84,8 @@ function View({ self, router, store, params = {} }) {
                     {loader.item.images && loader.item.images.map((it, i) => (
                       <img key={i} src={imageHost + it} alt="t" />
                     ))}
-                    {loader.item.videos && loader.item.videos.map((it, i) => (
-                      <video key={i} src={videoHost + it} />
+                    {_.isArray(loader.item.children) && loader.item.children.map((it, i) => (
+                      <video key={i} src={videoHost + it.path} controls style={{ width: '100%' }} />
                     ))}
                   </div>
                 </Fragment>
