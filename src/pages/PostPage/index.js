@@ -19,6 +19,8 @@ const model = createPageModel({ ResourceLoader });
 function View({ self, router, store, params = {} }) {
   const loader = self.ResourceLoader;
   const emptyView = EmptyView(loader);
+  let imageHost = store.lineLoader.getHostByType('image');
+  let videoHost = store.lineLoader.getHostByType('video');
   const localStore = useLocalStore(() => ({
     pop: false,
     percent: 0,
@@ -74,15 +76,17 @@ function View({ self, router, store, params = {} }) {
                       paddingBottom: 'env(safe-area-inset-bottom)',
                     }}
                   >
-                    {loader.isEmpty ? (
-                      emptyView
-                    ) : (
-                      <div
-                        dangerouslySetInnerHTML={{
-                          __html: loader.item.content,
-                        }}
-                      ></div>
-                    )}
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: loader.item.content,
+                      }}
+                    ></div>
+                    {loader.item.images && loader.item.images.map((it, i) => (
+                      <img key={i} src={imageHost + it} alt="t" />
+                    ))}
+                    {loader.item.videos && loader.item.videos.map((it, i) => (
+                      <video key={i} src={videoHost + it} />
+                    ))}
                   </div>
                 </Fragment>
               )}

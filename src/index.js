@@ -18,6 +18,7 @@ import * as swManager from './sw-manager';
 import services from 'services';
 import config from 'config';
 import { useEffectOnce } from 'react-use';
+import shttp from 'utils/shttp';
 
 // 引入router.顺便做点什么: loading/emptyView什么的
 function App() {
@@ -25,6 +26,7 @@ function App() {
   const local = useLocalStore(() => ({
     isError: false,
   }));
+  shttp.defaults.baseURL = store.app.baseURL || '';
   const launch = useCallback(() => {
     store.app.setBoot(true);
     store.app.setHistoryLength(window.history.length);
@@ -35,6 +37,10 @@ function App() {
           throw res.message;
         } else {
           store.ready(res.data);
+          const line = res.data.lines.find(l => l.type === 'api' && l.enabled === true && l.env === store.app.env);
+          if (line) {
+            shttp.defaults.baseURL = line.url;
+          }
           store.app.setBoot(false);
         }
       })

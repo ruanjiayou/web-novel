@@ -1,40 +1,8 @@
 import shttp from 'utils/shttp';
 import { stringfyQuery, sleep } from 'utils/utils';
-import store from '../store'
 
 export default {
   async getBoot() {
-    const hosts = ['https://u67631x482.vicp.fun', 'http://192.168.0.124'];
-    const url = await new Promise((resolve, reject) => {
-      let resolved = false, finished = 0;
-      if (window.location.hostname === '192.168.0.124') {
-        return resolve('https://192.168.0.124/gw/novel')
-      }
-      hosts.forEach((url) => {
-        fetch(url, { method: 'get', mode: 'cors' }).then(resp => {
-          finished++;
-          if (!resolved) {
-            resolved = true;
-            return resolve(url + '/gw/novel');
-          }
-          if (finished === hosts.length) {
-            resolve('')
-          }
-        }).catch(err => {
-          finished++;
-          if (finished === hosts.length) {
-            resolve('');
-          }
-        })
-      })
-    })
-    if (url) {
-      store.app.setBaseURL(url);
-      console.log('set race url:', url)
-      shttp.defaults.baseURL = url;
-    } else if (!store.app.baseURL) {
-      throw ('获取线路失败');
-    }
     return shttp({
       url: '/v1/public/boot',
     });

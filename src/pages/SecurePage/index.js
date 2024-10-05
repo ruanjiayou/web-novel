@@ -32,18 +32,21 @@ function View({ self, router, store, Navi }) {
               <div className="dd-common-alignside">
                 <Radio name='env' checked={store.app.env === 'test'} onChange={e => {
                   store.app.setENV('test')
+                  window.location.reload();
                 }}>
                   测试
                 </Radio>
                 &nbsp;&nbsp;
                 <Radio name='env' checked={store.app.env === 'development'} onChange={e => {
                   store.app.setENV('development')
+                  window.location.reload();
                 }}>
                   开发
                 </Radio>
                 &nbsp;&nbsp;
                 <Radio name='env' checked={store.app.env === 'production'} onChange={e => {
                   store.app.setENV('production')
+                  window.location.reload();
                 }}>
                   正式
                 </Radio>

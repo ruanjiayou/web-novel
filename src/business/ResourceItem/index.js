@@ -6,6 +6,7 @@ import ImageItem from './ImageItem/';
 import ArticleItem from './ArticleItem';
 import VideoItem from './VideoItem';
 import ComicItem from './ComicItem';
+import PostItem from './PostItem';
 
 export default function ResourceItem({
   item,
@@ -42,6 +43,9 @@ export default function ResourceItem({
             break;
           case 'article':
             Item = <ArticleItem item={item} loader={loader} />;
+            break;
+          case 'post':
+            Item = <PostItem item={item} loader={loader} />
             break;
           case 'news':
             Item = <ArticleItem item={item} loader={loader} />;
