@@ -26,7 +26,7 @@ function App() {
   const local = useLocalStore(() => ({
     isError: false,
   }));
-  shttp.defaults.baseURL = store.app.baseURL || '';
+  // shttp.defaults.baseURL = store.app.baseURL || '';
   const launch = useCallback(() => {
     store.app.setBoot(true);
     store.app.setHistoryLength(window.history.length);
@@ -39,7 +39,7 @@ function App() {
           store.ready(res.data);
           const line = res.data.lines.find(l => l.type === 'api' && l.enabled === true && l.env === store.app.env);
           if (line) {
-            shttp.defaults.baseURL = line.url;
+            // shttp.defaults.baseURL = line.url;
           }
           store.app.setBoot(false);
         }
