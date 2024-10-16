@@ -80,11 +80,10 @@ const Store = types
     },
   }));
 
-const baseURL = 'https://192.168.0.124/gw/novel';
 const store = Store.create({
   ts: Date.now(),
   app: {
-    baseURL: baseURL || '',
+    baseURL: window.location.origin + '/gw/novel',
     env: 'test',
     config: {},
   },
