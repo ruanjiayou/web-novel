@@ -37,19 +37,19 @@ export default class AlloyFinger extends Component {
     const that = this;
     this.events = this.isMobile
       ? {
-          onTouchStart: this._handleTouchStart.bind(this),
-          onTouchMove: this._handleTouchMove.bind(this),
-          onTouchCancel: this._handleTouchCancel.bind(this),
-          onTouchEnd: this._handleTouchEnd.bind(this),
-        }
+        onTouchStart: this._handleTouchStart.bind(this),
+        onTouchMove: this._handleTouchMove.bind(this),
+        onTouchCancel: this._handleTouchCancel.bind(this),
+        onTouchEnd: this._handleTouchEnd.bind(this),
+      }
       : {
-          onClick: function (evt) {
-            that._emitEvent('onTap', evt);
-          },
-          onDoubleClick: function (evt) {
-            that._emitEvent('onDoubleTap', evt);
-          },
-        };
+        onClick: function (evt) {
+          that._emitEvent('onTap', evt);
+        },
+        onDoubleClick: function (evt) {
+          that._emitEvent('onDoubleTap', evt);
+        },
+      };
   }
 
   getLen(v) {
@@ -142,7 +142,7 @@ export default class AlloyFinger extends Component {
   _handleTouchMove(evt) {
     this._emitEvent('onTouchMove', evt);
     var preV = this.preV,
-      len = evt.touches.length,
+      len = (evt.touches || []).length,
       currentX = evt.touches[0].pageX,
       currentY = evt.touches[0].pageY;
     this.isSingleTap = false;

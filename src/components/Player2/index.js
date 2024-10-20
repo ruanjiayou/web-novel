@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useRef } from 'react'
+import React, { Fragment, useEffect, useRef, useState } from 'react'
 import ReactPlayer from 'react-player'
 import { MIconView } from 'components';
 import { useStoreContext, useRouterContext, useNaviContext } from 'contexts';
@@ -8,6 +8,7 @@ import format from 'utils/num2time';
 import MyFinger from '../MyFinger/default';
 import VisualBoxView from 'components/VisualBoxView'
 import storage from 'utils/storage.js';
+import Hammer from 'hammerjs';
 
 export const Icon = styled.img`
   width: 32px;
@@ -70,7 +71,7 @@ const VIDEO_STATUS = {
   PLAYING: 'PLAYING',
   BUFFERING: 'BUFFERING',
 }
-
+let tap_timer = null;
 export default function Player({
   resource,
   srcpath,
@@ -84,7 +85,7 @@ export default function Player({
   const store = useStoreContext();
   const router = useRouterContext();
   const Navi = useNaviContext()
-  const containRef = useRef(null)
+  const containRef = useRef(null);
   const local = useLocalStore(() => ({
     volume: window.volume || parseInt(storage.getValue('volume')) || 30,
     muted: storage.getValue('muted') ? true : false,
@@ -92,6 +93,7 @@ export default function Player({
     playsinline: true,
     fullscreen: window.orientation === 0 ? false : true,
     autoplay: false,
+    playbackRate: 1,
 
     playing: false,
     player: null,
@@ -119,6 +121,7 @@ export default function Player({
       }, 1000);
     },
   }));
+  const controlRef = useRef(null);
   const botRef = useRef(null)
   useEffect(() => {
     if (botRef.current) {
@@ -162,9 +165,10 @@ export default function Player({
           playing={local.playing}
           width={'100%'}
           height={'100%'}
-          pip={false}
+          pip={true}
           controls={local.controls}
           playsinline={local.playsinline}
+          playbackRate={local.playbackRate}
           wrapper={'div'}
           config={{
             file: {
@@ -242,7 +246,7 @@ export default function Player({
           </div>
         )}
         <VisualBoxView visible={!local.controls}>
-          <MyFinger
+          {/* <MyFinger
             onTap={() => {
               const temp = local.playing;
               setTimeout(() => {
@@ -290,23 +294,83 @@ export default function Player({
               }
             }}
           >
-            <div style={{
-              zIndex: 3,
-              position: 'absolute',
-              left: 0,
-              top: 0,
-              width: '100%',
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              touchAction: 'manipulation',
+            
+          </MyFinger> */}
+          <div style={{
+            zIndex: 3,
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            touchAction: 'manipulation',
+          }}
+            ref={(ref) => {
+              if (ref && !controlRef.current) {
+                controlRef.current = ref;
+                const hm = new Hammer(ref, {});
+                hm.on('tap', function () {
+                  if (!tap_timer) {
+                    tap_timer = setTimeout(() => {
+                      local.showControl = !local.showControl;
+                      clearTimeout(tap_timer);
+                      tap_timer = null;
+                    }, 300)
+                  } else {
+                    clearTimeout(tap_timer);
+                    tap_timer = null;
+                  }
+                });
+                hm.on('doubletap', function () {
+                  local.playing = !local.playing
+                  local.status = local.playing ? VIDEO_STATUS.PLAYING : VIDEO_STATUS.CANPLAY
+                });
+                hm.on('press', function (evt) {
+                  local.playbackRate = 2;
+                });
+                hm.on('pressup', function (evt) {
+                  local.playbackRate = 1;
+                });
+                hm.on('panend', function (evt) {
+                  const direction = evt.additionalEvent;
+                  if (direction === 'panleft' || direction === 'panright') {
+                    const offset = (Math.abs(evt.deltaX) / 10).toFixed(0);
+                    const time = Math.max(
+                      0,
+                      Math.round(
+                        local.realtime + offset * (direction === 'panleft' ? -1 : 1),
+                      ),
+                    );
+                    local.player.seekTo(time)
+                    local.takePeek(offset + 's')
+                  } else if (direction === 'panup' || direction === 'pandown') {
+                    let height = containRef.current ? containRef.current.offsetHeight : 0;
+                    if (height) {
+                      const delta =
+                        (1.2 * Math.abs(evt.deltaY) * (direction === 'pandown' ? -1 : 1)) / height;
+                      local.volume = parseFloat(
+                        local.volume + delta > 1
+                          ? 1
+                          : local.volume + delta < 0
+                            ? 0
+                            : local.volume + delta,
+                      );
+                      if (window.setVolume) {
+                        window.setVolume(parseFloat(local.volume.toFixed(2)));
+                      }
+                    }
+                  }
+                });
+
+              }
             }}
-            >
-              {local.status === VIDEO_STATUS.BUFFERING && <Icon className='spin-slow' src={require('../../theme/icon/loading.svg')}
-              />}
-            </div>
-          </MyFinger>
+          >
+            {local.status === VIDEO_STATUS.BUFFERING && <Icon className='spin-slow' src={require('../../theme/icon/loading.svg')}
+            />}
+          </div>
         </VisualBoxView>
         {local.showPeek && (
           <div
