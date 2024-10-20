@@ -40,13 +40,22 @@ export const ProgressWrap = styled.div`
   margin: 0 10px 2px 10px;
 `
 export const Handler = styled.div`
-  width: 16px;
-  height: 10px;
+  width: 30px;
+  height: 30px;
   border-radius: 20px;
   position: absolute;
-  transform: translate(-8px,-4px);
-  background-color: #2bb7ff;
+  transform: translate(-15px,-15px);
+  
   z-index: 11;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+export const HandlerMain = styled.div`
+  background-color: #2bb7ff;
+  width: 20px;
+  height: 14px;
+  border-radius: 5px;
 `
 export const Tip = styled.span`
   position: absolute;
@@ -504,6 +513,7 @@ export default function Player({
                 local.dragtime = 0;
               }}
             >
+              <HandlerMain />
               {local.isDrag && <Tip>{format(local.dragtime)}</Tip>}
             </Handler>
           </ProgressWrap>
