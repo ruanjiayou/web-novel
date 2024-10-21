@@ -67,7 +67,7 @@ const GetPullToRefreshlData = ({
                   local.backedToTop = true;
                 }
                 if (
-                  offset <= -10 &&
+                  offset <= 10 &&
                   !loader.isLoading &&
                   !local.touchedBottom
                 ) {
@@ -75,7 +75,7 @@ const GetPullToRefreshlData = ({
                   if (!loader.isEnded) {
                     loadMore ? loadMore() : loader.loadMore();
                   }
-                } else if (offset >= 0) {
+                } else if (offset > 10) {
                   local.touchedBottom = false;
                 }
               }}

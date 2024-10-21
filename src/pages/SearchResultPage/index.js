@@ -19,23 +19,56 @@ import { useNaviContext, useRouterContext } from 'contexts';
 import storage from 'utils/storage';
 
 const model = createPageModel({
-  resources: SearchLoader,
+  allLoader: SearchLoader,
+  videosLoader: SearchLoader,
+  moviesLoader: SearchLoader,
+  shortsLoader: SearchLoader,
+  imagesLoader: SearchLoader,
+  imagesLoader: SearchLoader,
+  comicsLoader: SearchLoader,
+  articlesLoader: SearchLoader,
+  novelsLoader: SearchLoader,
+  musicsLoader: SearchLoader,
+  postsLoader: SearchLoader,
 });
+
+const tabs = [
+  { title: '全部', type: '', loader: 'allLoader' },
+  { title: '视频', type: 'video', loader: 'videosLoader' },
+  { title: '电影', type: 'movie', loader: 'moviesLoader' },
+  { title: '短视频', type: 'short', loader: 'shortsLoader' },
+  { title: '图片', type: 'image', loader: 'imagesLoader' },
+  { title: '漫画', type: 'comic', loader: 'comicsLoader' },
+  { title: '小说', type: 'novel', loader: 'novelsLoader' },
+  { title: '文章', type: 'article', loader: 'articlesLoader' },
+  { title: '音乐', type: 'music', loader: 'musicsLoader' },
+  { title: '帖子', type: 'post', loader: 'postsLoader' },
+];
 
 function View({ self, params }) {
   const router = useRouterContext();
-  const loader = self.resources;
+  const loader = self.allLoader;
   const iRef = useRef(null);
   const local = useLocalStore(() => ({
     search: params.title || '',
     tag: params.tag || '',
   }));
   useEffectOnce(() => {
+    tabs.forEach(tab => {
+      self[tab.loader].setOption({ query: { type: tab.type } });
+    })
     // loader.setOption({ query: { q: params.title, tag: local.tag } });
     loader.refresh({
       query: { key: 'q', value: local.search, tag: local.tag },
     });
   }, []);
+  const onChange = useCallback((tab, index) => {
+    if (self[tab.loader].isEmpty) {
+      self[tab.loader].refresh({
+        query: { key: 'q', value: local.search, tag: local.tag },
+      });
+    }
+  });
   return (
     <Observer>
       {() => (
@@ -131,8 +164,36 @@ function View({ self, params }) {
             </div>
           </FullWidth>
           <FullHeightAuto>
+            <Tabs
+              tabs={tabs}
+              initialPage={'all'}
+              animated={true}
+              onChange={onChange}
+            >
+              {tabs.map(tab => (
+                <LoaderListView
+                  auto={false}
+                  loader={self[tab.loader]}
+                  style={{ height: '100%' }}
+                  itemWrapStyle={{ margin: 10 }}
+                  key={tab.type}
+                  renderItem={(item, selectionId, index) => (
+                    <ResourceItem
+                      key={index}
+                      item={item}
+                      loader={self[tab.loader]}
+                      selectionId={selectionId}
+                    />
+                  )}
+                >
+                  <div
+                    style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+                  ></div>
+                </LoaderListView>
+              ))}
+            </Tabs>
             {/* TODO: loading */}
-            <LoaderListView
+            {/* <LoaderListView
               loader={loader}
               auto={false}
               itemWrapStyle={{ margin: 10 }}
@@ -141,7 +202,7 @@ function View({ self, params }) {
               )}
             >
               <div style={{ height: 'env(safe-area-inset-bottom)' }}></div>
-            </LoaderListView>
+            </LoaderListView> */}
           </FullHeightAuto>
         </UserAreaView>
       )}
