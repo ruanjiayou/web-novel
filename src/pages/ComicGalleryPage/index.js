@@ -50,7 +50,7 @@ function View({ self, store, router, params, Navi }) {
                   style={{ textAlign: 'center', padding: '6px 0' }}
                   onClick={() => {
                     router.replaceView('ComicGallery', {
-                      bid: self.GalleryLoader.item.next.bid,
+                      mid: self.GalleryLoader.item.next.mid,
                       id: self.GalleryLoader.item.next.id,
                     });
                   }}

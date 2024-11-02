@@ -43,7 +43,7 @@ export default function ({ item }) {
                     onClick={(e) => {
                       e.stopPropagation();
                       router.pushView('BookChapter', {
-                        bid: item.id,
+                        mid: item.id,
                         id: item.last_seen_id,
                       });
                     }}
@@ -58,7 +58,7 @@ export default function ({ item }) {
                   onClick={(e) => {
                     e.stopPropagation();
                     router.pushView('BookChapter', {
-                      bid: item.id,
+                      mid: item.id,
                       id: item.last_seen_id,
                     });
                   }}

@@ -15,7 +15,7 @@ export default function ({ item, router, nth }) {
                 borderBottom: '1px solid #eee',
               }}
               onClick={() => {
-                router.pushView('BookChapter', { bid: item.bid, id: item.id });
+                router.pushView('BookChapter', { mid: item.mid, id: item.id });
               }}
             >
               <div style={{ fontSize: '1.2rem' }}>{item.title}</div>

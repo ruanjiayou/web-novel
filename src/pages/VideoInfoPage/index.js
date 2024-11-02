@@ -86,8 +86,8 @@ function View({ self, router, store, services, params }) {
         query.source_type = res.item.source_type;
         recommendsLoader.refresh({ query });
         const child =
-          res.item.children.find((child) => child.id === localStore.child_id) ||
-          res.item.children[0];
+          res.item.videos.find((child) => child.id === localStore.child_id) ||
+          res.item.videos[0];
         if (child) {
           localStore.child_id = child.id;
           localStore.playpath =
@@ -142,12 +142,12 @@ function View({ self, router, store, services, params }) {
                     looktime={localStore.looktime}
                     next={recommendsLoader.items[0]}
                     playNext={() => {
-                      const index = loader.item.children.findIndex(
+                      const index = loader.item.videos.findIndex(
                         (child) => child.id === localStore.child_id,
                       );
-                      if (index + 1 !== loader.item.children.length) {
+                      if (index + 1 !== loader.item.videos.length) {
                         localStore.child_id =
-                          loader.item.children[index + 1].id;
+                          loader.item.videos[index + 1].id;
                         localStore.looktime = 0;
                         localStore.setRecorder(
                           localStore.child_id,
@@ -155,7 +155,7 @@ function View({ self, router, store, services, params }) {
                         );
                         localStore.playpath =
                           lineLoader.getHostByType('video') +
-                          loader.item.children[index + 1].path;
+                          loader.item.videos[index + 1].path;
                       }
                     }}
                     onRecord={(time) => {
@@ -182,7 +182,7 @@ function View({ self, router, store, services, params }) {
                     <Clipboard data-clipboard-text={loader.item.id} component={'a'}>
                       <h2>{loader.item.title}</h2>
                     </Clipboard>
-                    <VisualBoxView visible={loader.item.children.length > 1}>
+                    <VisualBoxView visible={loader.item.videos.length > 1}>
                       <p
                         style={{
                           fontWeight: 'bolder',
@@ -193,7 +193,7 @@ function View({ self, router, store, services, params }) {
                         播放列表:
                       </p>
                       <div>
-                        {loader.item.children.map((child) => (
+                        {loader.item.videos.map((child) => (
                           <EpTag
                             key={child.path}
                             onClick={() => {

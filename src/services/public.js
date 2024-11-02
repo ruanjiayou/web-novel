@@ -146,13 +146,13 @@ export default {
   },
   async getGalleryItems({ params }) {
     const result = await shttp({
-      url: `/v1/public/comic/${params.bid}/galleries`,
+      url: `/v1/public/comic/${params.mid}/galleries`,
     });
     return { items: result.data, ended: true };
   },
   async getGalleryDetail({ params }) {
     const result = await shttp({
-      url: `/v1/public/comic/${params.bid}/galleries/${params.id}`,
+      url: `/v1/public/comic/${params.mid}/galleries/${params.id}`,
     });
     return { item: result.data };
   },

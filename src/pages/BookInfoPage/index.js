@@ -160,7 +160,7 @@ function View({ self, router, store, services, params }) {
                         {Math.round(loader.item.words / 10000)}万字
                       </div>
                       <div className="dd-common-centerXY" style={{ flex: 1 }}>
-                        {loader.item.chapters}章
+                        {loader.item.counter.chapters}章
                       </div>
                       <div className="dd-common-centerXY" style={{ flex: 1 }}>
                         {loader.item.comments}评论
@@ -178,7 +178,7 @@ function View({ self, router, store, services, params }) {
                               params: { id: localStore.id },
                             });
                             router.pushView(`BookChapter`, {
-                              bid: localStore.id,
+                              mid: localStore.id,
                               id: info.item.id,
                             });
                           } catch (err) {
@@ -244,7 +244,7 @@ function View({ self, router, store, services, params }) {
                         目录
                       </span>
                       <span className="full-width-fix">
-                        连载至 {loader.item.chapters}章 ·{' '}
+                        连载至 {loader.item.counter.chapters}章 ·{' '}
                         {timespan(
                           new Date(loader.item.last.createdAt || Date.now()),
                         )}

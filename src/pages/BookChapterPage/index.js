@@ -26,20 +26,20 @@ function View({ self, router, params }) {
     pop: false,
     percent: 0,
     id: params.id,
-    bid: params.bid,
+    mid: params.mid,
   }));
   const container = useRef(null);
   const refresh = useCallback(() => {
     loader.refresh(
-      { params: { id: localStore.id, bid: localStore.bid } },
+      { params: { id: localStore.id, mid: localStore.mid } },
       async function (res) {
         console.log(res);
-        const data = await bookRecorder.getValue(localStore.bid);
+        const data = await bookRecorder.getValue(localStore.mid);
         if (data && res && res.item) {
           data.data.last_seen_ts = Date.now();
           data.data.last_seen_id = res.item.id;
           data.data.last_seen_title = res.item.title;
-          bookRecorder.setValue(localStore.bid, data.data);
+          bookRecorder.setValue(localStore.mid, data.data);
         }
       },
     );
@@ -192,7 +192,7 @@ function View({ self, router, params }) {
                         container.current.scrollTop = 1;
                         // let id = loader.item.nextId
                         // loader.clear()
-                        // router.replaceView(`/novel/book/${localStore.bid}/chapter/${id}`, null, { hideMenu: true })
+                        // router.replaceView(`/novel/book/${localStore.mid}/chapter/${id}`, null, { hideMenu: true })
                       }
                     }}
                   >

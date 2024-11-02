@@ -128,7 +128,7 @@ export default function ({ item, display = 1 }) {
                     padding: '5px 0',
                   }}
                 >
-                  {item.chapters}
+                  {item.counter.chapters}
                 </div>
               </div>
               <div

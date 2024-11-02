@@ -36,10 +36,12 @@ const Model = types
     types: types.array(types.string),
     createdAt: types.optional(types.string, new Date().toLocaleString()),
     duration: types.optional(types.number, 0),
-    words: types.optional(types.number, 0),
-    comments: types.optional(types.number, 0),
-    collections: types.optional(types.number, 0),
-    chapters: types.optional(types.number, 0),
+    counter: types.maybeNull(types.model({
+      words: types.maybeNull(types.number),
+      comments: types.maybeNull(types.number),
+      chapters: types.maybeNull(types.number),
+      collections: types.maybeNull(types.number),
+    })),
 
     // 临时非数据库字段
     last: types.optional(
@@ -47,13 +49,13 @@ const Model = types
         url: types.optional(types.string, ''),
         title: types.optional(types.string, ''),
         createdAt: types.optional(types.string, ''),
+        updatedAt: types.optional(types.string, ''),
+        progress: types.optional(types.number, 0),
+        sub_id: types.optional(types.string, ''),
+        sub_type: types.optional(types.string, ''),
       }),
       {},
     ),
-    last_seen_ts: types.optional(types.number, 0),
-    last_seen_id: types.optional(types.string, ''),
-    last_seen_title: types.optional(types.string, ''),
-    last_progress: types.optional(types.number, 0),
     playing: types.optional(types.boolean, false),
     audios: types.array(
       types.model({
@@ -64,12 +66,17 @@ const Model = types
     ),
     //
     marked: types.optional(types.boolean, false),
-    children: types.array(
+    videos: types.array(
       types.model({
         title: types.union(types.undefined, types.string),
         path: types.string,
         nth: types.number,
         id: types.string,
+        subtitles: types.maybeNull(types.array(types.model({
+          lang: types.string,
+          title: types.optional(types.string, ''),
+          path: types.string,
+        })))
       }),
     ),
   })

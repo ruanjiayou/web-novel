@@ -49,7 +49,7 @@ export default function ({ item }) {
                 </div>
                 <div style={{ padding: '4px 0', color: 'rgb(146, 145, 145)' }}>
                   {item.status === 'loading' ? '连载' : '完结'} ·{' '}
-                  {item.chapters}话
+                  {item.counter.chapters}话
                 </div>
                 <div
                   style={{

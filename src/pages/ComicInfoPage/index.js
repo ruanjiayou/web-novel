@@ -61,7 +61,7 @@ function View({ self, router, store, services, params }) {
       loader.refresh({ params: { id: params.id } });
     }
     if (galleries.isEmpty) {
-      galleries.refresh({ params: { bid: params.id } });
+      galleries.refresh({ params: { mid: params.id } });
     }
   }, [params.id]);
   return (
@@ -135,7 +135,7 @@ function View({ self, router, store, services, params }) {
                         {Math.round(loader.item.words / 10000)}万字
                       </div>
                       <div className="dd-common-centerXY" style={{ flex: 1 }}>
-                        {loader.item.chapters}章
+                        {loader.item.counter.chapters}章
                       </div>
                       <div className="dd-common-centerXY" style={{ flex: 1 }}>
                         {loader.item.comments}评论
@@ -153,7 +153,7 @@ function View({ self, router, store, services, params }) {
                               params: { id: localStore.id },
                             });
                             router.pushView('ComicGallery', {
-                              bid: localStore.id,
+                              mid: localStore.id,
                               id: info.item.id,
                             });
                           } catch (err) {

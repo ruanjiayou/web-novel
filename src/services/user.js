@@ -46,7 +46,7 @@ export default {
   },
   async getBookChapter({ query, params, data }) {
     const result = await shttp({
-      url: `/v1/user/book/${params.bid}/chapter/${params.id}`,
+      url: `/v1/user/book/${params.mid}/chapter/${params.id}`,
     });
     return { item: result.data };
   },
