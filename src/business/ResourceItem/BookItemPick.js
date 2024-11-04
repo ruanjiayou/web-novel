@@ -13,7 +13,7 @@ export default function ({ item }) {
               className="full-width"
               style={{ margin: 10 }}
               onClick={() => {
-                router.pushView(`BookInfo`, { id: item.id });
+                router.pushView(`BookInfo`, { id: item._id });
               }}
             >
               <div

@@ -27,13 +27,7 @@ export default {
   },
   async getResource({ query, params }) {
     const result = await shttp({
-      url: `/v1/public/resource/${params.id}`,
-    });
-    return { item: result.data };
-  },
-  async getBookInfo({ query, params, data }) {
-    const result = await shttp({
-      url: `/v1/public/book/${params.id}`,
+      url: `/v1/public/resource/${params._id}`,
     });
     return { item: result.data };
   },
@@ -152,7 +146,7 @@ export default {
   },
   async getGalleryDetail({ params }) {
     const result = await shttp({
-      url: `/v1/public/comic/${params.mid}/galleries/${params.id}`,
+      url: `/v1/public/comic/${params.mid}/galleries/${params._id}`,
     });
     return { item: result.data };
   },

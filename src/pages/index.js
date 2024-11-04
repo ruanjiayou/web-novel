@@ -11,8 +11,6 @@ import GroupTreePage from './GroupTreePage';
 import UserCenterPage from './UserCenterPage';
 import UserSettingPage from './UserSettingPage';
 import SecurePage from './SecurePage';
-import TodoPage from './TodoPage';
-import TodoAddPage from './TodoAddPage';
 import MusicPage from './MusicPage';
 import MusicPlayerPage from './MusicPlayerPage';
 import SongSheetPage from './SongSheetPage';
@@ -45,8 +43,6 @@ const pages = [
   UserCenterPage,
   UserSettingPage,
   SecurePage,
-  TodoAddPage,
-  TodoPage,
   MusicPage,
   MusicPlayerPage,
   SongSheetPage,

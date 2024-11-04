@@ -14,7 +14,7 @@ export default function ({ item }) {
             <div
               className="full-width"
               onClick={() => {
-                router.pushView('ComicInfo', { id: item.id });
+                router.pushView('ComicInfo', { id: item._id });
               }}
             >
               <div

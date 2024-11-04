@@ -145,7 +145,7 @@ export default function Filter({ self, loader, ...props }) {
               itemWrapStyle={{ margin: 10 }}
               renderItem={(item, selectionId, index) => (
                 <ResourceItem
-                  key={item.id}
+                  key={item._id}
                   item={item}
                   loader={lstore.loader}
                   selectionId={selectionId}

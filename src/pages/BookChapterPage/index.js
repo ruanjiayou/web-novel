@@ -25,15 +25,14 @@ function View({ self, router, params }) {
   const localStore = useLocalStore(() => ({
     pop: false,
     percent: 0,
-    id: params.id,
+    _id: params.id,
     mid: params.mid,
   }));
   const container = useRef(null);
   const refresh = useCallback(() => {
     loader.refresh(
-      { params: { id: localStore.id, mid: localStore.mid } },
+      { params: { _id: localStore._id, mid: localStore.mid } },
       async function (res) {
-        console.log(res);
         const data = await bookRecorder.getValue(localStore.mid);
         if (data && res && res.item) {
           data.data.last_seen_ts = Date.now();
@@ -166,7 +165,7 @@ function View({ self, router, params }) {
                     }}
                     onClick={() => {
                       if (!loader.isEmpty && loader.item.preId) {
-                        localStore.id = loader.item.preId;
+                        localStore._id = loader.item.preId;
                         refresh();
                       }
                     }}
@@ -187,7 +186,7 @@ function View({ self, router, params }) {
                     }}
                     onClick={() => {
                       if (!loader.isEmpty && loader.item.nextId) {
-                        localStore.id = loader.item.nextId;
+                        localStore._id = loader.item.nextId;
                         refresh();
                         container.current.scrollTop = 1;
                         // let id = loader.item.nextId

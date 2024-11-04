@@ -8,8 +8,6 @@ import LineLoader from './LineLoader';
 import ResourceListLoader from './ResourceListLoader';
 import ResourceLoader from './ResourceLoader';
 import SongSheetLoader from './SongSheetLoader';
-import TodoListLoader from './TodoListLoader';
-import TodoLoader from './TodoLoader';
 import UserLoader from './UserLoader';
 import SheetListLoader from './SheetListLoader';
 import MarkListLoader from './MarkListLoader';
@@ -30,8 +28,6 @@ export {
   ResourceListLoader,
   ResourceLoader,
   SongSheetLoader,
-  TodoListLoader,
-  TodoLoader,
   UserLoader,
   SheetListLoader,
   MarkListLoader,

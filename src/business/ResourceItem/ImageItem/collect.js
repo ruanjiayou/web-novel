@@ -11,7 +11,7 @@ export default function ({ item }) {
   const router = useRouterContext();
   const local = useLocalStore(() => ({
     loading: false,
-    id: item.id,
+    _id: item._id,
     markStatus: item.marked ? 'like' : 'dislike', // like/error
     markLoading: false,
     markError: false,
@@ -39,7 +39,7 @@ export default function ({ item }) {
                 position: 'relative',
               }}
               onClick={() => {
-                router.pushView('Image', { id: item.id });
+                router.pushView('Image', { id: item._id });
               }}
             >
               <FullWidthFix
@@ -77,10 +77,10 @@ export default function ({ item }) {
                     local.markLoading = true;
                     try {
                       if (local.markStatus === 'dislike') {
-                        await services.createMark({ data: { id: item.id } });
+                        await services.createMark({ data: { _id: item._id } });
                         local.markStatus = 'like';
                       } else {
-                        await services.destroyMark({ params: { id: item.id } });
+                        await services.destroyMark({ params: { _id: item._id } });
                         local.markStatus = 'dislike';
                       }
                     } catch (e) {

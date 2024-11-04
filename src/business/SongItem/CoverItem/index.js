@@ -21,7 +21,7 @@ export default function ({ item, more, loader, ...props }) {
       local.docked = !local.docked;
     },
     get isPlay() {
-      return item.id === music.currentId;
+      return item._id === music.currentId;
     },
   }));
   return (
@@ -49,14 +49,14 @@ export default function ({ item, more, loader, ...props }) {
                 e.stopPropagation();
                 const old = await musicRecorder.getValue(data.id);
                 if (!old) {
-                  musicRecorder.setValue(data.id, data, { id: '' });
+                  musicRecorder.setValue(data._id, data, { _id: '' });
                 }
                 music.loadHistory();
                 music.play(data);
                 if (router.lastView !== 'MusicPlayer') {
-                  router.pushView('MusicPlayer', { id: data.id });
+                  router.pushView('MusicPlayer', { id: data._id });
                 } else {
-                  router.replaceView('MusicPlayer', { id: data.id });
+                  router.replaceView('MusicPlayer', { id: data._id });
                 }
               }}
             >
@@ -69,7 +69,7 @@ export default function ({ item, more, loader, ...props }) {
                 e.preventDefault()
                 e.stopPropagation()
                 try {
-                  await services.removeFromSheet({ params: { id: loader.item.id }, data: { list: [item.id] } })
+                  await services.removeFromSheet({ params: { id: loader.item.id }, data: { list: [item._id] } })
                   loader.item.removeById(item.id)
                 } catch (e) {
 
@@ -105,7 +105,7 @@ export default function ({ item, more, loader, ...props }) {
                                 {
                                   title: item.title,
                                   poster: item.poster,
-                                  id: item.id,
+                                  _id: item._id,
                                   url: item.url,
                                 },
                               ],

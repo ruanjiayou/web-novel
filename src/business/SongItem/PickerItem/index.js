@@ -55,16 +55,16 @@ export default function ({ item, more, loader, ...props }) {
                 const data = item.toJSON();
                 e.preventDefault();
                 e.stopPropagation();
-                const old = await musicRecorder.getValue(data.id);
+                const old = await musicRecorder.getValue(data._id);
                 if (!old) {
-                  musicRecorder.setValue(data.id, data, { id: '' });
+                  musicRecorder.setValue(data._id, data, { _id: '' });
                 }
                 music.loadHistory();
                 music.play(data);
                 if (router.lastView !== 'MusicPlayer') {
-                  router.pushView('MusicPlayer', { id: data.id });
+                  router.pushView('MusicPlayer', { id: data._id });
                 } else {
-                  router.replaceView('MusicPlayer', { id: data.id });
+                  router.replaceView('MusicPlayer', { id: data._id });
                 }
               }}
             >
@@ -100,7 +100,7 @@ export default function ({ item, more, loader, ...props }) {
                                 {
                                   title: item.title,
                                   poster: item.poster,
-                                  id: item.id,
+                                  _id: item._id,
                                   url: item.url,
                                 },
                               ],

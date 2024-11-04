@@ -16,7 +16,7 @@ export default function ({ item }) {
               className="full-width"
               onClick={() => {
                 router.pushView(item.type === 'image' ? 'Image' : 'Article', {
-                  id: item.id,
+                  id: item._id,
                 });
               }}
             >

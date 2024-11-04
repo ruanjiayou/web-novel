@@ -17,7 +17,7 @@ export default function ({ item }) {
                 borderBottom: '1px solid #eee',
               }}
               onClick={() => {
-                router.pushView('Post', { id: item.id });
+                router.pushView('Post', { id: item._id });
               }}
             >
               <div style={{ fontSize: '1.2rem' }}>{item.content || item.title}</div>

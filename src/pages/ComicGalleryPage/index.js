@@ -15,7 +15,7 @@ function View({ self, store, router, params, Navi }) {
   let imageHost = store.lineLoader.getHostByType('image');
   useEffect(() => {
     if (params.id) {
-      self.GalleryLoader.refresh({ params });
+      self.GalleryLoader.refresh({ params: { _id: params.id } });
     }
     return () => {
       self.GalleryLoader.clear();
@@ -51,7 +51,7 @@ function View({ self, store, router, params, Navi }) {
                   onClick={() => {
                     router.replaceView('ComicGallery', {
                       mid: self.GalleryLoader.item.next.mid,
-                      id: self.GalleryLoader.item.next.id,
+                      id: self.GalleryLoader.item.next._id,
                     });
                   }}
                 >

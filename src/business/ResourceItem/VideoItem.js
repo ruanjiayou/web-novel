@@ -10,7 +10,7 @@ export default function ({ item, display = 1, ...props }) {
   const onClick = props.onClick
     ? () => props.onClick(item)
     : () => {
-        router.pushView('VideoInfo', { id: item.id });
+        router.pushView('VideoInfo', { id: item._id });
       };
   return (
     <Observer>

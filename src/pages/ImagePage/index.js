@@ -20,7 +20,7 @@ function View({ self, router, store, params, Navi }) {
   let imageHost = store.lineLoader.getHostByType('image');
   const localStore = useLocalStore(() => ({
     loading: false,
-    id: params.id,
+    _id: params.id,
     markStatus: 'dislike', // like/error
     markLoading: false,
     markError: false,
@@ -42,7 +42,7 @@ function View({ self, router, store, params, Navi }) {
   };
   useEffect(() => {
     if (loader.isEmpty) {
-      loader.refresh({ params: { id: localStore.id } });
+      loader.refresh({ params: { _id: localStore._id } });
     }
     if (store.app.isLogin) {
       getMark({ params }).then((result) => {
@@ -54,7 +54,7 @@ function View({ self, router, store, params, Navi }) {
     return () => {
       loader.clear();
     }
-  }, [localStore.id]);
+  }, [localStore._id]);
   return (
     <Observer>
       {() => (

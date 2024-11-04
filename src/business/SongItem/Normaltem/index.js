@@ -25,7 +25,7 @@ export default function ({ item, mode = 'add', loader, ...props }) {
       {() => (
         <Fragment>
           <Wrap
-            isPlay={item.id === music.currentId}
+            isPlay={item._id === music.currentId}
             className="dd-common-alignside"
             // {...props}
           >
@@ -34,20 +34,20 @@ export default function ({ item, mode = 'add', loader, ...props }) {
                 flex: 1,
               }}
               onClick={async (e) => {
-                if (music.currentId === item.id) return;
+                if (music.currentId === item._id) return;
                 const data = item.toJSON();
                 e.preventDefault();
                 e.stopPropagation();
-                const old = await musicRecorder.getValue(data.id);
+                const old = await musicRecorder.getValue(data._id);
                 if (!old) {
-                  musicRecorder.setValue(data.id, data, { id: '' });
+                  musicRecorder.setValue(data._id, data, { _id: '' });
                 }
                 music.loadHistory();
                 music.play(data);
                 if (router.lastView !== 'MusicPlayer') {
-                  router.pushView('MusicPlayer', { id: data.id });
+                  router.pushView('MusicPlayer', { id: data._id });
                 } else {
-                  router.replaceView('MusicPlayer', { id: data.id });
+                  router.replaceView('MusicPlayer', { id: data._id });
                 }
               }}
             >
@@ -63,9 +63,9 @@ export default function ({ item, mode = 'add', loader, ...props }) {
                     try {
                       await services.removeFromSheet({
                         params: { id: loader.item.id },
-                        data: { list: [item.id] },
+                        data: { list: [item._id] },
                       });
-                      loader.item.removeById(item.id);
+                      loader.item.removeById(item._id);
                     } catch (e) { }
                   }}
                 />

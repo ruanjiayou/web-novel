@@ -32,7 +32,7 @@ export default function Picker({ self }) {
             }}
           >
             {self.data.map((d, index) => (
-              <div key={d.id} style={{ margin: 10 }}>
+              <div key={d._id} style={{ margin: 10 }}>
                 <ResourceItem item={d} />
               </div>
             ))}

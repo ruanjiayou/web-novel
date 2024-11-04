@@ -36,7 +36,7 @@ function View({ self, router, Navi, params }) {
         ended: true,
       };
     }).create(),
-    id: params.id,
+    _id: params.id,
   }));
   useEffectOnce(() => {
     const mop = document.getElementById('mop');
@@ -45,7 +45,7 @@ function View({ self, router, Navi, params }) {
       mop.append(mo);
     }
     local.loader = createItemLoader(ResourceModel, function () {
-      return services.getResource({ params: { id: local.id } });
+      return services.getResource({ params: { _id: local._id } });
     }).create();
     return function () {
       const musicOpBox = document.getElementById('musicOpBox');
@@ -79,7 +79,7 @@ function View({ self, router, Navi, params }) {
                       onPress: (e) => {
                         e.stopPropagation();
                         e.preventDefault();
-                        musicRecorder.removeKey(item.id);
+                        musicRecorder.removeKey(item._id);
                         local.history.remove(index);
                       },
                       style: { backgroundColor: 'red', color: 'white' },

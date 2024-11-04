@@ -22,10 +22,10 @@ function View({ self, router, store, params = {} }) {
   const localStore = useLocalStore(() => ({
     pop: false,
     percent: 0,
-    id: params.id,
+    _id: params.id,
   }));
   useEffectOnce(() => {
-    loader.refresh({ params: { id: localStore.id } });
+    loader.refresh({ params: { _id: localStore._id } });
     return () => {
       loader.clear();
     };
@@ -85,7 +85,7 @@ function View({ self, router, store, params = {} }) {
                           __html: loader.item.content,
                         }}
                       >
-                        {}
+                        { }
                       </div>
                     )}
                   </div>

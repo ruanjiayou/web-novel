@@ -20,31 +20,31 @@ export default function ({ item, mode = 'add', loader, ...props }) {
           <div
             className="dd-common-alignside"
             style={{
-              backgroundColor: item.id === music.currentId ? 'grey' : '',
+              backgroundColor: item._id === music.currentId ? 'grey' : '',
               borderBottom: '1px solid #eee',
             }}
             {...props}
           >
             <MIconView
-              type={music.currentId === item.id ? 'FaPause' : 'FaPlay'}
+              type={music.currentId === item._id ? 'FaPause' : 'FaPlay'}
             />
             <div
               style={{ flex: 1 }}
               onClick={async (e) => {
-                if (music.currentId === item.id) return;
+                if (music.currentId === item._id) return;
                 const data = item.toJSON();
                 e.preventDefault();
                 e.stopPropagation();
                 const old = await musicRecorder.getValue(data.id);
                 if (!old) {
-                  musicRecorder.setValue(data.id, data, { id: '' });
+                  musicRecorder.setValue(data._id, data, { _id: '' });
                 }
                 music.loadHistory();
                 music.play(data);
                 if (router.lastView !== 'MusicPlayer') {
-                  router.pushView('MusicPlayer', { id: data.id });
+                  router.pushView('MusicPlayer', { id: data._id });
                 } else {
-                  router.replaceView('MusicPlayer', { id: data.id });
+                  router.replaceView('MusicPlayer', { id: data._id });
                 }
               }}
             >
@@ -59,10 +59,10 @@ export default function ({ item, mode = 'add', loader, ...props }) {
                     e.stopPropagation();
                     try {
                       await services.removeFromSheet({
-                        params: { id: loader.item.id },
-                        data: { list: [item.id] },
+                        params: { _id: loader.item.id },
+                        data: { list: [item._id] },
                       });
-                      loader.item.removeById(item.id);
+                      loader.item.removeById(item._id);
                     } catch (e) {}
                   }}
                 />
@@ -93,7 +93,7 @@ export default function ({ item, mode = 'add', loader, ...props }) {
                                 {
                                   title: item.title,
                                   poster: item.poster,
-                                  id: item.id,
+                                  _id: item._id,
                                   url: item.url,
                                 },
                               ],

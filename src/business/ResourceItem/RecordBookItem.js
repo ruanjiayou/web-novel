@@ -16,7 +16,7 @@ export default function ({ item }) {
               className="full-width"
               style={{ padding: 10 }}
               onClick={() => {
-                router.pushView('BookInfo', { id: item.id });
+                router.pushView('BookInfo', { id: item._id });
               }}
             >
               <div
@@ -43,7 +43,7 @@ export default function ({ item }) {
                     onClick={(e) => {
                       e.stopPropagation();
                       router.pushView('BookChapter', {
-                        mid: item.id,
+                        mid: item._id,
                         id: item.last_seen_id,
                       });
                     }}
@@ -58,7 +58,7 @@ export default function ({ item }) {
                   onClick={(e) => {
                     e.stopPropagation();
                     router.pushView('BookChapter', {
-                      mid: item.id,
+                      mid: item._id,
                       id: item.last_seen_id,
                     });
                   }}

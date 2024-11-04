@@ -21,7 +21,7 @@ function View({ self, router, store, params }) {
   const channels = store.app.channels;
   const loaders = channelLoaders;
   const local = useLocalStore(() => ({
-    index: channels.findIndex((ch) => ch.group_id === store.app.tab),
+    index: channels.findIndex((ch) => ch.group_id === params.tab) || 0,
   }));
   useEffectOnce(() => {
     if (params.tab) {

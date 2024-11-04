@@ -34,7 +34,7 @@ function View({ self, router, store, services, params }) {
     loading: false,
     firstLoading: false,
     shouldFix: true,
-    id: '',
+    _id: '',
     playpath: '',
     subtitles: [],
     child_id: '',
@@ -52,8 +52,8 @@ function View({ self, router, store, services, params }) {
     setRecorder(child_id = '', looktime = 0) {
       if (loader.item) {
         const data = loader.item.toJSON();
-        videoRecorder.getValue(localStore.id).then(() => {
-          videoRecorder.setValue(localStore.id, data, {
+        videoRecorder.getValue(localStore._id).then(() => {
+          videoRecorder.setValue(localStore._id, data, {
             child_id,
             time: looktime,
           });
@@ -63,22 +63,22 @@ function View({ self, router, store, services, params }) {
     updateHistory(time) {
       // localStore.setRecorder(localStore.child_id, time);
       services.createHistory({
-        resource_id: loader.item.id,
+        resource_id: loader.item._id,
         resource_type: loader.item.source_type,
         media_id: localStore.child_id,
         media_type: 'video',
         watched: Math.floor(time),
-        total: loader.item.words,
+        total: loader.item.duration,
       });
     },
   }));
   useEffect(() => {
-    if (localStore.id && store.app.isLogin && localStore.watched) {
+    if (localStore._id && store.app.isLogin && localStore.watched) {
       localStore.updateHistory(localStore.watched);
     }
-    localStore.id = params.id
-    localStore.id &&
-      loader.refresh({ params: { id: localStore.id } }, async (res) => {
+    localStore._id = params.id
+    localStore._id &&
+      loader.refresh({ params: { _id: localStore._id } }, async (res) => {
         const query = {};
         if (res.item.tags) {
           query.tags = res.item.tags;
@@ -86,10 +86,10 @@ function View({ self, router, store, services, params }) {
         query.source_type = res.item.source_type;
         recommendsLoader.refresh({ query });
         const child =
-          res.item.videos.find((child) => child.id === localStore.child_id) ||
+          res.item.videos.find((child) => child._id === localStore.child_id) ||
           res.item.videos[0];
         if (child) {
-          localStore.child_id = child.id;
+          localStore.child_id = child._id;
           localStore.playpath =
             lineLoader.getHostByType('video') + child.path;
           localStore.subtitles = child.subtitles || [];
@@ -100,18 +100,18 @@ function View({ self, router, store, services, params }) {
         localStore.looktime = resp.data.watched;
       }
     }, [params.id])
-    // videoRecorder.getValue(localStore.id).then((result) => {
-    //   if (result && result.data && result.option) {
-    //     localStore.child_id = result.option.child_id;
-    //     localStore.looktime = result.option.time;
-    //   }
-    // });
+    videoRecorder.getValue(localStore.id).then((result) => {
+      if (result && result.data && result.option) {
+        localStore.child_id = result.option.child_id;
+        localStore.looktime = result.option.time;
+      }
+    });
   }, [params.id]);
   useEffectOnce(() => {
     return () => {
-      // if (store.app.isLogin) {
-      //   localStore.updateHistory(localStore.watched);
-      // }
+      if (store.app.isLogin) {
+        localStore.updateHistory(localStore.watched);
+      }
       loader.clear();
       recommendsLoader.clear();
     };
@@ -119,6 +119,7 @@ function View({ self, router, store, services, params }) {
   return (
     <Observer>
       {() => {
+        console.log(loader)
         if (loader.isLoading) {
           return (
             <AutoCenterView>
@@ -127,7 +128,7 @@ function View({ self, router, store, services, params }) {
           );
         } else if (loader.isEmpty) {
           return EmptyView(loader, <div>empty</div>, function () {
-            loader.refresh({ params: { id: localStore.id } });
+            loader.refresh({ params: { _id: localStore._id } });
           });
         } else {
           return (
@@ -179,7 +180,7 @@ function View({ self, router, store, services, params }) {
                 </div>
                 <div className="full-height-auto">
                   <div style={{ padding: '0 20px' }}>
-                    <Clipboard data-clipboard-text={loader.item.id} component={'a'}>
+                    <Clipboard data-clipboard-text={loader.item._id} component={'a'}>
                       <h2>{loader.item.title}</h2>
                     </Clipboard>
                     <VisualBoxView visible={loader.item.videos.length > 1}>
@@ -197,7 +198,7 @@ function View({ self, router, store, services, params }) {
                           <EpTag
                             key={child.path}
                             onClick={() => {
-                              if (localStorage.child_id !== child.id) {
+                              if (localStorage.child_id !== child._id) {
                                 localStore.child_id = child.id;
                                 localStore.looktime = 0;
                                 localStore.playpath =
@@ -209,9 +210,9 @@ function View({ self, router, store, services, params }) {
                                 );
                               }
                             }}
-                            selected={localStore.child_id === child.id}
+                            selected={localStore.child_id === child._id}
                           >
-                            {child.title || `第${child.nth}集`}
+                            {child.title || `第${child.nth + 1}集`}
                           </EpTag>
                         ))}
                       </div>
@@ -268,7 +269,7 @@ function View({ self, router, store, services, params }) {
                       <ResourceItem
                         item={item}
                         onClick={(it) => {
-                          router.replaceView('VideoInfo', { id: it.id });
+                          router.replaceView('VideoInfo', { id: it._id });
                         }}
                       />
                     </div>

@@ -1,7 +1,7 @@
 import { types } from 'mobx-state-tree';
 
 const Model = types.model({
-  id: types.string,
+  _id: types.string,
   mid: types.string,
   title: types.optional(types.string, ''),
   publishedAt: types.maybe(types.string),

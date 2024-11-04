@@ -26,7 +26,7 @@ export default function ({ item, display = 1, ...props }) {
   const onClick = props.onClick
     ? () => props.onClick(item)
     : () => {
-        router.pushView('VideoInfo', { id: item.id });
+        router.pushView('VideoInfo', { id: item._id });
       };
   return (
     <Observer>
@@ -72,7 +72,7 @@ export default function ({ item, display = 1, ...props }) {
                     borderRadius: 3,
                   }}
                 >
-                  {num2time(props.watched)}/{num2time(item.words)}
+                  {num2time(props.watched)}/{num2time(item.duration)}
                 </div>
               </div>
               <div

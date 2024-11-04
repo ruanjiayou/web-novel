@@ -2,7 +2,7 @@ import { types } from 'mobx-state-tree';
 
 const SongSheetModel = types
   .model('MarkedSong', {
-    id: types.string,
+    _id: types.string,
     poster: types.string,
     title: types.string,
     url: types.string,

@@ -48,7 +48,7 @@ function View({ self, router, store, params, services, Navi }) {
                 if (loader.item.list.length) {
                   music.playAll();
                   router.pushView('MusicPlayer', {
-                    id: loader.item.list[0].id,
+                    id: loader.item.list[0]._id,
                   });
                 }
               }}
@@ -56,7 +56,7 @@ function View({ self, router, store, params, services, Navi }) {
             <div className="full-height">
               {loader.item.list.map((item, index) => (
                 <SongItem
-                  key={item.id}
+                  key={item._id}
                   mode={'delete'}
                   loader={loader}
                   item={item}
@@ -66,7 +66,7 @@ function View({ self, router, store, params, services, Navi }) {
                       music.loadList(loader.item.list);
                     }
                     music.play(item);
-                    router.pushView('MusicPlayer', { id: item.id });
+                    router.pushView('MusicPlayer', { id: item._id });
                   }}
                 />
               ))}

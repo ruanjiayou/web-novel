@@ -1,13 +1,14 @@
 import { types } from 'mobx-state-tree';
 import store from 'store';
 import services from 'services';
+import config from '../config'
 
 const Model = types
   .model('resource', {
-    id: types.string,
+    _id: types.string,
     uid: types.maybeNull(types.string),
     uname: types.maybeNull(types.string),
-    country: types.maybeNull(types.string, 'China'),
+    country: types.maybeNull(types.string, 'CN'),
     title: types.string,
     poster: types.optional(types.string, ''),
     thumbnail: types.optional(types.string, ''),
@@ -21,7 +22,7 @@ const Model = types
         types.string,
         types.model({
           path: types.optional(types.string, ''),
-          id: types.optional(types.string, ''),
+          _id: types.optional(types.string, ''),
           nth: types.optional(types.number, 1),
           more: types.maybe(
             types.model({
@@ -32,12 +33,18 @@ const Model = types
         }),
       ),
     ),
-    status: types.enumeration(['init', 'loading', 'finished', 'fail']),
+
+    status: types.union(
+      types.literal(config.constant.RESOURCE_STATUS.init),
+      types.literal(config.constant.RESOURCE_STATUS.loading),
+      types.literal(config.constant.RESOURCE_STATUS.fail),
+      types.literal(config.constant.RESOURCE_STATUS.finished),
+    ),
     types: types.array(types.string),
     createdAt: types.optional(types.string, new Date().toLocaleString()),
+    words: types.optional(types.number, 0),
     duration: types.optional(types.number, 0),
     counter: types.maybeNull(types.model({
-      words: types.maybeNull(types.number),
       comments: types.maybeNull(types.number),
       chapters: types.maybeNull(types.number),
       collections: types.maybeNull(types.number),
@@ -59,8 +66,8 @@ const Model = types
     playing: types.optional(types.boolean, false),
     audios: types.array(
       types.model({
-        id: types.string,
-        type: types.string,
+        _id: types.string,
+        type: types.number,
         path: types.string,
       }),
     ),
@@ -68,10 +75,10 @@ const Model = types
     marked: types.optional(types.boolean, false),
     videos: types.array(
       types.model({
-        title: types.union(types.undefined, types.string),
+        title: types.optional(types.string, ''),
         path: types.string,
         nth: types.number,
-        id: types.string,
+        _id: types.string,
         subtitles: types.maybeNull(types.array(types.model({
           lang: types.string,
           title: types.optional(types.string, ''),
@@ -86,7 +93,7 @@ const Model = types
     },
     async setMarked(marked) {
       self.marked = marked;
-      const data = { id: self.id };
+      const data = { _id: self._id };
       if (marked) {
         await services.createMark({ data });
       } else {

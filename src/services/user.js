@@ -40,65 +40,25 @@ export default {
   },
   async getBookFirstChapter({ query, params, data }) {
     const result = await shttp({
-      url: `/v1/user/book/${params.id}/first-chapter`,
+      url: `/v1/user/book/${params._id}/first-chapter`,
     });
     return { item: result.data };
   },
   async getBookChapter({ query, params, data }) {
     const result = await shttp({
-      url: `/v1/user/book/${params.mid}/chapter/${params.id}`,
+      url: `/v1/user/book/${params.mid}/chapter/${params._id}`,
     });
     return { item: result.data };
-  },
-  async getTodos({ query, params, data }) {
-    const result = await shttp({
-      url: `/v1/user/todos${stringfyQuery(query)}`,
-    });
-    result.data.forEach((d) => {
-      d.startedAt = new Date(d.startedAt);
-      d.endedAt = new Date(d.endedAt);
-    });
-    return { items: result.data };
-  },
-  async createTodo({ query, params, data }) {
-    const result = await shttp({
-      url: '/v1/user/todo',
-      method: 'POST',
-      data,
-    });
-    return { item: result.data };
-  },
-  async getTodo({ query, params, data }) {
-    const result = await shttp({
-      url: `/v1/user/todo/${params.id}`,
-      method: 'GET',
-    });
-    return { item: result.data };
-  },
-  async updateTodo({ query, params, data }) {
-    const result = await shttp({
-      url: `/v1/user/todo/${params.id}`,
-      method: 'PUT',
-      data,
-    });
-    return { item: result.data };
-  },
-  async destroyTodo({ query, params, data }) {
-    return shttp({
-      url: `/v1/user/todo/${params.id}`,
-      method: 'DELETE',
-      data,
-    });
   },
   async addSongToSheet({ query, params, data }) {
     return shttp({
-      url: `/v1/user/song-sheet/${params.ssid}/song/${params.id}`,
+      url: `/v1/user/song-sheet/${params.ssid}/song/${params._id}`,
       method: 'POST',
     });
   },
   async removeSheetSong({ query, params, data }) {
     return shttp({
-      url: `/v1/user/song-sheet/${params.ssid}/song/${params.id}`,
+      url: `/v1/user/song-sheet/${params.ssid}/song/${params._id}`,
       method: 'DELETE',
     });
   },
@@ -111,14 +71,14 @@ export default {
   },
   async destroyMark({ query, params, data }) {
     return shttp({
-      url: `/v1/user/mark/${params.id}`,
+      url: `/v1/user/mark/${params._id}`,
       method: 'DELETE',
       data: data,
     });
   },
   async getMark({ query, params, data }) {
     return shttp({
-      url: `/v1/user/mark/${params.id}`,
+      url: `/v1/user/mark/${params._id}`,
       method: 'GET',
       data: data,
     });

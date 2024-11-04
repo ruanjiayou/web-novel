@@ -71,7 +71,7 @@ function View({ self, router, store, params }) {
             backgroundColor: 'rgba(0,0,0,0.5)',
           }}>
             {local.loader.items.map((doc, i) => (
-              <div key={doc.id} style={{ width: '100%', height: '100%', position: 'absolute', top: (i * local.height) + 'px' }}>
+              <div key={doc._id} style={{ width: '100%', height: '100%', position: 'absolute', top: (i * local.height) + 'px' }}>
                 <div>{doc.title}</div>
               </div>
             ))}

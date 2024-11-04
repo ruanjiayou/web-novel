@@ -32,7 +32,7 @@ function View({ self, router, store, services, params }) {
     firstLoading: false,
     shouldFix: false,
     cached: false,
-    id: params.id,
+    _id: params.id,
   }));
   const toogleCache = useCallback(async () => {
     if (loader.isEmpty) {
@@ -58,7 +58,7 @@ function View({ self, router, store, services, params }) {
   }, [params.id]);
   useEffect(() => {
     if (loader.isEmpty) {
-      loader.refresh({ params: { id: params.id } });
+      loader.refresh({ params: { _id: params.id } });
     }
     if (galleries.isEmpty) {
       galleries.refresh({ params: { mid: params.id } });
@@ -75,7 +75,7 @@ function View({ self, router, store, services, params }) {
           );
         } else if (loader.isEmpty) {
           return EmptyView(loader, <div>empty</div>, function () {
-            loader.refresh({ params: { id: params.id } });
+            loader.refresh({ params: { _id: params.id } });
           });
         } else {
           return (
@@ -138,7 +138,7 @@ function View({ self, router, store, services, params }) {
                         {loader.item.counter.chapters}章
                       </div>
                       <div className="dd-common-centerXY" style={{ flex: 1 }}>
-                        {loader.item.comments}评论
+                        {loader.item.counter.comments}评论
                       </div>
                     </div>
                     <div className="dd-common-alignside">
@@ -150,11 +150,11 @@ function View({ self, router, store, services, params }) {
                           try {
                             localStore.firstLoading = true;
                             const info = await services.getBookFirstChapter({
-                              params: { id: localStore.id },
+                              params: { _id: localStore._id },
                             });
                             router.pushView('ComicGallery', {
-                              mid: localStore.id,
-                              id: info.item.id,
+                              mid: localStore._id,
+                              id: info.item._id,
                             });
                           } catch (err) {
                           } finally {
@@ -177,7 +177,7 @@ function View({ self, router, store, services, params }) {
                         style={{ minWidth: 82 }}
                         onClick={() => {
                           window.open(
-                            `${store.app.baseURL}/v1/public/download/book/${localStore.id}`,
+                            `${store.app.baseURL}/v1/public/download/book/${localStore._id}`,
                             '_blank',
                           );
                         }}
@@ -199,7 +199,7 @@ function View({ self, router, store, services, params }) {
                   </div>
                   <div>
                     {galleries.items.map((item) => (
-                      <GalleryItem router={router} key={item.id} item={item} />
+                      <GalleryItem router={router} key={item._id} item={item} />
                     ))}
                   </div>
                 </div>

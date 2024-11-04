@@ -27,7 +27,7 @@ function View({ self, router, store, services, params }) {
     firstLoading: false,
     shouldFix: false,
     cached: false,
-    id: params.id,
+    _id: params.id,
   }));
   const toogleCache = useCallback(async () => {
     if (loader.isEmpty) {
@@ -37,11 +37,11 @@ function View({ self, router, store, services, params }) {
       bookRecorder.removeKey(params.id);
     } else {
       const info = await services.getBookFirstChapter({
-        params: { id: localStore.id },
+        params: { _id: localStore._id },
       });
       if (info) {
         bookRecorder.setValue(params.id, loader.item.toJSON(), {
-          id: info.item.id,
+          _id: info.item._id,
           title: info.item.title,
         });
       } else {
@@ -62,7 +62,7 @@ function View({ self, router, store, services, params }) {
   });
   useEffect(() => {
     if (loader.isEmpty) {
-      loader.refresh({ params: { id: localStore.id } });
+      loader.refresh({ params: { _id: localStore._id } });
     }
   });
   return (
@@ -76,7 +76,7 @@ function View({ self, router, store, services, params }) {
           );
         } else if (loader.isEmpty) {
           return EmptyView(loader, <div>empty</div>, function () {
-            loader.refresh({ params: { id: localStore.id } });
+            loader.refresh({ params: { _id: localStore._id } });
           });
         } else {
           return (
@@ -102,12 +102,10 @@ function View({ self, router, store, services, params }) {
                     }}
                   />
                   <div>
-                    <VisualBoxView visible={localStore.shouldFix}>
-                      <div>{loader.item.title}</div>
-                      <div>
-                        {loader.item.uname} · {loader.item.type}
-                      </div>
-                    </VisualBoxView>
+                    <div>{loader.item.title}</div>
+                    <div>
+                      {loader.item.uname} · {loader.item.type}
+                    </div>
                   </div>
                   <MIconView type="FaEllipsisH" color="white" />
                 </div>
@@ -163,7 +161,7 @@ function View({ self, router, store, services, params }) {
                         {loader.item.counter.chapters}章
                       </div>
                       <div className="dd-common-centerXY" style={{ flex: 1 }}>
-                        {loader.item.comments}评论
+                        {loader.item.counter.comments}评论
                       </div>
                     </div>
                     <div className="dd-common-alignside">
@@ -175,11 +173,11 @@ function View({ self, router, store, services, params }) {
                           try {
                             localStore.firstLoading = true;
                             const info = await services.getBookFirstChapter({
-                              params: { id: localStore.id },
+                              params: { _id: localStore._id },
                             });
                             router.pushView(`BookChapter`, {
-                              mid: localStore.id,
-                              id: info.item.id,
+                              mid: localStore._id,
+                              id: info.item._id,
                             });
                           } catch (err) {
                           } finally {
@@ -202,7 +200,7 @@ function View({ self, router, store, services, params }) {
                         style={{ minWidth: 82 }}
                         onClick={() => {
                           window.open(
-                            `${store.app.baseURL}/v1/public/download/book/${localStore.id}`,
+                            `${store.app.baseURL}/v1/public/download/book/${localStore._id}`,
                             '_blank',
                           );
                         }}
@@ -234,7 +232,7 @@ function View({ self, router, store, services, params }) {
                       className="full-width"
                       style={{ height: 40 }}
                       onClick={() => {
-                        router.pushView(`BookCatalog`, { id: localStore.id });
+                        router.pushView(`BookCatalog`, { id: localStore._id });
                       }}
                     >
                       <span
@@ -244,7 +242,7 @@ function View({ self, router, store, services, params }) {
                         目录
                       </span>
                       <span className="full-width-fix">
-                        连载至 {loader.item.counter.chapters}章 ·{' '}
+                        连载至 {loader.item.counter.chapters}章
                         {timespan(
                           new Date(loader.item.last.createdAt || Date.now()),
                         )}
