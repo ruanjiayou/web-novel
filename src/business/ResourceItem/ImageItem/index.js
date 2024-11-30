@@ -40,7 +40,7 @@ export default function ({ item, display = 1 }) {
               className={display === 3 ? 'full-height-auto' : 'full-width'}
               style={{ position: 'relative', flex: 1, width: '100%' }}
               onClick={() => {
-                router.pushView('Image', { id: item.id });
+                router.pushView('Image', { id: item._id });
               }}
             >
               <div

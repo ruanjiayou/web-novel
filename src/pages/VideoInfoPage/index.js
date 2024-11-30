@@ -19,6 +19,7 @@ import { EpTag } from './style';
 import apis from '../../services/index'
 import showTip from 'utils/showTip';
 import Clipboard from 'react-clipboard.js';
+import { MdRefresh } from 'react-icons/md';
 
 const videoRecorder = new Recorder('video');
 const model = createPageModel({
@@ -60,6 +61,7 @@ function View({ self, router, store, services, params }) {
         });
       }
     },
+    query: {},
     updateHistory(time) {
       // localStore.setRecorder(localStore.child_id, time);
       services.createHistory({
@@ -84,6 +86,7 @@ function View({ self, router, store, services, params }) {
           query.tags = res.item.tags;
         }
         query.source_type = res.item.source_type;
+        localStore.query = query;
         recommendsLoader.refresh({ query });
         const child =
           res.item.videos.find((child) => child._id === localStore.child_id) ||
@@ -264,16 +267,24 @@ function View({ self, router, store, services, params }) {
                       </div>
                     </VisualBoxView>
                   </div>
-                  {recommendsLoader.items.map((item) => (
-                    <div key={item.id} style={{ margin: 10 }}>
-                      <ResourceItem
-                        item={item}
-                        onClick={(it) => {
-                          router.replaceView('VideoInfo', { id: it._id });
-                        }}
-                      />
-                    </div>
-                  ))}
+                  <div>
+                    <p style={{ marginLeft: 10, fontSize: '1.2rem' }}>
+                      相关推荐
+                      <MdRefresh onClick={() => {
+                        recommendsLoader.refresh({ query: localStore.query })
+                      }} />
+                    </p>
+                    {recommendsLoader.items.map((item) => (
+                      <div key={item.id} style={{ margin: 10 }}>
+                        <ResourceItem
+                          item={item}
+                          onClick={(it) => {
+                            router.replaceView('VideoInfo', { id: it._id });
+                          }}
+                        />
+                      </div>
+                    ))}
+                  </div>
                   <div style={{ height: 'env(safe-area-inset-bottom)' }}></div>
                 </div>
               </UserAreaView>

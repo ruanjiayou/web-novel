@@ -15,7 +15,7 @@ function View({ self, store, router, params, Navi }) {
   let imageHost = store.lineLoader.getHostByType('image');
   useEffect(() => {
     if (params.id) {
-      self.GalleryLoader.refresh({ params: { _id: params.id } });
+      self.GalleryLoader.refresh({ params: { _id: params.id, mid: params.mid } });
     }
     return () => {
       self.GalleryLoader.clear();

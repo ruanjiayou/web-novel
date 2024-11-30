@@ -78,7 +78,7 @@ export default {
   },
   async getMark({ query, params, data }) {
     return shttp({
-      url: `/v1/user/mark/${params._id}`,
+      url: `/v1/user/mark/${params.id}`,
       method: 'GET',
       data: data,
     });

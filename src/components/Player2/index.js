@@ -9,6 +9,7 @@ import MyFinger from '../MyFinger/default';
 import VisualBoxView from 'components/VisualBoxView'
 import storage from 'utils/storage.js';
 import Hammer from 'hammerjs';
+import { isPWAorMobile } from 'utils/utils';
 
 export const Icon = styled.img`
   width: 32px;
@@ -18,8 +19,10 @@ export const Icon = styled.img`
 export const BottomWrap = styled.div`
   position: absolute;
   bottom: 0;
-  left: 0;
+  left: 50%;
   width: 100%;
+  max-width: 856px;
+  transform: translate(-50%, 0);
   display: flex;
   flexDirection: column;
   z-index: 4;
@@ -100,7 +103,7 @@ export default function Player({
     muted: storage.getValue('muted') ? true : false,
     controls: false,
     playsinline: true,
-    fullscreen: window.orientation === 0 ? false : true,
+    fullscreen: false,
     autoplay: false,
     playbackRate: 1,
 
@@ -160,14 +163,16 @@ export default function Player({
       <div style={{
         position: 'relative',
         width: local.fullscreen ? 'calc(100% - env(safe-area-inset-left) - env(safe-area-inset-right))' : '100%',
-        height: local.fullscreen ? 'calc(100% - env(safe-area-inset-bottom))' : 'auto',
+        height: local.fullscreen ? 'calc(100% - env(safe-area-inset-bottom))' : (isPWAorMobile() ? 'auto' : 480),
+        paddingTop: isPWAorMobile() ? '56.25%' : 0,
         boxSizing: 'border-box',
-        paddingTop: local.fullscreen ? 0 : '56.25%',
         marginLeft: 'env(safe-area-inset-left)',
         marginRight: 'env(safe-area-inset-right)',
+        display: 'flex',
+        justifyContent: 'center',
       }}>
         <ReactPlayer
-          style={{ position: 'absolute', left: 0, top: 0, zIndex: 2 }}
+          style={{ position: 'absolute', left: '50%', transform: 'translate(-50%, 0)', top: 0, zIndex: 2 }}
           url={srcpath}
           ref={ref => local.player = ref}
           loop={false}
@@ -308,9 +313,11 @@ export default function Player({
           <div style={{
             zIndex: 3,
             position: 'absolute',
-            left: 0,
             top: 0,
             width: '100%',
+            maxWidth: 856,
+            transform: 'translate(-50%, 0)',
+            left: '50%',
             height: '100%',
             display: 'flex',
             alignItems: 'center',
