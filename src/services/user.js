@@ -8,14 +8,14 @@ export default {
     return shttp({
       url: '/v1/auth/user/sign-in',
       method: 'post',
-      data: { name: data.account, password: data.password },
+      data: { account: data.account, password: data.password },
     });
   },
   register({ query, params, data }) {
     return shttp({
       url: '/v1/auth/user/sign-up',
       method: 'post',
-      data: { name: params.account, password: params.password },
+      data: { account: params.account, password: params.password },
     });
   },
   refresh({ query, params, data }) {
@@ -157,5 +157,5 @@ export default {
       url: `/v1/user/history/${params.id}`,
       method: 'GET'
     })
-  }
+  },
 };

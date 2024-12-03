@@ -165,4 +165,11 @@ export default {
       data,
     });
   },
+  async getActorVideos({ query, params }) {
+    const result = await shttp({
+      url: `/v1/public/users/${params.id}/videos${stringfyQuery(query)}`,
+      method: 'GET',
+    });
+    return { items: result.data, user: result.user }
+  },
 };

@@ -86,6 +86,11 @@ const Model = types
         })))
       }),
     ),
+    actors: types.array(types.model({
+      _id: types.string,
+      name: types.string,
+      avatar: types.optional(types.string, ''),
+    }))
   })
   .actions((self) => ({
     toggleStatus() {

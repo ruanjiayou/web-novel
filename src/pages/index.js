@@ -28,6 +28,7 @@ import AwhilePage from './AwhilePage';
 import ComicInfoPage from './ComicInfoPage';
 import ComicGalleryPage from './ComicGalleryPage';
 import PostPage from './PostPage';
+import ActorPage from './ActorPage';
 
 const pages = [
   NotFound,
@@ -59,6 +60,7 @@ const pages = [
   ComicInfoPage,
   ComicGalleryPage,
   PostPage,
+  ActorPage,
 ];
 
 const groups = {};

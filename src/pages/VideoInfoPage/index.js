@@ -122,7 +122,6 @@ function View({ self, router, store, services, params }) {
   return (
     <Observer>
       {() => {
-        console.log(loader)
         if (loader.isLoading) {
           return (
             <AutoCenterView>
@@ -186,6 +185,12 @@ function View({ self, router, store, services, params }) {
                     <Clipboard data-clipboard-text={loader.item._id} component={'a'}>
                       <h2>{loader.item.title}</h2>
                     </Clipboard>
+                    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', }}>
+                      {loader.item.actors.map(actor => (<div key={actor._id} onClick={() => { router.replaceView('Actor', { id: actor._id }) }}>
+                        <img src={store.lineLoader.getHostByType('image') + actor.avatar} style={{ width: 50 }} />
+                        <div>{actor.name}</div>
+                      </div>))}
+                    </div>
                     <VisualBoxView visible={loader.item.videos.length > 1}>
                       <p
                         style={{

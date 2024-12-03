@@ -149,10 +149,12 @@ function createItemsLoader(model, fn, customs = {}) {
         },
         async refresh(option) {
           self.error = null;
-          return await request(option, 'refresh');
+          const t = await request(option, 'refresh');
+          return t;
         },
         async loadMore(option) {
-          return await request(option, 'more');
+          const t = await request(option, 'more');
+          return t;
         },
       };
     });
