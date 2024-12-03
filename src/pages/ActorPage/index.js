@@ -32,9 +32,9 @@ function View({ self, router, store, params, Navi }) {
   return <Observer>{() => (
     <UserAreaView>
       <Navi title="个人主页" />
-      <FullHeightFix>
-        <img src={store.lineLoader.getHostByType('image') + local.actor.avatar} style={{ width: 50, marginTop: 10, marginLeft: 10 }} />
-        <p>{local.actor.nickname}</p>
+      <FullHeightFix style={{ padding: 10 }}>
+        <img src={store.lineLoader.getHostByType('image') + local.actor.avatar} style={{ width: 50, marginBottom: 10 }} />
+        <div>{local.actor.nickname}</div>
       </FullHeightFix>
       <FullHeightAuto>
         <LoaderListView
@@ -44,6 +44,7 @@ function View({ self, router, store, params, Navi }) {
           }}
           auto={false}
           style={{ height: '100%' }}
+          itemWrapStyle={{ marginBottom: 5 }}
           renderItem={(item, sectionId, index) => (
             <ResourceItem
               key={index}
