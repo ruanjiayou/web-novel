@@ -170,6 +170,6 @@ export default {
       url: `/v1/public/users/${params.id}/videos${stringfyQuery(query)}`,
       method: 'GET',
     });
-    return { items: result.data, user: result.user }
+    return { items: result.data, user: result.user, ended: result.data.length < 20 }
   },
 };

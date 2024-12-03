@@ -1,11 +1,10 @@
-import React, { Fragment, useEffect, useCallback } from 'react';
+import React, { useRef } from 'react';
 import { Observer, useLocalStore } from 'mobx-react-lite';
-import { FullHeight, FullHeightAuto, FullHeightFix } from 'components/common';
+import { FullHeightAuto, FullHeightFix } from 'components/common';
 import createPageModel from 'page-group-loader-model/BasePageModel';
 import { useEffectOnce } from 'react-use';
-import services from 'services';
 import { ActorVideoLoader } from 'loader'
-import { LoaderListView, UserAreaView } from 'components';
+import { LoaderListView, UserAreaView, VisualBoxView } from 'components';
 import ResourceItem from 'business/ResourceItem';
 
 const model = createPageModel({
@@ -22,6 +21,7 @@ function View({ self, router, store, params, Navi }) {
     _id: params.id,
     page: 1,
   }));
+  const eleRef = useRef(null);
   useEffectOnce(() => {
     local.loading = true;
     const option = { query: { page: local.page }, params };
@@ -39,7 +39,11 @@ function View({ self, router, store, params, Navi }) {
       <FullHeightAuto>
         <LoaderListView
           loader={loader}
+          loadMore={() => {
+            loader.loadMore({ query: { page: local.page }, params })
+          }}
           auto={false}
+          style={{ height: '100%' }}
           renderItem={(item, sectionId, index) => (
             <ResourceItem
               key={index}
@@ -48,7 +52,25 @@ function View({ self, router, store, params, Navi }) {
               sectionId={sectionId}
             />
           )}
-        />
+        >
+          <div
+            ref={(ref) => (eleRef.current = ref)}
+            style={{ textAlign: 'center', padding: 15 }}
+          >
+            {loader.isLoading ? (
+              '正在加载更多数据...'
+            ) : loader.isEnded ? (
+              <VisualBoxView visible={!loader.isEmpty}>
+                已全部加载完毕
+              </VisualBoxView>
+            ) : (
+              <VisualBoxView visible={!loader.isEmpty}>
+                <span>点击加载更多</span>
+              </VisualBoxView>
+            )}
+          </div>
+          <div style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}></div>
+        </LoaderListView>
       </FullHeightAuto>
     </UserAreaView>
   )}</Observer>
