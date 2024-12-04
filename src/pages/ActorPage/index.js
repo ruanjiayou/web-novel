@@ -28,12 +28,15 @@ function View({ self, router, store, params, Navi }) {
     loader.refresh(option).then(resp => {
       local.actor = resp.user;
     })
+    return () => {
+      loader.clear();
+    }
   })
   return <Observer>{() => (
     <UserAreaView>
       <Navi title="个人主页" />
       <FullHeightFix style={{ padding: 10 }}>
-        <img src={store.lineLoader.getHostByType('image') + local.actor.avatar} style={{ width: 50, marginBottom: 10 }} />
+        <img src={store.lineLoader.getHostByType('image') + local.actor.avatar} style={{ width: 50, height: 50, marginBottom: 10 }} />
         <div>{local.actor.nickname}</div>
       </FullHeightFix>
       <FullHeightAuto>

@@ -44,6 +44,7 @@ const Model = types
     createdAt: types.optional(types.string, new Date().toLocaleString()),
     words: types.optional(types.number, 0),
     duration: types.optional(types.number, 0),
+    size: types.optional(types.number, 0),
     counter: types.maybeNull(types.model({
       comments: types.maybeNull(types.number),
       chapters: types.maybeNull(types.number),

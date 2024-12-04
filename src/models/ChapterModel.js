@@ -9,7 +9,7 @@ const Model = types.model({
   // 特殊部分
   nth: types.optional(types.number, 0),
   more: types.maybeNull(types.model({
-    words: types.maybeNull(types.number)
+    size: types.maybeNull(types.number)
   })),
   type: types.union(
     types.literal(config.constant.CHAPTER_TYPE.chatper),

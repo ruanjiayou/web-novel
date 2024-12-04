@@ -37,7 +37,7 @@ export default function ({ item }) {
                 </div>
                 <div style={{ padding: '4px 0', color: 'rgb(146, 145, 145)' }}>
                   {item.uname} · {item.status === 'loading' ? '连载' : '完结'} ·{' '}
-                  {Math.round(item.words / 10000)}万字
+                  {Math.round(item.size / 10000)}万字
                 </div>
                 <div
                   style={{ color: 'rgb(146, 145, 145)' }}

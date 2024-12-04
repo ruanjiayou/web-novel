@@ -70,7 +70,7 @@ function View({ self, router, store, services, params }) {
         media_id: localStore.child_id,
         media_type: 'video',
         watched: Math.floor(time),
-        total: loader.item.duration,
+        total: loader.item.size,
       });
     },
   }));
@@ -137,38 +137,6 @@ function View({ self, router, store, services, params }) {
             <Fragment>
               <UserAreaView bgcTop={'black'} bottom="0">
                 <div className="full-height-fix">
-                  {/* <Player
-                    router={router}
-                    type={localStore.type}
-                    resource={loader.item}
-                    srcpath={localStore.playpath}
-                    looktime={localStore.looktime}
-                    next={recommendsLoader.items[0]}
-                    playNext={() => {
-                      const index = loader.item.videos.findIndex(
-                        (child) => child.id === localStore.child_id,
-                      );
-                      if (index + 1 !== loader.item.videos.length) {
-                        localStore.child_id =
-                          loader.item.videos[index + 1].id;
-                        localStore.looktime = 0;
-                        localStore.setRecorder(
-                          localStore.child_id,
-                          localStore.looktime,
-                        );
-                        localStore.playpath =
-                          lineLoader.getHostByType('video') +
-                          loader.item.videos[index + 1].path;
-                      }
-                    }}
-                    onRecord={(time) => {
-                      // localStore.updateHistory(time)
-                      localStore.looktime = time;
-                    }}
-                    onTimeUpdate={(time) => {
-                      localStore.watched = time;
-                    }}
-                  /> */}
                   <Player2
                     resource={loader.item}
                     srcpath={localStore.playpath}

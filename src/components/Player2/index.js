@@ -110,7 +110,7 @@ export default function Player({
     playing: false,
     player: null,
     status: VIDEO_STATUS.CANPLAY,
-    duration: 0,
+    duration: resource.size || 0,
     realtime: 0,
     buffertime: 0,
     dragtime: 0,

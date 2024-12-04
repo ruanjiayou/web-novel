@@ -10,8 +10,8 @@ export default function ({ item, display = 1, ...props }) {
   const onClick = props.onClick
     ? () => props.onClick(item)
     : () => {
-        router.pushView('VideoInfo', { id: item._id });
-      };
+      router.pushView('VideoInfo', { id: item._id });
+    };
   return (
     <Observer>
       {() => {
@@ -64,10 +64,10 @@ export default function ({ item, display = 1, ...props }) {
                 <div style={{ padding: '4px 0', color: 'rgb(146, 145, 145)' }}>
                   {display !== 3 && (
                     <Fragment>
-                      {item.status === 'loading' ? '连载' : '完结'} ·{' '}
+                      {item.status === 3 ? '已更新' : '未就绪'} ·{' '}
                     </Fragment>
                   )}
-                  {timeFormat(item.words || 0)}
+                  {timeFormat(item.size || 0)}
                 </div>
                 {display !== 3 && item.desc && (
                   <div

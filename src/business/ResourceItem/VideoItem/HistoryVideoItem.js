@@ -72,7 +72,7 @@ export default function ({ item, display = 1, ...props }) {
                     borderRadius: 3,
                   }}
                 >
-                  {num2time(props.watched)}/{num2time(item.duration)}
+                  {num2time(props.watched)}/{num2time(item.size)}
                 </div>
               </div>
               <div

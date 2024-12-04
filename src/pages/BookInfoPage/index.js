@@ -155,7 +155,7 @@ function View({ self, router, store, services, params }) {
                   >
                     <div className="dd-common-alignside" style={{ height: 50 }}>
                       <div className="dd-common-centerXY" style={{ flex: 1 }}>
-                        {Math.round(loader.item.words / 10000)}万字
+                        {Math.round(loader.item.size / 10000)}万字
                       </div>
                       <div className="dd-common-centerXY" style={{ flex: 1 }}>
                         {loader.item.counter.chapters}章
