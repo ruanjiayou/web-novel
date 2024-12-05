@@ -64,7 +64,7 @@ export default function ({ item, display = 1, ...props }) {
                 <div style={{ padding: '4px 0', color: 'rgb(146, 145, 145)' }}>
                   {display !== 3 && (
                     <Fragment>
-                      {item.status === 3 ? '已更新' : '未就绪'} ·{' '}
+                      {item.status === 4 ? '已更新' : '未就绪'} ·{' '}
                     </Fragment>
                   )}
                   {timeFormat(item.size || 0)}
