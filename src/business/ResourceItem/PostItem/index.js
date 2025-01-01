@@ -41,7 +41,7 @@ export default function ({ item }) {
           <Fragment>
             <Wrap
               onClick={() => {
-                // router.pushView('Post', { id: item._id });
+                router.pushView('Post', { id: item._id });
               }}
             >
               <div style={{ color: 'grey', padding: '5px 0' }}>
