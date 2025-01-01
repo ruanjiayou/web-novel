@@ -74,7 +74,7 @@ export default function ({ defaultIndex, tabs = [], align = 'start', children, o
           evt.preventDefault();
           if (local.direction === 'h') {
             local.direction = '';
-            if (Math.abs(local.actionOffsetX) > 120) {
+            if (Math.abs(local.actionOffsetX) > 90) {
               if (evt.direction === 'Left') {
                 if (local.selectedIndex < tabs.length - 1) {
                   local.selectedIndex += 1;
