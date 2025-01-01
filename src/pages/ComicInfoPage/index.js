@@ -88,6 +88,7 @@ function View({ self, router, store, services, params }) {
                     width: '100%',
                     boxSizing: 'border-box',
                     height: 45,
+                    zIndex: 2,
                     padding: '0 15px',
                   }}
                 >
@@ -126,22 +127,11 @@ function View({ self, router, store, services, params }) {
                       {loader.item.title}
                     </div>
                     <div>
-                      {loader.item.uname} · {loader.item.type}
+                      {loader.item.uname} · {loader.item.counter.chapters}章 · {loader.item.type}
                     </div>
                   </div>
                   <div style={{ padding: '0 20px', backgroundColor: 'snow' }}>
-                    <div className="dd-common-alignside" style={{ height: 50 }}>
-                      <div className="dd-common-centerXY" style={{ flex: 1 }}>
-                        {Math.round(loader.item.size / 10000)}万字
-                      </div>
-                      <div className="dd-common-centerXY" style={{ flex: 1 }}>
-                        {loader.item.counter.chapters}章
-                      </div>
-                      <div className="dd-common-centerXY" style={{ flex: 1 }}>
-                        {loader.item.counter.comments}评论
-                      </div>
-                    </div>
-                    <div className="dd-common-alignside">
+                    <div className="dd-common-alignside" style={{ paddingTop: 15 }}>
                       <Button
                         type="primary"
                         size="small"

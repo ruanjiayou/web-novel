@@ -84,8 +84,16 @@ const Model = types
           lang: types.string,
           title: types.optional(types.string, ''),
           path: types.string,
-        })))
-      }),
+        }))),
+        is_playing: types.optional(types.boolean, false)
+      }).actions(v => ({
+        play() {
+          v.is_playing = true;
+        },
+        pause() {
+          v.is_playing = false;
+        }
+      })),
     ),
     actors: types.array(types.model({
       _id: types.string,

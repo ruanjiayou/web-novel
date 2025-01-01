@@ -51,8 +51,8 @@ export default function ({ defaultIndex, tabs = [], align = 'start', children, o
         },
         touchEnd: (evt) => {
           local.actionStarted = false;
-          local.actionStartX = 0;
-          local.actionOffsetX = 0;
+          // local.actionStartX = 0;
+          // local.actionOffsetX = 0;
         },
         touchMove: function (evt) {
           if (!local.actionStarted) {
@@ -72,18 +72,20 @@ export default function ({ defaultIndex, tabs = [], align = 'start', children, o
         },
         swipe: (evt) => {
           evt.preventDefault();
-          local.actionOffsetX = 0;
           if (local.direction === 'h') {
             local.direction = '';
-            if (evt.direction === 'Left') {
-              if (local.selectedIndex < tabs.length - 1) {
-                local.selectedIndex += 1;
-              }
-            } else if (evt.direction === 'Right') {
-              if (local.selectedIndex > 0) {
-                local.selectedIndex -= 1;
+            if (Math.abs(local.actionOffsetX) > 120) {
+              if (evt.direction === 'Left') {
+                if (local.selectedIndex < tabs.length - 1) {
+                  local.selectedIndex += 1;
+                }
+              } else if (evt.direction === 'Right') {
+                if (local.selectedIndex > 0) {
+                  local.selectedIndex -= 1;
+                }
               }
             }
+            local.actionOffsetX = 0;
             resizeSlider();
             onChange &&
               onChange(tabs[local.selectedIndex], local.selectedIndex);
@@ -95,7 +97,7 @@ export default function ({ defaultIndex, tabs = [], align = 'start', children, o
       });
     }
   }, [contentRef.current]);
-  useEffect(() => {
+  useEffectOnce(() => {
     resizeSlider();
   }, [wrapRef.current]);
   return (
@@ -129,6 +131,7 @@ export default function ({ defaultIndex, tabs = [], align = 'start', children, o
               ref={(ref) => (contentRef.current = ref)}>
               <ContentWrap
                 style={{
+                  transition: local.actionStarted ? '' : 'transform 0.2s linear 0s',
                   transform: `translateX(${contentRef.current ? -contentRef.current.offsetWidth * local.selectedIndex + (local.direction === 'h' ? local.actionOffsetX : 0) / 2 + 'px' : local.selectedIndex * 100 + '%'})`,
                 }}
                 selectedIndex={local.selectedIndex}
