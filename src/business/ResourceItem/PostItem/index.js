@@ -55,7 +55,7 @@ export default function ({ item }) {
                 {item.videos && item.videos.map((video, index) => (<Observer key={index}>{() => (
                   <Item>
                     <LazyLoadComponent>
-                      <video src={local.videoHost + video.path} className='center-xy' style={{ width: '100%', }} onEnded={() => { video.pause() }} />
+                      <video src={local.videoHost + video.path} controls={false} className='center-xy' style={{ width: '100%', backgroundColor: 'black' }} onEnded={() => { video.pause() }} />
                     </LazyLoadComponent>
                     <PlayBtn className='center-xy'
                       onClick={e => {
