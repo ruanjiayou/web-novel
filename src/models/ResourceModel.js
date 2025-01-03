@@ -80,6 +80,10 @@ const Model = types
         path: types.string,
         nth: types.number,
         _id: types.string,
+        more: types.model(({
+          width: types.number,
+          height: types.number,
+        })),
         subtitles: types.maybeNull(types.array(types.model({
           lang: types.string,
           title: types.optional(types.string, ''),

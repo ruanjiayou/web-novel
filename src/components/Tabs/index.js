@@ -23,6 +23,7 @@ export default function ({ defaultIndex, tabs = [], align = 'start', children, o
   const local = useLocalStore(() => ({
     selectedIndex: defaultIndex === -1 ? 0 : defaultIndex || 0,
     actionStarted: false,
+    animate: false,
     actionStartX: 0,
     actionOffsetX: 0,
     direction: '',
@@ -58,6 +59,7 @@ export default function ({ defaultIndex, tabs = [], align = 'start', children, o
           if (!local.actionStarted) {
             return;
           }
+          local.animate = true;
           if (local.direction === '' && (evt.deltaX || evt.deltaY)) {
             local.direction =
               Math.abs(evt.deltaX) > Math.abs(evt.deltaY) ? 'h' : 'v';
@@ -74,7 +76,7 @@ export default function ({ defaultIndex, tabs = [], align = 'start', children, o
           evt.preventDefault();
           if (local.direction === 'h') {
             local.direction = '';
-            if (Math.abs(local.actionOffsetX) > 90) {
+            if (Math.abs(local.actionOffsetX) > 70) {
               if (evt.direction === 'Left') {
                 if (local.selectedIndex < tabs.length - 1) {
                   local.selectedIndex += 1;
@@ -114,6 +116,7 @@ export default function ({ defaultIndex, tabs = [], align = 'start', children, o
                     if (index === local.selectedIndex) {
                       return;
                     }
+                    local.animate = false;
                     local.selectedIndex = index;
                     resizeSlider();
                     onChange && onChange(tabs[index], index);
@@ -131,7 +134,7 @@ export default function ({ defaultIndex, tabs = [], align = 'start', children, o
               ref={(ref) => (contentRef.current = ref)}>
               <ContentWrap
                 style={{
-                  transition: local.actionStarted ? '' : 'transform 0.2s linear 0s',
+                  transition: local.animate ? 'transform 0.2s linear 0s' : '',
                   transform: `translateX(${contentRef.current ? -contentRef.current.offsetWidth * local.selectedIndex + (local.direction === 'h' ? local.actionOffsetX : 0) / 2 + 'px' : local.selectedIndex * 100 + '%'})`,
                 }}
                 selectedIndex={local.selectedIndex}

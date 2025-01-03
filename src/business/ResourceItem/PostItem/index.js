@@ -16,15 +16,15 @@ const Wrap = styled.div`
 const Item = styled.div`
   width: 50%;
   margin-left: 1%;
-  padding-top: 30%;
+  padding-top: 28%;
   position: relative;
   overflow: hidden;
+  background-color: rgba(0,0,0,0.3);
 `
 const VideoItem = styled.div`
 
 `
 const PlayBtn = styled.div`
-  position: absolute;
   z-index: 2;
 `
 
@@ -48,14 +48,14 @@ export default function ({ item }) {
                 {item.uname} {timespan(new Date(item.createdAt))}
               </div>
               <div style={{ fontSize: '1.2rem' }}>{item.content || item.title}</div>
-              <div style={{ display: 'flex', flexDirection: 'row', marginTop: 10 }}>
+              <div style={{ display: 'flex', flexDirection: 'row', alignContent: 'center', marginTop: 10 }}>
                 {item.images && item.images.map((image, index) => (<Item key={index}>
-                  <LazyLoadImage src={local.imageHost + image.path} className='center-xy' style={{ width: '100%', }} />
+                  <LazyLoadImage src={local.imageHost + image.path} className='center-xy' style={{ width: '100%', maxHeight: '100%', }} />
                 </Item>))}
                 {item.videos && item.videos.map((video, index) => (<Observer key={index}>{() => (
                   <Item>
                     <LazyLoadComponent>
-                      <video src={local.videoHost + video.path} controls={false} className='center-xy' style={{ width: '100%', backgroundColor: 'black' }} onEnded={() => { video.pause() }} />
+                      <video src={local.videoHost + video.path} preload='metadata' controls={false} playsInline muted className='center-xy' style={{ zIndex: 2, ... (video.more.width > video.more.height ? { width: '100%' } : { height: '100%' }) }} onEnded={() => { video.pause() }} />
                     </LazyLoadComponent>
                     <PlayBtn className='center-xy'
                       onClick={e => {
@@ -70,7 +70,7 @@ export default function ({ item }) {
                         e.stopPropagation();
                         e.preventDefault();
                       }}
-                    >{!video.is_playing ? <PlayIcon style={{ width: 45, height: 45 }} /> : <PauseIcon style={{ width: 45, height: 45 }} />}</PlayBtn>
+                    >{video.is_playing ? <PauseIcon style={{ width: 45, height: 45 }} /> : <PlayIcon style={{ width: 45, height: 45 }} />}</PlayBtn>
                   </Item>
                 )}</Observer>))}
               </div>
