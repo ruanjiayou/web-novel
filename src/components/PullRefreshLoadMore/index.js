@@ -59,11 +59,13 @@ function RefreshAndLoadMore({
                 paddingBottom: 'env(safe-area-inset-bottom)',
               }}
             >
-              {isLoading && !isEmpty && '正在加载...'}
-              {!isLoading && isEnded && '加载完毕'}
-              {!isLoading && !isEnded && (
-                <span onClick={() => onLoadMore()}>点击加载更多</span>
-              )}
+              <div style={{ paddingBottom: 10 }}>
+                {isLoading && !isEmpty && '正在加载...'}
+                {!isLoading && isEnded && '加载完毕'}
+                {!isLoading && !isEnded && (
+                  <span onClick={() => onLoadMore()}>点击加载更多</span>
+                )}
+              </div>
             </div>
           </PullToRefresh>
         </div>

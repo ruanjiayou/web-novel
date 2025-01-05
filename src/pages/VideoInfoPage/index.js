@@ -188,7 +188,7 @@ function View({ self, router, store, services, params }) {
                             }}
                             selected={localStore.child_id === child._id}
                           >
-                            {child.title || `第${child.nth + 1}集`}
+                            {child.title || `第${child.nth}集`}
                           </EpTag>
                         ))}
                       </div>
