@@ -84,7 +84,7 @@ const store = Store.create({
   ts: Date.now(),
   app: {
     baseURL: window.location.origin + '/gw/novel',
-    env: 'test',
+    env: 'production',
     config: {},
   },
   music: {},

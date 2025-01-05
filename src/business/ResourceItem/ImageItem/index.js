@@ -114,22 +114,6 @@ export default function ({ item, display = 1 }) {
                 >
                   {MStatus()}
                 </div>
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: 4,
-                    right: 4,
-                    zIndex: 2,
-                    color: 'white',
-                    minWidth: 25,
-                    textAlign: 'center',
-                    backgroundColor: 'rgba(0,0,0,0.3)',
-                    borderRadius: '50px',
-                    padding: '5px 0',
-                  }}
-                >
-                  {item.counter.chapters}
-                </div>
               </div>
               <div
                 style={
