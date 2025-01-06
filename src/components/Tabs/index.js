@@ -23,6 +23,7 @@ export default function ({ defaultIndex, tabs = [], align = 'start', children, o
   const local = useLocalStore(() => ({
     selectedIndex: defaultIndex === -1 ? 0 : defaultIndex || 0,
     actionStarted: false,
+    timestamp: 0,
     animate: false,
     actionStartX: 0,
     actionOffsetX: 0,
@@ -46,6 +47,7 @@ export default function ({ defaultIndex, tabs = [], align = 'start', children, o
         touchStart: (evt) => {
           if (local.actionStarted) return;
           local.actionStarted = true;
+          local.timestamp = Date.now();
           local.actionStartX = evt.targetTouches[0].clientX;
           local.actionOffsetX = 0;
           local.direction = '';
@@ -76,7 +78,8 @@ export default function ({ defaultIndex, tabs = [], align = 'start', children, o
           evt.preventDefault();
           if (local.direction === 'h') {
             local.direction = '';
-            if (Math.abs(local.actionOffsetX) > 70) {
+            const deltaT = Date.now() - local.timestamp;
+            if (Math.abs(local.actionOffsetX) > 150 || 1000 * Math.abs(local.actionOffsetX) / deltaT > 300) {
               if (evt.direction === 'Left') {
                 if (local.selectedIndex < tabs.length - 1) {
                   local.selectedIndex += 1;

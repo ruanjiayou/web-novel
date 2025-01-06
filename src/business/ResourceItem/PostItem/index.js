@@ -14,15 +14,23 @@ const Wrap = styled.div`
   overflow: hidden;
 `
 const Item = styled.div`
-  width: 50%;
-  margin-left: 1%;
-  padding-top: 28%;
+  width: 40%;
+  font-size: 0;
+  margin-right: 1%;
+  padding-top: 40%;
   position: relative;
   overflow: hidden;
-  background-color: rgba(0,0,0,0.3);
+  background-color: #a1a1a11a;
+  flex: 0 0 auto;
 `
 const VideoItem = styled.div`
 
+`
+const ImageItem = styled.img`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
 `
 const PlayBtn = styled.div`
   z-index: 2;
@@ -48,14 +56,16 @@ export default function ({ item }) {
                 {item.uname} {timespan(new Date(item.createdAt))}
               </div>
               <div style={{ fontSize: '1.2rem' }}>{item.content || item.title}</div>
-              <div style={{ display: 'flex', flexDirection: 'row', alignContent: 'center', marginTop: 10 }}>
+              <div style={{ display: 'flex', flexDirection: 'row', alignContent: 'center', marginTop: 10, overflow: 'hidden' }}>
                 {item.images && item.images.map((image, index) => (<Item key={index}>
-                  <LazyLoadImage src={local.imageHost + image.path} className='center-xy' style={{ width: '100%', maxHeight: '100%', }} />
+                  <LazyLoadComponent>
+                    <ImageItem src={local.imageHost + image.path} style={{ width: image.more.height > image.more.width ? '100%' : 'auto', height: image.more.height > image.more.width ? 'auto' : '100%' }} />
+                  </LazyLoadComponent>
                 </Item>))}
                 {item.videos && item.videos.map((video, index) => (<Observer key={index}>{() => (
                   <Item>
                     <LazyLoadComponent>
-                      <video src={local.videoHost + video.path} preload='metadata' controls={false} playsInline muted className='center-xy' style={{ zIndex: 2, ... (video.more.width > video.more.height ? { width: '100%' } : { height: '100%' }) }} onEnded={() => { video.pause() }} />
+                      <video src={local.videoHost + video.path} preload='metadata' controls={false} playsInline muted className='center-xy' style={{ zIndex: 2, width: video.more.height > video.more.width ? '100%' : 'auto', height: video.more.height > video.more.width ? 'auto' : '100%' }} onEnded={() => { video.pause() }} />
                     </LazyLoadComponent>
                     <PlayBtn className='center-xy'
                       onClick={e => {
